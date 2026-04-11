@@ -18,32 +18,15 @@
 
 void main() {
 
-	/* 
-	  Spellcast Hook Code 
-	  Added 2003-06-23 by GeorgZ
-	  If you want to make changes to all spells,
-	  check x2_inc_spellhook.nss to find out more
-	  
-	*/
-    if (!X2PreSpellCastCode()) {
-		// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
 
+    if (!X2PreSpellCastCode()) return;
+ 
     //Declare major variables
 	object oCaster = OBJECT_SELF;
-	// Dark Disco no longer removes Eldritch Shield, so removing this from here because 
-	// otherwise we're just making the user have a specific order of casting.  -FlattedFifth
-	/*
-	if (GetHasSpellEffect(1375)) {
-		SendMessageToPC(oCaster, "You may not use Eldritch Shield while discorporated.");
-		return; 
-	}
-	*/
+
 	//Remove previous versions of this spell
 	effect eEffect = GetFirstEffect( oCaster );
 	while ( GetIsEffectValid(eEffect) ) {
-		
 		//SendMessageToPC(oCaster, "Shield: "+IntToString(GetEffectSpellId(eEffect)));
 		if (GetEffectSpellId(eEffect) == 811 ||
 			GetEffectSpellId(eEffect) == 2222 ||
@@ -57,11 +40,9 @@ void main() {
 			GetEffectSpellId(eEffect) == 2230 ||
 			GetEffectSpellId(eEffect) == 2231 ||
 			GetEffectSpellId(eEffect) == 2232) {
-				//SendMessageToPC(oCaster, "Removing "+IntToString(GetEffectSpellId(eEffect)));
 				RemoveEffect( oCaster, eEffect );
 				eEffect = GetFirstEffect( oCaster ); //start again from the beginning
-			}
-				
+			}	
 		eEffect = GetNextEffect( oCaster );
 	}
 	
@@ -77,67 +58,68 @@ void main() {
 	int nID = GetSpellId();
 	
     int nMetaMagic = GetMetaMagicFeat();
-	//SendMessageToPC(oCaster, "Metamagic: "+IntToString(nMetaMagic));
+	
 	if (nMetaMagic || nID > SPELL_I_ELDRICH_SHIELD) {
 		hasSpecial = TRUE;
-		if (nMetaMagic == METAMAGIC_INVOC_DRAINING_BLAST || nID == 2222) {
-			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_DRAINING_BLAST");
+		if (nMetaMagic == METAMAGIC_INVOC_DRAINING_BLAST || nID == 2222) {	
 			eSpecial = EffectImmunity(IMMUNITY_TYPE_SLOW);
 			eSpecial = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN), eSpecial);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_draining_shield"), eSpecial);
-		} else if (nMetaMagic == METAMAGIC_INVOC_FRIGHTFUL_BLAST || nID == 2223) {
-			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_FRIGHTFUL_BLAST");
+		
+		} else if (nMetaMagic == METAMAGIC_INVOC_FRIGHTFUL_BLAST || nID == 2223) {	
 			eSpecial = EffectImmunity(IMMUNITY_TYPE_FEAR);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_frightful_shield"), eSpecial);
+		
 		} else if (nMetaMagic == METAMAGIC_INVOC_BESHADOWED_BLAST || nID == 2224) {
 			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_BESHADOWED_BLAST");
 			eSpecial = EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
 			eSpecial = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_DEAFNESS), eSpecial);
 			eSpecial = EffectLinkEffects(EffectConcealment(20, MISS_CHANCE_TYPE_VS_RANGED), eSpecial);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_beshadowed_shield"), eSpecial);
+		
 		} else if (nMetaMagic == METAMAGIC_INVOC_BRIMSTONE_BLAST || nID == 2225) {
-		//	SendMessageToPC(oCaster, "METAMAGIC_INVOC_BRIMSTONE_BLAST");
 			eSpecial = EffectDamageImmunityIncrease(DAMAGE_TYPE_FIRE, 100);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_ACID, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_SONIC, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_brimstone_shield"), eSpecial);
 			nDamageType = DAMAGE_TYPE_FIRE;
+		
 		} else if (nMetaMagic == METAMAGIC_INVOC_HELLRIME_BLAST || nID == 2226) {
-			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_HELLRIME_BLAST");
 			eSpecial = EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, 100);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_ACID, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_SONIC, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_hellrime_shield"), eSpecial);
 			nDamageType = DAMAGE_TYPE_COLD;
+		
 		} else if (nMetaMagic == METAMAGIC_INVOC_BEWITCHING_BLAST || nID == 2227) {
 			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_BEWITCHING_BLAST");
 			eSpecial = EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_bewitching_shield"), eSpecial);
+		
 		} else if (nMetaMagic == METAMAGIC_INVOC_NOXIOUS_BLAST || nID == 2228) {
-			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_NOXIOUS_BLAST");
 			eSpecial = EffectImmunity(IMMUNITY_TYPE_DISEASE);
 			eSpecial = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_POISON), eSpecial);
 			eSpecial = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_SAVING_THROW_DECREASE), eSpecial);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_noxious_shield"), eSpecial);
+		
 		} else if (nMetaMagic == METAMAGIC_INVOC_VITRIOLIC_BLAST || nID == 2229) {
-			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_VITRIOLIC_BLAST");
 			eSpecial = EffectDamageImmunityIncrease(DAMAGE_TYPE_ACID, 100);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_FIRE, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_SONIC, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_vitriolic_shield"), eSpecial);
 			nDamageType = DAMAGE_TYPE_ACID;
+		
 		} else if (nMetaMagic == METAMAGIC_INVOC_UTTERDARK_BLAST || nID == 2230) {
-			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_UTTERDARK_BLAST");
 			eSpecial = EffectImmunity(IMMUNITY_TYPE_NEGATIVE_LEVEL);
 			eSpecial = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_DEATH), eSpecial);
 			eSpecial = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_ABILITY_DECREASE), eSpecial);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_utterdark_shield"), eSpecial);
 			nDamageType = DAMAGE_TYPE_NEGATIVE;
+			
 		} else if (nMetaMagic == METAMAGIC_INVOC_HINDERING_BLAST || nID == 2231) {
-			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_HINDERING_BLAST");
 			eSpecial = EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_ELECTRICAL, 100), eSpecial);
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_COLD, 20), eSpecial);
@@ -145,8 +127,8 @@ void main() {
 			eSpecial = EffectLinkEffects(EffectDamageImmunityIncrease(DAMAGE_TYPE_SONIC, 20), eSpecial);
 			eSpecial = EffectLinkEffects(EffectNWN2SpecialEffectFile("sp_blackbolt_shield"), eSpecial);
 			nDamageType = DAMAGE_TYPE_ELECTRICAL;
+		
 		} else if (nMetaMagic == METAMAGIC_INVOC_BINDING_BLAST || nID == 2232) {
-			//SendMessageToPC(oCaster, "METAMAGIC_INVOC_BINDING_BLAST");
 			eSpecial = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 			eSpecial = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_STUN), eSpecial);
 			eSpecial = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_SLOW), eSpecial);
@@ -177,7 +159,7 @@ void main() {
 		eShield = EffectLinkEffects(eShield, EffectNWN2SpecialEffectFile("sp_eldritch_shield"));
 	}
 	
-	SetEffectSpellId(eShield, 811);
+	eShield = SetEffectSpellId(eShield, nID);
 	
 	DelayCommand(0.5f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oCaster, fDuration));
 	

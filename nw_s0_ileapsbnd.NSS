@@ -14,20 +14,17 @@
 //:: JLR - OEI 08/24/05 -- Metamagic changes
 //:: Mimi Fearthegn 7/26/20 - Adding scaling based on level
 
-#include "nwn2_inc_spells"
-#include "nw_i0_spells"
+#include "ps_inc_invocations"
 
-#include "x2_inc_spellhook" 
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_LEAPS_AND_BOUNDS);
+}
 
+
+
+/*
 void main() {
 
-	/* 
-	  Spellcast Hook Code 
-	  Added 2003-06-23 by GeorgZ
-	  If you want to make changes to all spells,
-	  check x2_inc_spellhook.nss to find out more
-	  
-	*/
     if (!X2PreSpellCastCode()) {
 		// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
@@ -53,16 +50,18 @@ void main() {
 
     effect eDex = EffectAbilityIncrease(ABILITY_DEXTERITY, nDex);
     effect eTumble = EffectSkillIncrease(SKILL_TUMBLE, nSkillBuff);
-	
-    effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_LEAPS_BOUNDS);
     effect eLink = EffectLinkEffects(eDex, eTumble);
-    eLink = EffectLinkEffects(eLink, eDur);
+	
+
+	effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_LEAPS_BOUNDS);
+	eLink = EffectLinkEffects(eDur ,eLink);
+	 //Fire cast spell at event for the specified target
+	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+	
 
     RemoveEffectsFromSpell(oTarget, GetSpellId());
-
-    //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 
     //Apply the VFX impact and effects
     ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }
+*/

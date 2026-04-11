@@ -13,21 +13,29 @@
 
 
 // JLR - OEI 08/24/05 -- Metamagic changes
+
+#include "ps_inc_invocations" 
+
+
+void main(){
+	// store the spell id so we will know what flavour of hideousness to use
+	SetLocalInt(OBJECT_SELF, "HideousMeta", GetSpellId());
+	DoSelfOnlyInvocation(SPELL_I_HIDEOUS_BLOW);
+}
+
+
+/*
+
 #include "nwn2_inc_spells"
 #include "nw_i0_spells"
 
 #include "x2_inc_spellhook" 
 
+
 void main()
 {
 
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-23 by GeorgZ
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
+
 
     if (!X2PreSpellCastCode()) {
         return;
@@ -94,3 +102,4 @@ void main()
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, OBJECT_SELF);
 	//ActionAttack( oTarget ); // oTarget is yourself, this spell has a target type of 0x01, ie, self only
 }
+*/

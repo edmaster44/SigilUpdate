@@ -1,7 +1,5 @@
-#include "nwn2_inc_spells"
-#include "NW_I0_SPELLS"
-#include "x2_inc_spellhook" 
-#include "ps_inc_functions"
+
+#include "ps_inc_invocations" 
 
 
 
@@ -10,7 +8,7 @@ void FleeRefresh(object oPC)
 	if (!GetLocalInt(oPC,"FleeTheScene")) return;
 	
 	if (!GetIsInCombat(oPC))
-		AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_WALK_UNSEEN, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+		DoSelfOnlyInvocation(SPELL_I_FLEE_THE_SCENE, TRUE);
 		
 	DelayCommand(6.0, FleeRefresh(oPC));
 }

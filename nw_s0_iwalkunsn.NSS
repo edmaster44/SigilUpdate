@@ -19,11 +19,15 @@
 
 
 // JLR - OEI 08/24/05 -- Metamagic changes
-#include "nwn2_inc_spells"
-#include "nw_i0_spells"
 
-#include "x2_inc_spellhook" 
+#include "ps_inc_invocations" 
 
+
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_WALK_UNSEEN);
+}
+
+/*
 void main()
 {
 
@@ -57,3 +61,4 @@ void main()
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHit, oTarget);
 
 }
+*/

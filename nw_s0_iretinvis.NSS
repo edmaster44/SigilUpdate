@@ -26,6 +26,14 @@
 //::	Fix bug: should be improved invisibility, not regular
 //:: PKM-OEI 07.19.06 : VFX Update
 
+#include "ps_inc_invocations" 
+
+
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_RETRIBUTIVE_INVISIBILITY);
+}
+
+/*
 #include "X0_I0_SPELLS"
 #include "x2_inc_spellhook"
 
@@ -136,3 +144,4 @@ void main()
     //Apply the VFX impact and effects
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget,fDuration);
 }
+*/

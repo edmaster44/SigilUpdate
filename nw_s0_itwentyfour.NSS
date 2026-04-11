@@ -1,47 +1,36 @@
-#include "nwn2_inc_spells"
-#include "nw_i0_spells"
-#include "x2_inc_spellhook" 
-
-const int SPELL_I_OTHERWORLDLY_WHISPERS = 1059;
+#include "ps_inc_invocations"
 
 
-void DoWarlockBuff(object oPC, int nSpell){
-
-	AssignCommand(oPC, ActionCastSpellAtObject(nSpell, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-
-}
-
-
-void TwentyFour(object oPC)
-{
-	if (!GetLocalInt(oPC,"TwentyFour")){
+void TwentyFour(object oPC){
+	if (!GetLocalInt(oPC,"TwentyFour"))
 		return;
-	}
+
 	if (GetIsInCombat(oPC)){
 		DelayCommand(6.0, TwentyFour(oPC));
 		return;
 	}
 	if ((GetHasSpell(SPELL_I_BEGUILING_INFLUENCE,oPC))&&(!GetHasSpellEffect(SPELL_I_BEGUILING_INFLUENCE,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_BEGUILING_INFLUENCE);
+		DoSelfOnlyInvocation(SPELL_I_BEGUILING_INFLUENCE, TRUE);
 	if ((GetHasSpell(SPELL_I_DARK_ONES_OWN_LUCK,oPC))&&(!GetHasSpellEffect(SPELL_I_DARK_ONES_OWN_LUCK,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_DARK_ONES_OWN_LUCK);
+		DoSelfOnlyInvocation(SPELL_I_DARK_ONES_OWN_LUCK, TRUE);
 	if ((GetHasSpell(SPELL_I_ENTROPIC_WARDING,oPC))&&(!GetHasSpellEffect(SPELL_I_ENTROPIC_WARDING,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_ENTROPIC_WARDING);
+		DoSelfOnlyInvocation(SPELL_I_ENTROPIC_WARDING, TRUE);
 	if ((GetHasSpell(SPELL_I_OTHERWORLDLY_WHISPERS,oPC))&&(!GetHasSpellEffect(SPELL_I_OTHERWORLDLY_WHISPERS,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_OTHERWORLDLY_WHISPERS);
+		DoSelfOnlyInvocation(SPELL_I_OTHERWORLDLY_WHISPERS, TRUE);
 	if ((GetHasSpell(SPELL_I_LEAPS_AND_BOUNDS,oPC))&&(!GetHasSpellEffect(SPELL_I_LEAPS_AND_BOUNDS,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_LEAPS_AND_BOUNDS);
+		DoSelfOnlyInvocation(SPELL_I_LEAPS_AND_BOUNDS, TRUE);
 	if ((GetHasSpell(SPELL_I_SEE_THE_UNSEEN,oPC))&&(!GetHasSpellEffect(SPELL_I_SEE_THE_UNSEEN,oPC)))
-		DoWarlockBuff(oPC, SPELL_I_SEE_THE_UNSEEN);
+		DoSelfOnlyInvocation(SPELL_I_SEE_THE_UNSEEN, TRUE);
 	DelayCommand(6.0, TwentyFour(oPC));
 }
 
-void main()
-{
+void main(){
+	
 	object oPC = OBJECT_SELF;
-
 	TwentyFour(oPC);
+	
 }
+
 
 /*
 

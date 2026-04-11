@@ -5,13 +5,14 @@
 //:: Rewritten by MimiFearthegn on 8/20/2020
 //:: May want to make sure that it cannot be used with eldritch shield
 
-#include "x2_inc_spellhook"
-#include "nwn2_inc_metmag"
-#include "ps_inc_functions"
-#include "nwn2_inc_spells"
-#include "ginc_debug"
-#include "nw_i0_spells"
 
+#include "ps_inc_invocations" 
+
+
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_DARK_DISCORPORATION);
+}
+/*
 void main() {
 
     if (!X2PreSpellCastCode()) {
@@ -32,20 +33,6 @@ void main() {
 		SendMessageToPC(OBJECT_SELF, "You may not discorporate while Fiend Form is active.");
 		return;
 	}
-	
-	//Remove Eldritch Shield effects if discorporating
-	//This never worked super well, so removing as of 5/26/21
-	/*if ( GetHasSpellEffect(811) ) { //811 = Eldritch Shield
-		effect eEffect = GetFirstEffect( OBJECT_SELF );
-		while ( GetIsEffectValid(eEffect) ) {
-		
-			if ( GetEffectSpellId(eEffect) == 811){
-				RemoveEffect( OBJECT_SELF, eEffect );
-			}
-				
-			eEffect = GetNextEffect( OBJECT_SELF );
-		}
-	}*/
 
     //Declare major variables
     object oCaster = OBJECT_SELF;
@@ -76,4 +63,4 @@ void main() {
 	DelayCommand(0.0f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, oCaster, fDuration));
 }
 	
-	
+*/

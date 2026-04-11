@@ -24,8 +24,13 @@
         effect, so the warlock gets consistent access to it a little bit earlier.
 
 */
+#include "ps_inc_invocations" 
 
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_FLEE_THE_SCENE);
+}
 
+/*
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_spells"
 
@@ -33,8 +38,7 @@
 #include "x2_inc_spellhook" 
 
 
-void DoHasteEffects( object oCaster, object oTarget, int nMetaMagic )
-{
+void DoHasteEffects( object oCaster, object oTarget, int nMetaMagic){
     int nCasterLvl  = PS_GetCasterLevel(oCaster);
     float fDuration   = RoundsToSeconds(nCasterLvl); 
 
@@ -44,7 +48,7 @@ void DoHasteEffects( object oCaster, object oTarget, int nMetaMagic )
 
     // Create the Effects
     effect eHaste   = EffectHaste();
-    effect eDur     = EffectVisualEffect( VFX_DUR_SPELL_HASTE );
+    effect eDur     = EffectVisualEffect(VFX_DUR_SPELL_HASTE);
     effect eLink    = EffectLinkEffects(eHaste, eDur);
 		 // Remove any spells that share effects with this spell and were cast by caster
     if (GetHasSpellEffect(SPELL_HASTE, oTarget))
@@ -55,7 +59,6 @@ void DoHasteEffects( object oCaster, object oTarget, int nMetaMagic )
         PS_RemoveEffects(oTarget, SPELL_I_FLEE_THE_SCENE, NULL, oTarget);
 		
     ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
-   
 }
 
 
@@ -85,7 +88,7 @@ void main()
 	}
 
 }
-/*
+
 void DoExpeditiousRetreatEffects( object oCaster, object oTarget, int nMetaMagic )
 {
     effect eDur     = EffectVisualEffect( VFX_DUR_SPELL_EXPEDITIOUS_RETREAT );

@@ -1,6 +1,4 @@
-#include "nw_i0_spells"
-#include "x2_inc_spellhook" 
-#include "ps_inc_functions"
+#include "ps_inc_invocations" 
 
 
 
@@ -9,7 +7,7 @@ void RefreshDarkForesight(object oPC)
 	if (!GetLocalInt(oPC,"DarkForesight")) return;
 	
 	if (!GetIsInCombat())
-		AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_DARK_FORESIGHT, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+		DoSelfOnlyInvocation(SPELL_I_DARK_FORESIGHT, TRUE);
 	
 	DelayCommand(6.0, RefreshDarkForesight(oPC));
 }

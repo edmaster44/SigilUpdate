@@ -26,6 +26,16 @@
 
 */
 
+
+#include "ps_inc_invocations" 
+
+
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_DARK_FORESIGHT);
+}
+
+/*
+
 #include "nw_i0_spells"
 #include "x2_inc_spellhook" 
 
@@ -69,3 +79,4 @@ void main()
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 
 }
+*/

@@ -38,7 +38,6 @@ void main() {
 	
 		//Should not do damage to friends
 		if (GetIsEnemy(oTarget, oCaster) && oTarget != oCaster) {
-		
 			effect eDamage = EffectDamage(d6(2)+GetAbilityModifier(ABILITY_CHARISMA, oCaster));
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
 		

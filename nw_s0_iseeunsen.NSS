@@ -16,21 +16,14 @@
 
 
 // JLR - OEI 08/24/05 -- Metamagic changes
-#include "nwn2_inc_spells"
-#include "nw_i0_spells"
-#include "ps_inc_functions"
-#include "x2_inc_spellhook" 
+#include "ps_inc_invocations"
 
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_SEE_THE_UNSEEN);
+}
+/*
 void main()
 {
-
-/* 
-  Spellcast Hook Code 
-  Added 2003-06-23 by GeorgZ
-  If you want to make changes to all spells,
-  check x2_inc_spellhook.nss to find out more
-  
-*/
 
     if (!X2PreSpellCastCode())
     {
@@ -60,3 +53,4 @@ void main()
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
 	PS_GrantFeatBySpellWithEffect(nFeatDarkvision, oTarget, eLink, fDuration);
 }
+*/

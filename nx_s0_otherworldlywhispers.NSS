@@ -14,25 +14,24 @@
 
 
 
-#include "NW_I0_SPELLS"
-#include "x2_inc_spellhook"
+#include "ps_inc_invocations"
 
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_OTHERWORLDLY_WHISPERS);
+}
+
+
+/*
 void main()
 {
 
-    if (!X2PreSpellCastCode())
-    {
-    // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-
-	
+    if (!X2PreSpellCastCode()) return;
+ 
     //Declare major variables
 	object oCaster = OBJECT_SELF;
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	int nSkillBuff = (nCasterLevel/2) + 5;
 	
-    
  	//float fDuration = 60.0*60.0*24.0;  // 24 hours
 	float fDuration = HoursToSeconds(24);
 	
@@ -42,8 +41,12 @@ void main()
     effect eLink = EffectLinkEffects(eLore, eSpellCraft);
 	eLink = EffectLinkEffects(eLink, eSearch);
 	
-	//Fire cast spell at event for the specified target
-    SignalEvent(oCaster, EventSpellCastAt(oCaster, GetSpellId(), FALSE));
+
+		//Fire cast spell at event for the specified target
+		SignalEvent(oCaster, EventSpellCastAt(oCaster, GetSpellId(), FALSE));
+	
+	PS_RemoveEffects(oCaster, GetSpellId());
 
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
 }
+*/

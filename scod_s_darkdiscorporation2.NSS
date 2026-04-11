@@ -5,12 +5,10 @@
 //::////////////////////////////////////////////////
 //:: Added 5/26/21 - Mimi Fearthegn
 
-#include "x2_inc_spellhook"
-#include "nwn2_inc_metmag"
-#include "ps_inc_functions"
-#include "nwn2_inc_spells"
-#include "ginc_debug"
-#include "nw_i0_spells"
+#include "ps_inc_invocations" 
+//#include "nwn2_inc_metmag"
+//#include "ginc_debug"
+
 
 const float fDiscorpDuration = 6.0f;
 
@@ -20,7 +18,7 @@ void DiscorporationRefresh(object oPC)
 	if (!GetLocalInt(oPC,"DarkDiscorporation")) return;
 	
 	if (!GetIsInCombat())
-		AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_DARK_DISCORPORATION, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+		DoSelfOnlyInvocation(SPELL_I_DARK_DISCORPORATION, TRUE);
 	
 	DelayCommand(6.0, DiscorporationRefresh(oPC));
 }

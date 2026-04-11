@@ -1,7 +1,6 @@
 // Draco Rayne: Changed Walk Unseen script for use with Warlock Buddy
-#include "nwn2_inc_spells"
-#include "nw_i0_spells"
-#include "x2_inc_spellhook" 
+
+#include "ps_inc_invocations" 
 
 
 
@@ -12,22 +11,23 @@ void StayUnseen(object oPC)
 		DelayCommand(6.0, StayUnseen(oPC));
 		return;
 	}
-	AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_WALK_UNSEEN, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 	
-	if (GetHasSpell(SPELL_I_WALK_UNSEEN,oPC))    
-		if (!GetHasSpellEffect(SPELL_I_WALK_UNSEEN,oPC))	
-			AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_WALK_UNSEEN, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+	if (GetHasSpell(SPELL_I_WALK_UNSEEN,oPC)){    
+		if (!GetHasSpellEffect(SPELL_I_WALK_UNSEEN, oPC))	
+			DoSelfOnlyInvocation(SPELL_I_WALK_UNSEEN, TRUE);
+	}
 			
-	if (GetHasSpell(SPELL_I_RETRIBUTIVE_INVISIBILITY,oPC)) 
-		AssignCommand(oPC, ActionCastSpellAtObject(SPELL_I_RETRIBUTIVE_INVISIBILITY, oPC, METAMAGIC_ANY, FALSE, 0,PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-				
+	if (GetHasSpell(SPELL_I_RETRIBUTIVE_INVISIBILITY,oPC)){
+		if (!GetHasSpellEffect(SPELL_I_RETRIBUTIVE_INVISIBILITY, oPC))
+			DoSelfOnlyInvocation(SPELL_I_RETRIBUTIVE_INVISIBILITY, TRUE);
+	}
+	
 	DelayCommand(6.0, StayUnseen(oPC));
 }
 
 void main()
 {
 	object oPC = OBJECT_SELF;
-
 	StayUnseen(oPC);
 }
 

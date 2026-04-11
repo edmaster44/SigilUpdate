@@ -14,26 +14,21 @@
 //:: JLR - OEI 08/24/05 -- Metamagic changes
 //:: Mimi Fearthegn 7/26/20 - Adding scaling based on level
 
-#include "nwn2_inc_spells"
-#include "nw_i0_spells"
-#include "x2_inc_spellhook" 
+#include "ps_inc_invocations"
 
+void main(){
+	DoSelfOnlyInvocation(SPELL_I_BEGUILING_INFLUENCE);
+}
+
+
+
+
+/* original
 void main()
 {
+    if (!X2PreSpellCastCode()) return;
 
-	/* 
-	  Spellcast Hook Code 
-	  Added 2003-06-23 by GeorgZ
-	  If you want to make changes to all spells,
-	  check x2_inc_spellhook.nss to find out more
-	*/
-    if (!X2PreSpellCastCode()) {
-		// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-        return;
-    }
-	
     //Declare major variables
-    object oTarget = GetSpellTargetObject();
 	object oCaster = OBJECT_SELF;
 	int nCasterLevel = GetWarlockCasterLevel(oCaster);
 	
@@ -48,17 +43,17 @@ void main()
     effect eBluff = EffectSkillIncrease(SKILL_BLUFF, 6);
     effect eDiplomacy = EffectSkillIncrease(SKILL_DIPLOMACY, 6);
     effect eIntimidate = EffectSkillIncrease(SKILL_INTIMIDATE, 6);
-    effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_BEGUILE_INFLUENCE);
-    
     effect eLink = EffectLinkEffects(eBluff, eDiplomacy);
-    eLink = EffectLinkEffects(eLink, eIntimidate);
-    eLink = EffectLinkEffects(eLink, eDur);
-
-    RemoveEffectsFromSpell(oTarget, GetSpellId());
-
-    //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
-
+    eLink = EffectLinkEffects(eIntimidate, eLink);
+	
+	if (!GetLocalInt(oCaster, "WarlockBuddy")){
+		effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_BEGUILE_INFLUENCE);
+		eLink = EffectLinkEffects(eDur, eLink);
+		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+	}
+	
+	RemoveEffectsFromSpell(oTarget, GetSpellId());
     //Apply the VFX impact and effects
     ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }
+*/
