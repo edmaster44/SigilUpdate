@@ -447,9 +447,12 @@ void DoSelfOnlyInvocation(int nId, int bFromBuddy = FALSE){
 	if (!X2PreSpellCastCode()) return;
 	
 	//prevent unnecessary processing with warlock buddy
-	if (bFromBuddy){ 
-		if (GetHasSpellEffect(nId))
-			return;
+	if (bFromBuddy){
+		// except for hideous blow, which needs to refresh to change flavour
+		if (nId != SPELL_I_HIDEOUS_BLOW){ 
+			if (GetHasSpellEffect(nId))
+				return;
+		}
 	}
 		
 	object oCaster = OBJECT_SELF;
