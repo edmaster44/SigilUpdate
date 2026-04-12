@@ -13,12 +13,17 @@
 //:: Created By: Preston Watamaniuk
 //:: Created On: Jan 7, 2002
 //:://////////////////////////////////////////////
-#include "NW_I0_SPELLS"
+#include "x2_inc_spellhook"
+#include "nw_i0_generic"
 
-void main()
-{
-    //Declare major variables
-    //Get the object that is exiting the AOE
+void main(){
+	 object oTarget = GetExitingObject();
+	 DeleteLocalInt(oTarget, EVENFLW_SILENCE);
+	 DeleteLocalObject(oTarget, EVENFLW_SILENCE);
+	 PS_RemoveEffects(oTarget, GetAreaOfEffectSpellId(), NULL, GetAreaOfEffectCreator());
+}
+/*
+void main(){
     object oTarget = GetExitingObject();
     int bValid = FALSE;
     effect eAOE;
@@ -47,3 +52,4 @@ void main()
         }
     }
 }
+*/

@@ -261,24 +261,37 @@ void DoReleaseSpells(object oPC)
 		SendMessageToPC(oPC, "You cannot release spells in combat.");
 		return;
 	}	
-	
 	// turn off all warlock buddy toggles once we figure out how to set the buttons
 	// to not activated from here
 	/*
-	if (GetLocalInt(oPC, "HideousBlow"))
-		SetLocalInt(oPC, "HideousBlow", FALSE);
-	if (GetLocalInt(oPC,"AllreadyRunning"))
-		SetLocalInt(oPC, "AllreadyRunning", FALSE);
-	if (GetLocalInt(oPC,"TwentyFour"))
-		SetLocalInt(oPC,"TwentyFour",FALSE);
-	if (GetLocalInt(oPC,"Invisibility"))
-		SetLocalInt(oPC,"Invisibility",FALSE);	
-	if (GetLocalInt(oPC,"FleeTheScene"))
-		SetLocalInt(oPC,"FleeTheScene",FALSE);
-	if (GetLocalInt(oPC,"DarkForesight"))
-		SetLocalInt(oPC,"DarkForesight",FALSE);
-	if (GetLocalInt(oPC,"DarkDiscorporation"))
-		SetLocalInt(oPC,"DarkDiscorporation",FALSE);
+	if (GetLevelByClass(CLASS_TYPE_WARLOCK, oPC) > 0){
+	
+		if (GetLocalInt(oPC, "HideousBlow"))
+			SetLocalInt(oPC, "HideousBlow", FALSE);
+		if (GetLocalInt(oPC,"AllreadyRunning"))
+			SetLocalInt(oPC, "AllreadyRunning", FALSE);
+		if (GetLocalInt(oPC,"TwentyFour"))
+			SetLocalInt(oPC,"TwentyFour",FALSE);
+		if (GetLocalInt(oPC,"Invisibility"))
+			SetLocalInt(oPC,"Invisibility",FALSE);	
+		if (GetLocalInt(oPC,"FleeTheScene"))
+			SetLocalInt(oPC,"FleeTheScene",FALSE);
+		if (GetLocalInt(oPC,"DarkForesight"))
+			SetLocalInt(oPC,"DarkForesight",FALSE);
+		if (GetLocalInt(oPC,"DarkDiscorporation"))
+			SetLocalInt(oPC,"DarkDiscorporation",FALSE);
+		
+		// option 1: hide/show refresh
+		SetGUIObjectHidden(oPC, "SCREEN_WARLOCK", "TwentyFour", TRUE);
+		DelayCommand(0.1f, SetGUIObjectHidden(oPC, "SCREEN_WARLOCK", "TwentyFour", FALSE));
+
+		// Option 2: Disable/enable refresh  
+		SetGUIObjectDisabled(oPC, "SCREEN_WARLOCK", "TwentyFour", TRUE);
+		DelayCommand(0.1f, SetGUIObjectDisabled(oPC, "SCREEN_WARLOCK", "TwentyFour", FALSE));	
+		
+		// option 3: run load script
+		ExecuteScript("gui_sethideousblow", oPC);
+	}
 	*/
 	
 	//ReleaseCalledCreatures(oPC);
