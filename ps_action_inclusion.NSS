@@ -261,6 +261,11 @@ void DoReleaseSpells(object oPC)
 		SendMessageToPC(oPC, "You cannot release spells in combat.");
 		return;
 	}	
+	
+	if (GetLocalInt(oPC,"TwentyFour")){
+		SetLocalInt(oPC,"TwentyFour",FALSE);
+		SetLocalGUIVariable(oPC, "SCREEN_WARLOCK", 0, "0");
+	}
 	// turn off all warlock buddy toggles once we figure out how to set the buttons
 	// to not activated from here
 	/*
