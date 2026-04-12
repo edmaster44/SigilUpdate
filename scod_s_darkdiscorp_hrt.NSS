@@ -34,7 +34,7 @@ void main() {
 	}
 	
 	effect eDamage;
-	effect eVis = EffectVisualEffect(VFX_IMP_DOOM);
+	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
 	int nCha = GetAbilityModifier(ABILITY_CHARISMA, oCaster);
 	object oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE);
     while(GetIsObjectValid(oTarget)) {	
