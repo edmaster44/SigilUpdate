@@ -5,7 +5,7 @@
 //:://////////////////////////////////////////////
 /*
 	Classes: Cleric, Warlock
-	Spellcraft Required: 33
+	Spellcraft Required: 27
 	Caster Level: Epic
 	Innate Level: Epic
 	School: Enchantment
@@ -42,10 +42,9 @@
 
 void main()
 {
-	if (!X2PreSpellCastCode())
-	{	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
-	    return;
-	}
+	// If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
+	if (!X2PreSpellCastCode())return;
+	
 
 	
 	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
@@ -54,17 +53,11 @@ void main()
 	object oTarget = GetSpellTargetObject();
 	//effect eVis = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
 	effect eDeath = EffectDeath(FALSE, TRUE, TRUE);		// No spectacular death, yes display feedback, yes ignore death immunity.
-	effect eDaze = EffectDazed();
+	effect eDaze = EffectDazed();	
 	
-
-	{	
 		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
-			
-			if (!MyResistSpell(OBJECT_SELF, oTarget))
-			{
-				//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 
 				if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC, SAVING_THROW_TYPE_SPELL, OBJECT_SELF))
 				{	// Fail save and die.
@@ -74,8 +67,6 @@ void main()
 				{	// Make save, so be dazed.
 					DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDaze, oTarget, RoundsToSeconds(nDazeDuration)));
 				}
-				
-			}
 		}		
-	}
+	
 }

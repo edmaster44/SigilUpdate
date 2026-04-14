@@ -930,6 +930,8 @@ const int SPELL_BLEED							= 1508;
 const int SPELL_BLADE_OF_BLOOD					= 1509;
 const int SPELL_BLADE_OF_FEAR					= 1510;
 const int SPELLABILITY_DIVINE_RETRIBUTION		= 1931;
+const int EPIC_SPELL_EPIC_MAGE_ARMOR			= 2501;
+const int EPIC_SPELL_EPIC_FORESIGHT				= 2503;
 
 
 //New Spell Like Abilities for Dervish

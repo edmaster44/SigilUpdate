@@ -3,6 +3,8 @@
 #include "x2_inc_spellhook"
 void main()
 {
+	if (!X2PreSpellCastCode()) return;
+	
 	//Declare major variables
 	float fDuration = HoursToSeconds(24);
 	location lSpellTargetLocation = GetSpellTargetLocation();
