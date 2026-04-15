@@ -115,7 +115,7 @@ void main()
             while (GetIsObjectValid(oTarget))
             {
 				// Only effect those that are hostile
-	    		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester) && oTarget != oManifester)
+	    		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester) && oTarget != oManifester)
 				{
 
         	        // Will negates

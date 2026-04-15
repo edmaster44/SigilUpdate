@@ -42,7 +42,7 @@ void main()
     //Get first target in spell area
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {
             //Calculate the damage
             nDamage = d6(1*nLoop);

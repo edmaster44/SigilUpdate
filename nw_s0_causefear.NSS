@@ -73,7 +73,7 @@ void main()
     if ((PS_GetLevel(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
     {
         // * added rep check April 2003
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_CAUSE_FEAR));

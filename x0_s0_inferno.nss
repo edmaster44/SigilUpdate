@@ -78,7 +78,7 @@ void main()
 
     float fDelay = GetDistanceBetween(oTarget, OBJECT_SELF)/13;
 	
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
 		if(!MyResistSpell(OBJECT_SELF, oTarget))
 		{

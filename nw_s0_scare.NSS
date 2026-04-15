@@ -58,7 +58,7 @@ void main()
         if ((PS_GetLevel(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
         {
             // * added rep check April 2003
-            if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) == TRUE)
+            if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) == TRUE)
             {
                 nNumTargets = nNumTargets - 1;
 
@@ -101,7 +101,7 @@ void main()
         if ((PS_GetLevel(oTarget) < 6) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && (oOrigTgt != oTarget))
         {
             // * added rep check April 2003
-            if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) == TRUE)
+            if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) == TRUE)
             {
                 nNumTargets = nNumTargets - 1;
 

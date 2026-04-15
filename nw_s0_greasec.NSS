@@ -34,7 +34,7 @@ void main()
        // if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) &&(GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )
        if(!GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL))	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.
        {
-            if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+            if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
             {
                 fDelay = GetRandomDelay(0.0, 2.0);
                 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, data.nDC, SAVING_THROW_TYPE_NONE, oCaster, fDelay))

@@ -54,7 +54,7 @@ void main()
     oTarget = GetFirstInPersistentObject(OBJECT_SELF);
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
         {
             /*if(!MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_ACID, GetAreaOfEffectCreator(), fDelay))
             {

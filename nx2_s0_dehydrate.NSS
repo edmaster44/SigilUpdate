@@ -83,7 +83,7 @@ void main()
 		// remove previous usages of this spell
 		RemoveEffectsFromSpell(oTarget, GetSpellId());
 		// check to see if hostile
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) 
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)) 
 		{
 			if (!MyResistSpell(oCaster, oTarget) && !FortitudeSave(oTarget, GetSpellSaveDC()))
 			{

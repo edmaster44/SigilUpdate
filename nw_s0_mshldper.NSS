@@ -60,7 +60,7 @@ void main()
     object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_LARGE, locTarget );
     while (GetIsObjectValid(oTarget) )
     {
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 		{
 	
 	        //Make sure the target is a humanoid

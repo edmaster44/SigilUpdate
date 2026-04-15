@@ -46,7 +46,7 @@ void main()
 	int nCreatureSize;
 	float fDelay;
     int nSpell = GetSpellId();
-	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
+	int nSaveDC = PS_GetEpicSpellSaveDC();
     location lTarget = GetSpellTargetLocation();
 		
     effect eVis = EffectVisualEffect( VFX_HIT_SPELL_MASS_FOWL );

@@ -100,7 +100,7 @@ void main()
 			if (GetDistanceBetween(OBJECT_SELF, oTarget) > dweomer_closeness)
 				MoveTargetToSpell(oTarget, lTarget);
 		
-		} else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)) {
+		} else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)) {
 		
 	        //Fire cast spell at event for the specified target
 	        SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_RAINBOW_DWEOMER));

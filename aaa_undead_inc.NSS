@@ -565,7 +565,7 @@ void PS_DKAbyssalBlast(object oPC, int iLevel, int nSpell)
     object oTarget 			= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 
     while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {	fDelay 			= GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
@@ -775,7 +775,7 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	int bImmuneBlood = (bImmuneNeg || nRace == RACIAL_TYPE_OOZE || nRace == RACIAL_TYPE_CONSTRUCT ||
 		nRace == RACIAL_TYPE_ELEMENTAL);
     if(GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))	
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))	
         {	if (nTouch > 0)
             {	nDamage += PS_AddSneakDmgToSpell(oPC, oTarget, DAMAGE_TYPE_NEGATIVE);
     			effect eDamage	= EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
@@ -833,7 +833,7 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 	if (iLevel >= 10 || iLevelV >= 7)
 	{	nDrain = 2;	} 
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) ||
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) ||
 		(spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF) && !GetHasEffect(EFFECT_TYPE_DOMINATED, oTarget) == TRUE))
     {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 		if (GetHasEffect(EFFECT_TYPE_STUNNED, oTarget) || GetHasEffect(EFFECT_TYPE_PARALYZE, oTarget) ||
@@ -1067,7 +1067,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		PS_RemoveEffects(oPC, nSpell, EFFECT_TYPE_SKILL_INCREASE, oPC);
 		PS_RemoveEffects(oPC, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
-	}else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && !GetIsPC(oTarget)){
+	}else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC) && !GetIsPC(oTarget)){
 		SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
 		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC))
 			SendMessageToPC(oPC, "Target Immune");

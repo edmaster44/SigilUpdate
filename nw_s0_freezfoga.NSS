@@ -17,7 +17,7 @@ void main()
     float fDelay;
     oTarget 		= GetEnteringObject();
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
     {   SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1229));
             fDelay = GetRandomDelay(0.5, 2.0);
             nDamage = d2(nCL/3) + d2(PML/9);

@@ -33,7 +33,7 @@ void main(){
 	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
     effect eDam;
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator())){
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator())){
 	
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_WALL_OF_FIRE));

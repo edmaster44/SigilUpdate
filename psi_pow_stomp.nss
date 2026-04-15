@@ -89,7 +89,7 @@ void main()
             while(GetIsObjectValid(oTarget))
             {
                 if(oTarget != oManifester                                             && // Avoid the cone targeting bug
-                   spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester) && // Difficulty dependent restrictions
+                   spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester) && // Difficulty dependent restrictions
                    GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE      && // Incorporeal creatures are not affected
                    !GetIsImmune(oTarget, IMMUNITY_TYPE_KNOCKDOWN)                        // And the creature is not just generally immune to knockdown
                    )

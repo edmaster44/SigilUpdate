@@ -41,7 +41,7 @@ void main()
 		//SpeakString("nw_s2_wargloryA.ns: On Enter: target is friend");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAttackBonus, oTarget);
 	}
-	else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+	else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 	{
 		//SpeakString("nw_s2_wargloryA.ns: On Enter: target is enemy");
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSavePenalty, oTarget);			

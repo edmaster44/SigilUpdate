@@ -140,7 +140,7 @@ void RunRecurringEffects( object oTarget, object oCaster, float fDuration, int n
 
     while ( GetIsObjectValid(oOther) )
     {
-        if ( spellsIsTarget( oOther, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oOther != oTarget) 
+        if ( spellsIsTarget( oOther, SPELL_TARGET_NON_ALLIED, oCaster) && oOther != oTarget) 
         {
 			// Add a delay to the damage done to nearby enemies, based on their
 			// distance from the target.
@@ -196,7 +196,7 @@ void main()
         return;
     }
 
-    if ( GetIsObjectValid(oTarget) && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster ))
+    if ( GetIsObjectValid(oTarget) && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster ))
     {
 		SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SHROUD_OF_FLAME, TRUE));
 

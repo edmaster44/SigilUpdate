@@ -86,7 +86,7 @@ void main()
             while (GetIsObjectValid(oTarget))
             {
 				// Only effect those that are hostile
-	    		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester))
+	    		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester))
 				{
 
         	        // Reflex negates

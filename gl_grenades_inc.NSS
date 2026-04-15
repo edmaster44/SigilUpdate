@@ -124,7 +124,7 @@ void DoLowFireBomb()
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, LOW_FIRE_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);    
     while (GetIsObjectValid(oTarget))
     {
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) )
+        if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) )
         {
             fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
 			
@@ -201,7 +201,7 @@ void DoMediumAcidBomb()
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, MED_ACID_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);    
     while (GetIsObjectValid(oTarget))
     {
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) )
+        if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) )
         {
             fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
 			
@@ -275,7 +275,7 @@ void DoStrongShrapnelBomb()
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, STRONG_SHRAPNEL_RADIUS, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);    
     while (GetIsObjectValid(oTarget))
     {
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) )
+        if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) )
         {
             fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
 			
@@ -370,7 +370,7 @@ void DoCaltropsEffects(object oTarget)
 
     effect eVis = EffectVisualEffect(VFX_IMP_SLOW);
 	
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
 	{
 		SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), GetSpellId()));			
 		

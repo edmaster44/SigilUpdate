@@ -84,8 +84,7 @@ void main()
     //--------------------------------------------------------------------------
     eDur = ExtraordinaryEffect(eDur);
      // * Dec 2003- added the reaction check back in
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-    {
+    //if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)){
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 
         float fDist = GetDistanceToObject(oTarget);
@@ -155,7 +154,7 @@ void main()
 	        }
 			*/
 		}
-    }
+   // }
     //ApplyEffectToObject(DURATION_TYPE_INSTANT, eArrow, oTarget);
 
 }

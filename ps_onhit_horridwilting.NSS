@@ -45,7 +45,7 @@ void main()
     while (GetIsObjectValid(oTarget))
     {
         // GZ: Not much fun if the caster is always killing himself
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster)
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) && oTarget != oCaster)
         {
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_HORRID_WILTING));

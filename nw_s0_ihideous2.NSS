@@ -29,7 +29,7 @@ void main() {
 		object oTarget = GetSpellTargetObject();
 	    if(GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
 	    {
-	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) &&
+	        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) &&
 	            GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD &&
 	            GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT &&
 	            !GetHasSpellEffect(SPELL_NEGATIVE_ENERGY_PROTECTION, oTarget))

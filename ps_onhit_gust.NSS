@@ -30,7 +30,7 @@ void main() {
             }
         }
         else
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     	{
             {
                 //Fire cast spell at event for the specified target

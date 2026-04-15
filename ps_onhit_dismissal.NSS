@@ -41,7 +41,7 @@ void main() {
 	        {
 	        	// * March 2003. Added a check so that 'friendlies' will not be
 	            // * unsummoned.
-	            if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+	            if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF)
 	            {
 	             	SignalEvent(oTarget, EventSpellCastAt(oCaster, 430));
 	                //Determine correct save
@@ -90,8 +90,8 @@ void main() {
 			nRacial = GetRacialType(oTarget);
 			
 	        //Is that master valid and is he an enemy
-	        if ( (GetIsObjectValid(oMaster) && spellsIsTarget(oMaster,SPELL_TARGET_STANDARDHOSTILE, oCaster) ) ||
-				 spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) )
+	        if ( (GetIsObjectValid(oMaster) && spellsIsTarget(oMaster,SPELL_TARGET_NON_ALLIED, oCaster) ) ||
+				 spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) )
 	        {
 			
 	            if ( GetAssociate(ASSOCIATE_TYPE_SUMMONED, oMaster) == oTarget ||

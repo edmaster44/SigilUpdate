@@ -85,7 +85,7 @@ void main()
         while (GetIsObjectValid(oTarget))
         {
             //Make faction check to ignore allies
-        	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)
+        	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)
                 && GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
         	{
                 //Get the local variable off the target and determined if the spell has already checked them.

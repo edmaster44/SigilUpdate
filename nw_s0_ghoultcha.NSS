@@ -37,7 +37,7 @@ void main()
     eLink = EffectLinkEffects(eLink, eSkill);
     eLink = EffectLinkEffects(eLink, eDur);
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster)
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) && oTarget != oCaster)
     {
         if(!MyResistSpell(GetAreaOfEffectCreator(), oTarget) && !MySavingThrow(SAVING_THROW_FORT, oTarget, data.nDC, SAVING_THROW_TYPE_POISON))
         {

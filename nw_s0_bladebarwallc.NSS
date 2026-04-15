@@ -33,7 +33,7 @@ void main()
     oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE | OBJECT_TYPE_PLACEABLE | OBJECT_TYPE_DOOR);
 
     while(GetIsObjectValid(oTarget)){
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
   
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_BLADE_BARRIER));
 

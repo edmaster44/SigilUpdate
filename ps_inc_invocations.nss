@@ -219,7 +219,7 @@ void OnDispellCallback(object oCaster, int nSaveDC, float fDuration){
 
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lCaster, TRUE, OBJECT_TYPE_CREATURE );
     while (GetIsObjectValid(oTarget)){
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) && oTarget != oCaster){
 			
 			nSaveResult = FortitudeSave(oTarget, nSaveDC, nSaveType, oCaster );
 			if (nSaveResult != SAVING_THROW_CHECK_IMMUNE){

@@ -47,7 +47,7 @@ void main()
     //Check the faction of the entering object to make sure the entering object is not in the casters faction
     if(nFire == 0)
     {
-        //if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        //if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCaster))
         {
             SetLocalInt(OBJECT_SELF, "NW_SPELL_DELAY_BLAST_FIREBALL",TRUE);
@@ -56,7 +56,7 @@ void main()
             oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
             while(GetIsObjectValid(oTarget))
             {
-                if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+                if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
                 {
                     //Fire cast spell at event for the specified target
                     SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_DELAYED_BLAST_FIREBALL));

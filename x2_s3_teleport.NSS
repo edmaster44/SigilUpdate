@@ -35,7 +35,7 @@ void main()
     }
 
 
-    if (! GetPlotFlag(oTarget) && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oHitter) )
+    if (! GetPlotFlag(oTarget) && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oHitter) )
     {
 
         int nDC = 10 + PS_GetCasterLevel(OBJECT_SELF);

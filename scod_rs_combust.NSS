@@ -94,7 +94,7 @@ void main()
 	effect eHit = EffectLinkEffects(eDam, eVis);
 
     //if(!GetIsReactionTypeFriendly(oTarget))	// BDF: obsolete conditional
-	if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+	if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
     {
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 

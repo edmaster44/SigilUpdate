@@ -63,7 +63,7 @@ void main()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     	{
             if((GetSpellId() == 341) || GetSpellId() == 58)
             {

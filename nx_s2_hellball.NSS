@@ -51,7 +51,7 @@ void main()
 
     float fDelay;
     int nTotalDamage;
-    int nSpellDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;	// Epic Spells are DC +5
+    int nSpellDC = PS_GetEpicSpellSaveDC();	
 	
     //effect eExplode 	  = EffectVisualEffect(VFX_HIT_HELLBALL_AOE);
 	effect eHitVFX		  = EffectVisualEffect(VFX_HIT_HELLBALL);
@@ -70,8 +70,7 @@ void main()
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     while (GetIsObjectValid(oTarget))
     {
-	    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-	    {
+	    //if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)){
 		    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 		    fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20 + 0.5f;
 			
@@ -130,7 +129,7 @@ void main()
 			    //DelayCommand(fDelay + 0.5f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisFire, 	   oTarget));
 			    //DelayCommand(fDelay + 0.7f, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisSonic, 	   oTarget));
 			}
-        }
+        //}
 		
        //Select the next target within the spell shape.
        oTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

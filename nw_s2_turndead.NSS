@@ -256,7 +256,7 @@ void main()
     while( GetIsObjectValid(oTarget) && nHDCount < nTurnHD )
     {
 		// third check is for Death Knight who should be immune
-        if( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF && GetSubRace(oTarget) != 169)	// AFW-OEI 06/28/2006: Hopefully, the spellsIsTarget finally excludes all friendlies
+        if( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF && GetSubRace(oTarget) != 169)	// AFW-OEI 06/28/2006: Hopefully, the spellsIsTarget finally excludes all friendlies
         {
             nRacial = GetRacialType(oTarget);
 			nDex = GetAbilityScore( oTarget, ABILITY_DEXTERITY );

@@ -47,7 +47,7 @@ void main() {
 	if (GetHasSpell(SPELL_GREATER_SHOUT, oCaster)) {
 		while(GetIsObjectValid(oTarget))
 		{
-			if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+			if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 			{
 				SignalEvent(oTarget, EventSpellCastAt(oCaster, 1038));
 				if (oTarget != oCaster)
@@ -97,7 +97,7 @@ void main() {
 	else if (GetHasSpell(SPELL_SHOUT, oCaster)) {
 		while(GetIsObjectValid(oTarget))
 		{
-			if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+			if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 			{
 				SignalEvent(oTarget, EventSpellCastAt(oCaster, 1037));
 				if (oTarget != oCaster)

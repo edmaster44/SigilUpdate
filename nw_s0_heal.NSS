@@ -44,7 +44,7 @@ void main()
     //Check to see if the target is an undead
     if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
     {
-    	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)) //if the target is undead and hostile, or hardcore rules are on
+    	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)) //if the target is undead and hostile, or hardcore rules are on
     	{
 			HarmTarget( oTarget, oCaster, SPELL_HEAL );
         }

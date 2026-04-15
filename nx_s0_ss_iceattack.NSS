@@ -81,7 +81,7 @@ void CastSpell(float fDuration, int nEffect, int nTimesCast, int nTimesHit)
 			break;
 	}
 	
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_POLAR_RAY));

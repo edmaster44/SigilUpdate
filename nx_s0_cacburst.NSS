@@ -88,7 +88,7 @@ void main()
 	
 	while (GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{
 			
 			nDamage = d2(nCasterLvl*2) + d2((2*PML)/3);

@@ -54,7 +54,7 @@ void main() {
 		int nMod = 0;
 		if (onlyOne) nMod = -2;
 	
-	    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)) {
+	    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)) {
 		
 	        //Fire cast spell at event for the specified target
 	        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_HYPNOTISM));

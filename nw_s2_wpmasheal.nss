@@ -58,7 +58,7 @@ void CureObject( object oTarget, effect eVis, effect eVis2, int nCasterLvl, int 
 	float fDelay = GetRandomDelay();
 /*
 	//Check to see if the target is an undead
-	if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
 		DelayCommand(fDelay, HarmTarget( oTarget, OBJECT_SELF, nSpellId ) );
 	}

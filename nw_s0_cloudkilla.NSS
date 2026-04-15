@@ -32,7 +32,7 @@ void main(){
     //Declare major variables
     object oTarget = GetEnteringObject();
 	
-    if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+    if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		ApplyCloudKill(oTarget, oCaster, data.nId, data.nDC);
   
 }

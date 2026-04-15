@@ -62,7 +62,7 @@ void PS_Spell_NegateConcealment(object oPC, location lTarget, int nSpell)
 	
 	while (GetIsObjectValid(oTarget))
 	{
-		//if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		//if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		if (spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oPC))
 		{	if(!MyResistSpell(OBJECT_SELF, oTarget))
 			{	RemoveEffectsFromSpell(oTarget, nSpell);
@@ -131,7 +131,7 @@ void PS_Spell_WeighedInTheBalance(object oPC, int nSpell)
 	object oTarget 		= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	
 	while (GetIsObjectValid(oTarget))
-	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+	{	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
 		{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
 			nDamCorner			= d12(nCasterLevel);
 			nDamEdge			= d8(nCasterLevel);
@@ -437,7 +437,7 @@ void PS_Spell_WretchedBlight(object oPC, location lTarget, int nSpell)
     DelayCommand(0.0f, ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eDark, lTarget));	
 	
 	while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
     	{   SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
             if (!MyResistSpell(oPC, oTarget, fDelay))
     	    {	nDamage = d8(nCasterLvl);
@@ -478,7 +478,7 @@ void PS_Spell_GhaeleRay(object oPC, object oTarget, int nSpell)
 	int nMetaMagic = GetMetaMagicFeat();
 	if (nCasterLevel <= 0)
 		nCasterLevel = 1;
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
 	{   SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 		if (nTouch != TOUCH_ATTACK_RESULT_MISS)
 	    {   if (!MyResistSpell(oPC, oTarget))
@@ -548,7 +548,7 @@ void PS_Spell_StormOfShards(object oPC, location lTarget, int nSpell)
     object oTarget 		= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 
     while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
     	{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
     	    {	nDamage = d8(nCasterLvl);
@@ -774,7 +774,7 @@ void PS_Entropy_EntropicBolt(object oPC, object oTarget, int nSpell)
 	effect eUnresi	= EffectDamage(nDamage, DAMAGE_TYPE_MAGICAL, DAMAGE_POWER_NORMAL, TRUE);
 	effect eVFX = EffectNWN2SpecialEffectFile("sp_sonic_hit", oTarget);
 	
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 		if (nTouch != TOUCH_ATTACK_RESULT_MISS)
 		{	int iSave = MySavingThrow(SAVING_THROW_FORT, oTarget, GetSpellSaveDC());
@@ -915,7 +915,7 @@ void PS_Spell_LastJudgment(object oPC, object oTarget, int nSpell)
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);
 		return;	}	
 	
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 		if (!MyResistSpell(oPC, oTarget))
 		{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oTarget);
@@ -937,7 +937,7 @@ void PS_Spell_RayOfExhaustion(object oPC, object oTarget, int nSpell)
 	effect eFatigue = EffectFatigue();
 	effect eVFX		= EffectNWN2SpecialEffectFile("fx_spell_fatigue02");
 	
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
     {	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 		if (TouchAttackRanged(oTarget) != TOUCH_ATTACK_RESULT_MISS) 
 		{	if (!MyResistSpell(oPC, oTarget))

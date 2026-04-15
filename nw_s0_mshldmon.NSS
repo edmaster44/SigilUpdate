@@ -58,7 +58,7 @@ void main()
     object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_LARGE, locTarget );
     while (GetIsObjectValid(oTarget) )
     {
-		if ( TRUE == spellsIsTarget( oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster ) )
+		if ( TRUE == spellsIsTarget( oTarget, SPELL_TARGET_NON_ALLIED, oCaster ) )
 		{
 			float fDuration = RoundsToSeconds( GetScaledDuration(nRounds, oTarget) );
 

@@ -153,7 +153,7 @@ void RunRecurringEffects( location lTarget, object oCaster, int nCasterLevel, in
 
     while ( GetIsObjectValid(oVictim) )
     {
-        if ( spellsIsTarget( oVictim, SPELL_TARGET_STANDARDHOSTILE, oCaster) )
+        if ( spellsIsTarget( oVictim, SPELL_TARGET_NON_ALLIED, oCaster) )
 		//if (GetIsReactionTypeFriendly(oVictim) == FALSE)
         {
 			// Add a delay to the damage done to nearby victims, based on their

@@ -35,7 +35,7 @@ void main() {
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_MEDIUM, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
         {
             //------------------------------------------------------------------
             // Calculate delay until spell hits current target. If we are the

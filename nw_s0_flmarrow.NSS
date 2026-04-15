@@ -70,7 +70,7 @@ void main()
     int nPathType = PROJECTILE_PATH_TYPE_DEFAULT; 
     //int nPathType = PROJECTILE_PATH_TYPE_HOMING_SPIRAL; //NWN1 stuff that I don't want, was overriding 2da settings.
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
         float fDelay = GetProjectileTravelTime( lSourceLoc, lTargetLoc, nPathType );
         //Fire cast spell at event for the specified target

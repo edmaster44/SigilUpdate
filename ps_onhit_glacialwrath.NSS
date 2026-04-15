@@ -93,7 +93,7 @@ void main()
 	//begin cycling targets + basic discrimination
 	while (GetIsObjectValid(oTarget))
 	{	//FoF discrimination
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && oTarget != oCaster)
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) && oTarget != oCaster)
 		{
 			SignalEvent(oTarget, EventSpellCastAt(oCaster, 1045, TRUE));
 			fDist = GetDistanceBetween(OBJECT_SELF, oTarget)/10;

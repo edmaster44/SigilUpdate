@@ -51,7 +51,7 @@ void main()
     effect eVis = EffectVisualEffect( VFX_HIT_DROWN );
     effect eDam;
     //Check faction of target
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 437));

@@ -47,7 +47,7 @@ void main()
 	
 
 	
-	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
+	int nSaveDC = PS_GetEpicSpellSaveDC();
 	int nDazeDuration = d6(1) + 1;
 	
 	object oTarget = GetSpellTargetObject();
@@ -55,7 +55,7 @@ void main()
 	effect eDeath = EffectDeath(FALSE, TRUE, TRUE);		// No spectacular death, yes display feedback, yes ignore death immunity.
 	effect eDaze = EffectDazed();	
 	
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 

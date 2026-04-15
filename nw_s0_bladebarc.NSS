@@ -53,8 +53,7 @@ void main()
 
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCreator))
-        {
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCreator)){
             //Fire spell cast at event
             SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_BLADE_BARRIER));
             //Make SR Check

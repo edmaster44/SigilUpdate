@@ -45,7 +45,7 @@ void main()
 void DoPetrificationNew(int nPower, object oSource, object oTarget, int nSpellID, int nFortSaveDC)
 {
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
         // * exit if creature is immune to petrification
         if (spellsIsImmuneToPetrification(oTarget) == TRUE)

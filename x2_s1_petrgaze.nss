@@ -57,7 +57,7 @@ void main()
     {
         fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
 
-        if (spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) && oTarget != OBJECT_SELF)
+        if (spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) && oTarget != OBJECT_SELF)
         {
             DelayCommand(fDelay,  DoPetrification(nHitDice, oSelf, oTarget, nSpellID, nDC));
             //Get next target in spell area

@@ -62,7 +62,7 @@ void main()
     oTarget = GetFirstInPersistentObject();
     while(GetIsObjectValid(oTarget) && nDamCount < 1000)
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
         {
             fDelay = GetRandomDelay(1.0, 2.2);
             //------------------------------------------------------------------

@@ -44,7 +44,7 @@ void main()
     int nDamage;
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
 		if( GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
 		{

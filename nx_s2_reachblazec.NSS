@@ -54,7 +54,7 @@ void main()
 
 	while(GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCreator) && (oTarget != oCreator) )
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCreator) && (oTarget != oCreator) )
 		{
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELLABILITY_REACH_TO_THE_BLAZE));
 			

@@ -86,7 +86,7 @@ void main()
 	//oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GINORMOUS, lSelf, TRUE);
     while(GetIsObjectValid(oTarget))
     {
-        if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {
             //Fire cast spell at event for the specified target
  //           SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_DRAGON_BREATH_FIRE));

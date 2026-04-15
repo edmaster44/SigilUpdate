@@ -98,7 +98,7 @@ void main()
 	{
 		if (GetIsObjectValid(oTarget))
 		{
-			if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+			if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 			{
 				if ( !GetIsDead(oCaster) && GetArea(oTarget) == GetArea(oCaster) )
 				{

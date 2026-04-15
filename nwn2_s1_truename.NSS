@@ -32,7 +32,7 @@ void main()
     object oTarget = GetSpellTargetObject();
 
     if ( GetIsObjectValid(oTarget) && 
-		 spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && 
+		 spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && 
 		 GetImmortal(oTarget) &&
 		 !GetLocalInt(oTarget, IMMUNE_TO_TRUE_NAME) )
     {

@@ -31,7 +31,7 @@ void main(){
 	} else nDC = data.nDC;
 	
 	if(GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE){
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
 	
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ENTANGLE));
 

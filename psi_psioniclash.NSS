@@ -134,7 +134,7 @@ void main()
 		nPPFinal == 0;
 	}
 	
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
 		if(!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS))
 		//Completely ineffective against creatures immune to mind-effecting spells.

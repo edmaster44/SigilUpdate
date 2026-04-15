@@ -52,7 +52,7 @@ void main()
 		return;
 	}
 	
-	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
+	int nSaveDC = PS_GetEpicSpellSaveDC();
 	float fDuration = RoundsToSeconds(20);
 	
 	object oTarget = GetSpellTargetObject();
@@ -77,7 +77,7 @@ void main()
 	
 
 	{	
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 			//ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);

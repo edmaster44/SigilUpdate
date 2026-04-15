@@ -25,7 +25,7 @@
 //::                          Henchmen are booted from the party when petrified
 //::                          Dispel Magic delay until VFX hit has been set down to 0.3
 //:://////////////////////////////////////////////
-//:: 8/15/06 - BDF-OEI: modified spellsIsTarget (case SPELL_TARGET_STANDARDHOSTILE) to disregard targets that are associates of 
+//:: 8/15/06 - BDF-OEI: modified spellsIsTarget (case SPELL_TARGET_NON_ALLIED) to disregard targets that are associates of 
 //:: 	non-hostile PC's that are in the party, based on personal reputation global flag
 // ChazM 8/29/06 moved spellsIsTarget() (and includes and constants) to NW_I0_SPELLS
 //:: 10/16/06 - BDF-OEI: modified doAura() to substitute EffectDamageIncrease for EffectDamageShield(), which cannot be set for VersusAlignmentEffect()
@@ -469,7 +469,7 @@ void DoGrenade(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit
         //Apply the MIRV and damage effect
 
         // * only damage enemies
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) )
+        if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) )
         {
         // * must be the correct racial type (only used with Holy Water)
             if ((nRacialType != RACIAL_TYPE_ALL) && (nRacialType == GetRacialType(oTarget)))
@@ -511,7 +511,7 @@ void DoGrenade(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget))
     {
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) )
+        if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) )
         {
             float fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
             //Roll damage for each target
@@ -727,7 +727,7 @@ void DoCamoflage(object oTarget, int nSpellId)
 void DoSpikeGrowthEffect(object oTarget)
 {
     float fDelay = GetRandomDelay(1.0, 2.2);
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
     {
         //Fire cast spell at event for the target
         SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_SPIKE_GROWTH));
@@ -829,7 +829,7 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
     }
     else if (TouchAttackMelee(oTarget) >0 )
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpellID));
@@ -1185,7 +1185,7 @@ void DoCaltropEffect(object oTarget)
  //   effect eVis = EffectVisualEffect(VFX_IMP_SPIKE_TRAP);
     //effect eLink = eDam;
 
-    if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator())
+    if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator())
      && spellsIsFlying(oTarget) == FALSE)
     {
         //Fire cast spell at event for the target
@@ -1341,7 +1341,7 @@ int ArcaneArcherCalculateBonus()
 void DoPetrification(int nPower, object oSource, object oTarget, int nSpellID, int nFortSaveDC)
 {
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
         // * exit if creature is immune to petrification
         if (spellsIsImmuneToPetrification(oTarget) == TRUE)
@@ -1671,7 +1671,7 @@ void doAura(int nAlign, int nVis1, int nVis2, int nDamageType)
 	
 void DoStinkingCloud(object oTarget, object oSource, int nSaveDC, effect eVis, effect eStink)
 {
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
 	{
 		SignalEvent(oTarget, EventSpellCastAt(oSource, GetSpellId()));
 		if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC, SAVING_THROW_TYPE_POISON))
@@ -2003,7 +2003,7 @@ void spellsDispelMagic(object oTarget, int nCasterLevel, effect eVis, effect eIm
     //--------------------------------------------------------------------------
     // Fire hostile event only if the target is hostile...
     //--------------------------------------------------------------------------
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
 
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nId));

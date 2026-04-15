@@ -60,7 +60,7 @@ void main()
                 DestroyObject(oTarget);
             }
         }
-        else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oCaster)
+        else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != oCaster)
     	{
 	         //Fire cast spell at event for the specified target
 	         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));

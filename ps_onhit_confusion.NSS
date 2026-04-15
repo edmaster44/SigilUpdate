@@ -38,7 +38,7 @@ void main()
 	oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, GetLocation(OBJECT_SELF));
 	while (GetIsObjectValid(oTarget))
 	{
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     	{
            //Fire cast spell at event for the specified target
            SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_CONFUSION));

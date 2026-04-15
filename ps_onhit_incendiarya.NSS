@@ -27,7 +27,7 @@ void main()
     oTarget = GetEnteringObject();
     //Declare the spell shape, size and the location.
 	object oCaster = GetOnHitAbilityCaster(GetAreaOfEffectCreator());
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE,oCaster))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED,oCaster))
     {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_INCENDIARY_CLOUD));

@@ -35,7 +35,7 @@ void main(){
 	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
    
     while(GetIsObjectValid(oTarget)){
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_WALL_OF_FIRE));
             //Make SR check, and appropriate saving throw(s).

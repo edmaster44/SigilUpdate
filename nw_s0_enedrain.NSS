@@ -68,7 +68,7 @@ void main()
 	//eDrain = EffectLinkEffects( eDrain, eVis );
 	//eDrain = EffectLinkEffects( eDrain, eBeam );
     
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ENERGY_DRAIN));

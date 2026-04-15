@@ -58,7 +58,7 @@ void main()
 	if (nCasterLevel < 20 && !GetIsObjectValid(GetSpellCastItem())){
 	nDamage = d4(20) + d4(PML/3);
 	} 	
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
 		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ORB_OF_ELECTRICITY));
 		 //if (TouchAttackRanged(oTarget) != TOUCH_ATTACK_RESULT_MISS)

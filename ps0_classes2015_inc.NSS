@@ -36,7 +36,7 @@ void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell)
 
     SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 
-    if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+    if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
 	{	if (!MyResistSpell(oPC, oTarget))
 		{	if (!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()+10, SAVING_THROW_TYPE_MIND_SPELLS))
             {	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));		}
@@ -396,7 +396,7 @@ void PS_Feat_SOD_DeathTouch(object oPC, object oTarget, int nSpell)
 	{	nCasterLevel = nCasterLevel * 2;	}
     int nDamage = d6(nCasterLevel);  // JLR - OEI 07/19/05
     if(GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) &&
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) &&
         	GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD &&
             GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT &&
             !GetHasSpellEffect(SPELL_NEGATIVE_ENERGY_PROTECTION, oTarget))

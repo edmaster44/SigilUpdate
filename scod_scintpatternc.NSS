@@ -31,7 +31,7 @@ void main()
 		
 	oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);
     while(GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
 		{	if (!MyResistSpell(oCaster, oTarget))
 			{	SignalEvent(oTarget, EventSpellCastAt(oCaster, 1482, TRUE));
 				nHitDice	= PS_GetLevel(oTarget);

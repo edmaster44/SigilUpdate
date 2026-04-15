@@ -306,7 +306,7 @@ int AbilityScoreCheck(object oCaster, object oTarget, int nAbilityScore, int nDC
 
 // Returns the number of spell targets in the area
 // objectType=OBJECT_TYPE_CREATURE
-// targetType=SPELL_TARGET_STANDARDHOSTILE
+// targetType=SPELL_TARGET_NON_ALLIED
 int GetSpellTargetCountInArea(int shape, float radius, location loc, int lineOfSight, object caster, int objectType, int targetType)
 {
     int count = 0;

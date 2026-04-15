@@ -79,7 +79,7 @@ void main()
     //--------------------------------------------------------------------------
     // Do Safety check, SR and Saves...
     //--------------------------------------------------------------------------
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
 		if (TouchAttackMelee(oTarget))
 		{

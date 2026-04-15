@@ -58,7 +58,7 @@ void main()
 			{
 				return;
 				}
-    	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
     	{
 			// Let the AI know
         	//SPRaiseSpellCastAt(oTarget, TRUE, POWER_ECTOSHAMBLER, oCreator);

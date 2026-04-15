@@ -62,7 +62,7 @@ void main()
     while(GetIsObjectValid(oTarget))
     {
         // Make a faction check
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {
             fDelay = GetRandomDelay(1.0, 2.0);
             //Fire cast spell at event for the specified target

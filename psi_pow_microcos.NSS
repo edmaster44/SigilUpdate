@@ -129,7 +129,7 @@ void main()
 					if (nHPCounter <= 0)
 						break;
                     if(oTarget != manif.oManifester &&                                          // Not the manifester
-                       spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester) // Difficulty limitations
+                       spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester) // Difficulty limitations
                        )
                     {
                    	 	nTestHP = max(0, GetCurrentHitPoints(oTarget));

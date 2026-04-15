@@ -78,7 +78,7 @@ void main()
 
 	if (GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{	
 			if(!MyResistSpell(OBJECT_SELF, oTarget))
 			{

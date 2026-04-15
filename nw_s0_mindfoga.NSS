@@ -28,7 +28,7 @@ void main()
 		return;
 	}
 	
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
 	
 		struct dSpellData data = GetSpellDataForAoE("Mindfog", oCaster);
 		effect eVis = EffectVisualEffect( VFX_DUR_SPELL_MIND_FOG_VIC );

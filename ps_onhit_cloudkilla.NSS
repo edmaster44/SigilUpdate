@@ -40,7 +40,7 @@ void main()
     eDam = SetEffectSpellId(eDam, -1);
     eDam = ExtraordinaryEffect(eDam);
 
-    if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE , oCaster) )
+    if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED , oCaster) )
     {
 		if(GetIsImmune(oTarget, IMMUNITY_TYPE_POISON))
 		{

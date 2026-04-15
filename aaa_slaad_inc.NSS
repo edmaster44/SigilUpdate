@@ -31,7 +31,7 @@ void PS_StunningCroak(object oPC, int nSpell)
 	
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lCenter, TRUE, OBJECT_TYPE_CREATURE);
 	while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
         {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (GetSubRace(oTarget) != 168)
 			{	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget,fDuration);
@@ -195,7 +195,7 @@ void PS_SlaadChaosHammer(object oPC, int nSpell, location lTarget)
 	
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
 	while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
         {	fDelay = GetRandomDelay(0.15, 0.35);
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
@@ -339,7 +339,7 @@ void PS_SlaadCircleOfDeath(object oPC, int nSpell)
         bContinueLoop = FALSE; //Set this to false so that the loop only continues in the case of new low HD creature
         oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE);
         while (GetIsObjectValid(oTarget))
-        {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+        {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF)
         	{	bAlreadyAffected = GetLocalInt(oTarget, "bDEATH" + sIdentifier);
                 if (!bAlreadyAffected)
                 {	nCurrentHD = PS_GetLevel(oTarget);
@@ -437,7 +437,7 @@ void PS_SlaadPWBlind(object oPC, int nSpell)
 		eLink			= SupernaturalEffect(eLink);
 
 	if (GetIsObjectValid(oTarget))
-	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+	{	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
 		{	if (!MyResistSpell(oPC, oTarget) && !GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS))
 			{
 

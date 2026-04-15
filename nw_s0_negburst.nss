@@ -70,7 +70,7 @@ void main()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget))
     {
-       if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+       if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
        {
             //Roll damage for each target
             nDamage = d3(nCasterLvl) + d3(PML/3);
@@ -112,7 +112,7 @@ void main()
                 DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oTarget));
             }
 			else
-          	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+          	if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         	{
                 if(GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
                 {

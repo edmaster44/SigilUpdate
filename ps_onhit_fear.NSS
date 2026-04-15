@@ -35,7 +35,7 @@ void main()
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, GetLocation(OBJECT_SELF), TRUE);
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     	{
             fDelay = GetRandomDelay();
             //Fire cast spell at event for the specified target

@@ -56,7 +56,7 @@ void main()
 		return;
 	}
 	
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     {		
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));

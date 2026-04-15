@@ -60,7 +60,7 @@ void main()
 
 	// BMA-OEI 11/9/06: Allow casting on neutral creatures
     //if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE,OBJECT_SELF))
-    if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF))
+    if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED,OBJECT_SELF))
     {
         //GZ: I still signal this event for scripting purposes, even if a placeable
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_FINGER_OF_DEATH));

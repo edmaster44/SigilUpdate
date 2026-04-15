@@ -67,7 +67,7 @@ void HandleTargetSelf()
     object oTarget = GetFirstObjectInShape( SHAPE_SPHERE, RADIUS_SIZE_ASTRONOMIC, lSourceLoc );
     while ( GetIsObjectValid(oTarget) )
     {
-    	if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+    	if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
     	{	 
 			//Fire cast spell at event for the specified target
             SignalEvent( oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_METEOR_SWARM) );

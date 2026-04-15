@@ -75,8 +75,8 @@ void main()
 		nRacial = GetRacialType(oTarget);
 		
         //Is that master valid and is he an enemy
-        if ( (GetIsObjectValid(oMaster) && spellsIsTarget(oMaster,SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) ) ||
-			 spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+        if ( (GetIsObjectValid(oMaster) && spellsIsTarget(oMaster,SPELL_TARGET_NON_ALLIED, OBJECT_SELF) ) ||
+			 spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
         {
 		
             if ( GetAssociate(ASSOCIATE_TYPE_SUMMONED, oMaster) == oTarget ||

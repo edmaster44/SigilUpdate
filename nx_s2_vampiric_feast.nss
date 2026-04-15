@@ -50,7 +50,7 @@ void main()
 	}
 	object oCaster = OBJECT_SELF;
 	int nId = GetSpellId();
-	int nSaveDC = PS_GetSpellSaveDC(oCaster) + 5;
+	int nSaveDC = PS_GetEpicSpellSaveDC();
 	int nMaxHeal = GetMaxHitPoints() - GetCurrentHitPoints();
 	// if caster has a temp hp effect, current hp might be higher than max which would make
 	// nMaxHeal a negative number
@@ -165,7 +165,7 @@ void main()
 	    return;
 	}
 	
-	int nSaveDC = PS_GetSpellSaveDC(OBJECT_SELF) + 5;
+	int nSaveDC = PS_GetEpicSpellSaveDC(OBJECT_SELF);
 	int nTotalDamage = 0;
 	int bSummonShadow = 0;
 	//int nHD, nCurrentHP, nDamage;

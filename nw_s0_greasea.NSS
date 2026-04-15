@@ -32,7 +32,7 @@ void main()
     object oCaster = GetAreaOfEffectCreator();
 	struct dSpellData data = GetSpellDataForAoE("Grease", oCaster);
     float fDelay = GetRandomDelay(1.0, 2.2);
-    if((spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) &&
+    if((spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)) &&
 	    (PS_IsObjectImmuneToSpell(oTarget, SPELL_GREASE) == FALSE))
     {
         // if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) &&(GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )

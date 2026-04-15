@@ -73,7 +73,7 @@ void main()
 	{
         if (GetRacialType(oTarget)== RACIAL_TYPE_ABERRATION)
     	{
-			if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+			if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 			{
            //Fire cast spell at event for the specified target
 	           SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1222));

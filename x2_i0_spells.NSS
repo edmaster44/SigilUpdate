@@ -413,7 +413,7 @@ void DoMindBlast(int nDC, int nDuration, float fRange)
             bImmune = TRUE;
         }
 
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) && oTarget != OBJECT_SELF && !bImmune )
+        if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) && oTarget != OBJECT_SELF && !bImmune )
         {
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
             fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;

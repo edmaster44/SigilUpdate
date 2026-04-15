@@ -52,7 +52,7 @@
 //=========================================================================
 // * see spellsIsTarget for a definition of these constants
 const int SPELL_TARGET_ALLALLIES = 1;
-const int SPELL_TARGET_STANDARDHOSTILE = 2;
+const int SPELL_TARGET_NON_ALLIED = 2;
 const int SPELL_TARGET_SELECTIVEHOSTILE = 3;
 const int SAVING_THROW_NONE = 4;
 // * used by the IgnoreTargetRules functions
@@ -72,7 +72,7 @@ const string VAR_IMMUNE_TO_HEAL = "IMMUNE_TO_HEAL";
 // * Generic reputation wrapper
 // * definition of constants:
 // * SPELL_TARGET_ALLALLIES = Will affect all allies, even those in my faction who don't like me
-// * SPELL_TARGET_STANDARDHOSTILE: 90% of offensive area spells will work
+// * SPELL_TARGET_NON_ALLIED: 90% of offensive area spells will work
 //   this way. They will never hurt NEUTRAL or FRIENDLY NPCs.
 //   They will never hurt FRIENDLY PCs
 //   They WILL hurt NEUTRAL PCs
@@ -192,8 +192,9 @@ void IgnoreTargetRulesActionCastSpellAtLocationArea(int nShapeType, float fShape
 // Functions
 //=========================================================================
 
-int GetIsStandardHostileTarget(object oTarget, object oSource)
-{
+
+/* deprecated - FlattedFifth
+int GetIsStandardHostileTarget(object oTarget, object oSource){
     int nReturnValue = FALSE;
 
     int bTargetIsPC = GetIsPC(oTarget);
@@ -201,9 +202,7 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
     int bReactionTypeFriendly = GetIsReactionTypeFriendly(oTarget, oSource);
     int bInSameFaction = GetFactionEqual(oTarget, oSource);
     if (bReactionTypeFriendly == FALSE && bInSameFaction == FALSE)
-    {
         bNotAFriend = TRUE;
-    }
 
     // * Local Override is just an out for end users who want
     // * the area effect spells to hurt 'neutrals'
@@ -305,6 +304,8 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
 }
 
 
+
+
 //::///////////////////////////////////////////////
 //:: spellsIsTarget
 //:: Copyright (c) 2001 Bioware Corp.
@@ -336,11 +337,91 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
 int spellsIsTarget(object oTarget, int nTargetType, object oSource)
 {
 	// If the target is a ScriptHidden creature, we do not want to affect it.
-	if ( GetScriptHidden(oTarget) == TRUE )
+	if ( GetScriptHidden(oTarget) == TRUE ) return FALSE;
+
+	// If we want to ignore the rules of target selection for this spell, always return true.
+	int nEntry = IgnoreTargetRulesGetFirstIndex(oSource, oTarget);	
+	if (nEntry != -1)
 	{
-		return FALSE;
-	}
+		IgnoreTargetRulesRemoveEntry(oSource, nEntry);
+		return TRUE;	
+	}		
 	
+    // * if dead, not a valid target
+    if (GetIsDead(oTarget, TRUE)) return FALSE;
+    
+
+	// early out if the targets are the same...
+	if ( oTarget == oSource ){
+		if ( nTargetType == SPELL_TARGET_ALLALLIES ) return TRUE; 			
+		else return FALSE;
+	}
+	object oMaster;
+	object oCaller;
+	if (!GetIsPC(oTarget)){
+		oMaster = GetMaster(oTarget);
+		oCaller = GetLocalObject(oTarget, abilityCaster);
+		if (GetIsPC(oMaster)) 
+			return spellsIsTarget(oMaster, nTargetType, oSource);
+		if (GetIsPC(oCaller))
+			return spellsIsTarget(oCaller, nTargetType, oSource);
+	}
+	if (!GetIsPC(oSource)){
+		oMaster = GetMaster(oSource);
+		oCaller = GetLocalObject(oSource, abilityCaster);
+		if (GetIsPC(oMaster)) 
+			return spellsIsTarget(oTarget, nTargetType, oMaster);
+		if (GetIsPC(oCaller))
+			return spellsIsTarget(oTarget, nTargetType, oCaller);
+	}
+
+	// end early out section
+
+	switch (nTargetType){
+		// this kind of spell will affect all friendlies and anyone in my
+		// party, even if we are upset with each other currently.
+		case SPELL_TARGET_ALLALLIES:{
+			if(GetIsReactionTypeFriendly(oTarget,oSource) || GetFactionEqual(oTarget,oSource) ||
+				GetIsFriend(oTarget, oSource))
+				return TRUE;
+			else return FALSE;
+		}
+		// npcs who are not actively hostile default to allies, pcs default to non-allies unless In
+		// same party or friendly
+		case SPELL_TARGET_NON_ALLIED:{
+			// intrusive thoughts and self-sabotaging psychology aside, we're usually our own ally
+			if (oSource == oTarget) return FALSE;
+			// npcs are by default considered "allies" if they're not actively hostile so that
+			//aoe spells dont kill important npcs like quest givers or touts
+			if (!GetIsPC(oTarget)){ //not a pc
+				if (GetIsEnemy(oTarget, oSource) || GetIsReactionTypeHostile(oTarget, oSource))
+					return TRUE; // a hostile npc is a non-ally
+				else return FALSE; // non-hostile npcs are all allies for this purpose
+			} else { // is a PC
+				if (GetFactionEqual(oTarget, oSource) || // if in the same party
+					GetIsReactionTypeFriendly(oTarget, oSource) || //or set to "friendly" in the player list
+					GetIsFriend(oTarget, oSource)) 
+						return FALSE; //then the pc is considered an "ally"
+				else return TRUE; //otherwise a pc is a non-ally by default
+			}
+		}
+		// only harms enemies, ever
+		case SPELL_TARGET_SELECTIVEHOSTILE:{
+			if( GetIsEnemy(oTarget,oSource) || GetIsReactionTypeHostile(oTarget, oSource) )	
+				return TRUE;
+			else return FALSE;
+		}
+	}
+    return FALSE;
+}
+
+
+/* original
+int spellsIsTarget(object oTarget, int nTargetType, object oSource)
+{
+	// If the target is a ScriptHidden creature, we do not want to affect it.
+	if ( GetScriptHidden(oTarget) == TRUE ) return FALSE;
+
 	// If we want to ignore the rules of target selection for this spell, always return true.
 	int nEntry = IgnoreTargetRulesGetFirstIndex(oSource, oTarget);	
 	if (nEntry != -1)
@@ -368,8 +449,8 @@ int spellsIsTarget(object oTarget, int nTargetType, object oSource)
 
     switch (nTargetType)
     {
-        // * this kind of spell will affect all friendlies and anyone in my
-        // * party, even if we are upset with each other currently.
+        // this kind of spell will affect all friendlies and anyone in my
+        // party, even if we are upset with each other currently.
         case SPELL_TARGET_ALLALLIES:
         {
 
@@ -379,14 +460,14 @@ int spellsIsTarget(object oTarget, int nTargetType, object oSource)
             }
             break;
         }
-        case SPELL_TARGET_STANDARDHOSTILE:
+        case SPELL_TARGET_NON_ALLIED:
         {
             nReturnValue = GetIsStandardHostileTarget(oTarget, oSource);
             break;
         }
-        // * only harms enemies, ever
-        // * current list:call lightning, isaac missiles, firebrand, chain lightning, dirge, Nature's balance,
-        // * Word of Faith, bard songs that should never affect friendlies
+        // only harms enemies, ever
+        // current list:call lightning, isaac missiles, firebrand, chain lightning, dirge, Nature's balance,
+        // Word of Faith, bard songs that should never affect friendlies
         case SPELL_TARGET_SELECTIVEHOSTILE:
         {
 			// 10/23/06 - BDF(OEI): added GetIsReactionTypeHostile() since GetIsEnemy may not capture all cases
@@ -398,32 +479,34 @@ int spellsIsTarget(object oTarget, int nTargetType, object oSource)
         }
     }
 
-	/*	10/20/06 - BDF(OEI): this block of code is now deprecated.  It essentially prevents companions from damaging the
-								party in Hardcore difficulty, which isn't very hardcore at all
+	//	10/20/06 - BDF(OEI): this block of code is now deprecated.  It essentially prevents companions from damaging the
+	//							party in Hardcore difficulty, which isn't very hardcore at all
     // GZ: Creatures with the same master will never damage each other
-	if ( nTargetType != SPELL_TARGET_ALLALLIES )	// 9/25/06 - BDF: Added this conditional to limit this filter to damaging spells
-	{
-		if ( !GetIsPC(oTarget) && !GetIsPC(oSource) )	// 10/03/06 - BDF: this further reinforces that this block
-		{												// will only run when the target and source are NOT PC's
-	    	//if (GetMaster(oTarget) != OBJECT_INVALID && GetMaster(oSource) != OBJECT_INVALID )
-			if (GetCurrentMaster(oTarget) != OBJECT_INVALID && GetCurrentMaster(oSource) != OBJECT_INVALID )	// 9/19/06 - BDF: changed to GetCurrentMaster() for companion consideration
-		    {
+	//if ( nTargetType != SPELL_TARGET_ALLALLIES )	// 9/25/06 - BDF: Added this conditional to limit this filter to damaging //spells
+	//{
+	//	if ( !GetIsPC(oTarget) && !GetIsPC(oSource) )	// 10/03/06 - BDF: this further reinforces that this block
+	//	{												// will only run when the target and source are NOT PC's
+	 //   	//if (GetMaster(oTarget) != OBJECT_INVALID && GetMaster(oSource) != OBJECT_INVALID )
+	//		if (GetCurrentMaster(oTarget) != OBJECT_INVALID && GetCurrentMaster(oSource) != OBJECT_INVALID )	
+	// 9/19/06 - BDF: changed to GetCurrentMaster() for companion consideration
+	//	    {
 		        //if (GetMaster(oTarget) == GetMaster(oSource))
-		        if (GetCurrentMaster(oTarget) == GetCurrentMaster(oSource))	// 9/19/06 - BDF: changed to GetCurrentMaster() for companion consideration
-		        {
-		            if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_MULTI_HENCH_AOE_DAMAGE) == 0 )
-		            {
-		                nReturnValue = FALSE;
-		            }
-		        }
-		    }
-		}	
-	}
-	*/	
+	//	       if (GetCurrentMaster(oTarget) == GetCurrentMaster(oSource))	
+	// 9/19/06 - BDF: changed to GetCurrentMaster() for companion consideration
+	//	        {
+	//	            if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_MULTI_HENCH_AOE_DAMAGE) == 0 )
+	//	            {
+	//	                nReturnValue = FALSE;
+	//	            }
+	//	        }
+	//	    }
+	//	}	
+	//}
+	/
 
     return nReturnValue;
 }
-
+*/
 // * Returns true if Target is a humanoid
 int AmIAHumanoid(object oTarget)
 {
@@ -549,7 +632,7 @@ void DoHarming (object oTarget, int nDamageTotal, int nDamageType, int vfx_impac
 			return;
 	}			
 
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
 		if (!MyResistSpell(OBJECT_SELF, oTarget))
 		{

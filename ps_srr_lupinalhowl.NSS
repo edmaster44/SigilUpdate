@@ -41,7 +41,7 @@ void main()
 	
     while(GetIsObjectValid(oTarget))
     {
-    	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+    	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF)
     	{
 			int nAlign = GetAlignmentGoodEvil(oTarget);
 			if(nAlign == ALIGNMENT_EVIL)

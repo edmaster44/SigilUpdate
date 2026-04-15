@@ -39,7 +39,7 @@ void main()
     {  
        if(GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE)
        {
-            if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+            if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
             {
                 //Fire cast spell at event for the specified target
                 SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_ENTANGLE));

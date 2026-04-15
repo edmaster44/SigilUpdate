@@ -53,7 +53,7 @@ void main()
 
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCreator) && (oTarget != oCreator) )
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCreator) && (oTarget != oCreator) )
         {
             //Fire spell cast at event
             SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_BLADE_BARRIER));

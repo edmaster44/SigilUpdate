@@ -72,7 +72,7 @@ void main()
 			SetModuleOverrideSpellScriptFinished();
 			return;
 		}
-		else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{
 			if (GetRacialType(oTarget) == RACIAL_TYPE_CONSTRUCT
 			|| GetRacialType(oTarget) == RACIAL_TYPE_ELEMENTAL 

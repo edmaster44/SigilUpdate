@@ -80,7 +80,7 @@ void main()
                 nCurHD = PS_GetLevel(oTarget);
                 if (nCurHD <= nHDLeft )
                 {
-                    if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+                    if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
                     {
                         // ignore creatures already affected
                         if (GetLocalInt(oTarget,"X2_EBLIGHT_I_AM_DEAD") == 0 && !GetPlotFlag(oTarget) && !GetIsDead(oTarget))

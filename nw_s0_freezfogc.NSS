@@ -25,7 +25,7 @@ void main()
 
     oTarget = GetFirstInPersistentObject(OBJECT_SELF,OBJECT_TYPE_CREATURE);
     while(GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
         {	fDelay = GetRandomDelay(0.5, 2.0);
             SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_INCENDIARY_CLOUD));
             nDamage = d2(nCL/3) + d2(PML/9);

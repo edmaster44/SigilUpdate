@@ -358,7 +358,7 @@ void PS_Dragon_Blue_Sound_Imitation(object oPC, int nSpell)
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE,RADIUS_SIZE_HUGE, lLoc);
     while (GetIsObjectValid(oTarget))
     {	 				
-	    if (oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	    if (oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_SOUND_BURST));
 			nDamage = d8();
@@ -676,7 +676,7 @@ void PS_Dragon_Roar(object oPC, int nSpell){
 			SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
 			DelayCommand(fDelay-0.01, RemoveEffectsFromSpell(oTarget, nSpell));
 			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAlly, oTarget, RoundsToSeconds(nDuration)));
-		} else if ((GetRacialType(oTarget) != 11) && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)){
+		} else if ((GetRacialType(oTarget) != 11) && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC)){
 			if (PS_GetLevel(oTarget) < iHD)	{	
 				if (!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)){		
 					fDelay = GetRandomDelay(0.8, 2.0);
@@ -740,7 +740,7 @@ void PS_Dragon_Swipe(object oPC, int nSpell){
 	
 	object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fArea, lLocation, FALSE, OBJECT_TYPE_CREATURE);
 	while(GetIsObjectValid(oTarget)){
-		if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)){
+		if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)){
 			if(GetCreatureSize(oTarget) <= nSize){
 				SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 				fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
@@ -953,7 +953,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 	object oTarget = GetFirstObjectInShape(nShape, fShapeSize, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
 	
 	while(GetIsObjectValid(oTarget)){
-		if(oTarget != oPC && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)){
+		if(oTarget != oPC && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC)){
 			nRace = GetRacialType(oTarget);
 			SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 			fDelay = GetDistanceBetween(oPC, oTarget)/15;
@@ -1110,7 +1110,7 @@ void PS_Dragon_Breath_Bronze(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
 			while(GetIsObjectValid(oTarget))
 			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 				{
 					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
@@ -1195,7 +1195,7 @@ void PS_Dragon_Breath_Amethyst(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
 			while(GetIsObjectValid(oTarget))
 			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 				{
 					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
@@ -1272,7 +1272,7 @@ void PS_Dragon_Breath_Bronze_Gas(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   		  
 			 
@@ -1358,7 +1358,7 @@ void PS_Dragon_Breath_Black(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
 			while(GetIsObjectValid(oTarget))
 			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 				{
 					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
@@ -1433,7 +1433,7 @@ void PS_Dragon_Breath_Red(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   				
 					// Damage Breath -------------------------------------------------------------
@@ -1515,7 +1515,7 @@ void PS_Dragon_Breath_Emerald(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   				
 					// Damage Breath -------------------------------------------------------------
@@ -1606,7 +1606,7 @@ void PS_Dragon_Breath_Topaz(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   				
 					// Damage Breath -------------------------------------------------------------
@@ -1703,7 +1703,7 @@ void PS_Dragon_Breath_White(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   				
 					// Damage Breath -------------------------------------------------------------
@@ -1784,7 +1784,7 @@ void PS_Dragon_Breath_Shadow(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   		  
 			 
@@ -1875,7 +1875,7 @@ void PS_Dragon_Breath_Blue(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
 			while(GetIsObjectValid(oTarget))
 			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 				{
 					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
@@ -1956,7 +1956,7 @@ void PS_Dragon_Breath_Copper(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCYLINDER, 16.0, GetSpellTargetLocation(), TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, vOrigin);
 			while(GetIsObjectValid(oTarget))
 			{
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 				{
 					SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 					fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/15;
@@ -2031,7 +2031,7 @@ void PS_Dragon_Breath_Copper_Gas(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   		  
 			 
@@ -2111,7 +2111,7 @@ void PS_Dragon_Breath_Radiant_Light(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   		  
 			 
@@ -2209,7 +2209,7 @@ void PS_Dragon_Breath_Iron(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    			
 	   				
 					// Damage Breath -------------------------------------------------------------
@@ -2294,7 +2294,7 @@ void PS_Dragon_Breath_Iron_Gas(object oPC, int nSpell)
 			oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_TREMENDOUS, GetSpellTargetLocation(), TRUE);
 			while(GetIsObjectValid(oTarget))
 			{     
-				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))	 		
+				if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))	 		
 				{    				   			 
 					 // Sleep Breath --------------------------------------------------------------
 					 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));

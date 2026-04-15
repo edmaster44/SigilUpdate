@@ -54,7 +54,7 @@ void main()
 	if (nNumRays < 1) nNumRays = 1;
 
 	
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
 		int ni=0;
 		//float fDelay = 2.5;

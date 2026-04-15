@@ -59,7 +59,7 @@ void main()
 	object oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 11.0, GetSpellTargetLocation());
 	while (GetIsObjectValid(oTarget))
 	{
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     	{
 		   
 		    float fDelay = GetDelayForTarget( oTarget );

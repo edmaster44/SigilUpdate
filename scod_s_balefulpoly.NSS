@@ -80,7 +80,7 @@ void main() {
 
     //Apply the VFX impact and effects
     AssignCommand(oTarget, ClearAllActions()); // Prevents an exploit
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
         // Make SR Check
         if (GetHasFeat(FEAT_HEXEN_CURSEMASTER, OBJECT_SELF) || !DoWarlockMyResistSpell(OBJECT_SELF, oTarget))

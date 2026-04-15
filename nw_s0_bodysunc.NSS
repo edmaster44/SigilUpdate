@@ -68,7 +68,7 @@ void main()
 //This loop validates target, makes it save, burns it, then finds the next target and repeats
 	while(GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCreator) && (oTarget != oCreator) )
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCreator) && (oTarget != oCreator) )
 		{
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_BODY_OF_THE_SUN));
 			

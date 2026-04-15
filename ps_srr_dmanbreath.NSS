@@ -96,7 +96,7 @@ void main()
 	    oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_COLOSSAL, GetSpellTargetLocation(), TRUE);
 	    while(GetIsObjectValid(oTarget))
 	    {
-	        if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	        if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	        {
 	            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 	            fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;

@@ -36,7 +36,7 @@ void KnightSmite(object oPC, object oTarget, int nSpell )
 
 
 //	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
-	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Knight Smite", 1, "1attack01", 1,nSpell);
+	if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Knight Smite", 1, "1attack01", 1,nSpell);
 		if (nAttack == 2)
 		{	nDmg = nKnight * iChaBonus;
 			

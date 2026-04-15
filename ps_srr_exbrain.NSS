@@ -123,7 +123,7 @@ void main()
 	object oTarget = GetSpellTargetObject();
 	
 	// is it a valid target?
-	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_CREATURE && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
 		// is it too big? 
 		if (GetCreatureSize(oTarget) > GetCreatureSize(oPC))

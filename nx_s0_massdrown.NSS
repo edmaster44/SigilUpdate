@@ -57,7 +57,7 @@ void main()
 //target discrimination
 	while (GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{
 			//Signal spell cast at event
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1019));

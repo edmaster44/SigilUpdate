@@ -62,7 +62,7 @@ void PS_Fey_FeyHypnotism(object oPC) {
 		int nMod = 0;
 		if (onlyOne) nMod = -2;
 	
-	    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC) {
+	    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC) && oTarget != oPC) {
 		
 	        //Fire cast spell at event for the specified target
 	        SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_HYPNOTISM));
@@ -149,7 +149,7 @@ void PS_Fey_FeyFear(object oPC, location lTarget) {
     {
 		if (PS_GetLevel(oTarget) < nCasterLevel) 
 		{
-	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) && oTarget != oPC)
+	        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC) && oTarget != oPC)
 	    	{
 	            //Make SR Check
 	            if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))

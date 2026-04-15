@@ -56,7 +56,7 @@ void main()
 
 	// calculate base damage	
 	nDamage = d4(nDice) + d3(PML/6);	
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
 		 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_LESSER_ORB_OF_COLD));
 		 //if (TouchAttackRanged(oTarget) != TOUCH_ATTACK_RESULT_MISS)

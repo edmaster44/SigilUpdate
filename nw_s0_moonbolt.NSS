@@ -90,7 +90,7 @@ void main()
 
 	if (GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oTarget, 1.0);

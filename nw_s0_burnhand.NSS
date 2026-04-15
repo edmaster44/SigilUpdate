@@ -70,8 +70,7 @@ void main()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-    	{
+        //if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)){
             //Signal spell cast at event to fire.
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BURNING_HANDS));
             //Calculate the delay time on the application of effects based on the distance
@@ -106,7 +105,7 @@ void main()
                     DelayCommand(fDist, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
                 }
             }
-        }
+        //}
         //Select the next target within the spell shape.
         oTarget = GetNextObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_LARGE, GetSpellTargetLocation(), TRUE,
 									   OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);

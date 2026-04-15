@@ -371,7 +371,7 @@ int DoEldritchOnHitBlast(object oCaster, object oTarget, int nDmgType, int nVFX,
 	int nHitVFX = VFX_INVOCATION_ELDRITCH_HIT;	// default is Edlritch
 	int nTouch;effect eBeam = EffectBeam(nVFX, oCaster, BODY_NODE_HAND);
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) == TRUE)
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) == TRUE)
     {
         SignalEvent(oTarget, EventSpellCastAt(oCaster, nID));
 

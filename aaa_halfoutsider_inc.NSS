@@ -244,7 +244,7 @@ void PS_HOM_UnholyBlight(object oPC, int nSpell, location lTarget)
     object oTarget 			= GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
 
     while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != oPC) //Additional target check to make sure that the caster cannot be harmed by this spell
         {	fDelay 			= GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
             if (!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
@@ -371,7 +371,7 @@ void PS_HOM_RaptureOfRupture(object oPC, int nSpell, object oTarget)
 	effect eRupture, eImpact, eOngoing;
 
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
         if (TouchAttackMelee(oTarget,GetSpellCastItem() == OBJECT_INVALID)>0)
         {	if(!MyResistSpell(OBJECT_SELF, oTarget))
@@ -646,7 +646,7 @@ void PS_HOM_Gutwrench(object oPC, int nSpell, object oTarget)
 	int nDamage			= d6(10);
     effect eDam			= EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE, DAMAGE_POWER_NORMAL, TRUE);
 
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 		// Check for "no discernible anatomy"
 		if (PS_GetHasDiscernableAnatomy(oTarget) == FALSE)

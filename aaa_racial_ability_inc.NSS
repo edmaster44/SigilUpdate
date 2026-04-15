@@ -167,7 +167,7 @@ void PS_Ability_TroglodyteStench(object oPC, int nSpell)
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oPC));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eCloud, oPC, 10.0f);
     while(GetIsObjectValid(oTarget))
-    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+    {  	if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
     	{	fDelay = GetDistanceToObject(oTarget)/10;
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_GHAST_STENCH));
  			if(!MyResistSpell(oPC, oTarget, fDelay))
@@ -863,7 +863,7 @@ void PS_Ability_BralaniWhirlBlast(object oPC, object oTarget, int nSpell)
 	
 	nDamage = d6(nDice);	
 	if (TouchAttackRanged(oTarget) != FALSE)
-	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	{	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 		{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 			{	// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 			nDamage += PS_AddSneakDmgToSpell(OBJECT_SELF, oTarget, DAMAGE_TYPE_BLUDGEONING);
@@ -982,7 +982,7 @@ void PS_Ability_FirreFlamingSlam(object oPC, object oTarget, int nSpell)
 	nDamageF = d4(nFire);
 	nDamageB = d4(nBlud);
 	if (TouchAttackMelee(oTarget) != FALSE)
-	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	{	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 		{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 			{	// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 			nDamageB += PS_AddSneakDmgToSpell(OBJECT_SELF, oTarget, DAMAGE_TYPE_BLUDGEONING);
@@ -1032,7 +1032,7 @@ void PS_Ability_GhaeleLightRay(object oPC, object oTarget, int nSpell)
 	{	nDice = nDice  *2;	}
 	
 	nDamage = d6(nDice);	
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 		if (nTouch != TOUCH_ATTACK_RESULT_MISS)
 		{	// If applicable adds any sneak damage to total to be inflicted and reports the damage.

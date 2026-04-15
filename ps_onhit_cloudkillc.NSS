@@ -52,7 +52,7 @@ void main()
     while(GetIsObjectValid(oTarget))
     {
         fDelay = GetRandomDelay();
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE , GetAreaOfEffectCreator()) )
+        if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED , GetAreaOfEffectCreator()) )
         {
 			if (!GetIsImmune(oTarget, IMMUNITY_TYPE_POISON))
 			{

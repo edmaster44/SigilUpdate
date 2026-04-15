@@ -50,7 +50,7 @@ void main()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     	{
             //fDelay = GetRandomDelay(0.75, 2.25);
             //Fire cast spell at event for the specified target

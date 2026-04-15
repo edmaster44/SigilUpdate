@@ -33,7 +33,7 @@ void main()
 	SetEffectSpellId(eLink, SPELL_MIND_FOG);
     int bValid = FALSE;
     float fDelay = GetRandomDelay(1.0, 2.2);
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_MIND_FOG));

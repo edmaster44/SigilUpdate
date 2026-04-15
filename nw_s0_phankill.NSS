@@ -45,7 +45,7 @@ void main()
     effect eDam;
     effect eVis = EffectVisualEffect(VFX_IMP_DEATH);
     effect eVis2 = EffectVisualEffect(VFX_HIT_SPELL_ILLUSION);
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_PHANTASMAL_KILLER));

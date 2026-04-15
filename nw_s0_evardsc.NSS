@@ -35,7 +35,7 @@ void main(){
 	
     oTarget = GetFirstInPersistentObject();
     while(GetIsObjectValid(oTarget)){
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
 			DoEvardsDamage(oCaster, oTarget, data);
 		}
 	    oTarget = GetNextInPersistentObject();

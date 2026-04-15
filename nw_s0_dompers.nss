@@ -52,7 +52,7 @@ void main()
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DOMINATE_PERSON, FALSE));
     //Make sure the target is a humanoid
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
         if  (GetIsPlayableRacialType(oTarget) ||
 			(nRacial == RACIAL_TYPE_HUMANOID_GOBLINOID) ||

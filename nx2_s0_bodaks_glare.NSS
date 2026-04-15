@@ -57,7 +57,7 @@ void main()
 	if (GetIsObjectValid(oTarget))
 	{
 		// check to see if hostile
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) 
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)) 
 		{
 			nSaved = FortitudeSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_DEATH, oCaster);
 			if(nSaved == 2)

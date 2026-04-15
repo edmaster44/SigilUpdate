@@ -55,7 +55,7 @@ void PS_Spell_Gutwrench(object oPC, object oTarget, int nSpell)
 	int nDamage			= d6(10);
     effect eDam			= EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE, DAMAGE_POWER_NORMAL, TRUE);
 
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 		// Check for "no discernible anatomy"
 		if (PS_GetHasDiscernableAnatomy(oTarget) == FALSE)

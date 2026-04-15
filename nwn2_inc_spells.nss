@@ -265,7 +265,7 @@ void DispelMagicWithCallback( object oTarget, object oCaster, int nCasterLevel, 
     //--------------------------------------------------------------------------
 	if (nSpellID != SPELL_I_DEVOUR_MAGIC)	// Devour Magic is not hostile, everything else can be.
 	{
-	    if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	    if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	    {
 	
 	        SignalEvent(oTarget, EventSpellCastAt(oCaster, nSpellID));
@@ -819,7 +819,7 @@ int GetNumMeteorSwarmProjectilesToSpawnA( location lCenterOfAOE )
 	{
 		lTargetLocation = GetLocation(oTarget);	
 		
-		if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+		if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
 		{
 			//if (!MyResistSpell(OBJECT_SELF, oTarget, 0.5))
 			{			
@@ -865,7 +865,7 @@ int GetNumMeteorSwarmProjectilesToSpawnB( location lCenterOfAOE )
 			
 	while ( GetIsObjectValid(oTarget) )
 	{
-		if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+		if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
 		{
 			//if (!MyResistSpell(OBJECT_SELF, oTarget, 0.5))
 			{
@@ -1007,7 +1007,7 @@ int HealHarmObject( object oTarget, effect eVis, effect eVis2, int nCasterLvl, i
 	int bIsHealingSpell = TRUE;
 	int bRet = FALSE;
 	
-	if ((nRacialType == RACIAL_TYPE_UNDEAD && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if ((nRacialType == RACIAL_TYPE_UNDEAD && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 		|| (nRacialType != RACIAL_TYPE_UNDEAD && spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF)))
 	{
 	 	bRet = TRUE;
@@ -1019,7 +1019,7 @@ int HealHarmObject( object oTarget, effect eVis, effect eVis2, int nCasterLvl, i
 	
 /*
 	//Check to see if the target is an undead
-	if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
 		DelayCommand(fDelay, HarmTarget( oTarget, OBJECT_SELF, nSpellId ) );
 	}

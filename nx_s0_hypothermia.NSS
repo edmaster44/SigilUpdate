@@ -93,7 +93,7 @@ void main()
 
 	if (GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{	
 			//Target is valid, cast spell and then run spell resistance and saving throw before applying effect
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1031, TRUE));

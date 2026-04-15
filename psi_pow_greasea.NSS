@@ -42,7 +42,7 @@ void main()
                                         );
     float fDelay = GetRandomDelay(1.0, 2.2);
 
-    if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCreator))
+    if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCreator))
     {
         if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) && (GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE))
         {

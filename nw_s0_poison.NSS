@@ -42,7 +42,7 @@ void main()
     effect ePoison = EffectPoison(POISON_LARGE_SCORPION_VENOM);
 	//effect eHit = EffectVisualEffect(VFX_HIT_SPELL_POISON);//This is redundant
     
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_POISON));

@@ -79,7 +79,7 @@ void main()
            //Exclude the caster from the damage effects
            if (oTarget != OBJECT_SELF && oTarget2 == oTarget)
            {
-                if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+                if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
             	{
                    //Fire cast spell at event for the specified target
 					//PrettyDebug("Signaling Lightning Bolt on " + GetName(oTarget));

@@ -50,7 +50,7 @@ void main()
 	if (GetIsObjectValid(oTarget) && !MatchNonliving(GetRacialType(oTarget)))
 	{
 		// check to see if hostile
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) 
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)) 
 		{
 			if (!MyResistSpell(oCaster, oTarget))
 			{

@@ -37,6 +37,7 @@
 #include "ginc_crafting"
 #include "x0_i0_spells"
 #include "x2_i0_spells"
+#include "ps_inc_epicsave"
 #include "class_mageslayer_utils"
 
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
@@ -520,20 +521,24 @@ void DebugSpells(){
 	string sDebug = GetStringByStrRef(nNameRef);
 	sDebug += " (" + IntToString(nId) + ", " + Get2DAString("spells", "ImpactScript", nId) + ")";
 	sDebug += "\nClass: ";
-	nId = GetLastSpellCastClass();
-	if (nId == CLASS_TYPE_INVALID){
+	int nClass = GetLastSpellCastClass();
+	if (nClass == CLASS_TYPE_INVALID){
 		sDebug += "Undefined";
 		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(OBJECT_SELF));
 	} else {
-		nNameRef = StringToInt(Get2DAString("classes", "Name", nId));
+		nNameRef = StringToInt(Get2DAString("classes", "Name", nClass));
 		sDebug += GetStringByStrRef(nNameRef);
-		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(OBJECT_SELF, nId));
+		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(OBJECT_SELF, nClass));
 	}
 	if (GetLocalInt(OBJECT_SELF, "IsTester"))
 		sDebug += "\nCL for Engine: " + IntToString(GetCasterLevel(OBJECT_SELF));
-	sDebug += "\nSave DC: " + IntToString(GetSpellSaveDC());
+	int nDC;
+	int nInnate = StringToInt(Get2DAString("spells", "Innate", nId));
+	if (nInnate >= 10) nDC =  PS_GetEpicSpellSaveDC();
+	else nDC = GetSpellSaveDC();
+	sDebug += "\nSave DC: " + IntToString(nDC);
 
-	nId = GetSpellFeatId();
+	nId = GetSpellFeatId(); //reuse this variable since we're done with it
 	if (nId != 0){
 		sDebug += "\nSpell Feat Id: " + IntToString(nId);
 		nNameRef = StringToInt(Get2DAString("feat", "FEAT", nId));

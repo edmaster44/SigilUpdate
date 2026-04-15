@@ -39,7 +39,7 @@ void main()
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(OBJECT_SELF));
     while(GetIsObjectValid(oTarget))
     {
-    	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+    	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF)
     	{
             fDelay = GetDistanceToObject(oTarget)/10;
             nDuration = GetScaledDuration(nDuration , oTarget);

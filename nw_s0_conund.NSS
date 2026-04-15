@@ -75,7 +75,7 @@ void main()
 	//The actual spell
     if ((GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)&&(PS_GetLevel(oTarget) <= nHD))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
         {
            //Fire cast spell at event for the specified target
            SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_CONTROL_UNDEAD));

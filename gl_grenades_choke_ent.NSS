@@ -16,7 +16,7 @@ void main()
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_CONJURATION);
 	
 	object oTarget = GetEnteringObject();
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
 	{
 		SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), GetSpellId()));
 		if (!MySavingThrow(SAVING_THROW_FORT, oTarget, CHOKING_BOMB_SAVE_DC, SAVING_THROW_TYPE_POISON, GetAreaOfEffectCreator()))

@@ -85,7 +85,7 @@ void main()
     {
 		if ( GetIsObjectValidSongTarget( oTarget ) )
 		{
-			//if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+			//if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
 			if ( GetIsEnemy( oTarget ) )
 			{
                 // Make a Will save (against a DC of 11 + CHA modifier)

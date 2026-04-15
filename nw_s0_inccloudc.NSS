@@ -36,7 +36,7 @@ void main()
    
     oTarget = GetFirstInPersistentObject(OBJECT_SELF, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
     while(GetIsObjectValid(oTarget)){
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
             fDelay = GetRandomDelay(0.5, 2.0);
           
 			SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_INCENDIARY_CLOUD));

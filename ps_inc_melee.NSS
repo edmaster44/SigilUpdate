@@ -1567,7 +1567,7 @@ void AttemptTauntAroundPlayer(object oPC, int iMax)
 	object oTargetSphere = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetLocation(oPC), TRUE, OBJECT_TYPE_CREATURE);	
 	while( GetIsObjectValid(oTargetSphere) && iMax > iLoop)
     {
- 		if (spellsIsTarget(oTargetSphere, SPELL_TARGET_STANDARDHOSTILE, oPC) && 
+ 		if (spellsIsTarget(oTargetSphere, SPELL_TARGET_NON_ALLIED, oPC) && 
 		GetStealthMode(oTargetSphere) == STEALTH_MODE_DISABLED && 
 		GetAttackTarget(oTargetSphere) != oPC && 
 		GetIsInCombat(oTargetSphere))

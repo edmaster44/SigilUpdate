@@ -26,7 +26,7 @@ void main()
 
 
 //	nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Trip", 1, "1attack01", 1,nSpell);
-	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Sweeping Strike", 1, "1attack01", 1,nSpell);
+	if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC)) nAttack = AttemptMeleeAttackMainHand(oPC, oTarget, "Sweeping Strike", 1, "1attack01", 1,nSpell);
 		
 		if (nAttack == 2 && GetHasFeat(FEAT_CHAIN_OF_OVERWHELMING_FORCE,oPC))
 		{

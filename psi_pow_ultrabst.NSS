@@ -92,7 +92,7 @@ void main()
             {
                 // Targeting limitations
                 if(oTarget != oManifester                                            && // Don't hit self
-                   spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester)   // Difficulty limits
+                   spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester)   // Difficulty limits
                    )
                 {
                     // Let the AI know

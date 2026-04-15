@@ -35,7 +35,7 @@ void main(){
     //Start cycling through the AOE Object for viable targets including doors and placable objects.
     oTarget = GetFirstInPersistentObject(OBJECT_SELF);
     while(GetIsObjectValid(oTarget)){
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+        //if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
             if(MySavingThrow(SAVING_THROW_FORT, oTarget, data.nDC, SAVING_THROW_TYPE_ACID, oCaster, fDelay))
                  nDamage = nDamage / 2;
    
@@ -46,7 +46,7 @@ void main(){
 			SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_ACID_FOG));
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 
-        }
+        //}
         oTarget = GetNextInPersistentObject(OBJECT_SELF);
     }
 }

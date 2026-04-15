@@ -78,7 +78,7 @@ void CureObject( object oTarget, effect eVis, effect eVis2, int nCasterLvl, int 
 	//Check if racial type is undead
 	if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD )
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 		{
 	        //Fire cast spell at event for the specified target
 	        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));

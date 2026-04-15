@@ -38,7 +38,7 @@ void main(){
     //Get the first object in the persistant area
     oTarget = GetFirstInPersistentObject();
     while(GetIsObjectValid(oTarget)){
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_STINKING_CLOUD));
             //Make a SR check

@@ -118,7 +118,7 @@ void main()
 
     if(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
         {
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
         }

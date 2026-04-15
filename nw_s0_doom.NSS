@@ -52,7 +52,7 @@ void main()
     {
         nLevel *= 2;
     }
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DOOM));
         //Spell Resistance and Saving throw

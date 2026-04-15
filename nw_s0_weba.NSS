@@ -43,7 +43,7 @@ void main()
     }
 
     effect eSlow = EffectMovementSpeedDecrease(nSlow);
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     {
         // if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) &&(GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )
         if( (GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.

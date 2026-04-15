@@ -194,7 +194,7 @@ void main()
 void DoBeholderPetrify(int nDuration,object oSource, object oTarget, int nSpellID)
 {
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && !GetIsDead(oTarget))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && !GetIsDead(oTarget))
     {
         // * exit if creature is immune to petrification
         if (spellsIsImmuneToPetrification(oTarget) == TRUE)

@@ -47,7 +47,7 @@ void main()
     //Declare the spell shape, size and the location.
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
         {
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_WALL_OF_FIRE));

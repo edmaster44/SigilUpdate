@@ -66,7 +66,7 @@ void main()
 		if (!MatchNonliving(GetRacialType(oTarget)))
 		{	
 			// check to see if hostile
-			if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) 
+			if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)) 
 			{
 				fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
 				if (!MyResistSpell(oCaster, oTarget, fDelay))

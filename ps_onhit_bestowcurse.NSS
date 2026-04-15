@@ -36,7 +36,7 @@ void main()
     //eCurse = SupernaturalEffect(eCurse);
 	effect eLink = EffectLinkEffects( eCurse, eVis );
 	eLink = SupernaturalEffect(eLink); //FIX: whole link needs to be supernatural
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
         //Signal spell cast at event
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BESTOW_CURSE));

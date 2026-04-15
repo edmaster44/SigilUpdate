@@ -88,7 +88,7 @@ void main()
             {
                 // Target validity check
                 if(oTarget != oManifester                                            && // Cones have a bug where they can include the user in the area. Workaround
-                   spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester)   // Difficulty and faction dependent targeting limits, because people whine if they are missing
+                   spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester)   // Difficulty and faction dependent targeting limits, because people whine if they are missing
                    )
                 {
                     // Let the AI know

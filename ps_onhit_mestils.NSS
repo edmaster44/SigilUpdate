@@ -44,7 +44,7 @@ void main()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while(GetIsObjectValid(oTarget))
     {
-    	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+    	if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     	{
             //Fire cast spell at event for the specified target
             SignalEvent(oTarget, EventSpellCastAt(oCaster, nID));

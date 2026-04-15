@@ -113,7 +113,7 @@ void main()
             while(GetIsObjectValid(oTarget))
             {
                 // Difficulty & faction limits on targeting
-                if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester))
+                if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester))
                 {
                     // Make an SR check
                     if(PRCMyResistPower(oManifester, oTarget, nPen))

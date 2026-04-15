@@ -52,8 +52,7 @@ void main()
 	if (!bImmuneDeaf)
 		eLink = EffectLinkEffects(eDeaf, eLink);
 
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-	{
+	//if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)){
 		if( GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD)
 		{
 			FloatingTextStrRefOnCreature(40105, OBJECT_SELF, FALSE);
@@ -76,5 +75,5 @@ void main()
                 ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
             }
         }
-    }
+   // }
 }

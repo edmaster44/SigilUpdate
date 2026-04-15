@@ -112,7 +112,7 @@ void NegativeFire(int nDamage, int nDamage2, int nDC)
     object oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_ASTRONOMIC, GetSpellTargetLocation(), TRUE);
     while(GetIsObjectValid(oTarget))
     {
-        if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {
             //Reset the damage to full
             int nDamStrike = d10(nDamage2);

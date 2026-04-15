@@ -61,7 +61,7 @@ void main()
 //Validate entering object, force it to save, and then burn it
 	/*if (GetIsObjectValid(oTarget))
 	{
-		if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && (oTarget != oCaster ) )
+		if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) && (oTarget != oCaster ) )
 		{
 			SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_BODY_OF_THE_SUN));
 			

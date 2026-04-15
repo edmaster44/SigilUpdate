@@ -41,7 +41,7 @@ void main()
     object oTarget = GetEnteringObject();
 	int bHostile = FALSE;
 
-	if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) )
+	if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) )
     {
 	    if(!GetIsInCombat(oTarget))
 			SignalEvent( oTarget, EventSpellCastAt(oCaster, SPELL_SILENCE) );

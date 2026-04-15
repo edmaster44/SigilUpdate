@@ -30,7 +30,7 @@ void main(){
     //Get the first object in the persistant AOE
     object oTarget = GetFirstInPersistentObject();
     while(GetIsObjectValid(oTarget)){
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE , GetAreaOfEffectCreator()) ){
+        if(spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED , GetAreaOfEffectCreator()) ){
 			ApplyCloudKill(oTarget, oCaster, data.nId, data.nDC);
         }
         //Get the next target in the AOE

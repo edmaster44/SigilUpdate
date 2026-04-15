@@ -82,7 +82,7 @@ void main()
             {
                 // * March 2003. Added a check so that 'friendlies' will not be
                 // * unsummoned.
-                if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+                if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF)
                 {
                     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 430));
                     //Determine correct save

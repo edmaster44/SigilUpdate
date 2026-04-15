@@ -91,7 +91,7 @@ void main()
             while(GetIsObjectValid(oTarget))
             {
                 if(oTarget != oManifester &&                                          // No hurting self
-                   spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester) // Game difficulty limitations
+                   spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester) // Game difficulty limitations
                    )
                 {
                     // Roll damage

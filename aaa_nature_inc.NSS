@@ -216,7 +216,7 @@ void CastConeCold()
 				return;
 				}
 	
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
     	{
                 // SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_CONE_OF_COLD));
 				// Winter Wolf breath bypasses evasion and spell resistance.

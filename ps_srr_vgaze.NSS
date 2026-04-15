@@ -19,7 +19,7 @@ void main()
 	
 	if (!MyResistSpell(oPC, oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
 		{
 			if ((!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC) && !GetIsImmune(oTarget, IMMUNITY_TYPE_DOMINATE, oPC)) || iTargetRace == IP_CONST_RACIALTYPE_UNDEAD)
 			{

@@ -32,7 +32,7 @@ void main()
     effect eVis = EffectVisualEffect(VFX_HIT_SPELL_FIRE);
     //Capture the first target object in the shape.
     oTarget = GetEnteringObject();
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
     {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_WALL_OF_FIRE));

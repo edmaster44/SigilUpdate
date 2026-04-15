@@ -59,7 +59,7 @@ void main()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     	{
      // March 2003. Removed this as part of the reputation pass
      //            if((GetSpellId() == 340 && !GetIsFriend(oTarget)) || GetSpellId() == 25)

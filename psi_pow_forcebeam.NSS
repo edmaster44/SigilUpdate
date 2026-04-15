@@ -114,7 +114,7 @@ void main()
             while(GetIsObjectValid(oTarget))
             {
                 if(oTarget != oManifester &&
-                   spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester)
+                   spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester)
                    )
                 {
                     // Make an SR check

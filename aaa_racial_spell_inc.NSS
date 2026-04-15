@@ -66,7 +66,7 @@ void PS_Cast_Prayer(int iLevel)
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_PRAYER, FALSE));
             //Apply VFX impact and bonus effects
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePosLink, oTarget, RoundsToSeconds(iLevel + 10));	}
-        else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {   //Fire spell cast at event for target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_PRAYER));
             if(!MyResistSpell(OBJECT_SELF, oTarget))
@@ -159,7 +159,7 @@ void PS_Cast_OM_ConeOfCold(location lTarget, int iLevel)//FIXME!!!!!
 
     oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, 10.0, lTarget, TRUE);
     while(GetIsObjectValid(oTarget))
-    {	if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+    {	if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
         {   SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_CONE_COLD));
             fDelay = 1.5 + GetDistanceBetween(OBJECT_SELF, oTarget)/20;
 			if (fDelay > fMaxDelay)
@@ -186,7 +186,7 @@ void PS_Cast_EY_UnholyBlight(object oPC, location lTarget, int nSpell, int iLeve
     effect eDam;
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget))
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     	{	if (nSpell == 1885)
             {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
                 fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
@@ -291,7 +291,7 @@ void PS_Cast_BR_VampiricTouch(object oPC, object oTarget, int nSpell)
     {	nDamage = nMax;	}
     effect eHeal = EffectTemporaryHitpoints(nDamage);
     if(GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
-    {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC) &&
+    {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC) &&
             GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD && 
             GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT &&
             !GetHasSpellEffect(SPELL_NEGATIVE_ENERGY_PROTECTION, oTarget))	
@@ -326,7 +326,7 @@ void PS_Cast_BR_Beguile(object oPC, object oTarget, int nSpell, int iLevel)
     nDuration = GetScaledDuration(nDuration, oTarget);
     int nRacial = GetRacialType(oTarget);
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_DOMINATE_PERSON, FALSE));
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{	if (!MyResistSpell(OBJECT_SELF, oTarget))
     	{	if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, OBJECT_SELF, 1.0))
 			{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));	}
@@ -719,7 +719,7 @@ void PS_Cast_BR_LightningBolt(object oPC, location lTarget, object oTarget, int 
          while (GetIsObjectValid(oTarget))
         {	//Exclude the caster from the damage effects
         	if (oTarget != OBJECT_SELF && oTarget2 == oTarget)
-        	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        	{	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
             	{	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_LIGHTNING_BOLT));
                    if (!MyResistSpell(OBJECT_SELF, oTarget))
         	       {	nDamage =  d6(iLevel);
@@ -782,7 +782,7 @@ void PS_Cast_TArchonBlast(object oPC)
   
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_GINORMOUS, GetLocation(oPC));
     while (GetIsObjectValid(oTarget))
-	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	{	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {	if (GetSubRace(oTarget) != 163 && GetSubRace(oTarget) != 176)
 		    {	fDelay = GetDistanceBetweenLocations(GetLocation(oPC), GetLocation(oTarget))/20;
                 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 586));
@@ -912,7 +912,7 @@ void PS_Cast_YTHBEntangle(object oPC, location lTarget, int iLevel, int nSpell)
 
     while(GetIsObjectValid(oTarget))
     {	if( (GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )
-    	{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    	{	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
             {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ENTANGLE));
                 if(!GetHasSpellEffect(nSpell, oTarget))
                 {	if(!MyResistSpell(oPC, oTarget))
@@ -998,7 +998,7 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
         bContinueLoop = FALSE;
         oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetSpellTargetLocation());
         while (GetIsObjectValid(oTarget))
-        {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)
+        {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)
                 && GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
         	{	bAlreadyAffected = GetLocalInt(oTarget, sSpellLocal);
                 if (!bAlreadyAffected)
@@ -1033,7 +1033,7 @@ void PS_Cast_Hag_Sleep(object oPC, int iLevel, int nSpell)
         bContinueLoop = FALSE;
         oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_HUGE, GetSpellTargetLocation());
         while (GetIsObjectValid(oTarget))
-        {	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)
+        {	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)
                 && GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT && GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
         	{	bAlreadyAffected = GetLocalInt(oTarget, sSpellLocal);
                 if (!bAlreadyAffected)
@@ -1078,7 +1078,7 @@ void PS_Cast_Hag_Enfeeblement(object oPC, int iLevel, int nSpell)
     {	nBonus = 5;		}
     int nLoss = d6() + nBonus;
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 		if (TouchAttackRanged(oTarget) != TOUCH_ATTACK_RESULT_MISS) 
 		{	if (!MyResistSpell(OBJECT_SELF, oTarget))
@@ -1112,7 +1112,7 @@ void PS_Cast_MOTC_MagicMissile(object oPC, int nSpell)
     int nCnt;
 	float fTravelTime;
 	
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 
 	effect eMantle = GetFirstEffect(oTarget);
@@ -1240,7 +1240,7 @@ void PS_Cast_Rakshasa_Suggestion(object oPC, object oTarget, int nSpell)
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
     //Make sure the target is a monster
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
           //Make SR Check
           if (!MyResistSpell(OBJECT_SELF, oTarget))
@@ -1287,7 +1287,7 @@ void PS_Cast_Rakshasa_Pain_Wave(object oPC, object oTarget, int nSpell)
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while (GetIsObjectValid(oTarget))
     {
-       if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != oCaster)
+       if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != oCaster)
        {
             //Roll damage for each target
             nDamage = d8(2) + nCasterLvl;
@@ -1309,7 +1309,7 @@ void PS_Cast_Rakshasa_Pain_Wave(object oPC, object oTarget, int nSpell)
                 
             }
 			else
-          	if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+          	if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         	{
                 if(GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD)
                 {
@@ -1390,7 +1390,7 @@ void PS_Cast_Rakshasa_Imperious_Command(object oPC, object oTarget, int nSpell)
 
 	if (GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{	
 			if(!MyResistSpell(OBJECT_SELF, oTarget) && (nTargetSub != nCasterSub))
 			{
@@ -1454,7 +1454,7 @@ void PS_Cast_Rakshasa_Mystic_Palm(object oPC, object oTarget, int nSpell)
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
 	{	nDam = nDam * 2;	}
     
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 424));

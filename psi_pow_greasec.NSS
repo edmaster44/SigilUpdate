@@ -45,7 +45,7 @@ void main()
     {
         if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) && (GetCreatureFlag(oTarget, CREATURE_VAR_IS_INCORPOREAL) != TRUE))
         {
-            if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCreator))
+            if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCreator))
             {
                 fDelay = GetRandomDelay(0.0, 2.0);
                 if(!MySavingThrow(SAVING_THROW_REFLEX, oTarget, nDC, SAVING_THROW_TYPE_NONE, oCreator, fDelay))

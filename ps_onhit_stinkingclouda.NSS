@@ -34,7 +34,7 @@ void main()
     float fDelay;
     //Get the first object in the persistant area
     oTarget = GetEnteringObject();
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     {
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_STINKING_CLOUD));

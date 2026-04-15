@@ -29,7 +29,7 @@ void main()
     effect eVis2 = EffectVisualEffect( VFX_DUR_SPELL_SLOW );	// NWN2 VFX
     effect eLink = EffectLinkEffects(eSpeed, eVis2);
     float fDelay;
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, GetAreaOfEffectCreator()))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, GetAreaOfEffectCreator()))
     {
         //Fire cast spell at event for the target
         SignalEvent(oTarget, EventSpellCastAt(GetAreaOfEffectCreator(), SPELL_CREEPING_DOOM));

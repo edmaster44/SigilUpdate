@@ -51,7 +51,7 @@ void main()
     object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, lTarget, TRUE, OBJECT_TYPE_CREATURE);
     while (GetIsObjectValid(oTarget))
     {    //Cycle through the targets within the spell shape until an invalid object is captured.
-        if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) &&
+        if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) &&
 			 GetIsEnemy(oTarget, oCaster) &&
              IsValidChastiseTarget(oTarget) &&
              oTarget != oCaster )       // Caster is not affected by the spell.

@@ -32,7 +32,7 @@ void main()
     {
         nLevel = 15;
     }
-    if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster) && (oTarget != oCaster ) )
+    if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster) )
     {
         //Fire spell cast at event
         SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_BLADE_BARRIER));

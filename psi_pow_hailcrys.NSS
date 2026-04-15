@@ -110,7 +110,7 @@ void main()
             oExplodeTarget = GetFirstObjectInShape(SHAPE_SPHERE, fRadius, lTarget, TRUE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE);
             while(GetIsObjectValid(oExplodeTarget))
             {
-                if(spellsIsTarget(oExplodeTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester))
+                if(spellsIsTarget(oExplodeTarget, SPELL_TARGET_NON_ALLIED, oManifester))
                 {
                     // Let the AI know
                     //SPRaiseSpellCastAt(oExplodeTarget, TRUE, manif.nSpellID, oManifester);

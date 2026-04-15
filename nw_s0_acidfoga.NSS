@@ -25,7 +25,7 @@ void main(){
 	}
 	object oTarget = GetEnteringObject();
 	
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+   // if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
 		struct dSpellData data = GetSpellDataForAoE("AcidFog", oCaster);
 	
 		int nDamage = GetAcidFogDamage(oCaster, data.nCL);
@@ -33,7 +33,7 @@ void main(){
 		effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
 		effect eSlow = EffectMovementSpeedDecrease(50);
 		eSlow = SetEffectSpellId(eSlow, data.nId);
-		object oTarget = GetEnteringObject();
+
 		float fDelay = GetRandomDelay(1.0, 2.2);
         
         SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_ACID_FOG));
@@ -51,5 +51,5 @@ void main(){
 		eDam = EffectLinkEffects(eVis, eDam);
 		
 		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-    }
+   // }
 }

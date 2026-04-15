@@ -48,7 +48,7 @@ void main()
     while(GetIsObjectValid(oTarget))
     {
         //if(!GetIsReactionTypeFriendly(oTarget) && oTarget != OBJECT_SELF)	// 7/20/06 - BDF: deprecated
-        if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+        if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
         {
             //Calculate the damage
             nDamage = d6(1*nLoop);

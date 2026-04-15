@@ -143,7 +143,7 @@ void main()
 		        {
 		            // * March 2003. Added a check so that 'friendlies' will not be
 		            // * unsummoned.
-		            if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, manif.oManifester))
+		            if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, manif.oManifester))
 		            {
 		                // * Must be enough points in the pool to destroy target
 		                if(nBanishableHD >= PS_GetLevel(oTarget))

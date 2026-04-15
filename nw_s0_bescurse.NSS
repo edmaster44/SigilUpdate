@@ -101,8 +101,7 @@ void main()
 	eLink = EffectLinkEffects(eCurse, eLink);
 	
 	eLink = SupernaturalEffect(eLink); //FIX: whole link needs to be supernatural
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-	{
+	//if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)){
         //Signal spell cast at event
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_BESTOW_CURSE));
          //Make SR Check
@@ -116,5 +115,5 @@ void main()
                 //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);	// NWN1 VFX
             }
         }
-    }
+    //}
 }

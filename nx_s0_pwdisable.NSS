@@ -74,7 +74,7 @@ void main()
 //Spell Resistance Check & Target Discrimination
 	if (GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId()));	// Move signal above SR check.
 	

@@ -39,7 +39,7 @@ void main()
     object oTarget = GetEnteringObject();
 	object oCaster = GetAreaOfEffectCreator();
 
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
 		SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_SILENCE));
 		ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(40));
     } else {

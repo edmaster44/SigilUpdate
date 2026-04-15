@@ -87,7 +87,7 @@ void main()
             {
                 // Difficulty check
                 if(oTarget == oManifester                                            || // Despite usual limitations, this power explicitly hits self
-                   spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oManifester)
+                   spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oManifester)
                    )
                 {
                     // Let the AI know

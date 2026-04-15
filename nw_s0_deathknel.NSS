@@ -90,7 +90,7 @@ void main()
 	
 	// If applicable adds any sneak damage to total to be inflicted and reports the damage.
 	
-	if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+	if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
 	{
 		if (nTouch != TOUCH_ATTACK_RESULT_MISS)
 		{

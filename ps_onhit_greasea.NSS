@@ -29,7 +29,7 @@ void main()
     object oTarget = GetEnteringObject();
     float fDelay = GetRandomDelay(1.0, 2.2);
 	
-    if(spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+    if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
     {
         // if(!GetHasFeat(FEAT_WOODLAND_STRIDE, oTarget) &&(GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )
         if( (GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_IS_INCORPOREAL) != TRUE) )	// AFW-OEI 05/01/2006: Woodland Stride no longer protects from spells.

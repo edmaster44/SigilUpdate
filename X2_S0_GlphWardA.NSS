@@ -44,7 +44,7 @@ void main()
 	effect eEvilVis = EffectVisualEffect( VFX_HIT_SPELL_EVIL );
 	effect eNeutVis = EffectVisualEffect( VFX_HIT_SPELL_SONIC );
 	
-	if (spellsIsTarget( oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+	if (spellsIsTarget( oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 	{
 	if (!MyResistSpell(oCaster, oTarget))
 	{
@@ -121,7 +121,7 @@ void main()
         return;
     }
 
-    if (spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,oCreator))
+    if (spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,oCreator))
     {
         SetLocalObject(oPLC,"X2_GLYPH_LAST_ENTER",oTarget );
         SignalEvent(oPLC,EventUserDefined(2000));

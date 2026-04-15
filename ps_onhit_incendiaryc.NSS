@@ -44,7 +44,7 @@ void main()
     //Declare the spell shape, size and the location.
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
         {
             fDelay = GetRandomDelay(0.5, 2.0);
             //Make SR check, and appropriate saving throw(s).

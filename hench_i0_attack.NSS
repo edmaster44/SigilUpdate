@@ -2595,7 +2595,7 @@ void HenchCheckTurnUndead()
     //Cycle through the targets within the spell shape until an invalid object is captured.
     while( GetIsObjectValid(oTarget) && nHDCount < nTurnHD )
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF)
         {
             int nRacial = GetRacialType(oTarget);
             if (((nRacial == RACIAL_TYPE_UNDEAD) && !GetHasEffect(EFFECT_TYPE_TURNED, oTarget)) ||

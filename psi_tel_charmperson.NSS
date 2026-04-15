@@ -84,7 +84,7 @@ void main()
 	    oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, GetSpellTargetLocation());
 	    while (GetIsObjectValid(oTarget) && nAmount > 0)
 	    {
-	        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+	        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF)
 	    	{
 	            nRacial = GetRacialType(oTarget);
 	            fDelay = GetRandomDelay();

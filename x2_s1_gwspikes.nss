@@ -43,7 +43,7 @@ void SHManticoreAttack(int nMissiles, int nCap, int nSpell, int nMIRV = VFX_IMP_
     while (GetIsObjectValid(oTarget) )
     {
         // * caster cannot be harmed by this spell
-        if (spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) && (oTarget != OBJECT_SELF))
+        if (spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) && (oTarget != OBJECT_SELF))
         {
             nEnemies++;
         }
@@ -71,7 +71,7 @@ void SHManticoreAttack(int nMissiles, int nCap, int nSpell, int nMIRV = VFX_IMP_
     while (GetIsObjectValid(oTarget) && nCnt <= nEnemies)
     {
         // * caster cannot be harmed by this spell
-        if (spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) && (oTarget != OBJECT_SELF))
+        if (spellsIsTarget(oTarget,SPELL_TARGET_NON_ALLIED,OBJECT_SELF) && (oTarget != OBJECT_SELF))
         {
 
 		SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));

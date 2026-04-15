@@ -123,7 +123,7 @@ void main()
 		sTargetMessage += "their actions and you both must RP as if nothing happened.</c>";
 		SendMessageToPC(oCaster, sCasterMessage);
 		SendMessageToPC(oTarget, sTargetMessage);
-	} else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)){
+	} else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_CHARM_PERSON, TRUE));
 		//Verify that the Racial Type is humanoid

@@ -49,7 +49,7 @@ void main()
 	object oTarget = GetSpellTargetObject();
 	location lTarget = GetSpellTargetLocation();
 	
-	if ( spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+	if ( spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
 	{
  		HandleTargetCreature( oTarget );
 	}
@@ -292,7 +292,7 @@ void HandleTargetCreature( object oTarget )
 		//if (GetLocalInt(oTarget2, "MeteorSwarmPrimaryTarget") == 0)
 		if (oTarget2 != oTarget)
 		{			
-	    	if ( spellsIsTarget(oTarget2, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) )
+	    	if ( spellsIsTarget(oTarget2, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) )
 	    	{
 				//Fire cast spell at event for the specified target
 	            SignalEvent(oTarget2, EventSpellCastAt(OBJECT_SELF, SPELL_METEOR_SWARM));

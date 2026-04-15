@@ -82,7 +82,7 @@ void main()
         while (GetIsObjectValid(oTarget))
         {
             //Make sure the currect target is not an enemy
-        	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && oTarget != OBJECT_SELF)
+        	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && oTarget != OBJECT_SELF)
         	{
                 //Get a local set on the creature that checks if the spell has already allowed them to save
                 bAlreadyAffected = GetLocalInt(oTarget, "bDEATH" + sIdentifier);

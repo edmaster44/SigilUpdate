@@ -111,7 +111,7 @@ struct CombatSpellData
     int Shape;
     float Radius;
     // What rules should we use for determining if something is a target for this spell?
-    // SPELL_TARGET_STANDARDHOSTILE, etc
+    // SPELL_TARGET_NON_ALLIED, etc
     int TargetFilter;
     // For aoe/cone type spells, filters object types
     // OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE
@@ -274,7 +274,7 @@ struct CombatSpellData GetCombatSpellData(object oCaster)
     spell.Metamagic = GetMetaMagicFeat();
     spell.TargetObject = GetSpellTargetObject();
     spell.TargetLocation = GetSpellTargetLocation();
-    spell.TargetFilter = SPELL_TARGET_STANDARDHOSTILE;
+    spell.TargetFilter = SPELL_TARGET_NON_ALLIED;
     spell.ObjectTypeFilter = OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE;
     spell.SpellResistance = TRUE;
     spell.PreSpellCastHook = TRUE;

@@ -42,7 +42,7 @@ void main()
 	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ACID);
 	effect eRay = EffectBeam(VFX_BEAM_ACID, OBJECT_SELF, BODY_NODE_HAND);
 
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{
         //Fire cast spell at event for the specified target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_ACID_SPLASH));

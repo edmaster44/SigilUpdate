@@ -61,7 +61,7 @@ void main()
       //Check for the single creature or area targeting of the spell
       if (GetIsObjectValid(oTarget))
       {
-            if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+            if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         	{
                 //Fire cast spell at event for the specified target
                 SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_POWER_WORD_KILL));
@@ -108,7 +108,7 @@ void main()
                   while (GetIsObjectValid(oTarget))
                   {
                         //Make sure the target avoids all allies.
-                        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+                        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
                     	{
                               bKill = GetLocalInt(oTarget, "NW_SPELL_PW_KILL_" + GetTag(OBJECT_SELF));
                               //Get the HP of the current target

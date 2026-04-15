@@ -120,7 +120,7 @@ void PS_Feat_ControlUndead(object oPC, object oTarget, int nSpell)
 		DecrementRemainingFeatUses(oPC, FEAT_TURN_UNDEAD);
     	if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD && PS_GetLevel(oTarget) <= nControlMaxLevel)
     	{	if (GetIsPC(oTarget) == 0)
-			{	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+			{	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
         		{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
            			//if (!MyResistSpell(oPC, oTarget))		{	
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eControl, oTarget, HoursToSeconds(nDuration));	//}
@@ -171,7 +171,7 @@ void PS_Feat_PsionicThrust(object oPC, object oTarget, int nSpell)
 
     int nDuration = 2;
     
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
     {   effect eImpact 				= EffectVisualEffect(VFX_IMP_BIGBYS_FORCEFUL_HAND);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eImpact, oTarget);
         SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
@@ -229,7 +229,7 @@ void PS_Feat_PsionicDominate(object oPC, object oTarget, int nSpell)
     int nRacial 		= GetRacialType(oTarget);
 
 	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, FALSE));
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oPC))
+	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
 	{	if (!MyResistSpell(oPC, oTarget))
     	{	if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS))
     		{	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, TurnsToSeconds(nDuration));	}

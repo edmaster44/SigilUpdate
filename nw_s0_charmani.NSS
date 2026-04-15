@@ -99,7 +99,7 @@ void main()
 			sMessage += "\nThis information may guide roleplaying your reaction to the failed attempt.";
 		}
 		SendMessageToPC(oMaster, sMessage);
-	} else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF)){
+	} else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF)){
         //Fire spell cast at event to fire on the target
         SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_CHARM_PERSON_OR_ANIMAL, FALSE));
 		//Make sure the racial type of the target is applicable

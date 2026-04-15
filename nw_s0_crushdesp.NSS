@@ -63,7 +63,7 @@ void main()
         {
             // * added rep check April 2003
 			// Removed rep check Spetember 2006 cause that ain't how we roll
-            if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) == TRUE)
+            if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) == TRUE)
             {
                 nNumTargets = nNumTargets - 1;
 

@@ -80,7 +80,7 @@ void main()
 			//Apply VFX impact and bonus effects
             ApplyEffectToObject(nDurType, ePosLink, oTarget, fDuration);
         }
-        else if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
         {
             //Fire spell cast at event for target
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 14302));

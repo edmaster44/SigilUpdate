@@ -333,7 +333,7 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 		effect eDamage;
 	    oTarget = GetFirstObjectInShape(SHAPE_SPELLCONE, RADIUS_SIZE_COLOSSAL, lTarget, TRUE);
 	    while(GetIsObjectValid(oTarget))
-	    {	if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+	    {	if(oTarget != OBJECT_SELF && spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	        {	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpell));
 	            fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
 				string sSaved = GetName(oTarget) + " avoided the breath weapon!";

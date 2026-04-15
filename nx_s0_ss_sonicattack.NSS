@@ -50,7 +50,7 @@ void CastSpell()
 	
 	while(GetIsObjectValid(oTarget))
 	{
-		if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster))
+		if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster))
 		{
 			SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1038));
 			if (oTarget != oCaster)

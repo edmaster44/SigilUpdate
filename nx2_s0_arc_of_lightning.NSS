@@ -103,7 +103,7 @@ void main()
 		while (GetIsObjectValid(oTarget))
 		{
 			// check to see if hostile
-			if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, oCaster)) 
+			if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)) 
 			{
 				// Get damage apply effects
 				nDamage = d4(nCasterLevel);
