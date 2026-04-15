@@ -12,11 +12,27 @@ void main(){
 	}
 	string sID = PS_GetCharID(oPC);
 	if (sID == "NULL"){
-		SendMessageToPC(oPC, "Error retrieving data");
+		SendMessageToPC(oPC, "Error retrieving Character ID. Contact Administrator on our Discord.");
 		return;
 	}
 	int nXP = 0;
 	SQLExecDirect("SELECT dm_pool,rp_pool FROM characterdata WHERE id=" + sID);
+	if (SQLFetch() == SQL_ERROR){
+		object oSpeaker = GetLastSpeaker(); // this is the pc. Is that intended?
+		nXP += GetLocalInt(oSpeaker, sID+"dm");
+		nXP += GetLocalInt(oSpeaker, sID+"rp");
+	} else {
+		nXP += StringToInt(SQLGetData(1));
+		nXP += StringToInt(SQLGetData(2));
+	}
+	if (nXP != 0){
+		SetXP(oPC, nXP + GetXP(oPC));
+		ExportSingleCharacter(oPC);
+		SetXPpools(oPC, 0, TRUE, TRUE);	
+	} else {
+		SendMessageToPC(oPC, "Error getting data. No changes made.");
+	}
+	/* original
 	if (SQLFetch() == SQL_ERROR){
 		object oSpeaker = GetLastSpeaker();
 		nXP += GetLocalInt(oSpeaker, sID+"dm");
@@ -31,4 +47,5 @@ void main(){
 	} else {
 		SendMessageToPC(oPC, "Error getting data. No changes made.");
 	}
+	*/
 }
