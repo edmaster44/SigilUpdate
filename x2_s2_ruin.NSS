@@ -24,8 +24,7 @@ void main(){
     //Declare major variables
 	object oCaster = OBJECT_SELF;
     object oTarget = GetSpellTargetObject();
-	effect eLgSpurt	= EffectNWN2SpecialEffectFile("sp_utterdark_hit");
-
+	
     float fDist = GetDistanceBetween(oCaster, oTarget);
     float fDelay = fDist/(3.0 * log(fDist) + 2.0);
 
@@ -47,15 +46,16 @@ void main(){
 		nSub == RACIAL_SUBTYPE_INCORPOREAL)
 			nDam += nDam / 2; // 1.5x damage to creatures subject to the Ruin potions
 
-    if (MySavingThrow(SAVING_THROW_FORT,oTarget,nSpellDC,SAVING_THROW_TYPE_SPELL,oCaster)){
+    if (MySavingThrow(SAVING_THROW_FORT, oTarget, nSpellDC, SAVING_THROW_TYPE_SPELL, oCaster)){
 			if (GetIsPC(oTarget)) return;
 			else nDam /= 2;
 	}
 	effect eDam = EffectDamage(nDam, DAMAGE_TYPE_POSITIVE, DAMAGE_POWER_PLUS_TWENTY);
 	ApplyEffectAtLocation (DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_SCREEN_SHAKE), GetLocation(oTarget));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(487), oTarget);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_COM_BLOOD_CRT_RED), oTarget);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_COM_CHUNK_BONE_MEDIUM), oTarget);
+	//ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_COM_BLOOD_CRT_RED), oTarget);
+	//ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_COM_CHUNK_BONE_MEDIUM), oTarget);
+	effect eLgSpurt	= EffectNWN2SpecialEffectFile("sp_utterdark_hit");
 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
 	DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eLgSpurt, oTarget));
 	
