@@ -937,23 +937,23 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 		case SAVING_THROW_TYPE_MIND_SPELLS:{
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				// return SAVING_THROW_CHECK_IMMUNE doesn't seem to be working right, just return true
+				// return SAVING_THROW_CHECK_IMMUNE doesn't seem to be working right, just return SAVING_THROW_CHECK_IMMUNE
 				//return SAVING_THROW_CHECK_IMMUNE;
-				return TRUE;
+				return SAVING_THROW_CHECK_IMMUNE;
 			}
 			break;
 		}
 		case SAVING_THROW_TYPE_POISON:{
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return TRUE;
+				return SAVING_THROW_CHECK_IMMUNE;
 			}
 			break;
 		}
 		case SAVING_THROW_TYPE_DISEASE:{
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return TRUE;
+				return SAVING_THROW_CHECK_IMMUNE;
 			}
 			break;
 		}
@@ -961,7 +961,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR, oSaveVersus) ||
 				GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return TRUE;
+				return SAVING_THROW_CHECK_IMMUNE;
 			}
 			break;
 		
@@ -969,7 +969,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 		case SAVING_THROW_TYPE_DEATH:{
 			if (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH, oSaveVersus)){
 				MySavingThrowFeedback(oTarget, SAVING_THROW_CHECK_IMMUNE, nId, nSaveType, fDelay);
-				return TRUE;
+				return SAVING_THROW_CHECK_IMMUNE;
 			}
 			break;
 		}
@@ -984,9 +984,10 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 	}
 	
 	MySavingThrowFeedback(oTarget, nSaveResult, nId, nSaveType, fDelay);
-	if (nSaveResult == SAVING_THROW_CHECK_FAILED) return FALSE;
+	return nSaveResult;
+	//if (nSaveResult == SAVING_THROW_CHECK_FAILED) return FALSE;
 	
-	return TRUE;
+	//return TRUE;
 }
 
 void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType = SAVING_THROW_TYPE_NONE, float fDelay = 0.1f){

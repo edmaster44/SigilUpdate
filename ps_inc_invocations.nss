@@ -75,7 +75,7 @@ void DoDarkDiscorp(object oCaster, int nId, int bFromBuddy){
 		SendMessageToPC(oCaster, "You may not discorporate while Fiend Form is active.");
 		return;
 	}
-    int nCasterLvl = GetWarlockCasterLevel(oCaster);
+    int nCasterLvl = GetWarlockCasterLevelBase(oCaster);
   
 	float fDuration = TurnsToSeconds(nCasterLvl);
     fDuration = ApplyMetamagicDurationMods(fDuration);
@@ -101,7 +101,7 @@ void DoDarkDiscorp(object oCaster, int nId, int bFromBuddy){
 void DoDarkForesight(object oCaster, int nId, int bFromBuddy){
 
     //Declare major variables
-    int nDuration = GetWarlockCasterLevel(oCaster);
+    int nDuration = GetWarlockCasterLevelBase(oCaster);
     int nLimit = nDuration * 10;
 	if ( nLimit > 150 )	nLimit = 150;
     int nMetaMagic = GetMetaMagicFeat();
@@ -124,7 +124,7 @@ void DoDarkForesight(object oCaster, int nId, int bFromBuddy){
 
 
 void DoHasteEffects(object oCaster, object oTarget, int nId, int nMetaMagic){
-    int nCasterLvl  = GetWarlockCasterLevel(oCaster);
+    int nCasterLvl  = GetWarlockCasterLevelBase(oCaster);
     float fDuration   = RoundsToSeconds(nCasterLvl); 
 
     //Check for metamagic extension
@@ -300,7 +300,7 @@ void DoSeeTheUnseen(object oCaster, int nId, int bFromBuddy){
 
 void DoLeapsAndBounds(object oCaster, int nId, int bFromBuddy){
 	
-	int nCasterLevel = GetWarlockCasterLevel(oCaster);
+	int nCasterLevel = GetWarlockCasterLevelBase(oCaster);
 	int nSkillBuff = (nCasterLevel / 2) + 5;
 	
     float fDuration = HoursToSeconds(24);
@@ -333,7 +333,7 @@ void DoLeapsAndBounds(object oCaster, int nId, int bFromBuddy){
 
 
 void DoOtherworldlyWhispers(object oCaster, int nId, int bFromBuddy){
-	int nCasterLevel = GetWarlockCasterLevel(oCaster);
+	int nCasterLevel = GetWarlockCasterLevelBase(oCaster);
 	int nSkillBuff = (nCasterLevel/2) + 5;
 	
  	//float fDuration = 60.0*60.0*24.0;  // 24 hours
@@ -356,7 +356,7 @@ void DoOtherworldlyWhispers(object oCaster, int nId, int bFromBuddy){
 
 void DoEntropicWarding(object oCaster, int nId, int bFromBuddy){
 
-	int nCasterLevel = GetWarlockCasterLevel(oCaster);
+	int nCasterLevel = GetWarlockCasterLevelBase(oCaster);
     float fDuration = TurnsToSeconds(nCasterLevel);
 	int nSkillBuff = (nCasterLevel/4);
 	if (nSkillBuff < 1)
@@ -414,7 +414,7 @@ void DoDarkOnesOwnLuck(object oCaster, int nId, int bFromBuddy){
 
 void DoBeguilingInfluence(object oCaster, int nId, int bFromBuddy){
 
-	int nCasterLevel = GetWarlockCasterLevel(oCaster);
+	int nCasterLevel = GetWarlockCasterLevelBase(oCaster);
     float fDuration = HoursToSeconds(24);
 
     //Enter Metamagic conditions
@@ -423,9 +423,9 @@ void DoBeguilingInfluence(object oCaster, int nId, int bFromBuddy){
 	
 	int nSkillBuff = (nCasterLevel/2) + 5;
 
-    effect eBluff = EffectSkillIncrease(SKILL_BLUFF, 6);
-    effect eDiplomacy = EffectSkillIncrease(SKILL_DIPLOMACY, 6);
-    effect eIntimidate = EffectSkillIncrease(SKILL_INTIMIDATE, 6);
+    effect eBluff = EffectSkillIncrease(SKILL_BLUFF, nSkillBuff);
+    effect eDiplomacy = EffectSkillIncrease(SKILL_DIPLOMACY, nSkillBuff);
+    effect eIntimidate = EffectSkillIncrease(SKILL_INTIMIDATE, nSkillBuff);
     effect eLink = EffectLinkEffects(eBluff, eDiplomacy);
     eLink = EffectLinkEffects(eIntimidate, eLink);
 	
