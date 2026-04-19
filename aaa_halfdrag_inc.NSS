@@ -1003,7 +1003,8 @@ void PS_DraconicBloodline(object oPC, int nSpell)
 		
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eEff, oPC);
 }
-
+//moved to ff_persist_wingtail, persistent feat 2120
+/*
 void PS_HD_Dragonflight(object oPC, object oItem)
 {
 	int iCheck		= GetLocalInt(oItem, "DragonFlight");
@@ -1037,7 +1038,7 @@ void PS_HD_Dragonflight(object oPC, object oItem)
 	}
 	if (GetGender(oPC) == GENDER_FEMALE) iWing = iWingF;
 	else iWing = iWingM;
-	
+	PS_SetWingNumber(oPC, iWing);
 	FeatAdd(oPC, 2120, FALSE);
 	PS_RestoreOriginalAppearance(oPC);
 		
@@ -1050,6 +1051,7 @@ void PS_HD_Dragonflight(object oPC, object oItem)
 	DelayCommand(0.2f, PS_RefreshAppearance(oPC));
 	DelayCommand(0.3f, PS_SaveOriginalAppearance(oPC));
 }
+*/
 
 void PS_HD_RemainWingless(object oPC, object oItem)
 {

@@ -246,6 +246,15 @@ void AlternativeSkillStatScaling (object oPC)
 
 void RestFinish(object oPC)
 {
+	//test to see if rest script happens before or after rest resets feats
+	if (GetHasFeat(21885, oPC, TRUE)){
+		int nMinusUses = 5;
+		int i;
+		for (i = 1; i <= nMinusUses ; i++){
+			DecrementRemainingFeatUses(oPC, 21885);
+		}
+	}
+		
 	IncrementalDebug(oPC, "finish: top");
 	object oESSENCE	= GetItemPossessedBy(oPC, "ps_essence");
 	//if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);

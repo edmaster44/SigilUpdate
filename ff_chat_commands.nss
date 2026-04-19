@@ -8,6 +8,7 @@
 #include "ps_inc_randomitems"
 #include "x2_inc_itemprop"
 #include "nwnx_dae"
+#include "ps_inc_wingtail"
 
 
 int GetHasAllAccess(object oPC);
@@ -267,7 +268,18 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	}
 	//THE FOLLOWING ARE DEBUGGING COMMANDS THAT ONLY WORK IF USED BY A DM OR ON THE TEST SERVER
 	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") || GetIsDM(oSender)){
-		if (GetStringLeft(sInput, 8) == "#trinket"){
+		if (GetStringLeft(sInput, 8) == "#tailtest"){
+			string sTailNum = GetStringRight(sInput, GetStringLength(sInput) - 8);
+			int nTailNum = StringToInt(sTailNum);
+			PS_SetTailNumber(oSender, nTailNum);
+			PS_ApplyPCTail(oSender);
+		}
+		else if (sInput == "featusestest"){
+			if (GetHasFeat(21885, oSender, TRUE))
+				FeatRemove(oSender, 21885);
+			else FeatAdd(oSender, 21885, FALSE);
+		}
+		else if (GetStringLeft(sInput, 8) == "#trinket"){
 			sFeedback = "Generating trinket";
 			int nRank;
 			if (sInput == "#trinket1") nRank = 1;

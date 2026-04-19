@@ -341,8 +341,6 @@ void AddEpithetFeat(object oPC, int nFeat) {
 			else  PS_SetTailNumber(oPC, 26);
 			PS_ApplyPCTail(oPC);
 		} else if (nFeat == 3008) {
-			FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //Wings feat!
-			
 			if (GetGender(oPC) == GENDER_MALE) PS_SetWingNumber(oPC, 79);
 			else  PS_SetWingNumber(oPC, 78);
 			PS_ApplyPCWings(oPC);
@@ -354,7 +352,11 @@ void AddEpithetFeat(object oPC, int nFeat) {
 			FeatAdd(oPC, 3016, FALSE, FALSE, TRUE);
 		}
 	}
-	
+	if (!GetHasFeat(2120, oPC)){ // if we dont have the default nwn wing feat that gives move rate
+		if (nFeat == 288 || nFeat == 2179 || nFeat == 3024 || nFeat == 2781 || 
+			nFeat == 3021 || nFeat == 3022 || nFeat == 3023 || nFeat == 3008) //and we're adding wings
+				FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //then give the move rate feat
+	}
 	FeatAdd(oPC, nFeat, FALSE, FALSE, TRUE);
 }
 
@@ -402,7 +404,7 @@ void main(string sCOMMAND, string sFEAT)
 		nPAGE = nPAGE + 1;
 		SetLocalInt(oPC, "EXTRA_UI_PAGE", nPAGE);
 		DelayCommand(0.0f, PopulateList(oPC, nCLASS, nPAGE, sSCREEN));
-	}
+	} 
 	else if (sCOMMAND == "HO_PATH"){
 		nTITLE = GetTitle(nCLASS);
 		DisplayGuiScreen(oPC, sSCREEN, TRUE, "extra_choices.xml");

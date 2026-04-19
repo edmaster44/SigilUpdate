@@ -199,9 +199,9 @@ void main()
 			PS_Ability_ChangeSelf(oPC, nSpell);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
-		case 1882:		//Dark Flight
-			PS_Ability_DarkFlight(oPC);
-		break;
+		//case 1882:		//Dark Flight moved to ff_persist_wingtail, persistent feat 2120
+			//PS_Ability_DarkFlight(oPC);
+		//break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 1884:		//Erinyes Rope of Entanglement
 			PS_Ability_RopeOfEntanglement(oPC, oTarget, nSpell);

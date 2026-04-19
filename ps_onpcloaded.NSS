@@ -163,8 +163,23 @@ void GiveCreatureSkin(object oPC){
 // start of the level up process but at the END. So if there's any feats we
 // need a character to have before they reach level 2 rather than after it, 
 // we need to add that code here.
-void GiveStartingFeats(object oPC)
+void GiveStartingTraits(object oPC)
 {
+	int nWing = PS_GetRacialWingType(oPC);
+	if (nWing != 0){
+		PS_SetWingNumber(oPC, nWing);
+		PS_ApplyPCWings(oPC);
+		if (!GetHasFeat(2120, oPC, FALSE))
+			FeatAdd(oPC, 2120, FALSE);
+	}
+	
+	
+	int nTail = PS_GetRacialTailType(oPC);
+	if (nTail != 0){
+		PS_SetTailNumber(oPC, nTail);
+		PS_ApplyPCTail(oPC);
+	}
+	
 	// calls the psywar progression function from ps_inc_functions with 
 	// an argument that tells it to grant the first feat only.
 	DoPsyProgression(oPC, TRUE);
@@ -523,7 +538,7 @@ void main()
 		
 		if (Template == 0) RemoveAllItems(oPC); //don't remove widgets on race templates
 		oItem = CreateItemOnObject("ps_essence", oPC);
-		GiveStartingFeats(oPC);
+		GiveStartingTraits(oPC);
 		GiveStartingGold(oPC, 500);
 		SetStartingVariables(oPC, Legal);
 		PS_GiveXPReward(oPC, 1);

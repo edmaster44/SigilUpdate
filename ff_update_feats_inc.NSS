@@ -195,6 +195,12 @@ void LevelUpGuiChoices(object oPC){
 			}
 		}
 	}
+	
+	if (!GetHasFeat(2120, oPC)){ // if we dont have the default nwn wing feat that gives move rate..
+		if (GetHasFeat(288, oPC) || GetHasFeat(2179, oPC) || GetHasFeat(3024, oPC) || GetHasFeat(2781, oPC) || 
+			GetHasFeat(3021, oPC) || GetHasFeat(3022, oPC) || GetHasFeat(3023, oPC) || GetHasFeat(3008, oPC)) //..and we're adding wings..
+				FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //..then give the default wing feat
+	}
 }
 
 //manually give creature weapon proficiency to any race or class that is meant to have it

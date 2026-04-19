@@ -123,9 +123,9 @@ void main()
 			PS_HDM_EnergyAdaptGlow(oPC, nSpell);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
-		case 1391 :		//Dragonflight
-			PS_HD_Dragonflight(oPC, oItem);
-		break;
+		//case 1391 :		//Dragonflight moved to ff_persist_wingtail, persistent feat 2120
+		//	PS_HD_Dragonflight(oPC, oItem);
+		//break;
 ///////////////////////////////////////////////////////////////////////////////////
 		case 1397 :		//Remain Wingless
 			PS_HD_RemainWingless(oPC, oItem);

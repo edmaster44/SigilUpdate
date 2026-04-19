@@ -651,7 +651,14 @@ float GetECLXPTax(int nECL, int bForDisplay = FALSE){
 	
 	float fEffectiveLevel = 30.0 + IntToFloat(nECL);
 	float fECLXP = 1000.0 * fEffectiveLevel * (fEffectiveLevel - 1.0) / 2;
-	fTax = 435000.0 / fECLXP;
+	fTax = 435000.0 / fECLXP; // 0.56
+	
+	// leveling high ecl characters is so fast without the lvl 25 xp nerf 
+	// that theres no longer any advantage to playing a low ecl character
+	// so lets temporarily add an additional ecl tax of 1% per ecl
+	float fAddTax = IntToFloat(nECL) * 0.01;
+	fTax -= fAddTax;
+	
 	if (bForDisplay) return (1.00 - fTax) * 100.0;
 	
 	return fTax;

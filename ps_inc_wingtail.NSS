@@ -52,12 +52,20 @@ void PS_SetTailNumber(object oPC, int nVar)
 	SetLocalInt(oEssence, "PC_Tail", nVar);
 }
 
+
 // Returns the value from the essence variable PC_Tail
 int PS_GetTailNumber(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
 	int nTail		= GetLocalInt(oEssence, "PC_Tail");
 	return nTail;
+}
+
+int PS_GetRacialTailType(object oPC)
+{
+	int nSub = GetSubRace(oPC);
+	string sTail = Get2DAString("racialsubtypes", "TAIL", nSub);
+	return StringToInt(sTail);
 }
 
 // Determines if the PC should have wings based on their racial subtype and gender
@@ -105,6 +113,7 @@ int PS_Get_WingRace(object oPC)
 	{
 		case 47: return WING_VARIATION_HUMAN;
 		case 61: return WING_VARIATION_HUMAN;
+		case 70: return WING_VARIATION_ELF;
 		case 251: return WING_VARIATION_HUMAN;
 	}
 	return -1;
@@ -299,6 +308,11 @@ int PS_GetWing_Template(object oPC)
 int PS_GetFeatWingType(object oPC)
 {
 	int nWing = 0;
+	
+	if (GetHasFeat(2120, oPC) && GetSubRace(oPC) == 70){
+		if (GetGender(oPC) == GENDER_MALE) nWing = 63;
+		else nWing = 64;
+	}
 	
 	if (GetHasFeat(3008, oPC)) {
 		if (GetGender(oPC) == GENDER_MALE) nWing = 79;

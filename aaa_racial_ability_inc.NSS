@@ -249,6 +249,8 @@ void PS_Ability_ChangeSelf(object oPC, int nSpell) //still tweaking w/Astral
 	AssignCommand(oPC, ActionStartConversation(oPC, "aaa_conv_changeself", TRUE, FALSE));
 }
 
+// moved to ff_persist_wingtail, persistent feat 2120
+/*
 void PS_Ability_DarkFlight(object oPC)
 {
 	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
@@ -293,7 +295,7 @@ void PS_Ability_DarkFlight(object oPC)
 		else //You have no class!
 		{	return;		}
 		PS_RestoreOriginalAppearance(oPC);
-	
+		PS_SetWingNumber(oPC, iWing);
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 			app.WingVariation = iWing;
 		PS_SetCreatureCoreAppearance(oPC, app);
@@ -303,7 +305,7 @@ void PS_Ability_DarkFlight(object oPC)
 		DelayCommand(0.2f, PS_RefreshAppearance(oPC));
 		DelayCommand(0.3f, PS_SaveOriginalAppearance(oPC));	}
 }
-
+*/
 void PS_Ability_RopeOfEntanglement(object oPC, object oTarget, int nSpell)
 {
 

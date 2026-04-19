@@ -870,6 +870,7 @@ const int WING_VARIATION_DWARF					= 1;
 const int WING_VARIATION_GNOME					= 2;
 const int WING_VARIATION_HUMAN					= 3;
 const int WING_VARIATION_ORC					= 4;
+const int WING_VARIATION_ELF					= 5;
 
 // On-Hit Options
 const int IP_CONST_ONHIT_CASTSPELL_CHAOSDAM1	= 143;
