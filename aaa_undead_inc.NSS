@@ -185,8 +185,6 @@ void PS_UndeadRacialType(object oPC)
 		int nOrigin = GetRacialType(oPC);
 		int nOriSub = GetSubRace(oPC);
 		PS_RestoreOriginalAppearance(oPC);
-		SetLocalInt(oEssence, VAR_OLD_RACE, nOrigin);
-		SetLocalInt(oEssence, "OldSubrace", nOriSub);
 		SetLocalInt(oEssence, "TemplateFix", 0);
 		effect eUndead 	= EffectNWN2SpecialEffectFile("fx_coven_murder", oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eUndead, oPC, 6.0f);

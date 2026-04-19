@@ -171,8 +171,6 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 	if (GetRacialType(oPC) != RACIAL_TYPE_OUTSIDER)
 	{	if (nLevel >= 6)
 		{	SetLocalString(oItem, "Template", "HalfOutsider");
-			SetLocalInt(oItem, "OldRace", nOrigin);
-			SetLocalInt(oItem, "OldSubrace", nOriSub);
 			SetLocalString(oItem, "RaceChange", "Outsider");
 			SetLocalInt(oItem, "TemplateFix", 0);
 			PS_SetRacialType(oPC, RACIAL_TYPE_OUTSIDER);

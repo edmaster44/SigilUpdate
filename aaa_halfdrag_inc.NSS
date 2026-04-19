@@ -501,8 +501,6 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 	{
 		if (nHalfdragon == 6)
 		{
-			SetLocalInt(oItem, VAR_OLD_RACE, nOrigin);
-			SetLocalInt(oItem, "OldSubrace", nOriSub);
 			SetLocalString(oItem, "RaceChange", "Dragon");
 			SetLocalInt(oItem, "TemplateFix", 0);
 			PS_SetRacialType(oPC, RACIAL_TYPE_DRAGON);

@@ -4190,7 +4190,7 @@ void PS_UndeadRaceFix(object oPC)
                     DeleteLocalString(oItem, "Template");
                     DeleteLocalInt(oItem, "IsUndead");
                     //DeleteLocalInt(oItem, "OldECL");
-                    DeleteLocalInt(oItem, VAR_OLD_RACE);
+                    //DeleteLocalInt(oItem, VAR_OLD_RACE);
                     SetFirstName(oItem, "Your Essence");
                     SetItemIcon(oItem, 122);
                 }
@@ -4216,7 +4216,7 @@ void PS_UndeadRaceFix(object oPC)
                     DeleteLocalString(oItem, "Template");
                     DeleteLocalInt(oItem, "IsUndead");
                     //DeleteLocalInt(oItem, "OldECL");
-                    DeleteLocalInt(oItem, VAR_OLD_RACE);
+                   // DeleteLocalInt(oItem, VAR_OLD_RACE);
                 }
             }
         }
@@ -4353,7 +4353,7 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
     {
         if (nVAR == TRUE) return;
         nSUBRACE = GetSubRace(oPC);
-        SetLocalInt(oESSENCE, "OldSubrace", nSUBRACE);
+        //SetLocalInt(oESSENCE, "OldSubrace", nSUBRACE);
         SetLocalInt(oESSENCE, "TemplateFix", TRUE);
     }
     string s2DA = "racialsubtypes";
@@ -4617,8 +4617,8 @@ void PS_HalfOutsiderRaceFix(object oPC)
             {   PS_SetRacialType(oPC, iOldRace);
                 PS_SetSubRacialType(oPC, iOldSub);
                 DeleteLocalString(oItem, "RaceChange");
-                DeleteLocalInt(oItem, VAR_OLD_RACE);
-                DeleteLocalInt(oItem, "OldSubrace");
+               // DeleteLocalInt(oItem, VAR_OLD_RACE);
+               // DeleteLocalInt(oItem, "OldSubrace");
                 SendMessageToPC(oPC, "Racial type and subtype reverting to original");  }
             
             if (iHDLevel != 6 && iFlight == 1)

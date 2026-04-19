@@ -163,8 +163,6 @@ void LevelUpGuiChoices(object oPC){
 	
 			if (GetRacialType(oPC) != RACIAL_TYPE_OUTSIDER){	
 				SetLocalString(oEss, "Template", "HalfOutsider");
-				SetLocalInt(oEss, "OldRace", nOrigin);
-				SetLocalInt(oEss, "OldSubrace", nOriSub);
 				SetLocalString(oEss, "RaceChange", "Outsider");
 				SetLocalInt(oEss, "TemplateFix", 0);
 				PS_SetRacialType(oPC, RACIAL_TYPE_OUTSIDER);

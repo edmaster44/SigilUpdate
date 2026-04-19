@@ -567,9 +567,11 @@ void main()
 	
 	object oCheck =  GetItemPossessedBy(oPC, "ps_essence");
 	
+	//this was just changing the old subrace to new for templates. OldRace and OldSubrace should be set ONCE
+	// for new characters and then never changed again
 	// If OldSubrace is not already set, set it!
-	if (GetLocalInt(oCheck, "OldSubrace") == 0 && GetLocalString(oCheck, "Template") == "")
-	{	SetLocalInt(oCheck, "OldSubrace", GetSubRace(oPC));	}
+	//if (GetLocalInt(oCheck, "OldSubrace") == 0 && GetLocalString(oCheck, "Template") == "")
+	//{	SetLocalInt(oCheck, "OldSubrace", GetSubRace(oPC));	}
 	
 	/*	Victim of crash during Word of Peace imprisonment effect is sent back to where they came from.	*/
 	location lExdim = GetLocalLocation(oCheck, "ExtraDim");
