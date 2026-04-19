@@ -21,7 +21,7 @@ FEAT		SPELL		TYPE			ADDITIONAL NOTE
 #include "ps_inc_wingtail"
 #include "x2_inc_spellhook"
 
-void SetRacialWingTail(object oPC);
+void SetRacialWing(object oPC, object oEssence);
 void PS_Ability_DarkFlight(object oPC);
 void PS_HD_Dragonflight(object oPC, object oItem);
 void PS_FeyWings(object oPC);
@@ -37,7 +37,7 @@ void main(){
 		GetHasFeat(3021, oPC, TRUE) || GetHasFeat(022, oPC, TRUE))
 			PS_Ability_DarkFlight(oPC);
 	else if (GetHasFeat(3008, oPC, TRUE)) PS_FeyWings(oPC);
-	else SetRacialWingTail(oPC);
+	else SetRacialWing(oPC, oEssence);
 	
 	int nWing = PS_GetWingNumber(oPC);
 	int nTail = PS_GetTailNumber(oPC);
@@ -50,35 +50,17 @@ void main(){
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
 	}
-	
-	/*
-	effect eWingTail;
-	int bHasEffect = FALSE;
-
-	if (nWing != WING_TYPE_NONE){
-		bHasEffect = TRUE;
-		eWingTail = EffectLinkEffects(EffectMovementSpeedIncrease(10), eWingTail);
-	}
-	} if (nTail != 0){
-		bHasEffect = TRUE;
-		if (GetIsEffectValid(eWingTail))
-			eWingTail = EffectLinkEffects(EffectSkillIncrease(SKILL_TUMBLE, 10), eWingTail);
-		else eWingTail = EffectSkillIncrease(SKILL_TUMBLE, 10);
-	}
-	int nId = GetSpellId();
-	if (bHasEffect)
-		eWingTail = SetEffectSpellId(eWingTail, GetSpellId());
-		eWingTail = SupernaturalEffect(eWingTail);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eWingTail, oPC);
-	}
-	*/
 }
 
-void SetRacialWingTail(object oPC){
-	if (PS_GetWingNumber(oPC) == 0)
-		PS_SetWingNumber(oPC, PS_GetRacialWingType(oPC));
-	if (PS_GetTailNumber(oPC) == 0)
-		PS_SetTailNumber(oPC, PS_GetRacialTailType(oPC));
+void SetRacialWing(object oPC, object oEssence){
+	int nGender	= GetGender(oPC);
+	string sWing = (nGender == GENDER_MALE) ? "MWING" : "FWING";
+	int nSub = GetLocalInt(oEssence, "OldSubrace");
+	int nWing = StringToInt(Get2DAString("racialsubtypes", sWing, nSub));
+	if (nWing != 0){
+		PS_SetWingNumber(oPC, nWing);
+		PS_ApplyPCWings(oPC);
+	}	
 }
 
 void PS_FeyWings(object oPC){

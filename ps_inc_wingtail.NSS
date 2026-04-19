@@ -73,7 +73,8 @@ int PS_GetRacialTailType(object oPC)
 int PS_GetRacialWingType(object oPC)
 {
 	int nGender		= GetGender(oPC);
-	int nSub		= GetSubRace(oPC);
+	//int nSub		= GetSubRace(oPC);
+	int nSub = GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "OldSubrace");
 	string sMWing	= Get2DAString("racialsubtypes", "MWING", nSub);
 	int nMWing		= StringToInt(sMWing);
 	string sFWing	= Get2DAString("racialsubtypes", "FWING", nSub);

@@ -165,6 +165,9 @@ void GiveCreatureSkin(object oPC){
 // we need to add that code here.
 void GiveStartingTraits(object oPC)
 {
+	object oEssence = GetItemPossessedBy(oPC, "ps_essence");
+	SetLocalInt(oEssence, "OldRace", GetRacialType(oPC));
+	SetLocalInt(oEssence, "OldSubrace", GetSubRace(oPC));
 	int nWing = PS_GetRacialWingType(oPC);
 	if (nWing != 0){
 		PS_SetWingNumber(oPC, nWing);
