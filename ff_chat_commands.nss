@@ -266,6 +266,55 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
+	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") && GetIsTester(oSender)){
+		if (sInput == "#showxptax"){
+			int nLvlTax = GetLocalInt(GetModule(), "USE_LEVEL_TAX");
+			float fLvlTax = GetLocalFloat(GetModule(), "LEVEL_TAX");
+			int nECLAdd = GetLocalInt(GetModule(), "USE_ADDITIONAL_ECL_TAX");
+			float fECLAdd = GetLocalFloat(GetModule(), "ECL_ADD_TAX");
+			if (nLvlTax){
+				sFeedback = "Additional tax per level is ";
+				sFeedback += PS_PrettyFloatString(fLvlTax * 100.0) + "%\n";
+			} else sFeedback = "Additional tax per level is OFF";
+			if (nECLAdd){
+				sFeedback += "Additional tax per ECL is ";
+				sFeedback += PS_PrettyFloatString(fECLAdd * 100.0) + "%\n";
+			} else sFeedback += "Additional tax per ECL is OFF";
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 12) == "#setleveltax"){
+			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 12);
+			float fLvlTax = StringToFloat(sRight);
+			if (fLvlTax == 0.0){
+				SetLocalInt(GetModule(), "USE_LEVEL_TAX", FALSE);
+				sFeedback = "Turning Level XP Tax OFF";
+			} else {
+				sFeedback = "Setting Level XP Tax to " + PS_PrettyFloatString(fLvlTax) + "%";
+				SetLocalInt(GetModule(), "USE_LEVEL_TAX", TRUE);
+				SetLocalFloat(GetModule(), "LEVEL_TAX", fLvlTax / 100.0);
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 10) == "#setecltax"){
+			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 10);
+			float fECLAdd = StringToFloat(sRight);
+			if (fECLAdd == 0.0){
+				SetLocalInt(GetModule(), "USE_ADDITIONAL_ECL_TAX", FALSE);
+				sFeedback = "Turning Additional ECL XP Tax OFF";
+			} else {
+				sFeedback = "Setting Additional XP Tax to " + PS_PrettyFloatString(fECLAdd) + "%";
+				SetLocalInt(GetModule(), "USE_ADDITIONAL_ECL_TAX", TRUE);
+				SetLocalFloat(GetModule(), "ECL_ADD_TAX", fECLAdd / 100.0);
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+	
+	
+	
+	}
 	//THE FOLLOWING ARE DEBUGGING COMMANDS THAT ONLY WORK IF USED BY A DM OR ON THE TEST SERVER
 	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") || GetIsDM(oSender)){
 		if (GetStringLeft(sInput, 8) == "#tailtest"){

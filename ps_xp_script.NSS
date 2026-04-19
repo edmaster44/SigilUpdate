@@ -42,7 +42,12 @@ void main(){
 		nSubDead != 40 && nSubDead != 44 && nSubDead != 140 && nSubDead != 141 &&
 		nSubDead != 142);
 	
-	struct PartyData data = GetPartyData(oKiller);	
+	struct PartyData data = GetPartyData(oKiller);
+	
+	int bLvlTax = USE_LEVEL_TAX;
+	if (!bLvlTax) bLvlTax = GetLocalInt(GetModule(), "USE_LEVEL_TAX");
+	float fLevelTax = GetLocalFloat(GetModule(), "LEVEL_TAX");
+	if (fLevelTax == 0.0) fLevelTax = TAX_PER_LEVEL;
 	
 	float fPartyLevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
 	float fCRoriginal = GetChallengeRating(oDead);
@@ -97,7 +102,17 @@ void main(){
 			// in the unlikely event that they're getting more than max, give them max
 			if (fIndividualXP > MAXMONSTERXP) fIndividualXP = MAXMONSTERXP;
 			
+			if (bLvlTax){
+				fLevelTax *= fLevel;
+				fLevelTax = 100.0 - fLevelTax;
+				if (fLevelTax < 0.01) fLevelTax = 1.0;
+				if (fLevelTax > 1.0) fLevelTax = 1.0;
+				fSoloXP *= fLevelTax;
+				fIndividualXP *= fLevelTax;
+			}
+			
 			nFinalXP = PS_RoundToInt(fIndividualXP);
+		
 			//if the monster is not more than 10 levels below the player then the player should get 
 			// at least 1 xp
 			if (nFinalXP < 1 && PS_RoundToInt(fCR) >= nLevel - MAXPARTYRANGE)

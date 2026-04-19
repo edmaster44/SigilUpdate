@@ -7,6 +7,14 @@
 /*
 rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
+// tax xp per level to slow down advancement, so if tax per level is 0.5 and a character is level 4, then
+// their xp is multiplied by 0.98
+const int USE_LEVEL_TAX = FALSE; //see ps_xp_script main
+const float TAX_PER_LEVEL = 0.5;
+const int USE_ADDITIONAL_ECL_TAX = FALSE; // see ps_inc_functions 
+const float ECL_ADD_TAX = 0.01;
+
+
 // makes sure that non-partied summons, such as call of the beast, give xp to summoner when they make
 // a kill. Useage: SetLocalObject(oCreature, abilityCaster, oPC); This is checked for in ps_xp_script.nss
 const string abilityCaster = "abilityCaster";
