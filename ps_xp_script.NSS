@@ -46,8 +46,15 @@ void main(){
 	
 	float fPartyLevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
 	float fCRoriginal = GetChallengeRating(oDead);
-	int nDeadHD = GetHitDice(oDead);
-	float fCR = (IntToFloat(nDeadHD) > fCRoriginal) ? IntToFloat(nDeadHD) : fCRoriginal;
+	float fDeadHD = IntToFloat(GetHitDice(oDead));
+	float fCR;
+	// Several mobs have their CR set ridiculously high, the hobgoblin bosses in Clangor, for example
+	// have their CR set to 99, same as The Ascended and the White Dragon. It shouldnt be CR 99 if you
+	// can kill it in two rounds. If it's a really epic boss, use the higher of CR or HD. Otherwise, 
+	// use the lower
+	if (fDeadHD >= 40.0) fCR = (fCRoriginal > fDeadHD) ? fCRoriginal : fDeadHD;
+	else fCR = (fCRoriginal > fDeadHD) ? fDeadHD : fCRoriginal;
+
 	int nElite = StringToInt(GetLocalString(oDead,"ELITE"));
     if (nElite > 0){
         if (fPartyLevel + 5.0 < 10.0 * nElite) fCR += 3.0;
@@ -87,18 +94,16 @@ void main(){
 					fIndividualXP = GetBaseXP(fLevel, fLevel, data.nNum);
 				//otherwise if the player is IN range but below party average, give them a litttle boost
 				} else if (fLevel < fPartyLevel ){
-					fIndividualXP *= 1.05;
+					fIndividualXP *= 1.025;
 				}
 			} else {
 				fSoloXP = GetBaseXP(fLevel, fCR, 1);
 			}
-			// in the unlikely event that they'd get more xp solo, give them that
-			if (fIndividualXP < fSoloXP) fIndividualXP = fSoloXP;
 			// in the unlikely event that they're getting more than max, give them max
 			if (fIndividualXP > MAXMONSTERXP) fIndividualXP = MAXMONSTERXP;
 			
 			//show the % of party xp bonus. only used if they have #KillInfo chat command on
-			if (fIndividualXP > fSoloXP) fPbonus = ((fIndividualXP - fSoloXP) / fSoloXP ) * 100.0;
+			if (fIndividualXP > fSoloXP && data.nNum > 1) fPbonus = ((fIndividualXP - fSoloXP) / fSoloXP ) * 100.0;
 			else fPbonus = 0.0;
 			
 			nFinalXP = PS_RoundToInt(fIndividualXP);
@@ -189,6 +194,8 @@ struct PartyData GetPartyData(object oPC){
 	return data;
 }
 
+// this is not resused or used elsewhere, it's just its own function for 
+// the sake of main's readability
 object PS_GetKiller(){
 	object oKiller = GetLastKiller();
     if (GetIsObjectValid(GetLocalObject(OBJECT_SELF, abilityCaster)))  {
