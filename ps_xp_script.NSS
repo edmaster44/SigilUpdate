@@ -41,29 +41,35 @@ void main(){
 		nSubDead != 25 && nSubDead != 30 && nSubDead != 36 && nSubDead != 37 &&
 		nSubDead != 40 && nSubDead != 44 && nSubDead != 140 && nSubDead != 141 &&
 		nSubDead != 142);
-	
-	struct PartyData data = GetPartyData(oKiller);
-	
-	float fPartyLevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
 	float fCRoriginal = GetChallengeRating(oDead);
 	float fDeadHD = IntToFloat(GetHitDice(oDead));
 	float fCR;
 	// Several mobs have their CR set ridiculously high, the hobgoblin bosses in Clangor, for example
 	// have their CR set to 99, same as The Ascended and the White Dragon. It shouldnt be CR 99 if you
-	// can kill it in two rounds. If it's a really epic boss, use the higher of CR or HD. Otherwise, 
-	// use the lower
-	if (fDeadHD >= 40.0) fCR = (fCRoriginal > fDeadHD) ? fCRoriginal : fDeadHD;
+	// can kill it in two rounds. If it's a really epic boss with 50 hd or more, use the higher of CR or HD. 
+	// If it's got between 50 and 30 hd, use the average of CR and HD. If it's 30 hd or below, use the lower.
+	if (fDeadHD >= 50.0) fCR = (fCRoriginal > fDeadHD) ? fCRoriginal : fDeadHD;
+	else if (fDeadHD < 50.0 && fDeadHD >= 31.0) fCR = (fDeadHD + fCRoriginal) / 2;
 	else fCR = (fCRoriginal > fDeadHD) ? fDeadHD : fCRoriginal;
 
 	int nElite = StringToInt(GetLocalString(oDead,"ELITE"));
     if (nElite > 0){
-        if (fPartyLevel + 5.0 < 10.0 * nElite) fCR += 3.0;
-        else fCR += 2.0 - log(IntToFloat(data.nNum));
+        if (nElite > 3) nElite = 3;
+        fCR += IntToFloat(nElite);
     }
-	float fXP = GetBaseXP(fPartyLevel, fCR, data.nNum);
+	//get the party data including max level, average level, and number in party. Note that max level
+	// COULD BE LOWER than average level because max does not include ECL since it is only used for 
+	// party range. It's more inclusive not to count ECL for the max in this way. Not counting
+	// ecl in the max while counting it individually allows a lvl 18 with 3 ecl to still be considered
+	// within 10 lvls of a lvl 30 with any ecl. However, ecl IS counted in average because it affects
+	// the overall difficulty of the encounter
+	struct PartyData data = GetPartyData(oKiller);
+	float fPartyLevel = data.fAvg;
+	float fPartyXP = GetBaseXP(fPartyLevel, fCR, data.nNum);
+	float fPartyBonus = GetPartyXPBonus(fPartyLevel, fCR, data.nNum);
 
     int nLevel, nECL, nFinalXP, rp_pool, rp_bonus, bUpdateDB;
-	float fLevel, fIndividualXP, fSoloXP, fPbonus;
+	float fLevel, fIndividualXP, fSoloXP, fBonusXP;
 	string sID, sDebug;
 	string sXPbanking = "You have surpassed the required XP to level up.";
 	sXPbanking += "\nYour XP is being calculated as though you were level ";
@@ -75,7 +81,6 @@ void main(){
 		
 			if (bGiveCopper) GiveKillCopper(oMember, fCR);
 			rp_pool = 0;
-			fIndividualXP = fXP;
 			nLevel = PS_GetLevelByXP(oMember);
 			if (nLevel > GetHitDice(oMember)){
 				SendMessageToPC(oMember, sXPbanking + IntToString(nLevel) + ".");
@@ -83,30 +88,29 @@ void main(){
 			fLevel = IntToFloat(nLevel);
 			nECL = GetNewECL(oMember);
 			fLevel += IntToFloat(nECL);
-			//if the monster is higher CR than the player's level
-			if (fCR >= fLevel){
-				//assume that if the cr of the enemy is higher then they'd be fighting something their own size
-				// if they were alone
-				fSoloXP = GetBaseXP(fLevel, fLevel, 1);
-				// then if the player is out of range (excluding the highest lvls ECL and including their own
-				if (IntToFloat(data.nMax - MAXPARTYRANGE) > fLevel){
-					// then they get xp as if the mob was the same level as them
-					fIndividualXP = GetBaseXP(fLevel, fLevel, data.nNum);
-				//otherwise if the player is IN range but below party average, give them a litttle boost
-				} else if (fLevel < fPartyLevel ){
-					fIndividualXP *= 1.025;
-				}
-			} else {
-				fSoloXP = GetBaseXP(fLevel, fCR, 1);
-			}
+			
+			//assume that if the cr of the enemy is higher then they'd be fighting something their own size
+			// if they were alone, otherwise calc solo value based on actual data
+			fSoloXP = (fCR >= fLevel) ? GetBaseXP(fLevel, fLevel, 1) : GetBaseXP(fLevel, fCR, 1);
+		
+			// if the character is in party range they get the higher of solo xp or party xp
+			if (fLevel >= IntToFloat(data.nMax - MAXPARTYRANGE)){
+				fIndividualXP = (fPartyXP > fSoloXP) ? fPartyXP : fSoloXP;
+			// else they get the lesser amount
+			} else fIndividualXP = (fPartyXP > fSoloXP) ? fSoloXP : fPartyXP;
+			
 			// in the unlikely event that they're getting more than max, give them max
 			if (fIndividualXP > MAXMONSTERXP) fIndividualXP = MAXMONSTERXP;
 			
-			//show the % of party xp bonus. only used if they have #KillInfo chat command on
-			if (fIndividualXP > fSoloXP && data.nNum > 1) fPbonus = ((fIndividualXP - fSoloXP) / fSoloXP ) * 100.0;
-			else fPbonus = 0.0;
+			//if the monster is not more than 10 levels below the player then the player should get 
+			// at least 1 xp
+			if (fIndividualXP < 1.0 && fCR >= fLevel - IntToFloat(MAXPARTYRANGE))
+				fIndividualXP = 1.0;
 			
-			nFinalXP = PS_RoundToInt(fIndividualXP);
+			if (fPartyBonus > 0.0)
+				fBonusXP = fIndividualXP * fPartyBonus;
+			else fBonusXP = 0.0;
+			nFinalXP = PS_RoundToInt(fIndividualXP + fBonusXP);
 		
 			//if the monster is not more than 10 levels below the player then the player should get 
 			// at least 1 xp
@@ -118,19 +122,20 @@ void main(){
 				sID = PS_GetCharID(oMember);
 				//SendMessageToPC(oPartyMember,"id:" + sID);
 				SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + sID);
-				if (SQLFetch() != SQL_ERROR) { 
+				if (SQLFetch() != SQL_ERROR){ 
 					rp_pool = StringToInt(SQLGetData(1));
-					if (rp_pool > 0) bUpdateDB = TRUE;
-					else bUpdateDB = FALSE;
-					if (rp_pool > nFinalXP){
-						rp_pool -= nFinalXP;
-						nFinalXP += nFinalXP;
-						rp_bonus = nFinalXP;
-					} else if (rp_pool > 0 ){
-						nFinalXP += rp_pool;
-						rp_bonus = rp_pool;
-						rp_pool = 0;
-					}
+					if (rp_pool > 0){
+						bUpdateDB = TRUE;
+						if (rp_pool > nFinalXP){
+							rp_pool -= nFinalXP;
+							nFinalXP += nFinalXP;
+							rp_bonus = nFinalXP;
+						} else {
+							nFinalXP += rp_pool;
+							rp_bonus = rp_pool;
+							rp_pool = 0;
+						}
+					} else bUpdateDB = FALSE;
 					if (bUpdateDB)// reduce writing to server by not updating the db if rp pool hasn't changed
 						SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
 				} else rp_bonus = 0;
@@ -139,10 +144,10 @@ void main(){
 			if (GetLocalInt(oMember, "xpdebug")){
 				sDebug = "Max level in party: " + IntToString(data.nMax);
 				sDebug += "\nParty Size: " + IntToString(data.nNum);
-				sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fSoloXP));
+				sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fIndividualXP));
 				sDebug += "\nParty XP Bonus: ";
-				if (fPbonus == 0.0) sDebug += "none";
-				else sDebug += PS_PrettyFloatString(fPbonus, 2) + "%";
+				if (fPartyBonus > 0.0) sDebug += PS_PrettyFloatString(fPartyBonus * 100.0, 2) + "%";
+				else sDebug += "none";
 				sDebug += "\nRP Pool Bonus: " + IntToString(rp_bonus);
 				sDebug += "\nEnemy Data:\n";
 				sDebug += GetCreatureInfo(oDead, oMember);
@@ -184,8 +189,13 @@ struct PartyData GetPartyData(object oPC){
 			data.nNum++;
 			nLvl = PS_GetLevel(oMember);
 			if (nLvl > data.nMax)
-				data.nMax = nLvl;
-			nTotal += nLvl;
+				// max excludes ecl because we want to exclude it from level range for max so as to be more inclusive
+				// for example, we want someone with 28 lvls and 3 ecl to be considered only 9 lower than someone
+				// with 30 levels regardless of the higher character's ecl
+				data.nMax = nLvl; 
+			// total includes ecl because it affects the overall difficulty. A party of 5 dragons
+			// is going to have an easier time than a party of 5 humans
+			nTotal += nLvl + GetNewECL(oMember);
 		}
         oMember = GetNextFactionMember(oPC, TRUE);     
 	}
@@ -229,21 +239,17 @@ float GetBaseXP(float fLevel, float fCR, int nNum){
 	// then no xp
 	if (fLevel - fCR > 5.0 && nNum == 1) return 0.0;
 
-    float fXP = BASEXP;
+    float fPartyXP = BASEXP;
 	
 	if (fCR != fLevel){
 		if(fCR > fLevel){
 			// this calibrates for a lvl 30 to get BASEXP * 3 for a CR 99
-			fXP *= (1.0 + (3.15 * log(1.0 + fCR / fLevel) / 2.302));
+			fPartyXP *= (1.0 + (3.15 * log(1.0 + fCR / fLevel) / 2.302));
 		} else { //For lower CR give xp penalty
-			fXP *= pow(0.843, fLevel - fCR);
+			fPartyXP *= pow(0.843, fLevel - fCR);
 		}
 	}
-
-	if (nNum > 1)
-		fXP *= 1.0 + GetPartyXPBonus(fLevel, fCR, nNum);
-	
-    return fXP;
+    return fPartyXP;
 }
 
 
