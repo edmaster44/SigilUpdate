@@ -105,25 +105,25 @@ void DoDarkForesight(object oCaster, int nId, int bFromBuddy){
     int nLimit = nDuration * 10;
 	if ( nLimit > 150 )	nLimit = 150;
     int nMetaMagic = GetMetaMagicFeat();
-    effect eStone = EffectDamageReduction(20, GMATERIAL_METAL_ALCHEMICAL_SILVER, nLimit, DR_TYPE_GMATERIAL);
-    effect eVis = EffectVisualEffect(VFX_DUR_SPELL_PREMONITION);	// NWN2 VFX
-    effect eLink = EffectLinkEffects(eStone, eVis);
-	eLink = SetEffectSpellId(eLink, nId);
-   
+    effect eLink = EffectDamageReduction(20, GMATERIAL_METAL_ALCHEMICAL_SILVER, nLimit, DR_TYPE_GMATERIAL);
+
     //Enter Metamagic conditions
     if (nMetaMagic == METAMAGIC_EXTEND)
 		nDuration = nDuration *2; //Duration is +100%
   
-	if (!bFromBuddy)
+	if (!bFromBuddy){
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, nId, FALSE));
-
+		effect eVis = EffectVisualEffect(VFX_DUR_SPELL_PREMONITION);	// NWN2 VFX
+		eLink = EffectLinkEffects(eVis, eLink);
+	}
+	eLink = SetEffectSpellId(eLink, nId);
     RemoveEffectsFromSpell(oCaster, nId);
     //Apply the linked effect
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, RoundsToSeconds(nDuration));
 }
 
 
-void DoHasteEffects(object oCaster, object oTarget, int nId, int nMetaMagic){
+void DoHasteEffects(object oCaster, object oTarget, int nId, int nMetaMagic, int bFromBuddy){
     int nCasterLvl  = GetWarlockCasterLevelBase(oCaster);
     float fDuration   = RoundsToSeconds(nCasterLvl); 
 
@@ -132,9 +132,12 @@ void DoHasteEffects(object oCaster, object oTarget, int nId, int nMetaMagic){
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     // Create the Effects
-    effect eHaste   = EffectHaste();
-    effect eDur     = EffectVisualEffect(VFX_DUR_SPELL_HASTE);
-    effect eLink    = EffectLinkEffects(eHaste, eDur);
+    effect eLink = EffectHaste();
+	
+	if (!bFromBuddy){
+		effect eDur = EffectVisualEffect(VFX_DUR_SPELL_HASTE);
+		eLink = EffectLinkEffects(eLink, eDur);
+	}
 	eLink = SetEffectSpellId(eLink, nId);
 		 // Remove any spells that share effects with this spell and were cast by caster
     if (GetHasSpellEffect(SPELL_HASTE, oTarget))
@@ -153,14 +156,14 @@ void DoFleeTheScene(object oCaster, int nId, int bFromBuddy){
 	if (!bFromBuddy)
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, SPELL_I_FLEE_THE_SCENE, FALSE));
 
-    DoHasteEffects(oCaster, oCaster, nId, nMetaMagic);
+    DoHasteEffects(oCaster, oCaster, nId, nMetaMagic, bFromBuddy);
 	
 	//Apply haste to party members
 	object oArea = GetArea(oCaster);
 	object oTarget = GetFirstFactionMember(oCaster, FALSE); 
 	while (GetIsObjectValid(oTarget)) {
 		if (GetArea(oTarget) == oArea && oTarget != oCaster)
-			DoHasteEffects(oCaster, oTarget, nId, nMetaMagic );
+			DoHasteEffects(oCaster, oTarget, nId, nMetaMagic, bFromBuddy );
 	
 		oTarget = GetNextFactionMember(oCaster, FALSE);
 	}
@@ -254,20 +257,19 @@ void DoRetributiveInvis(object oCaster, int nId, int bFromBuddy){
 
     effect eOnDispell = EffectOnDispel(0.5f, OnDispellCallback(oCaster, nSaveDC, RoundsToSeconds(1)));
     effect eInvis = EffectInvisibility(INVISIBILITY_TYPE_IMPROVED);
-	effect eInvisLink = EffectLinkEffects(eInvis, eOnDispell);
-	
-    effect eVis = EffectVisualEffect(VFX_DUR_INVISIBILITY);
-    effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_RETRIBUTIVE_INVISIBILITY);
+	effect eVis = EffectVisualEffect(VFX_DUR_INVISIBILITY);
     effect eCover = EffectConcealment(50);
-    effect eLink = EffectLinkEffects(eVis, eInvisLink);
-    eLink = EffectLinkEffects(eDur, eLink);
+    effect eLink = EffectLinkEffects(eInvis, eOnDispell);
+    eLink = EffectLinkEffects(eVis, eLink);
 	eLink = EffectLinkEffects(eCover, eLink);
-	eLink = SetEffectSpellId(eLink, nId);
 	
 	if (!bFromBuddy){
 		//Fire cast spell at event for the specified target
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, nId, FALSE));
+		effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_RETRIBUTIVE_INVISIBILITY);
+		eLink = EffectLinkEffects(eDur, eLink);
 	}
+	eLink = SetEffectSpellId(eLink, nId);
  
     //Apply the VFX impact and effects
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oCaster, fDuration);
@@ -284,18 +286,15 @@ void DoSeeTheUnseen(object oCaster, int nId, int bFromBuddy){
 	effect eBlind = EffectImmunity(IMMUNITY_TYPE_BLINDNESS);
     effect eLink = EffectLinkEffects(eSight, eBlind);
 	
-	//if (!bFromBuddy){
+	if (!bFromBuddy){
 		effect eDur = EffectVisualEffect( VFX_DUR_SPELL_SEE_INVISIBILITY);
 		eLink = EffectLinkEffects(eDur, eLink);
-	if (!bFromBuddy){
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, nId, FALSE));
 	}
 	eLink = SetEffectSpellId(eLink, nId);
     RemoveEffectsFromSpell(oCaster, nId);
 
 	PS_GrantFeatBySpellWithEffect(nFeatDarkvision, oCaster, eLink, fDuration);
-
-
 }
 
 void DoLeapsAndBounds(object oCaster, int nId, int bFromBuddy){
@@ -317,10 +316,9 @@ void DoLeapsAndBounds(object oCaster, int nId, int bFromBuddy){
     effect eTumble = EffectSkillIncrease(SKILL_TUMBLE, nSkillBuff);
     effect eLink = EffectLinkEffects(eDex, eTumble);
 	
-	//if (!bFromBuddy){
+	if (!bFromBuddy){
 		effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_LEAPS_BOUNDS);
 		eLink = EffectLinkEffects(eDur ,eLink);
-	if (!bFromBuddy){
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, nId, FALSE));
 	}
 	eLink = SetEffectSpellId(eLink, nId);
@@ -374,10 +372,9 @@ void DoEntropicWarding(object oCaster, int nId, int bFromBuddy){
 	effect eLink = EffectLinkEffects(eShield, eMoveSilently);
     eLink = EffectLinkEffects(eHide, eLink);
   
-	//if (!bFromBuddy){
+	if (!bFromBuddy){
 		effect eDur = EffectVisualEffect(VFX_DUR_SPELL_ENTROPIC_SHIELD);
 		eLink = EffectLinkEffects(eDur, eLink);
-	if (!bFromBuddy){
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, nId, FALSE));
 	}
 	eLink = SetEffectSpellId(eLink, nId);
@@ -398,10 +395,9 @@ void DoDarkOnesOwnLuck(object oCaster, int nId, int bFromBuddy){
 
     effect eLink = EffectSavingThrowIncrease(SAVING_THROW_ALL, nBonus, SAVING_THROW_TYPE_ALL);
 	
-	//if (!bFromBuddy){
+	if (!bFromBuddy){
 		effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_DARKONESLUCK);
 		eLink = EffectLinkEffects(eDur, eLink);
-	if (!bFromBuddy){
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, nId, FALSE));
 	}
     
@@ -429,10 +425,9 @@ void DoBeguilingInfluence(object oCaster, int nId, int bFromBuddy){
     effect eLink = EffectLinkEffects(eBluff, eDiplomacy);
     eLink = EffectLinkEffects(eIntimidate, eLink);
 	
-	//if (!bFromBuddy){
+	if (!bFromBuddy){
 		effect eDur = EffectVisualEffect(VFX_DUR_INVOCATION_BEGUILE_INFLUENCE);
 		eLink = EffectLinkEffects(eDur, eLink);
-	if (!bFromBuddy){
 		SignalEvent(oCaster, EventSpellCastAt(oCaster, nId, FALSE));
 	}
 	eLink = SetEffectSpellId(eLink, nId);
@@ -477,4 +472,3 @@ void DoSelfOnlyInvocation(int nId, int bFromBuddy = FALSE){
 		case SPELL_I_HIDEOUS_BLOW: DoHideousBlowEffect(oCaster, nId, bFromBuddy); break;
 	}
 }
-

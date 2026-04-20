@@ -70,8 +70,7 @@ int PS_GetRacialTailType(object oPC)
 
 // Determines if the PC should have wings based on their racial subtype and gender
 // Uses the MWING and FWING fields from racialsubtype.2da and returns the wing variation
-int PS_GetRacialWingType(object oPC)
-{
+int PS_GetRacialWingType(object oPC){
 	int nGender		= GetGender(oPC);
 	//int nSub		= GetSubRace(oPC);
 	int nSub = GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "OldSubrace");

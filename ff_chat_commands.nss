@@ -266,94 +266,10 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
-	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") && GetIsTester(oSender)){
-		if (sInput == "#showxptax"){
-			int nLvlTax = GetLocalInt(GetModule(), "USE_LEVEL_TAX");
-			float fLvlTax = GetLocalFloat(GetModule(), "LEVEL_TAX");
-			int nECLAdd = GetLocalInt(GetModule(), "USE_ADDITIONAL_ECL_TAX");
-			float fECLAdd = GetLocalFloat(GetModule(), "ECL_ADD_TAX");
-			if (nLvlTax){
-				sFeedback = "Additional tax per level is ";
-				sFeedback += PS_PrettyFloatString(fLvlTax * 100.0) + "%\n";
-			} else sFeedback = "Additional tax per level is OFF";
-			if (nECLAdd){
-				sFeedback += "Additional tax per ECL is ";
-				sFeedback += PS_PrettyFloatString(fECLAdd * 100.0) + "%\n";
-			} else sFeedback += "Additional tax per ECL is OFF";
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-		else if (GetStringLeft(sInput, 12) == "#setleveltax"){
-			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 12);
-			float fLvlTax = StringToFloat(sRight);
-			if (fLvlTax == 0.0){
-				SetLocalInt(GetModule(), "USE_LEVEL_TAX", FALSE);
-				sFeedback = "Turning Level XP Tax OFF";
-			} else {
-				sFeedback = "Setting Level XP Tax to " + PS_PrettyFloatString(fLvlTax) + "%";
-				SetLocalInt(GetModule(), "USE_LEVEL_TAX", TRUE);
-				SetLocalFloat(GetModule(), "LEVEL_TAX", fLvlTax / 100.0);
-			}
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-		else if (GetStringLeft(sInput, 10) == "#setecltax"){
-			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 10);
-			float fECLAdd = StringToFloat(sRight);
-			if (fECLAdd == 0.0){
-				SetLocalInt(GetModule(), "USE_ADDITIONAL_ECL_TAX", FALSE);
-				sFeedback = "Turning Additional ECL XP Tax OFF";
-			} else {
-				sFeedback = "Setting Additional XP Tax to " + PS_PrettyFloatString(fECLAdd) + "%";
-				SetLocalInt(GetModule(), "USE_ADDITIONAL_ECL_TAX", TRUE);
-				SetLocalFloat(GetModule(), "ECL_ADD_TAX", fECLAdd / 100.0);
-			}
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-	}
 	//THE FOLLOWING ARE DEBUGGING COMMANDS THAT ONLY WORK IF USED BY A DM OR ON THE TEST SERVER
 	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") || GetIsDM(oSender)){
-		if (GetStringLeft(sInput, 9) == "#tailtest"){
-			string sTailNum = GetStringRight(sInput, GetStringLength(sInput) - 9);
-			int nTailNum = StringToInt(sTailNum);
-			PS_SetTailNumber(oSender, nTailNum);
-			//PS_ApplyPCTail(oSender);
-			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
-			app.TailVariation = nTailNum;
-			PS_SetCreatureCoreAppearance(oSender, app);
-			PS_RefreshAppearance(oSender);
-			if (nTailNum == 0) sFeedback = "Removing tail";
-			else sFeedback = "Applying tail " + sTailNum;
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-		else if (sInput == "#featusestest"){
-			if (GetHasFeat(21885, oSender, TRUE)){
-				sFeedback = "Removing test feat";
-				FeatRemove(oSender, 21885);
-			} else {
-				sFeedback = "Adding test feat";
-				FeatAdd(oSender, 21885, FALSE);
-			}
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-		else if (GetStringLeft(sInput, 8) == "#trinket"){
-			sFeedback = "Generating trinket";
-			int nRank;
-			if (sInput == "#trinket1") nRank = 1;
-			else if (sInput == "#trinket2") nRank = 2;
-			else if (sInput == "#trinket3") nRank = 3;
-			else if (sInput == "#trinket4") nRank = 4;
-			else if (sInput == "#trinket5") nRank = 5;
-			else if (sInput == "#trinket6") nRank = 6;
-			else nRank = d6();
-			CreateTrinketOnTarget(oSender, nRank);
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-		else if (sInput == "#testcraftcost"){
+	
+		if (sInput == "#testcraftcost"){
 			if (GetLocalInt(oSender, "TestCraftCost")){
 				SetLocalInt(oSender, "TestCraftCost", FALSE);
 				sFeedback = "Turning off craft costs.";

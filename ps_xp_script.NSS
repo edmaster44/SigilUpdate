@@ -44,11 +44,6 @@ void main(){
 	
 	struct PartyData data = GetPartyData(oKiller);
 	
-	int bLvlTax = USE_LEVEL_TAX;
-	if (!bLvlTax) bLvlTax = GetLocalInt(GetModule(), "USE_LEVEL_TAX");
-	float fLevelTax = GetLocalFloat(GetModule(), "LEVEL_TAX");
-	if (fLevelTax == 0.0) fLevelTax = TAX_PER_LEVEL;
-	
 	float fPartyLevel = IntToFloat(data.nMax) - (log(IntToFloat(data.nMax) - data.fAvg + 1.0) * 1.5);
 	float fCRoriginal = GetChallengeRating(oDead);
 	int nDeadHD = GetHitDice(oDead);
@@ -60,8 +55,8 @@ void main(){
     }
 	float fXP = GetBaseXP(fPartyLevel, fCR, data.nNum);
 
-    int nLevel, nFinalXP, rp_pool;
-	float fLevel, fIndividualXP, fSoloXP;
+    int nLevel, nECL, nFinalXP, rp_pool, rp_bonus, bUpdateDB;
+	float fLevel, fIndividualXP, fSoloXP, fPbonus;
 	string sID, sDebug;
 	string sXPbanking = "You have surpassed the required XP to level up.";
 	sXPbanking += "\nYour XP is being calculated as though you were level ";
@@ -79,37 +74,32 @@ void main(){
 				SendMessageToPC(oMember, sXPbanking + IntToString(nLevel) + ".");
 			}
 			fLevel = IntToFloat(nLevel);
-
+			nECL = GetNewECL(oMember);
+			fLevel += IntToFloat(nECL);
 			//if the monster is higher CR than the player's level
-			if (fCR > fLevel){
+			if (fCR >= fLevel){
+				//assume that if the cr of the enemy is higher then they'd be fighting something their own size
+				// if they were alone
+				fSoloXP = GetBaseXP(fLevel, fLevel, 1);
 				// then if the player is out of range (excluding the highest lvls ECL and including their own
-				if (data.nMax - MAXPARTYRANGE > nLevel + GetNewECL(oMember)){
+				if (IntToFloat(data.nMax - MAXPARTYRANGE) > fLevel){
 					// then they get xp as if the mob was the same level as them
 					fIndividualXP = GetBaseXP(fLevel, fLevel, data.nNum);
 				//otherwise if the player is IN range but below party average, give them a litttle boost
 				} else if (fLevel < fPartyLevel ){
-					fIndividualXP *= log(fCR / fLevel) * 0.75;
+					fIndividualXP *= 1.05;
 				}
-				// note that players above party average are already getting a boost for the xp
-				// being calculated based on the lower party average, and all party members are
-				// getting a boost based upon number in party
+			} else {
+				fSoloXP = GetBaseXP(fLevel, fCR, 1);
 			}
-		
-			 // get how much xp the player would have gotten solo
-			fSoloXP = GetBaseXP(fLevel, fCR, 1);
-			// in the unlikely event that they would have gotten more solo, give them the solo xp
-			fIndividualXP = (fSoloXP > fIndividualXP) ? fSoloXP : fIndividualXP;
+			// in the unlikely event that they'd get more xp solo, give them that
+			if (fIndividualXP < fSoloXP) fIndividualXP = fSoloXP;
 			// in the unlikely event that they're getting more than max, give them max
 			if (fIndividualXP > MAXMONSTERXP) fIndividualXP = MAXMONSTERXP;
 			
-			if (bLvlTax){
-				fLevelTax *= fLevel;
-				fLevelTax = 100.0 - fLevelTax;
-				if (fLevelTax < 0.01) fLevelTax = 1.0;
-				if (fLevelTax > 1.0) fLevelTax = 1.0;
-				fSoloXP *= fLevelTax;
-				fIndividualXP *= fLevelTax;
-			}
+			//show the % of party xp bonus. only used if they have #KillInfo chat command on
+			if (fIndividualXP > fSoloXP) fPbonus = ((fIndividualXP - fSoloXP) / fSoloXP ) * 100.0;
+			else fPbonus = 0.0;
 			
 			nFinalXP = PS_RoundToInt(fIndividualXP);
 		
@@ -125,14 +115,20 @@ void main(){
 				SQLExecDirect("SELECT rp_pool FROM characterdata WHERE id=" + sID);
 				if (SQLFetch() != SQL_ERROR) { 
 					rp_pool = StringToInt(SQLGetData(1));
+					if (rp_pool > 0) bUpdateDB = TRUE;
+					else bUpdateDB = FALSE;
 					if (rp_pool > nFinalXP){
 						rp_pool -= nFinalXP;
 						nFinalXP += nFinalXP;
+						rp_bonus = nFinalXP;
 					} else if (rp_pool > 0 ){
 						nFinalXP += rp_pool;
+						rp_bonus = rp_pool;
+						rp_pool = 0;
 					}
-					SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
-				}
+					if (bUpdateDB)// reduce writing to server by not updating the db if rp pool hasn't changed
+						SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
+				} else rp_bonus = 0;
 			}
 			// if player is using #KillInfo chat command, which is not meant to show quest or rp xp
 			if (GetLocalInt(oMember, "xpdebug")){
@@ -140,9 +136,9 @@ void main(){
 				sDebug += "\nParty Size: " + IntToString(data.nNum);
 				sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fSoloXP));
 				sDebug += "\nParty XP Bonus: ";
-				float fVar = GetPartyXPBonus(data.fAvg, fCRoriginal, data.nNum) * 100.0;
-				sDebug += PS_PrettyFloatString(fVar, 2) + "%";
-				sDebug += "\nRP Pool Bonus: " + IntToString(rp_pool);
+				if (fPbonus == 0.0) sDebug += "none";
+				else sDebug += PS_PrettyFloatString(fPbonus, 2) + "%";
+				sDebug += "\nRP Pool Bonus: " + IntToString(rp_bonus);
 				sDebug += "\nEnemy Data:\n";
 				sDebug += GetCreatureInfo(oDead, oMember);
 				SendMessageToPC(oMember, sDebug);
