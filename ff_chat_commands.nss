@@ -187,6 +187,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		} else {
 			sFeedback = "The item Tag is " + GetTag(oItem);
 			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
+			sFeedback += "\nThe base item is " + IntToString(GetBaseItemType(oItem));
 		}
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;

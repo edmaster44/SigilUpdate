@@ -176,7 +176,7 @@ string GetPotionFromList(object oTarget, int nRandom, int nTreasureType = 1) {
 			case 29: sPotion = "ps_potions2_12"; break;
 			case 30: sPotion = "ps_potions2_13"; break;
 			case 31: sPotion = "ps_potions2_14"; break;
-			case 32: sPotion = "ps_potion_lessersequencer"; break;
+			case 32: sPotion = "ps_potions2_07"; break;
 			default: sPotion = ""; break;
 		}
 		return sPotion;
@@ -197,15 +197,15 @@ string GetPotionFromList(object oTarget, int nRandom, int nTreasureType = 1) {
 			case 13: sPotion = "ps_potions4_04"; break;
 			case 14: sPotion = "ps_potions4_05"; break;
 			case 15: sPotion = "ps_potions4_06"; break;
-			case 16: sPotion = "ps_potion_lessersequencer"; break;
+			case 16: sPotion = "ps_potions6_01"; break;
 			case 17: sPotion = "ps_potion_jhuild"; break;
-			case 18: sPotion = "ps_potion_sequencer"; break;
+			case 18: sPotion = "ps_potion_jhuild"; break;
 		}
 	} else if (nTreasureType == TREASURE_HIGH) {
         switch (nRandom) {
 			case 1: sPotion = "ps_potions5_01"; break;
 			case 2: sPotion = "ps_potions5_02"; break;
-			case 3: sPotion = "ps_potion_greatersequencer"; break;
+			case 3: sPotion = "ps_potions6_01"; break;
 		}
     }
 	return sPotion;

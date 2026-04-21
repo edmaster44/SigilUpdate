@@ -39,11 +39,13 @@
 #include "x2_i0_spells"
 #include "ps_inc_epicsave"
 #include "class_mageslayer_utils"
+#include "ff_sequencer"
 
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
 // function declarations
+void ff_ShowConsumableCraftCosts();
 void ED_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
 	object oTarget, float fDuration=0.0f);
 int GetMissChance(object oCaster);
@@ -69,6 +71,11 @@ void DebugSpells();
 int X2PreSpellCastCode()
 {
 	object oTarget = GetSpellTargetObject();
+	
+	if (GetResRef(oTarget) == "ps_enchantmentfocus"){
+		ff_ShowConsumableCraftCosts();
+		return FALSE;
+	}
 	
 	// send spell debugging info to caster if they've used the #SpellInfo chat command
 	DebugSpells();
@@ -232,12 +239,13 @@ int X2RunUserDefinedSpellScript()
 //------------------------------------------------------------------------------
 int X2GetSpellCastOnSequencerItem(object oItem)
 {
-
+	
+	// not a valid item
     if (!GetIsObjectValid(oItem))
     {
         return FALSE;
     }
-
+	// not a sequencer
     int nMaxSeqSpells = IPGetItemSequencerProperty(oItem); // get number of maximum spells that can be stored
     if (nMaxSeqSpells <1)
     {
@@ -267,6 +275,12 @@ int X2GetSpellCastOnSequencerItem(object oItem)
     // is there still space left on the sequencer?
     if (nNumberOfTriggers < nMaxSeqSpells)
     {
+		string sRef = GetResRef(oItem);
+		if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
+			sRef == "ps_potion_greatersequencer"){
+			if (!StoreSpellOnSequencerPot(oItem, OBJECT_SELF))
+				return TRUE;
+		}
         // success visual and store spell-id on item.
         effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
         nNumberOfTriggers++;
@@ -281,7 +295,7 @@ int X2GetSpellCastOnSequencerItem(object oItem)
     {
         FloatingTextStrRefOnCreature(83859,OBJECT_SELF);
     }
-
+	
     return TRUE; // in any case, spell is used up from here, so do not fire regular spellscript
 }
 
@@ -545,4 +559,20 @@ void DebugSpells(){
 		sDebug += "\nSpell Feat Name: " + GetStringByStrRef(nNameRef);
 	}
 	SendMessageToPC(OBJECT_SELF, sDebug);
+}
+
+
+void ff_ShowConsumableCraftCosts(){
+	object oPC = OBJECT_SELF;
+	int nId = GetSpellId();
+	int nLevel = CIGetSpellInnateLevel(nId, FALSE);
+	string sMessage = "Scroll cost: ";
+	sMessage += IntToString(CIGetCraftGPCost(oPC, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER));
+	sMessage += "\nPotion/Sequencer cost: ";
+	sMessage += IntToString(CIGetCraftGPCost(oPC, nLevel, X2_CI_BREWPOTION_COSTMODIFIER));
+	if (nLevel <= 4){
+		sMessage += "\nWand cost: ";
+		sMessage += IntToString(CIGetCraftGPCost(oPC, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER));
+	}
+	SendMessageToPC(oPC, sMessage);
 }

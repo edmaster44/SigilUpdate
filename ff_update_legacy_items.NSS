@@ -10,6 +10,7 @@
 #include "ginc_crafting"
 
 // function declarations
+void SetNewSequencerDesc(object oItem, string sRef);
 void FF_UpdateLegacyItems(object oPC, int bSetsOnly = FALSE);
 void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FALSE);
 void UpdateUndeadRegeantDescription(object oRegeant);
@@ -21,6 +22,12 @@ void UpdateUndeadRegeantDescription(object oRegeant);
 void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 	// since multiple checks require knowing the res ref, we'll just get it here.
 	string sRef = GetResRef(oItem);
+	
+	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" || 
+		sRef == "ps_potion_greatersequencer"){
+			SetNewSequencerDesc(oItem, sRef);
+			return;
+	}
 	
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
@@ -340,5 +347,36 @@ void UpdateUndeadRegeantDescription(object oRegeant){
 	if (nChance > 0){
 		sDesc += ", " + IntToString(nChance) + "% chance of Faint Death Essence";
 	} 
+	string sOldDesc =  GetDescription(oRegeant);
+	if (sOldDesc == sDesc) return;
 	SetDescription(oRegeant, sDesc);
+}
+
+void SetNewSequencerDesc(object oItem, string sRef){
+	string sName, sCost, sSkill;
+	if (sRef == "ps_potion_lessersequencer"){
+		sName = "Lesser";
+		sCost = "2";
+		sSkill = "10";
+	} else if (sRef == "ps_potion_sequencer"){
+		sName = "";
+		sCost = "4";
+		sSkill = "20";
+	} else if (sRef == "ps_potion_greatersequencer"){
+		sName = "Greater";
+		sCost = "6";
+		sSkill = "30";
+	} else return;
+
+	string sNewDesc = "<color=violet>" + sName + " Sequencer Potion</color>\n";
+	sNewDesc += "Location Needed: <i>Alchemy Workbench</i>\n";
+	sNewDesc += "Feat Required: <i>Brew Potion</i>\n";
+	sNewDesc += "Item Cost: <i>Empty Potion Bottle</i>\n";
+	sNewDesc += "Cost: <i>" + sCost + " gold</i>\n";
+	sNewDesc += "Required Spell: <i>None</i>\n";
+	sNewDesc += "Required Skill: <i>Craft Alchemy " + sSkill + "</i>";
+
+	string sOldDesc =  GetDescription(oItem);
+	if (sOldDesc == sNewDesc) return;
+	else SetDescription(oItem, sNewDesc);
 }

@@ -224,7 +224,7 @@ int GetRangerAndPRCClassLevels(object oPC);
 
 int PS_IsEquippableCW(object oItem);
 
-int PS_GetCasterLevel(object oPC, int nPassedClass = NULL);
+int PS_GetCasterLevel(object oPC = OBJECT_SELF, int nPassedClass = NULL);
 
 //Safely retrieves the Icon Picture
 int GetItemIconSafe(object oItem);
@@ -2688,7 +2688,7 @@ int iSlotNumber; int iClass;
 }
 
 
-int PS_GetCasterLevel(object oPC, int nPassedClass = NULL)
+int PS_GetCasterLevel(object oPC = OBJECT_SELF, int nPassedClass = NULL)
 {
     int iClass;
     if (nPassedClass == NULL) iClass = GetLastSpellCastClass();

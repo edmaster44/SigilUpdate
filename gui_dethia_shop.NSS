@@ -69,7 +69,413 @@ Events:
 *************************************************************************************/
 #include "dethia_shop_sys"
 
+// rewritten for clarity, April 20, 2026, -FlattedFifth
+void main(string sEvent, string sItemID, string sItemCost, string sStackSize, string sStoreID, string sUp, string sDown, string sExtra){
+	int		iEvent	= StringToInt(sEvent);
+	object	oStore	= StringToObject(sStoreID);
+	object	oPC		= OBJECT_SELF;	//The player interacting with the gui
+	// before we do anything we check that the player is standing close enough
+	//13, 14 and 15 are not store related actions so we dont need a distance check for them
+	if(iEvent != 13 && iEvent != 14 && iEvent != 15){
+		if(!DS_DistanceCheck(oPC, oStore)) //If player too far away, close shop; close function included here
+			return;	
+	}
+	PS_Timestamp_UNIX(oStore, STORE_TIMESTAMP); // timestamp, not sure why, but dethia had it so it stays
+	
+	object oItem = IntToObject(StringToInt(sItemID)); //The item being bought or sold
+	
+	int nStack = PS_GetStackSize(oItem, sStackSize);
+	//lets deal exclusively with integers for the sake of math, we can convert back to strings
+	// when we update the ui as needed
+	int nCost = StringToInt(sItemCost);
+	int nMaxBuy = GetStoreMaxBuyPrice(oStore);
+	if (nMaxBuy < 0) nMaxBuy = INFINITE_BUY;
 
+	//Now perform the action associated with the event
+	switch (iEvent){
+		//shop panes: 0 = armor 1 = weapons 2 = potion/scrolls 3 = jewelry 4 = misc
+		case 0: case 1: case 2: case 3: case 4:{//populate shop with corresponding category
+				//First disable/enable the sell/buy buttons (since we are buying)
+			SetGUIObjectDisabled(oPC, "dethia_shop", "buy_item_button", FALSE);
+			SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", TRUE);
+			SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", TRUE);
+			
+			//Remove Pagination
+			SetGUIObjectText(oPC, "dethia_shop", "PAGE_TEXT", -1, "Page 1 of 1");
+			SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", TRUE);
+			SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
+			
+			//If theft is enabled, allow stealing from the shop
+			if((DS_THEFT_ENABLE && !GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	||
+				(!DS_THEFT_ENABLE && GetLocalInt(oStore, "DS_THEFT_OVERRIDE"))	)
+			{	SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", FALSE);	}
+			//Convert the various values for use
+			int	iMarkUp		= StringToInt(sUp);
+			int	iMarkDown	= StringToInt(sDown);
+
+			//Now populate the store with the appropriate items
+			DS_AddItemsToShop(oStore, oPC, iEvent, iMarkUp, iMarkDown);
+			break;
+		}
+		case 5:{ //Item selected within the shop
+			SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, IntToString(nStack));
+			SetLocalGUIVariable(oPC, "dethia_shop", 7, IntToString(nStack));
+			nCost *= nStack;
+			UpdateUICostFields(oPC, nCost);
+			break;
+		}
+		case 6:{ //Update quantity field as the slider is moved
+			sStackSize = FloatToString((nStack) * (StringToInt(sExtra) / 100.0f));
+			SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
+			SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
+			nStack = PS_GetStackSize(oItem, sStackSize);
+			nCost = nStack * nCost;
+			UpdateUICostFields(oPC, nCost);
+			break;
+		}
+		case 7:{ //The player is examining the item
+			if(!GetIsObjectValid(oItem)) return;		//Skip invalid items
+			//First we must create a safe location to recreate the item
+			vector		vStorePos	= GetPosition(oPC);
+						vStorePos.z	-= 10.0f;
+			float		fDirection	= GetFacing(oPC);
+			location	lLoc		= Location(GetArea(oPC), vStorePos, fDirection);
+			//Now recreate and identify the item
+			object oExamine	= CopyObject(oItem, lLoc);
+			if(sExtra == "0")	//iExtra in this case indicated buying(0)/selling(1)
+				SetIdentified(oExamine, TRUE);
+			DelayCommand(0.5f, ActionExamine(oExamine));
+			DestroyObject(oExamine, 0.6f);
+			break;
+		}
+		case 8:{ //The player chose "sell" category
+			//First disable/enable the buy, steal/sell buttons (since we are selling)
+			SetGUIObjectDisabled(oPC, "dethia_shop", "buy_item_button", TRUE);
+			SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", FALSE);
+			SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", FALSE);
+			SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", TRUE);
+			
+			int nMaxBuy = GetStoreMaxBuyPrice(oStore);
+			if (nMaxBuy < 0) nMaxBuy = 999999;
+			
+			//pagination variables	
+			int nPageLength = 143;
+			int nCurrentPage = StringToInt(sExtra);
+			
+			//We will populate the shop gui with all non-cursed items and allowed items
+			object	oItem		= GetFirstItemInInventory(oPC);
+			int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket buy rate
+			int		iRowID		= 0;	//The listbox row ID for a particular item
+			//Before we populate the listbox we must first clear it
+			ClearListBox(oPC, "dethia_shop", "store_items");
+			
+			//this page's limits
+			int lastItem = (nCurrentPage+1) * nPageLength; // last item in current page
+			int firstItem = lastItem - nPageLength; // first item in current page
+			int nCount = 0;
+
+			//As long as there are valid items we list them for sale
+			while(GetIsObjectValid(oItem)) {
+				if (!GetItemCursedFlag(oItem) && !GetPlotFlag(oItem)) {
+					if (nCount >= firstItem && nCount < lastItem) {
+						//We add the item to the "store_items" listbox
+						nStack = GetItemStackSize(oItem);
+						sStackSize	= IntToString(nStack);
+						string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
+						string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIconSafe(oItem)) + ".tga";
+						int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
+												GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
+												
+						if (iItemCost > nMaxBuy) iItemCost = nMaxBuy;
+						iItemCost *= nStack;
+												
+						if(!GetIdentified(oItem))	//If not identified hide the item name
+							sItemName	= "<color=cyan>Unidentified (" + sStackSize + ")</color>";	
+			
+						//Add the item into the store sell list
+						AddListBoxRow(oPC, "dethia_shop", "store_items", IntToString(iRowID),
+							"item_cost_cc=" + DS_ConvertCoinsToCopper(iItemCost) + ";"	+
+							"item_cost_sc=" + DS_ConvertCoinsToSilver(iItemCost) + ";"	+
+							"item_cost_gc=" + DS_ConvertCoinsToGold(iItemCost) + ";"	+
+							"item_name=" + sItemName,
+							"item_icon=" + sItemIcon,
+							"0=" + IntToString(ObjectToInt(oItem)) + ";"	+
+							"1=" + IntToString(iItemCost) + ";"	+
+							"2=" + sStackSize + ";"				+
+							"3=" + IntToString(iRowID), "");
+						iRowID++;	//Increment the item ID
+					}
+					nCount++;
+				}
+				oItem	= GetNextItemInInventory(oPC);	//Get the next item
+			}
+			
+			int nMaxPage = FloatToInt(IntToFloat(nCount)/IntToFloat(nPageLength));
+			SetLocalInt(oPC, "shop_max_pages", nMaxPage);
+			
+			//Add Pagination
+			SetGUIObjectText(oPC, "dethia_shop", "PAGE_TEXT", -1, "Page "+IntToString(nCurrentPage+1)+" of "+IntToString(nMaxPage+1));
+			if (nCurrentPage > 0)
+				SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", FALSE);
+			else
+				SetGUIObjectDisabled(oPC, "dethia_shop", "PREVIOUS_PAGE", TRUE);
+			if (nCurrentPage < nMaxPage)
+				SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", FALSE);
+			else
+				SetGUIObjectDisabled(oPC, "dethia_shop", "NEXT_PAGE", TRUE);
+		
+				break;
+		}
+		case 9:{//Player has selected some item and hit Identify button
+			if(!GetIsObjectValid(oItem) || GetIdentified(oItem)) return;
+			int	nIdCost	= GetStoreIdentifyCost(oStore);
+			//If the player doesn't have enough currency let them know and end script
+			if(GetGold(oPC) < nIdCost){
+				FloatingTextStringOnCreature("You don't have enough coins friend.", oPC, FALSE);
+				return;	
+			}
+			//If all checks out with the identify cost we identify the item in oPC's
+			//inventory and update the sell-item listbox row with name and new price as
+			//well as take the gold from oPC and add it to the store's current gold
+			DS_TakeCoinsFromCreature(oPC, nIdCost);
+			DS_UpdateStoreCurrency(oStore, oPC, nIdCost);
+			SetIdentified(oItem, TRUE);
+			int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket
+			int		iItemCost	= DS_GetItemSellValue(oItem, 0, StringToInt(sDown), iBlkMark);
+			SetLocalGUIVariable(oPC, "dethia_shop", 4, IntToString(iItemCost));	//Update price
+			ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
+				"item_cost_cc=" + DS_ConvertCoinsToCopper(iItemCost) + ";"	+
+				"item_cost_sc=" + DS_ConvertCoinsToSilver(iItemCost) + ";"	+
+				"item_cost_gc=" + DS_ConvertCoinsToGold(iItemCost) + ";"	+
+				"item_name=" + GetName(oItem) + " (" + sStackSize + ")", "",
+				"1=" + IntToString(iItemCost), "");
+			break;
+		}
+		case 10:{	//Player clicked on "Buy" item, an item is being purchased
+			if(!GetIsObjectValid(oItem)) return; //Skip invalid items
+			int	nAmount	= StringToInt(sUp); // in this case, the selected stack size
+			//Updating the stack size if it got stuck in memory
+			nStack = PS_GetStackSize(oItem, sStackSize);
+			if (nAmount < 1) nAmount = 1;
+			int	nPrice	= StringToInt(sItemCost) * nAmount;
+			//If the player doesn't have enough currency let them know and end script
+			if (GetGold(oPC) < nPrice){
+				FloatingTextStringOnCreature("You don't have enough coins friend.", oPC);
+				return;	
+			//If the store's stock is less than player selected stack size let them know
+			} else if (!GetInfiniteFlag(oItem) && nStack < nAmount){
+				FloatingTextStringOnCreature("Terribly sorry but I don't have that much in stock.", oPC);
+				return;	
+			}
+			//If the player has enough gold we subtract it and add it to the store
+			DS_TakeCoinsFromCreature(oPC, nPrice);
+			DS_UpdateStoreCurrency(oStore, oPC, nPrice);
+			//Next add the specified quantity of the item to oPC's inventory
+			SetItemStackSize(oItem, nAmount, FALSE);	//Temporarily set oItem stack size
+			CopyObject(oItem, GetLocation(oPC), oPC);	//Copy the item to oPC's inventory
+			if(!GetInfiniteFlag(oItem)) nStack -= nAmount;
+			if (nStack > 0){
+				sStackSize = IntToString(nStack);
+				SetItemStackSize(oItem, nStack, FALSE);
+				ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
+										"item_name=" + GetName(oItem) + " (" + sStackSize + ")", "",
+										"2=" + sStackSize, "");
+			
+			} else {
+				DestroyObject(oItem);
+				RemoveListBoxRow(oPC, "dethia_shop", "store_items", sExtra);
+			}
+			break;
+		}
+		case 11: { //Player clicked "Sell item" button, an item is being sold
+			//Disable the buy gui for 1 second to prevent it from being spammed
+			SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", TRUE);
+			DelayCommand(1.0f, SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", FALSE));
+			//First we must check that the store BUYS the specified item and can afford to buy it
+			string	sNoBuyList	= GetLocalString(oStore, "DS_WILL_NOT_BUY");
+			string	sBuyOnlyLst	= GetLocalString(oStore, "DS_WILL_ONLY_BUY");
+			int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket
+			if(!GetIsObjectValid(oItem)) return;	//Skip invalid items
+			else if(GetPlotFlag(oItem)){ //If this is a plot item don't buy it
+				FloatingTextStringOnCreature("Odds are you need that more than I do.", oPC);
+				return;
+			} else if(GetItemCursedFlag(oItem)){//If the item is cursed don't buy it
+				FloatingTextStringOnCreature("I don't think I can take that off your hands.", oPC);
+				return;
+			} else if(GetStolenFlag(oItem) && !iBlkMark){//If the item is stolen & the store doesn't buy them 
+				FloatingTextStringOnCreature("I don't know where you got that but I don't want it.", oPC);
+				return;
+			//If item is in the "Will Not Buy" list, or is NOT in the "Will Only Buy" list skip it
+			} else if(DS_WillNotBuy(oItem, sNoBuyList) || !DS_WillOnlyBuy(oItem, sBuyOnlyLst)){
+				FloatingTextStringOnCreature("I don't deal in such wares try someone else.", oPC);
+				return;
+			// quiver generated ammo, this check is also made in PS_GetItemValue() just to be sure
+			} else if (GetStringLowerCase(GetTag(oItem)) == "returning"){ 
+				if (DS_GetIsProjectile(oItem)){
+					FloatingTextStringOnCreature("I'm not buying ammo you can magically create!", oPC);
+					return;
+				}
+			}
+			//If we passed all the preliminaries next make sure the store can afford the item
+			int nSellAmount	= StringToInt(sUp);
+			int nStackSize 	= PS_GetStackSize(oItem, sStackSize);
+			sStackSize = IntToString(nStackSize); 
+			int nDown = StringToInt(sDown);
+			float fMod =  GetLocalFloat(oStore, "DS_BUY_MOD");
+			int	nSellPrice = DS_GetItemSellValue(oItem, 0, nDown, iBlkMark, fMod);
+			if (nSellPrice < 1){
+				FloatingTextStringOnCreature("It's not worth my while to buy that.", oPC);
+				return;
+			}
+			if (nSellPrice > nMaxBuy) nSellPrice = nMaxBuy;
+			nSellPrice *= nSellAmount;
+			int	iStoreGold	= GetStoreGold(oStore);
+			//Not enough gold in the store, let player know and end here
+			if(nMaxBuy < INFINITE_BUY && iStoreGold < nSellPrice){
+				FloatingTextStringOnCreature("Sorry but I don't have the coin to pay for that.", oPC);
+				return;	
+			} else if (nSellAmount < 1 || nSellPrice < 1) return;
+			
+			//If the store has enough gold the item is sold.  First we transfer it from
+			//the player's inventory to the store, and give the player his/her cash
+			object oSoldItem	= CopyObject(oItem, GetLocation(oStore), oStore);
+			if(nSellAmount >= nStackSize){//If amount sold is equal to the stack size, destroy the whole lot
+				DestroyObject(oItem);
+				RemoveListBoxRow(oPC, "dethia_shop", "store_items", sExtra);
+			} else {//If only a portion we update the stack sizes both in the store,
+					//in the player's inventory and in the GUI
+				nStackSize	-= nSellAmount;
+				sStackSize	= IntToString(nStackSize);
+				SetItemStackSize(oItem, nStackSize);
+				SetItemStackSize(oSoldItem, nSellAmount);
+				ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
+									"item_name=" + GetName(oItem) + " (" + sStackSize + ")", "",
+									"2=" + sStackSize, "");
+				//Update the local:5 variable which stores the item's total stack size
+				SetLocalGUIVariable(oPC, "dethia_shop", 5, sStackSize);
+				//Update the player selected stack size to the maximum remaining stock value
+				SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
+				SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
+			}
+			//Give the player the mula and update the shop's gold
+			DS_GiveCoinsToCreature(oPC, nSellPrice);
+			DS_UpdateStoreCurrency(oStore, oPC, nSellPrice, FALSE);
+			//Lastly save the sell-price on the item, it can be bought back at that price
+			SetLocalInt(oSoldItem, "DS_SELL_PRICE", nSellPrice);
+			break;
+		}
+		case 12:{	//Player is trying to steal a selected item
+			if(!GetIsObjectValid(oItem)) return;//Skip invalid items
+			//Player failed to steal the item, time to punish them
+			if (!DS_GetIsTheftSuccessful(oPC, oStore, oItem, StringToInt(sItemCost), StringToInt(sUp))){
+				//First set a local int on them labeling them as a thief for this shop
+				SetLocalInt(oPC, "DS_THIEF_" + GetTag(oStore), TRUE);
+				//Yell at the player
+				FloatingTextStringOnCreature("Why you dirty scoundrel! Get out of here before I call the guards!", oPC);
+				DS_CloseShop(oPC, oStore);	//Close the store
+				return;
+			}
+			SetItemStackSize(oItem, StringToInt(sUp), FALSE);
+			//Add item to oPC's inventory and mark it as stolen
+			SetStolenFlag(CopyObject(oItem, GetLocation(oPC), oPC), TRUE);
+			SetItemStackSize(oItem, StringToInt(sStackSize), FALSE);
+
+			if(!GetInfiniteFlag(oItem)){//Update the quantity for sale in the shop if it is not unlimited
+				nStack	= StringToInt(sStackSize) - StringToInt(sUp);
+				if(nStack > 0){//Update the quantity if it is non-zero
+					SetItemStackSize(oItem, nStack);
+					ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
+										"item_name=" + GetName(oItem)	+
+										" (" + IntToString(nStack) + ")",
+										"", "2=" + IntToString(nStack), "");
+				} else if (nStack <= 0){//If 0 we remove the item from shop and gui
+					DestroyObject(oItem);
+					RemoveListBoxRow(oPC, "dethia_shop", "store_items", sExtra);
+				}
+			}
+			break;
+		}
+		case 13:{ //Update the player's coin values in the inventory
+			DS_UpdateInventoryCoinValues(oPC);
+			break;
+		}
+		case 14:{ //Player is purchasing/selling an item using double click
+			//First we check if the event passed is a purchase or a sale
+			if(sDown == "0")	//Player is buying an item
+			{//We simply re-run this script with the appropriate parameters
+				AddScriptParameterString("10");			//Buying event
+				AddScriptParameterString(sItemID);		//Item's ID
+				AddScriptParameterString(sItemCost);	//Item's cost
+				AddScriptParameterString(sStackSize);	//Item's maximum stack size
+				AddScriptParameterString(sStoreID);		//Store's ID
+				//Next we set the stack size, which is 1 unless the item is ammunition
+				if(DS_GetIsProjectile(oItem))
+				{	AddScriptParameterString(IntToString(GetItemStackSize(oItem)));	}
+				else	{	AddScriptParameterString("1");	}
+				AddScriptParameterString("");			//sDown is passed a blank value
+				AddScriptParameterString(sUp);			//Item listbox row ID
+				ExecuteScriptEnhanced("gui_dethia_shop", oPC);
+			}
+			else if(sDown == "1")	//Player is selling an item
+			{//We simply re-run this script with the appropriate parameters
+				AddScriptParameterString("11");			//Seling event
+				AddScriptParameterString(sItemID);		//Item's ID
+				AddScriptParameterString(sItemCost);	//Item's cost
+				AddScriptParameterString(sStackSize);	//Item's maximum stack size
+				AddScriptParameterString(sStoreID);		//Store's ID
+				//Next we set the stack size, which is 1 unless the item is ammunition
+				if(DS_GetIsProjectile(oItem))
+				{	AddScriptParameterString(IntToString(GetItemStackSize(oItem)));	}
+				else	{	AddScriptParameterString("1");	}			
+				AddScriptParameterString("");			//sDown is passed a blank value
+				AddScriptParameterString(sUp);			//Item listbox row ID
+				ExecuteScriptEnhanced("gui_dethia_shop", oPC);
+			}
+			break;
+		}
+		case 16: { //Player clicked the last page button
+			int nPage = StringToInt(sExtra);
+			if (nPage <= 0) nPage = 0;
+			else nPage -= 1;
+			SetLocalGUIVariable(oPC, "dethia_shop", 9, IntToString(nPage));
+			//rerun sell tab generation
+			AddScriptParameterString("8");
+			AddScriptParameterString("");
+			AddScriptParameterString("");
+			AddScriptParameterString("");
+			AddScriptParameterString(sStoreID);
+			AddScriptParameterString(sUp);
+			AddScriptParameterString(sDown);
+			AddScriptParameterString(IntToString(nPage));
+			ExecuteScriptEnhanced("gui_dethia_shop", oPC);
+			break;
+		}
+		case 17:{ //Player clicked the next page button
+			int nPage = StringToInt(sExtra);
+			int nMaxPage = GetLocalInt(oPC, "shop_max_pages");
+			if (nPage >= nMaxPage) nPage = (nMaxPage-1);
+			else nPage += 1;
+			SetLocalGUIVariable(oPC, "dethia_shop", 9, IntToString(nPage));
+			//rerun sell tab generation
+			AddScriptParameterString("8");
+			AddScriptParameterString("");
+			AddScriptParameterString("");
+			AddScriptParameterString("");
+			AddScriptParameterString(sStoreID);
+			AddScriptParameterString(sUp);
+			AddScriptParameterString(sDown);
+			AddScriptParameterString(IntToString(nPage));
+			ExecuteScriptEnhanced("gui_dethia_shop", oPC);
+			break;
+		}
+		case 99:{ //The store is being closed
+			DS_CloseShop(oPC, oStore);
+			return;
+		}
+	}
+}
+
+/* original
 void main(string sEvent, string sItemID, string sItemCost, string sStackSize, string sStoreID, string sUp, string sDown, string sExtra)
 {//First we convert sEvent to an integer value
 	int		iEvent	= StringToInt(sEvent);
@@ -77,9 +483,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	object	oItem	= IntToObject(StringToInt(sItemID));	//The item in question
 	object	oStore	= StringToObject(sStoreID);
 	
-	// will return a custom value for player profit on crafted items, returns original value
-	// if not crafted or if this value is turned off in dethia_shop_sys
-	sItemCost = GetCraftedItemValue(oItem, sItemCost);
+	
 
 	//Before we perform specified actions we check what action it is
 	if(iEvent != 13 && iEvent != 14 && iEvent != 15)	//13 and 14 are not store related actions
@@ -287,52 +691,52 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 
 	else if(iEvent == 10)	//Player clicked on "Buy" item, an item is being purchased
 	{//First we check if the player has enough room in his inventory!!!
-		int	iAmount	= StringToInt(sUp);
-		int	iStack	= StringToInt(sStackSize);
-		int	iPrice	= StringToInt(sItemCost)*iAmount;
+		int	nAmount	= StringToInt(sUp);
+		int	nStack	= StringToInt(sStackSize);
+		int	nPrice	= StringToInt(sItemCost)*nAmount;
 		
 		//Updating the stack size if it got stuck in memory
-		//SpeakString("iStack "+IntToString(iStack)+" vs. item stack size "+IntToString(GetItemStackSize(oItem)), TALKVOLUME_SHOUT);
-		if (iStack > GetItemStackSize(oItem)) {
-			iStack =  GetItemStackSize(oItem);
+		//SpeakString("nStack "+IntToString(nStack)+" vs. item stack size "+IntToString(GetItemStackSize(oItem)), TALKVOLUME_SHOUT);
+		if (nStack > GetItemStackSize(oItem)) {
+			nStack =  GetItemStackSize(oItem);
 		}
 		
 		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
-		{	iPrice	/= iAmount;	}
+		{	nPrice	/= nAmount;	}
 		if(!GetIsObjectValid(oItem))	{	return;	}	//Skip invalid items
-		/*else if(!DoesPCHaveFreeInvSlots(oPC))
-		{//If the player doesn't have enough room let them know and end script
-			FloatingTextStringOnCreature("Sorry, I don't think you can carry anymore things.", oPC);
-			return;
-		}*/
-		else if(GetGold(oPC) < iPrice)
+		//else if(!DoesPCHaveFreeInvSlots(oPC)){
+		//If the player doesn't have enough room let them know and end script
+		//	FloatingTextStringOnCreature("Sorry, I don't think you can carry anymore things.", oPC);
+			//return;
+		//}
+		else if(GetGold(oPC) < nPrice)
 		{//If the player doesn't have enough currency let them know and end script
 			FloatingTextStringOnCreature("You don't have enough coins friend.", oPC);
 			return;	
 		}
-		else if(!GetInfiniteFlag(oItem) && iStack < iAmount)
+		else if(!GetInfiniteFlag(oItem) && nStack < nAmount)
 		{//If the store's stock is less than player selected value let them know
 			FloatingTextStringOnCreature("Terribly sorry but I don't have that much in stock.", oPC);
 			return;	
 		}
-		else if(iAmount == 0)
+		else if(nAmount == 0)
 		{//If a quantity of 0 was selected - obviously don't sell anything
 			FloatingTextStringOnCreature("Nothing for nothing, free as the air we breath.", oPC);
 			return;	
 		}
 
 		//If the player has enough gold we subtract it and add it to the store
-		DS_TakeCoinsFromCreature(oPC, iPrice);
-		DS_UpdateStoreCurrency(oStore, oPC, iPrice);
+		DS_TakeCoinsFromCreature(oPC, nPrice);
+		DS_UpdateStoreCurrency(oStore, oPC, nPrice);
 		//Next add the specified quantity of the item to oPC's inventory
-		SetItemStackSize(oItem, iAmount, FALSE);	//Temporarily set oItem stack size
+		SetItemStackSize(oItem, nAmount, FALSE);	//Temporarily set oItem stack size
 		CopyObject(oItem, GetLocation(oPC), oPC);	//Copy the item to oPC's inventory
-		SetItemStackSize(oItem, iStack, FALSE);	//Return item stack size to normal
+		SetItemStackSize(oItem, nStack, FALSE);	//Return item stack size to normal
 
 		if(!GetInfiniteFlag(oItem))
 		{//Lastly we update the quantity for sale in the shop if it is not unlimited
 			//SpeakString("Item is not infinite, update stack size to: ", TALKVOLUME_SHOUT);
-			int nNewStack = iStack - iAmount;
+			int nNewStack = nStack - nAmount;
 			string sNewStack	= IntToString(nNewStack);
 			//SpeakString(sNewStack, TALKVOLUME_SHOUT);
 			if(nNewStack > 0)
@@ -342,7 +746,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 										"item_name=" + GetName(oItem) + " (" + sNewStack + ")", "",
 										"2=" + sNewStack, "");
 			}
-			else if(iStack - iAmount <= 0)
+			else if(nStack - nAmount <= 0)
 			{	//If 0 we remove the item from shop and gui
 				DestroyObject(oItem);
 				RemoveListBoxRow(oPC, "dethia_shop", "store_items", sExtra);
@@ -381,40 +785,40 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 			return;
 		}
 		//If we passed all the preliminaries next make sure the store can afford the item
-		int		iSellAmount		= StringToInt(sUp);
-	//	int		iStackSize		= StringToInt(sStackSize);
-		int 	iStackSize 		= GetItemStackSize(oItem);
-		sStackSize = IntToString(iStackSize); 
-		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
+		int		nSellAmount		= StringToInt(sUp);
+	//	int		nStackSize		= StringToInt(sStackSize);
+		int 	nStackSize 		= GetItemStackSize(oItem);
+		sStackSize = IntToString(nStackSize); 
+		int		nSellPrice		= StringToInt(sItemCost)*nSellAmount;
 		
 		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
-		{		iSellPrice		/= iSellAmount;	}
+		{		nSellPrice		/= nSellAmount;	}
 		
 		int		iMaxBuyPrice	= GetStoreMaxBuyPrice(oStore);
 		int		iStoreGold		= GetStoreGold(oStore);
 		
-		if(iMaxBuyPrice != -1 && iStoreGold < iMaxBuyPrice && iSellPrice > iStoreGold)
+		if(iMaxBuyPrice != -1 && iStoreGold < iMaxBuyPrice && nSellPrice > iStoreGold)
 		{//Not enough gold in the store, let player know and end here
 			FloatingTextStringOnCreature("Sorry but I don't have the coin to pay for that.", oPC);
 			return;	
 		}
 		//If the player is selling nothing, nothing happens
-		else if(iSellAmount <= 0)
+		else if(nSellAmount <= 0)
 		{	return;	}
 		//If selling ammunition and the selected stack size is less than 99, don't buy it
-		else if(DS_GetIsProjectile(oItem)&& iSellAmount < 99 && PS_GetItemValue(oItem) <= 1)
+		else if(DS_GetIsProjectile(oItem)&& nSellAmount < 99 && PS_GetItemValue(oItem) <= 1)
 		{//If player is selling less than 99 units of ammunition tell them it's a no no
 			FloatingTextStringOnCreature("I prefer to purchase a full quiver of the stuff, otherwise it's not so good for business.", oPC);
 			return;	
 		}
 		//If selling price exceeds the max buying price, set it to max buying price
-		else if(iMaxBuyPrice != -1 && iSellPrice > iMaxBuyPrice)
-		{	iSellPrice	= iMaxBuyPrice;	}
+		else if(iMaxBuyPrice != -1 && nSellPrice > iMaxBuyPrice)
+		{	nSellPrice	= iMaxBuyPrice;	}
 
 		//If the store has enough gold the item is sold.  First we transfer it from
 		//the player's inventory to the store, and give the player his/her cash
 		object	oSoldItem	= CopyObject(oItem, GetLocation(oStore), oStore);
-		if(iSellAmount == iStackSize)
+		if(nSellAmount == nStackSize)
 		{//If amount sold is equal to the stack size, destroy the whole lot
 			DestroyObject(oItem);
 			RemoveListBoxRow(oPC, "dethia_shop", "store_items", sExtra);
@@ -422,10 +826,10 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		else
 		{//If only a portion we update the stack sizes both in the store,
 			//in the player's inventory and in the GUI
-			iStackSize	-= iSellAmount;
-			sStackSize	= IntToString(iStackSize);
-			SetItemStackSize(oItem, iStackSize);
-			SetItemStackSize(oSoldItem, iSellAmount);
+			nStackSize	-= nSellAmount;
+			sStackSize	= IntToString(nStackSize);
+			SetItemStackSize(oItem, nStackSize);
+			SetItemStackSize(oSoldItem, nSellAmount);
 			ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
 									"item_name=" + GetName(oItem) + " (" + sStackSize + ")", "",
 									"2=" + sStackSize, "");
@@ -436,10 +840,10 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 			SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
 		}
 		//Give the player the mula and update the shop's gold
-		DS_GiveCoinsToCreature(oPC, iSellPrice);
-		DS_UpdateStoreCurrency(oStore, oPC, iSellPrice, FALSE);
+		DS_GiveCoinsToCreature(oPC, nSellPrice);
+		DS_UpdateStoreCurrency(oStore, oPC, nSellPrice, FALSE);
 		//Lastly save the sell-price on the item, it can be bought back at that price
-		SetLocalInt(oSoldItem, "DS_SELL_PRICE", iSellPrice);
+		SetLocalInt(oSoldItem, "DS_SELL_PRICE", nSellPrice);
 	}
 
 	else if(iEvent == 12)	//Player is trying to steal a selected item
@@ -455,16 +859,16 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 
 			if(!GetInfiniteFlag(oItem))
 			{//Update the quantity for sale in the shop if it is not unlimited
-				int	iStackSize	= StringToInt(sStackSize) - StringToInt(sUp);
-				if(iStackSize > 0)
+				int	nStackSize	= StringToInt(sStackSize) - StringToInt(sUp);
+				if(nStackSize > 0)
 				{//Update the quantity if it is non-zero
-					SetItemStackSize(oItem, iStackSize);
+					SetItemStackSize(oItem, nStackSize);
 					ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
 										"item_name=" + GetName(oItem)	+
-										" (" + IntToString(iStackSize) + ")",
-										"", "2=" + IntToString(iStackSize), "");
+										" (" + IntToString(nStackSize) + ")",
+										"", "2=" + IntToString(nStackSize), "");
 				}
-				else if(iStackSize <= 0)
+				else if(nStackSize <= 0)
 				{//If 0 we remove the item from shop and gui
 					DestroyObject(oItem);
 					RemoveListBoxRow(oPC, "dethia_shop", "store_items", sExtra);
@@ -560,51 +964,52 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		ExecuteScriptEnhanced("gui_dethia_shop", oPC);
 
 	}
-/*The below section does not work at all for various reasons.  If I am up to it sometime
-I will re-do this entire segment of the barter window (trading coins) but that is for another time
-	else if(iEvent == 15)	//Player is trading some cash, manage selections
-	{//First we check what sub-event was passed to the script
-		if(sItemCost == "0")	//Populate the max field values
-		{//Get the amount of gold the player has and store it in local:100
-			int	iCoins	= DS_GetCoinsOnCreature(oPC);
-			SetLocalGUIVariable(oPC, "splitgold.xml", 100, IntToString(iCoins));
+//The below section does not work at all for various reasons.  If I am up to it sometime
+//I will re-do this entire segment of the barter window (trading coins) but that is for another time
+//	else if(iEvent == 15){	//Player is trading some cash, manage selections
+	//First we check what sub-event was passed to the script
+	//	if(sItemCost == "0"){	//Populate the max field values
+		//Get the amount of gold the player has and store it in local:100
+		//	int	iCoins	= DS_GetCoinsOnCreature(oPC);
+		//	SetLocalGUIVariable(oPC, "splitgold.xml", 100, IntToString(iCoins));
 			//Store in 101-103 the currently held coin values by the player
-			SetLocalGUIVariable(oPC, "splitgold.xml", 101, DS_ConvertCoinsToGold(iCoins));
-			SetLocalGUIVariable(oPC, "splitgold.xml", 102, DS_ConvertCoinsToSilver(iCoins));
-			SetLocalGUIVariable(oPC, "splitgold.xml", 103, DS_ConvertCoinsToCopper(iCoins));
+		//	SetLocalGUIVariable(oPC, "splitgold.xml", 101, DS_ConvertCoinsToGold(iCoins));
+		//	SetLocalGUIVariable(oPC, "splitgold.xml", 102, DS_ConvertCoinsToSilver(iCoins));
+		//	SetLocalGUIVariable(oPC, "splitgold.xml", 103, DS_ConvertCoinsToCopper(iCoins));
 			//The below segment doesn't work for god knows what reason ;/
 			//SetGUIObjectText(oPC, "splitgold.xml", "pcc_gc", -1, DS_ConvertCoinsToGold(iCoins));
 			//SetGUIObjectText(oPC, "splitgold.xml", "pcc_sc", -1, DS_ConvertCoinsToSilver(iCoins));
 			//SetGUIObjectText(oPC, "splitgold.xml", "pcc_cc", -1, DS_ConvertCoinsToCopper(iCoins));
-		}
-		else if(sItemCost == "1")	//We set the trade value to the selected value
-		{//First get the player's total gold then convert each selected value
-			int iTotal	= DS_GetCoinsOnCreature(oPC);//StringToInt(sStackSize);	//Total amount of coins
+		//}
+		//else if(sItemCost == "1"){	//We set the trade value to the selected value
+		//First get the player's total gold then convert each selected value
+		//	int iTotal	= DS_GetCoinsOnCreature(oPC);//StringToInt(sStackSize);	//Total amount of coins
 			//First gold
-			int	iGold	= StringToInt(DS_ConvertCoinsToGold(iTotal));
-				iGold	= FloatToInt((StringToFloat(sUp)/100.0f)*iGold);
-			SetLocalGUIVariable(oPC, "splitgold.xml", 107, IntToString(iGold));
+		//	int	iGold	= StringToInt(DS_ConvertCoinsToGold(iTotal));
+		//		iGold	= FloatToInt((StringToFloat(sUp)/100.0f)*iGold);
+		//	SetLocalGUIVariable(oPC, "splitgold.xml", 107, IntToString(iGold));
 			//SetGUIObjectText(oPC, "splitgold.xml", "pcs_gc", -1, IntToString(iGold));
-				iGold	*= AuC;
+		//		iGold	*= AuC;
 			//Next silver
-			int	iSilver	= StringToInt(DS_ConvertCoinsToSilver(iTotal));
-				iSilver	= FloatToInt((StringToFloat(sDown)/100.0f)*iSilver);
-			SetLocalGUIVariable(oPC, "splitgold.xml", 108, IntToString(iSilver));
+		//	int	iSilver	= StringToInt(DS_ConvertCoinsToSilver(iTotal));
+		//		iSilver	= FloatToInt((StringToFloat(sDown)/100.0f)*iSilver);
+		//	SetLocalGUIVariable(oPC, "splitgold.xml", 108, IntToString(iSilver));
 			//SetGUIObjectText(oPC, "splitgold.xml", "pcs_sc", -1, IntToString(iSilver));
-				iSilver *= AgC;
+		//		iSilver *= AgC;
 			//Next copper
-			int	iCopper	= StringToInt(DS_ConvertCoinsToCopper(iTotal));
-				iCopper	= FloatToInt((StringToFloat(sExtra)/100.0f)*iCopper);
-			SetLocalGUIVariable(oPC, "splitgold.xml", 109, IntToString(iCopper));
+		//	int	iCopper	= StringToInt(DS_ConvertCoinsToCopper(iTotal));
+		//		iCopper	= FloatToInt((StringToFloat(sExtra)/100.0f)*iCopper);
+		//	SetLocalGUIVariable(oPC, "splitgold.xml", 109, IntToString(iCopper));
 			//SetGUIObjectText(oPC, "splitgold.xml", "pcs_cc", -1, IntToString(iCopper));
-				iCopper	*= CuC;
+		//		iCopper	*= CuC;
 			//Lastly update the player input value
-			SetLocalGUIVariable(oPC, "splitgold.xml", 110, IntToString(iGold + iSilver + iCopper));
-			//SetGUIObjectText(oPC, "splitgold.xml", "GoldAmountEDIT", -1, IntToString(iGold + iSilver + iCopper));
-		}
-	}
-*/
+		//	SetLocalGUIVariable(oPC, "splitgold.xml", 110, IntToString(iGold + iSilver + iCopper));
+			//SetGUIObjectText(oPC, "splitgold.xml", "GoldAmountEDIT", -1, IntToString(iGold + iSilver + //iCopper));
+		//}
+	//}
+
 
 	else if(iEvent == 99)	//The store is being closed
 	{	DS_CloseShop(oPC, oStore);	}
 }
+*/

@@ -163,11 +163,7 @@ void GiveCreatureSkin(object oPC){
 // start of the level up process but at the END. So if there's any feats we
 // need a character to have before they reach level 2 rather than after it, 
 // we need to add that code here.
-void GiveStartingTraits(object oPC)
-{
-	object oEssence = GetItemPossessedBy(oPC, "ps_essence");
-	SetLocalInt(oEssence, "OldRace", GetRacialType(oPC));
-	SetLocalInt(oEssence, "OldSubrace", GetSubRace(oPC));
+void GiveStartingTraits(object oPC){
 	int nWing = PS_GetRacialWingType(oPC);
 	if (nWing != 0){
 		PS_SetWingNumber(oPC, nWing);
@@ -175,12 +171,14 @@ void GiveStartingTraits(object oPC)
 		if (!GetHasFeat(2120, oPC, FALSE))
 			FeatAdd(oPC, 2120, FALSE);
 	}
-	
-	
-	int nTail = PS_GetRacialTailType(oPC);
-	if (nTail != 0){
-		PS_SetTailNumber(oPC, nTail);
-		PS_ApplyPCTail(oPC);
+	// dragons should get get their tails automatically,
+	// tails are optional for most other races
+	if (GetRacialType(oPC) == 11){
+		int nTail = PS_GetRacialTailType(oPC);
+		if (nTail != 0){
+			PS_SetTailNumber(oPC, nTail);
+			PS_ApplyPCTail(oPC);
+		}
 	}
 	
 	// calls the psywar progression function from ps_inc_functions with 
@@ -196,12 +194,13 @@ void GiveStartingGold( object oPC, int nAmount )
 
 void SetStartingVariables(object oPC, string sLegal){
 	object oEss = PS_GetEssence(oPC);
+	SetLocalString(oEss, "LEGAL", sLegal);
 	// we need to track what classes and at what levels the character has so that 
 	// we can in future tell what class was just leveled up for purposes of 
 	// gui_extra_choices
 	StoreClasses(oPC);
 	// we need the original race stored at char creation, 
-	SetLocalString(oEss, "LEGAL", sLegal);
+	SetLocalInt(oEss, "OldRace", GetRacialType(oPC));
 	SetLocalInt(oEss, "OldSubrace", GetSubRace(oPC));			
 	SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));
 }

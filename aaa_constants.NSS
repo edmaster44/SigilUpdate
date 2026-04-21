@@ -8,6 +8,12 @@
 rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 */
 
+// adjust the amount of gold from chests and kills by the following number.
+// For example, if set to 1.03 then all gold from chests and kills will be multiplied by
+// 1.03, resulting in an increase of 3%. If set to 0.97, then all gold from chests and kills
+// will be multiplied by 0.97 resulting in a decrease of 3%. Has no effect if set to negative 
+// number. See implementation in ps_xp_script.nss and ps_inc_chest.nss -FlattedFifth
+const float GOLD_MULTIPLIER = 1.03;	
 
 // makes sure that non-partied summons, such as call of the beast, give xp to summoner when they make
 // a kill. Useage: SetLocalObject(oCreature, abilityCaster, oPC); This is checked for in ps_xp_script.nss

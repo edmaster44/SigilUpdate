@@ -48,8 +48,8 @@ void main(){
 	// have their CR set to 99, same as The Ascended and the White Dragon. It shouldnt be CR 99 if you
 	// can kill it in two rounds. If it's a really epic boss with 50 hd or more, use the higher of CR or HD. 
 	// If it's got between 50 and 30 hd, use the average of CR and HD. If it's 30 hd or below, use the lower.
-	if (fDeadHD >= 50.0) fCR = (fCRoriginal > fDeadHD) ? fCRoriginal : fDeadHD;
-	else if (fDeadHD < 50.0 && fDeadHD >= 31.0) fCR = (fDeadHD + fCRoriginal) / 2;
+	if (fDeadHD >= 40.0) fCR = (fCRoriginal > fDeadHD) ? fCRoriginal : fDeadHD;
+	else if (fDeadHD < 40.0 && fDeadHD >= 21.0) fCR = (fDeadHD + fCRoriginal) / 2;
 	else fCR = (fCRoriginal > fDeadHD) ? fDeadHD : fCRoriginal;
 
 	int nElite = StringToInt(GetLocalString(oDead,"ELITE"));
@@ -172,6 +172,9 @@ void GiveKillCopper(object oPC, float fCR){
 	else if (fCR < 30.0 && fCR >= 20.0) nCopper = d8(3);
 	else if (fCR < 20.0 && fCR >= 10.0) nCopper = d10(2);
 	else nCopper = d20();
+	if (GOLD_MULTIPLIER > 0.0){
+		nCopper = PS_RoundToInt(nCopper * GOLD_MULTIPLIER);
+	}
 	PS_GiveGoldToCreature(oPC, nCopper);
 }
 

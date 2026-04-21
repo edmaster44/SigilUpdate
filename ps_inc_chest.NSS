@@ -1,5 +1,5 @@
 
-
+#include "ps_inc_functions"
 #include "ps_inc_treasuregeneration"
 #include "ps_inc_time"
 
@@ -116,11 +116,14 @@ void FillChestWithGold(object oChest){
 	if(iGolddice > 0 && iGoldnr > 0) {
 		int i = 0;
 		for ( i = 0; i < iGoldnr; i++) {
-			iGoldAmount =  iGoldAmount + Random(iGolddice) +1;
+			iGoldAmount += Random(iGolddice) +1;
 		}
 	}	
 	
-	iGoldAmount = iGoldAmount + iGoldcons;
+	iGoldAmount += iGoldcons;
+	if (GOLD_MULTIPLIER > 0.0){
+		iGoldAmount = PS_RoundToInt(iGoldAmount * GOLD_MULTIPLIER);
+	}
 	
 	if ( iGoldAmount > 0 )
 		CreateTreasureItemOnTarget("PS_IT_COPPER001", oChest, iGoldAmount);

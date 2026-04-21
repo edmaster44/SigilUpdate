@@ -869,6 +869,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
    // object oCaster      = OBJECT_SELF;
     int    nId          = GetSpellId();
     int    nLevel       = CIGetSpellInnateLevel(nId,TRUE);
+	int nStack = GetItemStackSize(oSpellTarget);
 
     // -------------------------------------------------------------------------
     // check if brew potion feat is there
@@ -907,14 +908,12 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // XP/GP Cost Calculation
     // -------------------------------------------------------------------------
-    int nCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_BREWPOTION_COSTMODIFIER);
-//    float nExperienceCost = 0.04  * nCost; // xp = 1/25 of gp value
-    int nGoldCost = nCost ;
+    int nGoldCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_BREWPOTION_COSTMODIFIER);
 
     // -------------------------------------------------------------------------
     // Does Player have enough gold?
     // -------------------------------------------------------------------------
-    if (GetGold(oCaster) < nGoldCost)
+    if (GetGold(oCaster) < nGoldCost * nStack)
     {
         FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_GOLD, oCaster); // Item Creation Failed - not enough gold!
         return TRUE;
@@ -937,26 +936,26 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // Here we brew the new potion
     // -------------------------------------------------------------------------
-    object oPotion = CICraftBrewPotion(oCaster, nId);
-
-    // -------------------------------------------------------------------------
-    // Verify Results
-    // -------------------------------------------------------------------------
-    if (GetIsObjectValid(oPotion))
-    {
-        PS_TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
-//        SetXP(oCaster, nNewXP);
-        DestroyObject (oSpellTarget);
+	int i;
+	int nMade = 0;
+	for (i = 1; i <= nStack; i++){
+		if (nMade >= nStack) break;
+		object oPotion = CICraftBrewPotion(oCaster, nId);
+		if (GetIsObjectValid(oPotion)){
+			nMade++;
+			SetIdentified(oPotion, TRUE);
+		}
+	}
+	if (nMade > 0){
+		if (nMade >= nStack) DestroyObject(oSpellTarget);
+		else SetItemStackSize(oSpellTarget, nStack - nMade);
         FloatingTextStrRefOnCreature(STR_REF_IC_SUCCESS, oCaster); // Item Creation successful
-		SetIdentified(oPotion, TRUE);
+		PS_TakeGoldFromCreature(nGoldCost * nMade, oCaster, TRUE);
+        return TRUE;
+     } else {
+        FloatingTextStrRefOnCreature(STR_REF_IC_FAILED, oCaster); // Item Creation Failed
         return TRUE;
      }
-     else
-     {
-         FloatingTextStrRefOnCreature(STR_REF_IC_FAILED, oCaster); // Item Creation Failed
-        return TRUE;
-     }
-
 }
 
 
@@ -967,6 +966,7 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
 int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
 {
     int  nId = GetSpellId();
+	int nStack = GetItemStackSize(oSpellTarget);
 
     // -------------------------------------------------------------------------
     // check if scribe scroll feat is there
@@ -990,9 +990,7 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     // XP/GP Cost Calculation
     // -------------------------------------------------------------------------
     int  nLevel    = CIGetSpellInnateLevel(nId,FALSE);
-    int nCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
-//    float fExperienceCost = 0.04 * nCost;
-    int nGoldCost = nCost;
+    int nGoldCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
 	
 	// nerf the cost of raise deads and or full res? controlled by boolean-like integer constants at top
 	if (nId == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS)
@@ -1004,12 +1002,10 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
 		nGoldCost = N_RES_COST;
 	}
 
-
     // -------------------------------------------------------------------------
     // Does Player have enough gold?
     // -------------------------------------------------------------------------
-    if (GetGold(oCaster) < nGoldCost)  //  enough gold?
-    {
+    if (GetGold(oCaster) < nGoldCost * nStack){
         FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_GOLD, oCaster); // Item Creation Failed - not enough gold!
         return TRUE;
     }
@@ -1030,59 +1026,48 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // Here we scribe the scroll
     // -------------------------------------------------------------------------
-    object oScroll = CICraftScribeScroll(oCaster, nId);
-
-    // -------------------------------------------------------------------------
-    // Verify Results
-    // -------------------------------------------------------------------------
-    if (GetIsObjectValid(oScroll))
-    {
-		// Adding the proper item properties 
-		if ((nId == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || 
-				(nId == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT) ||
-				(nId == ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT))
-		{
-			IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
+	int i;
+	int nMade = 0;
+	for (i = 1; i <= nStack; i++){
+		if (nMade >= nStack) break; // double safeguard
+		object oScroll = CICraftScribeScroll(oCaster, nId);
+		if (GetIsObjectValid(oScroll)){
+			nMade ++;
+			// Adding the proper item properties 
+			if ((nId == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || 
+					(nId == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT) ||
+					(nId == ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT)){
+						IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
+			} else{
+				MakeItemUseableByClassesWithSpellAccess(nId, oScroll);
+			}
+			//This script spawns the default in-game spell scrolls, so since some of those descriptions have
+			//changed we update the spell description with current value from tlk
+			int refSpellDesc = StringToInt(Get2DAString("spells", "SpellDesc", nId));
+			string sSpellDesc = GetStringByStrRef(refSpellDesc);
+			SetDescription(oScroll, sSpellDesc);
+			SetFirstName(oScroll, "Scroll");
+			AppendSpellToName(oScroll, nId);
+	        SetIdentified(oScroll,TRUE);
+			// if the scroll is a cheap raise dead or res, make it unsellable.
+			if (nId == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS){
+				SetStolenFlag(oScroll, TRUE);
+			} else if (nId == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS){
+				SetStolenFlag(oScroll, TRUE);
+			}
 		}
-		else
-		{
-			MakeItemUseableByClassesWithSpellAccess(nId, oScroll);
-		}
-		//This script spawns the default in-game spell scrolls, so since some of those descriptions have
-		//changed we update the spell description with current value from tlk
-		int refSpellDesc = StringToInt(Get2DAString("spells", "SpellDesc", nId));
-		string sSpellDesc = GetStringByStrRef(refSpellDesc);
-		SetDescription(oScroll, sSpellDesc);
-		SetFirstName(oScroll, "Scroll");
-		AppendSpellToName(oScroll, nId);
-		
-		// FF_WIP
-		//----------------------------------------------------------------------
-        // Some scrollsare ar not identified ... fix that here
-        //----------------------------------------------------------------------
-        SetIdentified(oScroll,TRUE);
-		// if the scroll is a cheap raise dead or res, make it unsellable. I hope. Will flagging it stolen do that?
-		if (nId == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS)
-		{
-			SetStolenFlag(oScroll, TRUE);
-		}
-		else if (nId == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS)
-		{
-			SetStolenFlag(oScroll, TRUE);
-		}
+	}
+	if (nMade > 0){
         ActionPlayAnimation (ANIMATION_FIREFORGET_READ,1.0);
-        PS_TakeGoldFromCreature(nGoldCost, oCaster, TRUE);
-//        SetXP(oCaster, nNewXP);
-        DestroyObject (oSpellTarget);
+        PS_TakeGoldFromCreature(nGoldCost * nMade, oCaster, TRUE);
+		if (nMade >= nStack) DestroyObject(oSpellTarget);
+		else SetItemStackSize(oSpellTarget, nStack -= nMade);
         FloatingTextStrRefOnCreature(STR_REF_IC_SUCCESS, oCaster); // Item Creation successful
         return TRUE;
-     }
-     else
-     {
+     } else {
         FloatingTextStrRefOnCreature(STR_REF_IC_FAILED, oCaster); // Item Creation Failed
         return TRUE;
-     }
-
+    }
     return FALSE;
 }
 
@@ -1128,9 +1113,8 @@ int CICraftCheckCraftWand(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
     // XP/GP Cost Calculation
     // -------------------------------------------------------------------------
-    int nCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER);
-//    float nExperienceCost = 0.04 * nCost;
-    int nGoldCost = nCost;
+
+    int nGoldCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER);
 
     // -------------------------------------------------------------------------
     // Does Player have enough gold?
