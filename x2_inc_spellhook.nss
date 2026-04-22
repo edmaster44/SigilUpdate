@@ -71,10 +71,14 @@ void DebugSpells();
 int X2PreSpellCastCode()
 {
 	object oTarget = GetSpellTargetObject();
-	
-	if (GetResRef(oTarget) == "ps_enchantmentfocus"){
-		ff_ShowConsumableCraftCosts();
-		return FALSE;
+	//casting a spell on the enchant focus or mortar and pestle shows the costs for making
+	// scrolls, potions, and wands of that spell
+	if (GetObjectType(oTarget) == OBJECT_TYPE_ITEM){
+		string sRef = GetResRef(oTarget);
+		if (FindSubString(sRef, "ps_enchantmentf") != -1 || sRef == "mortar"){
+			ff_ShowConsumableCraftCosts(); 
+			return FALSE;
+		}
 	}
 	
 	// send spell debugging info to caster if they've used the #SpellInfo chat command
@@ -275,10 +279,10 @@ int X2GetSpellCastOnSequencerItem(object oItem)
     // is there still space left on the sequencer?
     if (nNumberOfTriggers < nMaxSeqSpells)
     {
-		string sRef = GetResRef(oItem);
-		if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
-			sRef == "ps_potion_greatersequencer"){
-			if (!StoreSpellOnSequencerPot(oItem, OBJECT_SELF))
+		// sequencer pots need coin to store the spell, 
+		// if they can't pay they can't play
+		if (PS_GetIsSequencerPot(oItem)){
+			if (!PS_PayForSequencerPot(oItem, OBJECT_SELF))
 				return TRUE;
 		}
         // success visual and store spell-id on item.
@@ -290,6 +294,10 @@ int X2GetSpellCastOnSequencerItem(object oItem)
         SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
         ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
         FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
+		
+		// if it's a sequencer pot rename it to reflect spell(s) stored
+		if (PS_GetIsSequencerPot(oItem))
+			PS_RenameSequencerPot(oItem, OBJECT_SELF);
     }
     else
     {
@@ -566,13 +574,24 @@ void ff_ShowConsumableCraftCosts(){
 	object oPC = OBJECT_SELF;
 	int nId = GetSpellId();
 	int nLevel = CIGetSpellInnateLevel(nId, FALSE);
-	string sMessage = "Scroll cost: ";
-	sMessage += IntToString(CIGetCraftGPCost(oPC, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER));
-	sMessage += "\nPotion/Sequencer cost: ";
-	sMessage += IntToString(CIGetCraftGPCost(oPC, nLevel, X2_CI_BREWPOTION_COSTMODIFIER));
-	if (nLevel <= 4){
-		sMessage += "\nWand cost: ";
-		sMessage += IntToString(CIGetCraftGPCost(oPC, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER));
+	int nScroll = CIGetCraftGPCost(oPC, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
+	string sScroll = GetCurrencyFeedback(nScroll, FALSE, FALSE, TRUE);
+	string sMessage = "Scroll cost: " + sScroll + "\n";
+	
+	int nPot, nWand;
+	string sPot, sWand;
+	int bHarmful = StringToInt(Get2DAString("spells", "HostileSetting", nId));
+	if (!bHarmful){
+		nPot = CIGetCraftGPCost(oPC, nLevel, X2_CI_BREWPOTION_COSTMODIFIER);
+		sPot = GetCurrencyFeedback(nPot, FALSE, FALSE, TRUE);
+		sMessage += "Potion/Sequencer cost: " + sPot + "\n";
 	}
+	
+	if (nLevel <= 4){
+		nWand = CIGetCraftGPCost(oPC, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER);
+		sWand = GetCurrencyFeedback(nWand, FALSE, FALSE, TRUE);
+		sMessage += "\nWand cost: " + sWand;
+	}
+	
 	SendMessageToPC(oPC, sMessage);
 }

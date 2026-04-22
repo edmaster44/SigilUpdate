@@ -103,8 +103,7 @@ float	DS_BUY_RATE		= 0.5f;		//50%
 int		DS_THEFT_ENABLE	= FALSE;	//Enable/Disable theft from shops
 float	DS_THEFT_WEIGHT	= 10.0f;	//Maximum allowed weight for stolen items
 float	DS_MAX_DISTANCE	= 5.0f;		//Max shopping distance
-int 	MAX_AMMO_BUY = 	  100;     //max buy price of ammo
-int 	INFINITE_BUY = 999999;
+
 //Timestamp for sanity checks
 const string STORE_TIMESTAMP = "last_interacted";	//string for the store timestamp
 const int STORE_TIMEOUT = 5; 						//store timeout in minutes
@@ -118,6 +117,7 @@ int	PRICING_SYSTEM_OLD	= 0;	//Uses GetGoldPieceValue
 int	PRICING_SYSTEM_NEW	= 1;	//Uses new logic
 
 //Pricing options for players selling crafted items to npcs
+const int bCUSTOM_CRAFT_PRICING = TRUE;
 float fCraftProfit = 1.1f; // multiply crafted item value by this amount, so 1.1 = 10% profit over cost
 
 //Item categories
@@ -143,6 +143,10 @@ string	DS_BUY_FILTER_MISCELLANEOUS	= "-5";	//Filter for the miscellaneous catego
 //------------------------------FUNCTIONS--------------------------------//
 //------------------------------PROTOTYPES-------------------------------//
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
+
+//This function gets a special value for player-made items to control how
+// much profit can be made from crafters selling to npcs
+string GetCraftedItemValue(object oItem, string sCost);
 
 //This function closes the shop, it will clear the gui, close it and execute
 //the shop's OnClose script
@@ -296,88 +300,24 @@ void AddItemToDB(object oItem);
 //Set up all the variables for this item
 void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT_INVALID);
 
-// returns a stacksize, min 1 and max = either the max stack for the base item type in 2da
-// or 99, whichever is lower
-int PS_GetStackSize(object oItem, string sStackSize);
-
-// update the 3 cost fields in the UI
-void UpdateUICostFields(object oPC, int nCost);
-
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 //------------------------------FUNCTIONS--------------------------------//
 //------------------------------IMPLEMENTATION---------------------------//
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 
 
-int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMarket = 0, float fSellMod = 0.0f){
-
-	SetItemCostVariables(oItem, TRUE);
+string GetCraftedItemValue(object oItem, string sCost){
+	if (!GetIsPlayerMade(oItem) || bCUSTOM_CRAFT_PRICING != TRUE) 
+		return sCost;
+		
+	int nItem = GetBaseItemType(oItem);
 	
-	int	iItemCost = 1;	//Yet to be determined item cost
-	float fCostMod = (iMarkUp + iMarkDown)/200.0f;	//The buy price modifier
+	string sBaseCost = SearchValIn2da("scod_craft_baseitems", "ID", IntToString(nItem), "BASE_COST");
+	float fBaseCost = StringToFloat(sBaseCost);
+	fBaseCost *= fCraftProfit;
+	int nRoundedCost = PS_RoundToInt(fBaseCost);
 	
-	//If the sell modifier is not zero we add it to the fCostMod, otherweise we use the default DS_BUY_RATE
-	if(fSellMod > 0.0f) fCostMod	+= fSellMod;	
-	else fCostMod	+= DS_BUY_RATE;
-	
-	//If stolen adjust modifier for black-market value
-	if(GetStolenFlag(oItem) && iBlackMarket > 0)	
-		fCostMod *= (iBlackMarket/100.0f);	
-
-	//Next we generate the item cost
-	//If item is not identified set the price to 10 coppers
-	if(!GetIdentified(oItem)) iItemCost	= 10;
-	else{
-		int nBaseCost = PS_GetItemValue(oItem);
-		if (nBaseCost == 0) return 0; // some items are set to 0 on purpose because stores shouldnt buy
-		iItemCost = FloatToInt(fCostMod * PS_GetItemValue(oItem));
-	}
-	
-	//If the cost is less than or equal to 0, set it to 1
-	if(iItemCost <= 0)	{	iItemCost	= 1;	}
-
-	//Lastly return the determined item cost
-	return iItemCost;
-}
-
-
-//A function to fetch the "real" gold piece value of an item
-int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
-
-	SetItemCostVariables(oItem, FALSE, oPC);
-	int nCost = GetLocalInt(oItem, "PRICE");
-	if (DS_GetIsProjectile(oItem)){
-		//do not buy quiver-generated ammo
-		if (GetStringLowerCase(GetTag(oItem)) == "returning") nCost = 0;
-		else if (nCost > MAX_AMMO_BUY) nCost = MAX_AMMO_BUY;
-	// get a price for player-made items based upon the cost of making them
-	} else if (GetIsPlayerMade(oItem)){
-		int nItem = GetBaseItemType(oItem);
-		string sBaseCost = SearchValIn2da("scod_craft_baseitems", "ID", IntToString(nItem), "BASE_COST");
-		float fBaseCost = StringToFloat(sBaseCost);
-		fBaseCost *= fCraftProfit;
-		nCost = PS_RoundToInt(fBaseCost);
-	}
-	return nCost;
-}
-
-int PS_GetStackSize(object oItem, string sStackSize){
-	//set the min and max stack sizes. Ammo can stack up to 999 but the ui slider gets too fiddly
-	//with a selected stack that big
-	int nStack = StringToInt(sStackSize);
-	int nMaxStack = StringToInt(Get2DAString("baseitems", "Stacking", GetBaseItemType(oItem)));
-	if (nMaxStack > 99) nMaxStack = 99;
-	if (nStack < 1) nStack = 1;
-	if (nStack > nMaxStack) nStack = nMaxStack;
-	int nRealStack = GetItemStackSize(oItem);
-	if (nStack > nRealStack) nStack = nRealStack;
-	return nStack;
-}
-
-void UpdateUICostFields(object oPC, int nCost){
-	SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(nCost));
-	SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(nCost));
-	SetGUIObjectText(oPC, "dethia_shop", "sb_cost_gc", -1, DS_ConvertCoinsToGold(nCost));
+	return IntToString(nRoundedCost);
 }
 
 void DS_CloseShop(object oPC, object oStore)
@@ -638,6 +578,34 @@ int DS_WillOnlyBuy(object oItem, string sBuyOnlyList)
 	return FALSE;
 }
 
+int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMarket = 0, float fSellMod = 0.0f)
+{//First determine if the store buys stolen goods
+
+	//object oPC = GetFirstPC();
+
+	SetItemCostVariables(oItem, TRUE);
+	
+	int		iItemCost	= 1;	//Yet to be determined item cost
+	float	fCostMod	= (iMarkUp + iMarkDown)/200.0f;	//The buy price modifier
+	//If the sell modifier is not zero we add it to the fCostMod, otherweise we use the default DS_BUY_RATE
+	if(fSellMod > 0.0f)	{	fCostMod	+= fSellMod;	}
+	else				{	fCostMod	+= DS_BUY_RATE;	}
+	if(GetStolenFlag(oItem) && iBlackMarket > 0)	//If stolen adjust modifier for black-market value
+	{	fCostMod	*= (iBlackMarket/100.0f);	}
+
+	//Next we generate the item cost
+	if(!GetIdentified(oItem))	//If item is not identified set the price to 10 coppers
+	{	iItemCost	= 10;	}
+	else	//If all is well compute the item's sell value
+	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem)/GetItemStackSize(oItem));	} //update to PS_GetItemValue later
+	
+	
+	//If the cost is less than or equal to 0, set it to 1
+	if(iItemCost <= 0)	{	iItemCost	= 1;	}
+
+	//Lastly return the determined item cost
+	return iItemCost;
+}
 
 
 
@@ -806,22 +774,19 @@ int DS_GetItemCategory(object oItem)
 	return iCategory;
 }
 
-int DS_GetIsProjectile(object oItem){
-	int nItem = GetBaseItemType(oItem);
-	if (nItem == BASE_ITEM_ARROW || nItem == BASE_ITEM_BULLET || nItem == BASE_ITEM_BOLT ||                 
-		nItem == BASE_ITEM_THROWINGAXE	|| nItem == BASE_ITEM_SHURIKEN	|| nItem == BASE_ITEM_DART)
-			return TRUE;	
-
+int DS_GetIsProjectile(object oItem)
+{//Simply do the check
+	if(IPGetIsProjectile(oItem)	||
+		GetBaseItemType(oItem) == BASE_ITEM_THROWINGAXE	||
+		GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN	||
+		GetBaseItemType(oItem) == BASE_ITEM_DART		)
+	{	return TRUE;	}
+	//If we got this far return FALSE
 	return FALSE;
 }
 
-float DS_AbsoluteValue(float fValue){	
-//Dethia's version unnecessarily complicated, risks floating point precision loss
-//return pow(pow(fValue, 2.0f), 0.5f);	
-if (fValue < 0.0) return fValue * -1.0f; // instead just turn a neg into a pos
-return fValue; // or return if 0 or pos
-// -FlattedFifth
-}
+float DS_AbsoluteValue(float fValue)
+{	return	pow(pow(fValue, 2.0f), 0.5f);	}
 
 int DoesPCHaveFreeInvSlots(object oPC, int iSlots)
 {	//Get the first item in inventory
@@ -994,6 +959,19 @@ int GetItemUseable(object oItem, object oPC)
 	return FALSE;
 }
 
+//A function to fetch the "real" gold piece value of an item
+int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
+
+	SetItemCostVariables(oItem, FALSE, oPC);
+	int nCost = GetLocalInt(oItem, "PRICE");
+	if (!DS_GetIsProjectile(oItem)) //if we aren't a projectile, price should be the price of the stack
+		nCost *= GetItemStackSize(oItem);
+	else if (GetLocalInt(oItem, "PRICE") > 1) //if we are a projectile, but expensive, the price should be the price of the stack
+		nCost *= GetItemStackSize(oItem);
+		
+	return nCost;
+
+}
 
 //get whether the item is in the database
 int GetItemInDB(object oItem) {

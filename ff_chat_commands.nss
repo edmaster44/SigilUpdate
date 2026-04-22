@@ -51,6 +51,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	}
 	string sFeedback = "";
 	string sInput = GetStringLowerCase(sMessage);
+	sInput = PS_RemoveSpaces(sInput);
 	object oItem;
 	int nPos;
 	
@@ -58,6 +59,30 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		sFeedback = "Please see full list of chat commands at:";
 		sFeedback += "\nhttps://sigil-nwn2.fandom.com/wiki/Chat_Commands";
 		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
+	else if (GetStringLeft(sInput, 4) == "#xp%"){
+		if (GetIsDM(oSender) || (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE"))){
+			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 4);
+			int nPercent = StringToInt(sRight);
+			if (sRight == "off" || nPercent == 100){
+				DeleteLocalFloat(GetModule(), "XPBOOST");
+				sMessage = "Turning off XP%";
+			} else if (nPercent < 1 || nPercent > 500){
+				sMessage = "Invalid entry. Must be an integer between 1 and 500, inclusive.\n";
+				sMessage += "For example, 150 to give players 150% (aka 1.5X) XP or 80 to give them ";
+				sMessage += "only 80% of normal XP.\n";
+				sMessage += "If you are trying to turn XP% off, type #XP% OFF or #XP% 100.";
+			} else {
+				SetLocalFloat(GetModule(), "XPBOOST", IntToFloat(nPercent) / 100.0);
+				sMessage = "Setting XP gains to " + IntToString(nPercent) + "% of normal.\n";
+				sMessage = "This will last until you type #XP% OFF, #XP% 100, or until server reset";
+			}
+		} else {
+			sMessage = "On main server this command is only for DMs. On test server this command is only "; 
+			sMessage += "for DMs, Dev Team, and Admin staff.";
+		}
+		SendMessageToPC(oSender, sMessage);
 		return TRUE;
 	}
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft

@@ -87,14 +87,14 @@ void main(){
 			}
 			fLevel = IntToFloat(nLevel);
 			nECL = GetNewECL(oMember);
-			fLevel += IntToFloat(nECL);
+			
 			
 			//assume that if the cr of the enemy is higher then they'd be fighting something their own size
 			// if they were alone, otherwise calc solo value based on actual data
 			fSoloXP = (fCR >= fLevel) ? GetBaseXP(fLevel, fLevel, 1) : GetBaseXP(fLevel, fCR, 1);
 		
-			// if the character is in party range they get the higher of solo xp or party xp
-			if (fLevel >= IntToFloat(data.nMax - MAXPARTYRANGE)){
+			// if the character (including ECL) is in party range (excluding ECL) they get the higher of solo xp or party xp
+			if (fLevel + IntToFloat(nECL) >= IntToFloat(data.nMax - MAXPARTYRANGE)){
 				fIndividualXP = (fPartyXP > fSoloXP) ? fPartyXP : fSoloXP;
 			// else they get the lesser amount
 			} else fIndividualXP = (fPartyXP > fSoloXP) ? fSoloXP : fPartyXP;
@@ -192,13 +192,8 @@ struct PartyData GetPartyData(object oPC){
 			data.nNum++;
 			nLvl = PS_GetLevel(oMember);
 			if (nLvl > data.nMax)
-				// max excludes ecl because we want to exclude it from level range for max so as to be more inclusive
-				// for example, we want someone with 28 lvls and 3 ecl to be considered only 9 lower than someone
-				// with 30 levels regardless of the higher character's ecl
 				data.nMax = nLvl; 
-			// total includes ecl because it affects the overall difficulty. A party of 5 dragons
-			// is going to have an easier time than a party of 5 humans
-			nTotal += nLvl + GetNewECL(oMember);
+			nTotal += nLvl;
 		}
         oMember = GetNextFactionMember(oPC, TRUE);     
 	}
@@ -240,18 +235,18 @@ float GetPartyXPBonus(float fAvgLevel, float fCR, int nNum){
 float GetBaseXP(float fLevel, float fCR, int nNum){
 	// if the level (whether party average or solo) is more than 25 higher than CR, 
 	// then no xp
-	if (fLevel - fCR > 5.0 && nNum == 1) return 0.0;
+	if (fLevel - fCR > 25.0 && nNum == 1) return 0.0;
 
     float fPartyXP = BASEXP;
 	
 	if (fCR != fLevel){
 		if(fCR > fLevel){
-			// this calibrates for a lvl 30 to get BASEXP * 3 for a CR 99
-			fPartyXP *= (1.0 + (3.15 * log(1.0 + fCR / fLevel) / 2.302));
+			fPartyXP *= (1.0 + (1.8 * log(1.0 + fCR / fLevel) / 2.302));
 		} else { //For lower CR give xp penalty
-			fPartyXP *= pow(0.843, fLevel - fCR);
+			fPartyXP *= pow(0.905, fLevel - fCR);
 		}
 	}
+	if (fPartyXP <= 0.0) fPartyXP = 1.0;
     return fPartyXP;
 }
 

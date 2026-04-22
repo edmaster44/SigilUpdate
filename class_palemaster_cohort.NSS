@@ -37,6 +37,7 @@ void main(object oPC)
 //	Add the created creature as a henchman and apply the "henchman" script set
 	DelayCommand(0.21, AddHenchman(oPC, oHench));
 	DelayCommand(0.22, SetCreatureScriptsToSet(oHench, 10));
-	SendMessageToPC(oPC,"A " + sName + " has answered your Call. Use the Unsummon Undead feat to return him to his coffin.");
+	string sMessage = "A " + sName + " has answered your Call. Use the Unsummon Undead feat to return it to its coffin.";
+	FloatingTextStringOnCreature(sMessage, oPC, FALSE);
 
 }

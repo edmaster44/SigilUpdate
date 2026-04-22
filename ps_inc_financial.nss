@@ -29,7 +29,7 @@ string DS_ConvertCoinsToGold(int iCoins);
 // moved from Dethia_shop_sys
 void DS_UpdateInventoryCoinValues(object oPC);
 
-string GetCurrencyFeedback(int nGP, int bGained, int bFromLoot);
+string GetCurrencyFeedback(int nGP, int bGained, int bFromLoot, int bJustNumbers = FALSE);
 
 // Wrapper for GiveGoldToCreature that gives the player a message in gold, silver, and copper
 // written by FlattedFifth
@@ -61,13 +61,15 @@ void DS_UpdateInventoryCoinValues(object oPC){
 	SetGUIObjectText(oPC, "SCREEN_INVENTORY", "pc_cc", -1, DS_ConvertCoinsToCopper(iCoins));
 }
 
-string GetCurrencyFeedback(int nGP, int bGained, int bFromLoot){
+string GetCurrencyFeedback(int nGP, int bGained, int bFromLoot, int bJustNumbers = FALSE){
 	int nGold   = nGP / 100;
 	int nSilver = (nGP % 100) / 10;
 	int nCopper = nGP % 10;
 	
-	string sMessage = (bGained) ? "Acquired " : "Lost ";
-	if (bFromLoot && bGained){
+	string sMessage;
+	if (bJustNumbers) sMessage = "";
+	else sMessage = (bGained) ? "Acquired " : "Lost ";
+	if (bFromLoot && bGained && !bJustNumbers){
 		sMessage = "Game engine doesn't always report large stacks correctly.\n";
 		sMessage += "You actually acquired ";
 	}

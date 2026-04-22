@@ -23,8 +23,9 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 	// since multiple checks require knowing the res ref, we'll just get it here.
 	string sRef = GetResRef(oItem);
 	
-	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" || 
-		sRef == "ps_potion_greatersequencer"){
+	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_r_pot_lseq" ||
+		sRef == "ps_potion_sequencer" || sRef == "ps_r_pot_seq" ||
+		sRef == "ps_potion_greatersequencer" || sRef == "ps_r_pot_gseq"){
 			SetNewSequencerDesc(oItem, sRef);
 			return;
 	}
@@ -353,16 +354,17 @@ void UpdateUndeadRegeantDescription(object oRegeant){
 }
 
 void SetNewSequencerDesc(object oItem, string sRef){
+	
 	string sName, sCost, sSkill;
-	if (sRef == "ps_potion_lessersequencer"){
+	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_r_pot_lseq"){
 		sName = "Lesser";
 		sCost = "2";
 		sSkill = "10";
-	} else if (sRef == "ps_potion_sequencer"){
+	} else if (sRef == "ps_potion_sequencer" || sRef == "ps_r_pot_seq"){
 		sName = "";
 		sCost = "4";
 		sSkill = "20";
-	} else if (sRef == "ps_potion_greatersequencer"){
+	} else if (sRef == "ps_potion_greatersequencer" || sRef == "ps_r_pot_gseq"){
 		sName = "Greater";
 		sCost = "6";
 		sSkill = "30";

@@ -140,7 +140,7 @@ int IsImmuneToDamage(object oTarget, int nDmgType, int bShowFeedback = FALSE);
 // decimal point when the decimals are all zeros
 string PS_PrettyFloatString(float fNum, int nPlaces = 9, int nRoundTo = ROUND_NEAREST);
 
-// The following 4 are utils to clean up illegal chars in variable names,
+// The following 5 are utils to clean up illegal chars in variable names,
 // useful for non-static variable names such as a character name.
 // To do this, call PS_ScrubVarName() and the other three are helper
 // functions. Be sure to use it both in setters and getters.
@@ -148,6 +148,7 @@ string PS_ScrubVarName(string sString);
 string PS_ValidChars(string sString);
 int PS_GetAsciiValue(string sChar);
 string PS_GetStringFingerprint(string sString);
+string PS_RemoveSpaces(string sInput);
 
 
 // GetDistanceBetween measures centre to center, not edge to edge
@@ -169,7 +170,7 @@ float PS_RoundDecimal(float fNum, int nPlaces = 9, int nRoundTo = ROUND_NEAREST)
 // get only get 96.7% of the xp they earn applied to their character because 96.7% of 465k
 // is roughly 435k. In this way we can have any amount of ECL we need, not just up to 3 
 // (but for now I've capped it at ECL 20, which would be 36% of earned xp is applied)
-int GetECLXP(int nXP, object oPC, int bFromKill = FALSE);
+int GetECLXP(int nXP, object oPC);
 
 // The default GiveXPToCreature() has return type void, so int PS_GiveXPReward() doesn't always work in place of it.
 void PS_GiveXPRewardNoReturn(object oPC, int nXP, int bFromKill = FALSE);
@@ -368,6 +369,21 @@ effect EffectNewBlindness(){
     if (REPLACE_BLINDNESS_WITH_MISS_CHANCE)
         return EffectMissChance(BLINDNESS_MISS_CHANCE);
     return EffectBlindness();
+}
+
+string PS_RemoveSpaces(string sInput){
+    string sResult = "";
+    int nLen = GetStringLength(sInput);
+    
+	string sChar;
+    int i;
+    for (i = 0; i < nLen; i++) {
+        sChar = GetSubString(sInput, i, 1);
+        if (sChar != " ") {
+            sResult += sChar;
+        }
+    }
+    return sResult;
 }
 
 string PS_ScrubVarName(string sString){
@@ -658,7 +674,7 @@ float GetECLXPTax(int nECL, int bForDisplay = FALSE){
 }
 
 // Called from PS_GiveXPReward().
-int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
+int GetECLXP(int nXP, object oPC){
    
 	int nECL = GetNewECL(oPC);
 	if (nXP < 1) return 0;
@@ -666,7 +682,7 @@ int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
 	if (nECL > 20) nECL = 20;
 	
 	if (nECL == 0){
-		if (GetLocalInt(oPC, "xpdebug") && bFromKill){
+		if (GetLocalInt(oPC, "xpdebug")){
 			SendMessageToPC(oPC, "You have no ECL, therefore your XP is not taxed");
 		}
 		return nXP;
@@ -674,14 +690,18 @@ int GetECLXP(int nXP, object oPC, int bFromKill = FALSE){
 
 	float fTax = GetECLXPTax(nECL);
 	int nAdjusted = PS_RoundToInt(IntToFloat(nXP) * fTax);
-	
 	if (nAdjusted < 1) nAdjusted = 1; // to get here nXP had to be at least 1, so should the adjusted
-	
-	if (GetLocalInt(oPC, "xpdebug") && bFromKill){
-		string sMessage = "Your ECL is " + IntToString(nECL);
-		sMessage += "\nYour XP before tax is " + IntToString(nXP);
+	float fDMadjust = GetLocalFloat(GetModule(), "DMXPADJUST");
+	if (fDMadjust != 1.0 && fDMadjust != 0.0) 
+		nAdjusted = PS_RoundToInt(IntToFloat(nAdjusted) * fDMadjust);
+	if (GetLocalInt(oPC, "xpdebug")){
+		string sMessage = "ECL: " + IntToString(nECL);
+		sMessage += "\nXP before ECL tax: " + IntToString(nXP);
 		float fPercent = (1.0 - fTax) * 100.0;
-		sMessage += "\nYour ECL XP tax is " + PS_PrettyFloatString(fPercent, 2) + "%";
+		sMessage += "\nECL XP tax: " + PS_PrettyFloatString(fPercent, 2) + "%";
+		if (fDMadjust != 1.0 && fDMadjust != 0.0){
+			sMessage += "\nDM Adjustment: " + PS_PrettyFloatString(fPercent * 100.0, 2) + "%";
+		}
 		sMessage += "\nYour final XP is " + IntToString(nAdjusted);
 		SendMessageToPC(oPC, sMessage);
 	}
@@ -4750,7 +4770,7 @@ void DebugMessageToPC(object oPC, string sMessage)
 }
 
 int PS_GiveXPReward(object oPC, int nXP, int bFromKill = FALSE){
-	nXP = GetECLXP(nXP, oPC, bFromKill);
+	if (bFromKill) nXP = GetECLXP(nXP, oPC); // only tax for ECL if combat xp
     GiveXPToCreature(oPC, nXP);
     return TRUE;
 }
@@ -4758,7 +4778,7 @@ int PS_GiveXPReward(object oPC, int nXP, int bFromKill = FALSE){
 // The above doesn't always work in place of GiveXPToCreature() because GiveXPToCreature()
 // returns void, not int, so the above does not work as an arg for AssignCommand or DelayCommand
 void PS_GiveXPRewardNoReturn(object oPC, int nXP, int bFromKill = FALSE){
-    PS_GiveXPReward(oPC, nXP);
+    PS_GiveXPReward(oPC, nXP, bFromKill);
 }
 
 /* clean up: remove conditionals for outdated constants

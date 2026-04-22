@@ -335,7 +335,6 @@ int XPCraft_GetNewVariationValue(object oPC, int iBaseItemType, int iAction)
 //XPCraft_Debug(oPC,"Nouvelle Variation : " + IntToString(iNewVariationValue));
 	SendMessageToPC(oPC,"Current Variation: " + IntToString(iCurrentVariationValue));
 	SendMessageToPC(oPC,"List Name: " + sListName);
-	SendMessageToPC(oPC,"Variation List: " + sVariationList);
 	SendMessageToPC(oPC,"New Variation: " + IntToString(iNewVariationValue));
 	return iNewVariationValue;
 }
