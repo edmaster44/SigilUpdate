@@ -357,7 +357,7 @@ void SetNewSequencerDesc(object oItem, string sRef){
 	
 	string sName, sCost, sSkill;
 	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_r_pot_lseq"){
-		sName = "Lesser";
+		sName = "Lesser ";
 		sCost = "2";
 		sSkill = "10";
 	} else if (sRef == "ps_potion_sequencer" || sRef == "ps_r_pot_seq"){
@@ -365,12 +365,12 @@ void SetNewSequencerDesc(object oItem, string sRef){
 		sCost = "4";
 		sSkill = "20";
 	} else if (sRef == "ps_potion_greatersequencer" || sRef == "ps_r_pot_gseq"){
-		sName = "Greater";
+		sName = "Greater ";
 		sCost = "6";
 		sSkill = "30";
 	} else return;
 
-	string sNewDesc = "<color=violet>" + sName + " Sequencer Potion</color>\n";
+	string sNewDesc = "<color=violet>" + sName + "Sequencer Potion</color>\n";
 	sNewDesc += "Location Needed: <i>Alchemy Workbench</i>\n";
 	sNewDesc += "Feat Required: <i>Brew Potion</i>\n";
 	sNewDesc += "Item Cost: <i>Empty Potion Bottle</i>\n";

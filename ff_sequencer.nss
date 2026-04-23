@@ -5,7 +5,7 @@ int PS_GetIsSequencerPot(object oSequencer){
 	string sRef = GetResRef(oSequencer);
 	//check to make sure this is a sequencer pot
 	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
-		sRef == "ps_potion_greatersequencer")
+		sRef == "ps_potion_greatersequncer")
 			return TRUE;
 	return FALSE;
 }
@@ -22,11 +22,12 @@ void PS_RenameSequencerPot(object oSequencer, object oCaster){
 	int nSpell3 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3");
 	// if no spells stored something has gone wrong
 	if (nSpell1 + nSpell2 + nSpell3 < 1) return;
-	
+	int nNumberOfTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
 	int nStack = GetItemStackSize(oSequencer);
-	string sSpell1 = (nSpell1 == 0) ? "" : GetSpellName(nSpell1 - 1);
-	string sSpell2 = (nSpell2 == 0) ? "" : GetSpellName(nSpell2 - 1);
-	string sSpell3 = (nSpell2 == 0) ? "" : GetSpellName(nSpell2 - 1);
+	string sSpell1 = GetSpellName(nSpell1 - 1);
+	string sSpell2, sSpell3;
+	if (nSpell2 > 0) sSpell2 = GetSpellName(nSpell2 - 1);
+	if (nSpell3 > 0) sSpell3 = GetSpellName(nSpell3 - 1);
 	
 	string sName = "<c=cyan>";
 	string sRef = GetResRef(oSequencer);
@@ -45,6 +46,12 @@ void PS_RenameSequencerPot(object oSequencer, object oCaster){
 	SetItemStackSize(oSequencer, 1);
 	SetFirstName(oSequencer, sName);
 	SetItemStackSize(oSequencer, nStack);
+	SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
+	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", nSpell1); 
+	if (nSpell2 > 0)
+		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", nSpell2); 
+	if (nSpell3 > 0)
+		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", nSpell3);
 	string sMessage = "Your Sequencer Potion has been renamed.\nThe new name will become visible ";
 	sMessage += "after an area transition.";
 	SendMessageToPC(oCaster, sMessage);
@@ -61,5 +68,6 @@ int PS_PayForSequencerPot(object oSequencer, object oCaster){
 		FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_GOLD, oCaster); // not enough gold!
         return FALSE;
 	}
+	PS_TakeGoldFromCreature(nGold, oCaster);
 	return TRUE;
 }

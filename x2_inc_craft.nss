@@ -258,6 +258,33 @@ void AppendSpellToName(object oObject, int nSpellId);
 // functions
 //--------------------------------------------------------------------
 
+int GetIsHealingSpell(int nId){
+	switch (nId){
+		case 486: return TRUE; //stone to flesh
+		case 114: return TRUE; //mass heal
+		case 897: return TRUE; //mass cure crit
+		case 70: return TRUE; //greater resto
+		case 894: return TRUE; //mass cure serious
+		case 79: return TRUE; //heal
+		case 891: return TRUE; //mass cure mod
+		case 80: return TRUE; //mass cure light
+		case 31: return TRUE; //cure crit
+		case 126: return TRUE; //netra poison
+		case 152: return TRUE; //restore
+		case 35: return TRUE; //cure serious
+		case 145: return TRUE; //remove blind deaf
+		case 146: return TRUE; //remove curse
+		case 147: return TRUE; //remove disease
+		case 34: return TRUE; //cure mod
+		case 97: return TRUE; //lesser resoto
+		case 149: return TRUE; //remove paralysis
+		case 1202: return TRUE; //stabilize
+		case 32: return TRUE; //cure light
+		case 148: return TRUE; //remove fear
+		case 33: return TRUE; //cure minor
+	}
+	return FALSE;
+}
 
 
 // *  Returns either the innate level of the spell or the level of the spell as
@@ -499,21 +526,23 @@ int CIGetCraftGPCost(object oCaster, int nLevel, int nMod){
 	if (nMod == X2_CI_SCRIBESCROLL_COSTMODIFIER){
 		if (GetLocalInt(oCaster, "bScribeAtMinLvl")) nCasterLvl = 1;
 	}
-	
-    int nLvlRow =   IPGetIPConstCastSpellFromSpellID(GetSpellId(), nCasterLvl);
+	int nId = GetSpellId();
+    int nLvlRow =   IPGetIPConstCastSpellFromSpellID(nId, nCasterLvl);
     int nCLevel = StringToInt(Get2DAString("iprp_spells","CasterLvl",nLvlRow));
 
 	if (nLevel == 0) nLevel = 1;
 		
     // -------------------------------------------------------------------------
-    // in case we don't get a valid CLevel, use spell level instead
+    // in case we don't get a valid CLevel, use CasterLvl level instead
     // -------------------------------------------------------------------------
-    if (nCLevel == 0) nCLevel = nLevel;
+    if (nCLevel == 0) nCLevel = nCasterLvl;
     
 	int nRet = 0;
 	
-	nRet = FloatToInt(((IntToFloat(nCLevel)/10.0) + IntToFloat(nLevel)) * nMod);
-
+	nRet = PS_RoundToInt(((IntToFloat(nCLevel)/10.0) + IntToFloat(nLevel)) * nMod);
+	//healing spells get a slight discount. Others cost more.
+	if (GetIsHealingSpell(nId)) nRet = PS_RoundToInt(nRet * 0.9, ROUND_DOWN);
+	else nRet = PS_RoundToInt(nRet * 1.5, ROUND_UP);
     return nRet;
 
 }
@@ -938,12 +967,18 @@ int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
 	int i;
 	int nMade = 0;
+	object oPotion;
 	for (i = 1; i <= nStack; i++){
 		if (nMade >= nStack) break;
-		object oPotion = CICraftBrewPotion(oCaster, nId);
 		if (GetIsObjectValid(oPotion)){
+			SetItemStackSize(oPotion, GetItemStackSize(oPotion) + 1);
 			nMade++;
-			SetIdentified(oPotion, TRUE);
+		} else {
+			oPotion = CICraftBrewPotion(oCaster, nId);
+			if (GetIsObjectValid(oPotion)){
+				nMade++;
+				SetIdentified(oPotion, TRUE);
+			}
 		}
 	}
 	if (nMade > 0){
@@ -1028,32 +1063,38 @@ int CICraftCheckScribeScroll(object oSpellTarget, object oCaster)
     // -------------------------------------------------------------------------
 	int i;
 	int nMade = 0;
+	object oScroll;
 	for (i = 1; i <= nStack; i++){
 		if (nMade >= nStack) break; // double safeguard
-		object oScroll = CICraftScribeScroll(oCaster, nId);
 		if (GetIsObjectValid(oScroll)){
-			nMade ++;
-			// Adding the proper item properties 
-			if ((nId == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || 
-					(nId == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT) ||
-					(nId == ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT)){
-						IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
-			} else{
-				MakeItemUseableByClassesWithSpellAccess(nId, oScroll);
-			}
-			//This script spawns the default in-game spell scrolls, so since some of those descriptions have
-			//changed we update the spell description with current value from tlk
-			int refSpellDesc = StringToInt(Get2DAString("spells", "SpellDesc", nId));
-			string sSpellDesc = GetStringByStrRef(refSpellDesc);
-			SetDescription(oScroll, sSpellDesc);
-			SetFirstName(oScroll, "Scroll");
-			AppendSpellToName(oScroll, nId);
-	        SetIdentified(oScroll,TRUE);
-			// if the scroll is a cheap raise dead or res, make it unsellable.
-			if (nId == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS){
-				SetStolenFlag(oScroll, TRUE);
-			} else if (nId == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS){
-				SetStolenFlag(oScroll, TRUE);
+			SetItemStackSize(oScroll, GetItemStackSize(oScroll) + 1);
+			nMade++;
+		} else {
+			oScroll = CICraftScribeScroll(oCaster, nId);
+			if (GetIsObjectValid(oScroll)){
+				nMade ++;
+				// Adding the proper item properties 
+				if ((nId == ID_SPELL_RAISE_DEAD && B_RAISE_SCROLL_NO_CLASS_LIMIT) || 
+						(nId == ID_SPELL_FULL_RES && B_FULL_RES_SCROLL_NO_CLASS_LIMIT) ||
+						(nId == ID_SPELL_STONE_TO_FLESH && B_STONE_TO_FLESH_SCROLL_NO_CLASS_LIMIT)){
+							IPRemoveMatchingItemProperties(oScroll, ITEM_PROPERTY_USE_LIMITATION_CLASS, -1, -1);
+				} else{
+					MakeItemUseableByClassesWithSpellAccess(nId, oScroll);
+				}
+				//This script spawns the default in-game spell scrolls, so since some of those descriptions have
+				//changed we update the spell description with current value from tlk
+				int refSpellDesc = StringToInt(Get2DAString("spells", "SpellDesc", nId));
+				string sSpellDesc = GetStringByStrRef(refSpellDesc);
+				SetDescription(oScroll, sSpellDesc);
+				SetFirstName(oScroll, "Scroll");
+				AppendSpellToName(oScroll, nId);
+				SetIdentified(oScroll,TRUE);
+				// if the scroll is a cheap raise dead or res, make it unsellable.
+				if (nId == ID_SPELL_RAISE_DEAD && B_CHEAP_RAISE_SCROLLS){
+					SetStolenFlag(oScroll, TRUE);
+				} else if (nId == ID_SPELL_FULL_RES && B_CHEAP_FULL_RES_SCROLLS){
+					SetStolenFlag(oScroll, TRUE);
+				}
 			}
 		}
 	}

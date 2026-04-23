@@ -74,6 +74,10 @@ void main(){
 	string sXPbanking = "You have surpassed the required XP to level up.";
 	sXPbanking += "\nYour XP is being calculated as though you were level ";
 	
+	int bDMAdjust = FALSE;
+	float fDMadjust = GetLocalFloat(GetModule(), "DMXPADJUST");
+	if (fDMadjust != 1.0 && fDMadjust != 0.0) bDMAdjust = TRUE;
+	
 	object oArea = GetArea(oKiller);
 	object oMember = GetFirstFactionMember(oKiller, TRUE);
     while(GetIsObjectValid(oMember)){
@@ -106,11 +110,13 @@ void main(){
 			// at least 1 xp
 			if (fIndividualXP < 1.0 && fCR >= fLevel - IntToFloat(MAXPARTYRANGE))
 				fIndividualXP = 1.0;
+			// now we factor in ECL BEFORE we apply party and rp bonuses
+			nFinalXP = GetECLXP(PS_RoundToInt(fIndividualXP), oMember);
 			
 			if (fPartyBonus > 0.0)
-				fBonusXP = fIndividualXP * fPartyBonus;
+				fBonusXP = nFinalXP * fPartyBonus;
 			else fBonusXP = 0.0;
-			nFinalXP = PS_RoundToInt(fIndividualXP + fBonusXP);
+			nFinalXP += PS_RoundToInt(fBonusXP);
 		
 			//if the monster is not more than 10 levels below the player then the player should get 
 			// at least 1 xp
@@ -140,20 +146,30 @@ void main(){
 						SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
 				} else rp_bonus = 0;
 			}
+			// apply DM adjustments last
+			if (bDMAdjust)
+				nFinalXP = PS_RoundToInt(nFinalXP * fDMadjust);
 			// if player is using #KillInfo chat command, which is not meant to show quest or rp xp
 			if (GetLocalInt(oMember, "xpdebug")){
 				sDebug = "Max level in party: " + IntToString(data.nMax);
 				sDebug += "\nParty Size: " + IntToString(data.nNum);
 				sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fIndividualXP));
+				sDebug += "\nECL: " + IntToString(nECL);
+				sDebug += "\nECL XP Tax: ";
+				if (nECL < 1) sDebug += "none";
+				else sDebug += PS_PrettyFloatString(GetECLXPTax(nECL, TRUE)) + "%";
 				sDebug += "\nParty XP Bonus: ";
 				if (fPartyBonus > 0.0) sDebug += PS_PrettyFloatString(fPartyBonus * 100.0, 2) + "%";
 				else sDebug += "none";
 				sDebug += "\nRP Pool Bonus: " + IntToString(rp_bonus);
+				if (bDMAdjust){
+					sDebug = "DM multiplier: " + PS_PrettyFloatString(fDMadjust);
+				}
 				sDebug += "\nEnemy Data:\n";
 				sDebug += GetCreatureInfo(oDead, oMember);
 				SendMessageToPC(oMember, sDebug);
 			}
-			if (nFinalXP > 0) PS_GiveXPReward(oMember, nFinalXP, TRUE);
+			if (nFinalXP > 0) PS_GiveXPReward(oMember, nFinalXP);
 		}
 		oMember = GetNextFactionMember(oKiller, TRUE);
 	}

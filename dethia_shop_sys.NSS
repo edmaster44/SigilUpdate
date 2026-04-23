@@ -146,7 +146,7 @@ string	DS_BUY_FILTER_MISCELLANEOUS	= "-5";	//Filter for the miscellaneous catego
 
 //This function gets a special value for player-made items to control how
 // much profit can be made from crafters selling to npcs
-string GetCraftedItemValue(object oItem, string sCost);
+int GetCraftedItemValue(object oItem);
 
 //This function closes the shop, it will clear the gui, close it and execute
 //the shop's OnClose script
@@ -267,6 +267,8 @@ int GetSpecificAlignment(object oPC);
 //returns TRUE if the item is useable, and FALSE if not.
 int GetItemUseLimited(object oItem, object oPC);
 
+int GetIsQuiverGenerated(object oItem);
+
 //Check if you have proficiency
 int GetItemUseable(object oItem, object oPC);
 
@@ -306,18 +308,51 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 
 
-string GetCraftedItemValue(object oItem, string sCost){
-	if (!GetIsPlayerMade(oItem) || bCUSTOM_CRAFT_PRICING != TRUE) 
-		return sCost;
-		
+//A function to fetch the "real" gold piece value of an item.
+//Also sets static, low costs for certain consumable crafting materials
+//and for items that are of rp value only
+int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
+
+	int nCost;
+	string sRef = GetResRef(oItem);
+	if (GetIsPlayerMade(oItem)) nCost = GetCraftedItemValue(oItem);
+	else if (sRef == "x2_it_cfm_pbottl") nCost = 50;
+	else if (sRef == "ps_potion_lessersequencer") nCost = 700;
+	else if (sRef == "ps_potion_sequencer") nCost =  1400;
+	else if	(sRef == "ps_potion_greatersequncer") nCost = 2100; 
+	else if	(sRef == "x2_it_cfm_wand") nCost = 100;
+	else if	(sRef == "x2_it_cfm_bscrl") nCost = 50;
+	else if	(sRef == "sigisparchment") nCost = 2;
+	else if	(sRef == "ps_parchment") nCost = 1;
+	else if	(sRef == "i_ps_itemeditor_pc") nCost = 1; 
+	else if	(sRef == "i_ps_itemeditor") nCost = 1; 
+	else if	(sRef == "ps_npc_remote") nCost = 1; 
+	else if	(sRef == "ps_signitem_documents") nCost = 5;
+	else if	(sRef == "ps_signitem_cookies") nCost = 10; 
+	else if	(sRef == "ps_signitem_bread") nCost = 5;
+	else if	(sRef == "ps_signitem_map") nCost = 3; 
+	else if	(sRef == "psplacewand") nCost = 1;
+	else if	(sRef == "i_ps_pipe") nCost =  1;
+	else if	(sRef == "psplacewand") nCost = 1;
+	else if (FindSubString(sRef, "i_ps_umbrella") != -1) nCost = 3;
+	else if (FindSubString(sRef, "ps_i_basket") != -1) nCost =  3;
+	else if (FindSubString(sRef, "i_ps_cigar") != -1) nCost = 3;
+	else {
+		SetItemCostVariables(oItem, FALSE, oPC);
+		nCost = GetLocalInt(oItem, "PRICE");
+	}
+	return nCost;
+}
+
+
+
+int GetCraftedItemValue(object oItem){
 	int nItem = GetBaseItemType(oItem);
 	
 	string sBaseCost = SearchValIn2da("scod_craft_baseitems", "ID", IntToString(nItem), "BASE_COST");
 	float fBaseCost = StringToFloat(sBaseCost);
 	fBaseCost *= fCraftProfit;
-	int nRoundedCost = PS_RoundToInt(fBaseCost);
-	
-	return IntToString(nRoundedCost);
+	return PS_RoundToInt(fBaseCost);
 }
 
 void DS_CloseShop(object oPC, object oStore)
@@ -597,12 +632,14 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	if(!GetIdentified(oItem))	//If item is not identified set the price to 10 coppers
 	{	iItemCost	= 10;	}
 	else	//If all is well compute the item's sell value
-	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem)/GetItemStackSize(oItem));	} //update to PS_GetItemValue later
+	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem)/GetItemStackSize(oItem));	} 
 	
+	// quiver generated ammo cannot be sold, so set price to 0, other ammo max price 1 gold
+	if (DS_GetIsProjectile(oItem)){
+		if (GetIsQuiverGenerated(oItem)) iItemCost = 0;
+		if (iItemCost > 100 ) iItemCost = 100;
+	} else if (iItemCost < 1) iItemCost = 1; //non-ammo min price 1 copper
 	
-	//If the cost is less than or equal to 0, set it to 1
-	if(iItemCost <= 0)	{	iItemCost	= 1;	}
-
 	//Lastly return the determined item cost
 	return iItemCost;
 }
@@ -774,13 +811,19 @@ int DS_GetItemCategory(object oItem)
 	return iCategory;
 }
 
+int GetIsQuiverGenerated(object oItem){
+	if (DS_GetIsProjectile(oItem) && GetStringLowerCase(GetTag(oItem)) == "returning")
+		return TRUE;
+		
+	return FALSE;
+}
+
 int DS_GetIsProjectile(object oItem)
 {//Simply do the check
-	if(IPGetIsProjectile(oItem)	||
-		GetBaseItemType(oItem) == BASE_ITEM_THROWINGAXE	||
-		GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN	||
-		GetBaseItemType(oItem) == BASE_ITEM_DART		)
-	{	return TRUE;	}
+	int nItem = GetBaseItemType(oItem);
+	if( nItem == BASE_ITEM_ARROW || nItem == BASE_ITEM_BULLET || nItem == BASE_ITEM_BOLT ||
+		nItem  == BASE_ITEM_THROWINGAXE	|| nItem  == BASE_ITEM_SHURIKEN	|| nItem  == BASE_ITEM_DART)
+			return TRUE;	
 	//If we got this far return FALSE
 	return FALSE;
 }
@@ -959,19 +1002,6 @@ int GetItemUseable(object oItem, object oPC)
 	return FALSE;
 }
 
-//A function to fetch the "real" gold piece value of an item
-int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
-
-	SetItemCostVariables(oItem, FALSE, oPC);
-	int nCost = GetLocalInt(oItem, "PRICE");
-	if (!DS_GetIsProjectile(oItem)) //if we aren't a projectile, price should be the price of the stack
-		nCost *= GetItemStackSize(oItem);
-	else if (GetLocalInt(oItem, "PRICE") > 1) //if we are a projectile, but expensive, the price should be the price of the stack
-		nCost *= GetItemStackSize(oItem);
-		
-	return nCost;
-
-}
 
 //get whether the item is in the database
 int GetItemInDB(object oItem) {

@@ -19,7 +19,7 @@ int GetIsTester(object oPC);
 void SixSecondTick(object oPC, int nRound = 1);
 
 //allows roll of social skills with auto opposed rolls from nearby pcs and npcs
-void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "");
+void RollSocialCheck(object oPC, int nChannel,  int nCommandLength = -1, string sMessage = "");
 
 //gets area information for debugging purposes
 string GetAreaInfo(object oArea, object oItem = OBJECT_INVALID);
@@ -53,7 +53,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	string sInput = GetStringLowerCase(sMessage);
 	sInput = PS_RemoveSpaces(sInput);
 	object oItem;
-	int nPos;
+	int nCommandLength = -1;
 	
 	if (sInput == "#"){
 		sFeedback = "Please see full list of chat commands at:";
@@ -67,22 +67,22 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			int nPercent = StringToInt(sRight);
 			if (sRight == "off" || nPercent == 100){
 				DeleteLocalFloat(GetModule(), "XPBOOST");
-				sMessage = "Turning off XP%";
+				sFeedback = "Turning off XP%";
 			} else if (nPercent < 1 || nPercent > 500){
-				sMessage = "Invalid entry. Must be an integer between 1 and 500, inclusive.\n";
-				sMessage += "For example, 150 to give players 150% (aka 1.5X) XP or 80 to give them ";
-				sMessage += "only 80% of normal XP.\n";
-				sMessage += "If you are trying to turn XP% off, type #XP% OFF or #XP% 100.";
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive.\n";
+				sFeedback += "For example, 150 to give players 150% (aka 1.5X) XP or 80 to give them ";
+				sFeedback += "only 80% of normal XP.\n";
+				sFeedback += "If you are trying to turn XP% off, type #XP% OFF or #XP% 100.";
 			} else {
 				SetLocalFloat(GetModule(), "XPBOOST", IntToFloat(nPercent) / 100.0);
-				sMessage = "Setting XP gains to " + IntToString(nPercent) + "% of normal.\n";
-				sMessage = "This will last until you type #XP% OFF, #XP% 100, or until server reset";
+				sFeedback = "Setting XP gains to " + IntToString(nPercent) + "% of normal.\n";
+				sFeedback = "This will last until you type #XP% OFF, #XP% 100, or until server reset";
 			}
 		} else {
-			sMessage = "On main server this command is only for DMs. On test server this command is only "; 
-			sMessage += "for DMs, Dev Team, and Admin staff.";
+			sFeedback = "On main server this command is only for DMs. On test server this command is only "; 
+			sFeedback += "for DMs, Dev Team, and Admin staff.";
 		}
-		SendMessageToPC(oSender, sMessage);
+		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
@@ -100,8 +100,9 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
+	}
 	//turn dm reporting of social roll chat commands on or off
-	} else if (sInput == "#togglesocial" && GetIsDM(oSender)){
+	if (sInput == "#togglesocial" && GetIsDM(oSender)){
 		int nMuted = GetLocalInt(oSender, "MUTE_SOCIAL");
 		if (nMuted){
 			sFeedback = "Turning on reporting of social skill chat commands";
@@ -115,44 +116,39 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	}
 	// APPRAISE
 	else if (GetStringLeft(sInput, 9) == "#appraise" || GetStringLeft(sInput, 7) == "#haggle"){ 
-		if (GetStringLeft(sInput, 9) == "#appraise") nPos = 9;
-		else nPos = 7;
-		sMessage = GetSubString(sMessage, nPos, GetStringLength(sMessage) - nPos);
-		RollSocialCheck(oSender, SKILL_APPRAISE, nChannel, sMessage);
+		if (GetStringLeft(sInput, 9) == "#appraise") nCommandLength = 9;
+		else nCommandLength = 7;
+		RollSocialCheck(oSender, nChannel, nCommandLength, sMessage);
 		return TRUE;
 	}
 	//BLUFF
 	else if (GetStringLeft(sInput, 6) == "#bluff" || GetStringLeft(sInput, 4) == "#lie"){
-		if (GetStringLeft(sInput, 6) == "#bluff") nPos = 6;
-		else nPos = 4;
-		sMessage = GetSubString(sMessage, nPos, GetStringLength(sMessage) - nPos);
-		RollSocialCheck(oSender, SKILL_BLUFF, nChannel, sMessage);
+		if (GetStringLeft(sInput, 6) == "#bluff") nCommandLength = 6;
+		else nCommandLength = 4;
+		RollSocialCheck(oSender, nChannel, nCommandLength, sMessage);
 		return TRUE;
 	}
 	//DIPLOMACY
 	else if (GetStringLeft(sInput, 10) == "#diplomacy" || GetStringLeft(sInput, 9) == "#persuade"){
-		if (GetStringLeft(sInput, 10) == "#diplomacy") nPos = 10;
-		else nPos = 9;
-		sMessage = GetSubString(sMessage, nPos, GetStringLength(sMessage) - nPos);
-		RollSocialCheck(oSender, SKILL_DIPLOMACY, nChannel, sMessage);
+		if (GetStringLeft(sInput, 10) == "#diplomacy") nCommandLength = 10;
+		else nCommandLength = 9;
+		RollSocialCheck(oSender, nChannel, nCommandLength, sMessage);
 		return TRUE;
 	}
 	//INTIMIDATE
 	else if (GetStringLeft(sInput, 11) == "#intimidate" || GetStringLeft(sInput, 7) == "#threat"){
-		if (GetStringLeft(sInput, 11) == "#intimidate") nPos = 11;
-		else nPos = 7;
-		sMessage = GetSubString(sMessage, nPos, GetStringLength(sMessage) - nPos);
-		RollSocialCheck(oSender, SKILL_INTIMIDATE, nChannel, sMessage);
+		if (GetStringLeft(sInput, 11) == "#intimidate") nCommandLength = 11;
+		else nCommandLength = 7;
+		RollSocialCheck(oSender, nChannel, nCommandLength, sMessage);
 		return TRUE;
 	}
 	//SLEIGHT_OF_HAND
 	else if (GetStringLeft(sInput, 8) == "#sleight"){
-		sMessage = GetSubString(sMessage, 8, GetStringLength(sMessage) - 8);
-		RollSocialCheck(oSender, SKILL_SLEIGHT_OF_HAND, nChannel, sMessage);
+		RollSocialCheck(oSender, nChannel, 8, sMessage);
 		return TRUE;	
 	} 
 	else if (sInput == "#socialrollrules"){
-		RollSocialCheck(oSender, 255, nChannel);
+		RollSocialCheck(oSender, nChannel, 255);
 		return TRUE;
 	} 
 	else if (sInput == "#showcl"){
@@ -452,8 +448,8 @@ string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID, int bF
 		
 	//note that we don't actually check if the target object type is creature because
 	//some of this information, such as hit dice or ac, can apply to placeables
-		
-	string sDebug = "Resref: " + GetResRef(oCreature);
+	string sDebug = "";
+	if (bFromChat) sDebug = "Resref: " + GetResRef(oCreature);
 	int nVar = StringToInt(Get2DAString("racialtypes", "Name", GetRacialType(oCreature)));
 	sDebug += "\nRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", GetSubRace(oCreature)));
@@ -461,14 +457,16 @@ string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID, int bF
 	sDebug += "\nHD: " + IntToString(PS_GetLevel(oCreature));
 	float fVar = GetChallengeRating(oCreature);
 	sDebug += "\nCR: " + PS_PrettyFloatString(fVar, 2);
-	sDebug += "\nElite Rating:" + GetLocalString(oCreature,"ELITE");
-	if (GetHasAllAccess(oCaller)){
+	sDebug += "\nElite Rating: ";
+	string sElite = GetLocalString(oCreature,"ELITE");
+	if (sElite == "") sDebug += "0";
+	else sDebug += sElite;
+	if (GetIsTester(oCaller))
 		sDebug += "\nMax HP: " + IntToString(GetMaxHitPoints(oCreature));
-		sDebug += "\nAC: " + IntToString(GetAC(oCreature));
-		nVar = GetBaseAttackBonus(oCreature);
-		sDebug += "\nBAB: " + IntToString(nVar);
-		sDebug += "\nTotal AB: " + IntToString(nVar + dae_GetOnHandAttackModifier(oCreature));
-	}
+	sDebug += "\nAC: " + IntToString(GetAC(oCreature));
+	nVar = GetBaseAttackBonus(oCreature);
+	sDebug += "\nAB: " + IntToString(nVar + dae_GetOnHandAttackModifier(oCreature) - 2);
+	
 	if (bFromChat) sDebug += "\n" + GetEffectInfo(oCreature);
 	
 	return sDebug;
@@ -521,7 +519,7 @@ string GetAreaInfo(object oArea, object oItem = OBJECT_INVALID){
 	sInfo += "\nMap width: " + IntToString(GetAreaSize(AREA_WIDTH, oArea));
 	if (oItem != OBJECT_INVALID){
 		vector vPos = GetPosition(oItem);
-		sInfo += "\nPos: X=" + FloatToString(vPos.x, 2) + " Y=" + FloatToString(vPos.y, 2) + 
+		sInfo += "\nCommandLength: X=" + FloatToString(vPos.x, 2) + " Y=" + FloatToString(vPos.y, 2) + 
               " Z=" + FloatToString(vPos.z, 2);
 		sInfo += "\nFacing: " + FloatToString(GetFacing(oItem), 2);
 	}
@@ -619,9 +617,9 @@ string GetEffectInfo(object oPC){
 	return sInfo;
 }
 
-void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = ""){
+void RollSocialCheck(object oPC, int nChannel,  int nCommandLength = -1, string sMessage = ""){
 	// this is the action that merely reports the rules for the social rolls.
-	if (nAction == 255){
+	if (nCommandLength == 255){
 		sMessage = "<c=lightgreen>There are social skill roll chat commands you can use to facilitate";
 		sMessage +=" adding dice rolls into your RP, but these are meant to ENHANCE RP, not REPLACE it. This is not ";
 		sMessage +="mind control and other players are perfectly free to ignore the outcome of a dice roll if they believe";
@@ -660,6 +658,25 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 		SendMessageToPC(oPC, sMessage);
 		return;
 	}
+	//strip the leading command off of sMessage to get the text the player is saying and the action
+	// the player is performing
+	string sCommand = GetStringLowerCase(GetStringLeft(sMessage, nCommandLength));
+	sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - nCommandLength);
+	int nAction = -1;
+	if (sCommand == "#appraise" || sCommand == "#haggle") nAction = SKILL_APPRAISE;
+	else if (sCommand == "#bluff" || sCommand == "#lie") nAction = SKILL_BLUFF;
+	else if (sCommand == "#diplomacy" || sCommand == "#persuade") nAction = SKILL_DIPLOMACY;
+	else if (sCommand == "#intimidate" || sCommand == "#threat") nAction = SKILL_INTIMIDATE;
+	else if (sCommand == "#sleight") nAction = SKILL_SLEIGHT_OF_HAND;
+	
+	if (nAction == -1) return;
+	
+	//strip leading spaces off of sMessage
+	if (sMessage != ""){
+		while (sMessage != "" && GetStringLeft(sMessage, 1) == " "){
+			sMessage = GetSubString(sMessage, 1, GetStringLength(sMessage) - 1);
+		}
+	}
 	
 	// if the dm uses this while targeting a player or npc, then roll everything as if that player or npc
 	// used the command
@@ -669,12 +686,7 @@ void RollSocialCheck(object oPC, int nAction, int nChannel,  string sMessage = "
 		oPC = oTarget;
 		if (GetIsPC(oTarget)) sMessage = ""; // a DM should not be able to put words in a PCs mouth.
 	}
-	//strip leading spaces off of sMessage
-	if (sMessage != ""){
-		while (sMessage != "" && GetStringLeft(sMessage, 1) == " "){
-			sMessage = GetSubString(sMessage, 1, GetStringLength(sMessage) - 1);
-		}
-	}
+	
 	
 	//int nNoSkillPenalty = 5;
 	int nSkill = -1;

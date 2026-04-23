@@ -13,79 +13,6 @@
 */
 
 
-// Apply a level adjustment to the character for the template class.
-// Do not use this by itself; there should be a check to ensure it has not been previously applied
-// Called by PS_Undead_TouchOfEvil (see below)
-void PS_Template_LevelAdjustment(object oPC, object oItem)
-{	
-
-	if (ALLOW_ECL_LEVEL_30) return;
-	// Listing of all template class values; set a new int and new if statement for each
-	int nOldECL = PS_GetEssenceECL(oPC);
-
-	int iLich = 0;
-	int iVamp = 0;
-	int iDKnt = 0;
-	int iNewECL;
-	string sNewECL;
-	
-	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-	{	iLich = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0)
-	{	iLich = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
-	{	iLich = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC) > 0)
-	{	iVamp = GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC) > 0)
-	{	iVamp = GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0)
-	{	iVamp = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
-	{	iDKnt = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);	}
-
-	if (iLich != 0)
-	{	//iNewECL = nOldECL + 3;
-		//sNewECL = IntToString(iNewECL);
-		//SetLocalInt(oItem, "OldECL", nOldECL);
-		//SetLocalString(oPC, "ECL", sNewECL);
-		//SetLocalString(oItem, "ECL", sNewECL);
-		SetLocalString(oItem, "Template", "Lich");
-		SetFirstName(oItem, "My Phylactery");
-		SetItemIcon(oItem, 2711);	}
-		
-	if (iVamp != 0)
-	{	//iNewECL = nOldECL + 3;
-		//sNewECL = IntToString(iNewECL);
-		//SetLocalInt(oItem, "OldECL", nOldECL);
-		//SetLocalString(oPC, "ECL", sNewECL);
-		//SetLocalString(oItem, "ECL", sNewECL);
-		SetLocalString(oItem, "Template", "Vampire");	}
-		
-	if (iDKnt != 0)
-	{	//iNewECL = nOldECL + 3;
-		//sNewECL = IntToString(iNewECL);
-		//SetLocalInt(oItem, "OldECL", nOldECL);
-		//SetLocalString(oPC, "ECL", sNewECL);
-		//SetLocalString(oItem, "ECL", sNewECL);
-		SetLocalString(oItem, "Template", "DeathKnight");	}
-	
-	// Remove one level if total ECL results in a value greater than 30
-	if (PS_GetLevel(oPC) > 30 )
-	{	int nextlvl = 1000;
-		int totalxp = 0;
-		int whatlevel = PS_GetLevel(oPC) - 1; // decrease level by 1
-		// set your level
-		int i=0;
-		for (i = 1; i < whatlevel; i++) 
-		{	totalxp += nextlvl;
-			nextlvl += 1000;	}
-		SetXP(oPC, totalxp + nextlvl - 1);
-		//Template Class Fix
-		PS_UndeadRaceFix(oPC);
-		DelayCommand(1.0f, ForceRest(oPC));	}
-}
-
 /*
 //Deprecated. This uses GetDistanceBetween() which measures the distance between the centres of two
 // models, not the edge to edge. Therefore there's been many times when I've been standing on the toes
@@ -137,7 +64,6 @@ void PS_Undead_TouchOfEvil(object oPC)
 				else
 				{	AdjustAlignment(oPC, ALIGNMENT_EVIL, 35);	}
 				SendMessageToPC(oPC, "As you begin your undeath, evil has left its mark on your soul.");
-				PS_Template_LevelAdjustment(oPC, oItem);
 				SetLocalInt(oItem, "IsUndead", 1);
 				SetLocalInt(oItem, "OldGoodEvil", nGoodEvil);
 			}	

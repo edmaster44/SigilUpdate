@@ -76,10 +76,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	object	oPC		= OBJECT_SELF;	//The player interacting with the gui
 	object	oItem	= IntToObject(StringToInt(sItemID));	//The item in question
 	object	oStore	= StringToObject(sStoreID);
-	
-	// will return a custom value for player profit on crafted items, returns original value
-	// if not crafted or if this value is turned off in dethia_shop_sys
-	sItemCost = GetCraftedItemValue(oItem, sItemCost);
+	sItemCost = IntToString(PS_GetItemValue(oItem, oPC));
 
 	//Before we perform specified actions we check what action it is
 	if(iEvent != 13 && iEvent != 14 && iEvent != 15)	//13 and 14 are not store related actions
@@ -142,13 +139,12 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	else if(iEvent == 6)	//Update quantity field as the slider is moved
 	{//First we update the gui text field, then the price fields
 		sStackSize	= IntToString(FloatToInt((StringToInt(sStackSize))*(StringToInt(sExtra)/100.0f)));
+		if (StringToInt(sStackSize) < 1) sStackSize = "1"; // you cannot select 0 of something
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
 		
 		//SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
 	
-		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) < 1) //Don't update price for base ammunition
-		{	return;	}
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
@@ -203,16 +199,15 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		while(GetIsObjectValid(oItem)) {
 		
 			//SendMessageToPC(oPC, "Count: "+IntToString(nCount));
-		
-			if (!GetItemCursedFlag(oItem) && !GetPlotFlag(oItem)) {
+			int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
+											GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
+			if (!GetItemCursedFlag(oItem) && !GetPlotFlag(oItem) && !GetIsQuiverGenerated(oItem) && iItemCost > 0) {
 			
 				if (nCount >= firstItem && nCount < lastItem) {
 					//We add the item to the "store_items" listbox
 					string	sStackSize	= IntToString(GetItemStackSize(oItem));
 					string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
 					string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIconSafe(oItem)) + ".tga";
-					int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
-											GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
 											
 					if (iItemCost > nMaxBuy)
 						iItemCost = nMaxBuy;			
@@ -384,11 +379,10 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		int		iSellAmount		= StringToInt(sUp);
 	//	int		iStackSize		= StringToInt(sStackSize);
 		int 	iStackSize 		= GetItemStackSize(oItem);
+		if (iSellAmount > iStackSize) iSellAmount = iStackSize;
 		sStackSize = IntToString(iStackSize); 
 		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
 		
-		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
-		{		iSellPrice		/= iSellAmount;	}
 		
 		int		iMaxBuyPrice	= GetStoreMaxBuyPrice(oStore);
 		int		iStoreGold		= GetStoreGold(oStore);
@@ -401,15 +395,9 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		//If the player is selling nothing, nothing happens
 		else if(iSellAmount <= 0)
 		{	return;	}
-		//If selling ammunition and the selected stack size is less than 99, don't buy it
-		else if(DS_GetIsProjectile(oItem)&& iSellAmount < 99 && PS_GetItemValue(oItem) <= 1)
-		{//If player is selling less than 99 units of ammunition tell them it's a no no
-			FloatingTextStringOnCreature("I prefer to purchase a full quiver of the stuff, otherwise it's not so good for business.", oPC);
-			return;	
-		}
 		//If selling price exceeds the max buying price, set it to max buying price
-		else if(iMaxBuyPrice != -1 && iSellPrice > iMaxBuyPrice)
-		{	iSellPrice	= iMaxBuyPrice;	}
+		else if(iMaxBuyPrice != -1 && iSellPrice > iMaxBuyPrice * iSellAmount)
+		{	iSellPrice	= iMaxBuyPrice * iSellAmount;	}
 
 		//If the store has enough gold the item is sold.  First we transfer it from
 		//the player's inventory to the store, and give the player his/her cash

@@ -590,7 +590,7 @@ void ff_ShowConsumableCraftCosts(){
 	if (nLevel <= 4){
 		nWand = CIGetCraftGPCost(oPC, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER);
 		sWand = GetCurrencyFeedback(nWand, FALSE, FALSE, TRUE);
-		sMessage += "\nWand cost: " + sWand;
+		sMessage += "Wand cost: " + sWand;
 	}
 	
 	SendMessageToPC(oPC, sMessage);

@@ -34,7 +34,7 @@ void DoPsionFeatProgression(object oPC);
 
 void ShutdownMetaPsionics(object oPC);
 
-int PS_GiveXPReward(object oPC, int nXP, int bFromKill = FALSE);
+int PS_GiveXPReward(object oPC, int nXP);
 
 // get whether the defender is in range of the attacker's current weapon or feat
 int PS_GetTargetInRange(object oAttacker, object oDefender, int nFeatId = NULL, int bWeaponRange = TRUE);
@@ -173,7 +173,7 @@ float PS_RoundDecimal(float fNum, int nPlaces = 9, int nRoundTo = ROUND_NEAREST)
 int GetECLXP(int nXP, object oPC);
 
 // The default GiveXPToCreature() has return type void, so int PS_GiveXPReward() doesn't always work in place of it.
-void PS_GiveXPRewardNoReturn(object oPC, int nXP, int bFromKill = FALSE);
+void PS_GiveXPRewardNoReturn(object oPC, int nXP);
 
 // Call this function to get the oPC's essence object.
 object PS_GetEssence(object oPC = OBJECT_SELF);
@@ -681,30 +681,12 @@ int GetECLXP(int nXP, object oPC){
     if (nECL < 0) nECL = 0;
 	if (nECL > 20) nECL = 20;
 	
-	if (nECL == 0){
-		if (GetLocalInt(oPC, "xpdebug")){
-			SendMessageToPC(oPC, "You have no ECL, therefore your XP is not taxed");
-		}
-		return nXP;
-	}
+	if (nECL == 0) return nXP;
+	 
 
 	float fTax = GetECLXPTax(nECL);
 	int nAdjusted = PS_RoundToInt(IntToFloat(nXP) * fTax);
 	if (nAdjusted < 1) nAdjusted = 1; // to get here nXP had to be at least 1, so should the adjusted
-	float fDMadjust = GetLocalFloat(GetModule(), "DMXPADJUST");
-	if (fDMadjust != 1.0 && fDMadjust != 0.0) 
-		nAdjusted = PS_RoundToInt(IntToFloat(nAdjusted) * fDMadjust);
-	if (GetLocalInt(oPC, "xpdebug")){
-		string sMessage = "ECL: " + IntToString(nECL);
-		sMessage += "\nXP before ECL tax: " + IntToString(nXP);
-		float fPercent = (1.0 - fTax) * 100.0;
-		sMessage += "\nECL XP tax: " + PS_PrettyFloatString(fPercent, 2) + "%";
-		if (fDMadjust != 1.0 && fDMadjust != 0.0){
-			sMessage += "\nDM Adjustment: " + PS_PrettyFloatString(fPercent * 100.0, 2) + "%";
-		}
-		sMessage += "\nYour final XP is " + IntToString(nAdjusted);
-		SendMessageToPC(oPC, sMessage);
-	}
 	return nAdjusted; 
 }
 
@@ -4769,16 +4751,15 @@ void DebugMessageToPC(object oPC, string sMessage)
     SendMessageToPC(oPC, sMessage);
 }
 
-int PS_GiveXPReward(object oPC, int nXP, int bFromKill = FALSE){
-	if (bFromKill) nXP = GetECLXP(nXP, oPC); // only tax for ECL if combat xp
+int PS_GiveXPReward(object oPC, int nXP){
     GiveXPToCreature(oPC, nXP);
     return TRUE;
 }
 
 // The above doesn't always work in place of GiveXPToCreature() because GiveXPToCreature()
 // returns void, not int, so the above does not work as an arg for AssignCommand or DelayCommand
-void PS_GiveXPRewardNoReturn(object oPC, int nXP, int bFromKill = FALSE){
-    PS_GiveXPReward(oPC, nXP, bFromKill);
+void PS_GiveXPRewardNoReturn(object oPC, int nXP){
+    PS_GiveXPReward(oPC, nXP);
 }
 
 /* clean up: remove conditionals for outdated constants
