@@ -365,6 +365,29 @@ int DevMode = GetLocalInt(GetModule(), "SIGIL_DEV_MODE");
 // gets whether to ignore craft material and gold costs if test server or crafter is dm
 int GetIsCraftingFree(object oPC);
 
+object GetIdenticalInventoryItem(object oObject, object oPC){
+	string sRes = GetResRef(oObject);
+	string sName = GetName(oObject);
+	// res and name is fine for now as I'm only making this to find the "parent"
+	// stack of a split stack of sequencer pots. We can add other criteria later.
+	// -FlattedFifth
+	string sNewRes, sNewName;
+    // Iterate through all items in the inventory
+	int i = 0;
+	object oItem = GetFirstItemInInventory(oPC);
+    while (GetIsObjectValid(oItem)){
+		i++;
+		sNewRes = GetResRef(oItem);
+		sNewName = GetName(oItem);
+		if (sNewRes == sRes && sNewName == sName && oItem != oObject)
+			return oItem;
+		// num of items a pc could have if inv full of full bags, including the bags
+		if (i > 27072) break;
+		oItem = GetNextItemInInventory(oPC);
+    }
+	return OBJECT_INVALID;
+}
+
 effect EffectNewBlindness(){
     if (REPLACE_BLINDNESS_WITH_MISS_CHANCE)
         return EffectMissChance(BLINDNESS_MISS_CHANCE);

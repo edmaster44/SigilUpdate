@@ -21,6 +21,7 @@
 #include "ps_inc_functions"
 #include "class_mageslayer_utils"
 #include "ff_update_legacy_items"
+#include "ff_sequencer"
 
 
 // since muling is allowed there's no reason to make unnecessary writes to disk to log it.
@@ -30,6 +31,7 @@ const int B_CHECK_FOR_MULING = FALSE;
 
 
 // function declarations
+void HandleSplitSequencerStack(object oItem, object oPC);
 int GetIsLooted(object oFROM);
 void ReportMuling(object oBY, object oFROM, object oITEM);
 int CheckMuling(object oBY, object oFROM, object oITEM);
@@ -40,10 +42,13 @@ void HandleSigilAcquisition(object oBY, object oFROM, object oITEM);
 
 void main()
 {
+	
 	object oBY = GetModuleItemAcquiredBy();
 	if (GetIsPC(oBY) == FALSE) return;
 	object oFROM = GetModuleItemAcquiredFrom();
 	object oITEM = GetModuleItemAcquired();
+	
+	HandleSplitSequencerStack(oITEM, oBY);
 	HandleSigilAcquisition(oBY, oFROM, oITEM);
 	
 	// call to ff_update_legacy_items
@@ -220,5 +225,32 @@ void HandleSigilAcquisition(object oBY, object oFROM, object oITEM)
 		DestroyObject(oITEM, 0.5f, FALSE);
 		PS_GiveGoldToCreature(oBY, nCopper, FALSE, TRUE);
 	}
+}
+
+
+void HandleSplitSequencerStack(object oItem, object oPC){
+	if (!PS_GetIsSequencerPot(oItem)) return;
+	string sName = GetName(oItem);
+	// used sequencers have been renamed to cyan text
+	if (GetStringLeft(sName, 8) != "<c=cyan>") return; 
+	object oOtherStack = GetIdenticalInventoryItem(oItem, oPC);
+	if (!GetIsObjectValid(oOtherStack)) return;  // Safety check
+	
+	object oChildStack, oParentStack;
+	if (GetLocalInt(oItem, "X2_L_SPELLTRIGGER1") == 0){
+		oChildStack = oItem;
+		oParentStack = oOtherStack;
+	} else {
+		oChildStack = oOtherStack;
+		oParentStack = oItem;
+	}
+	int nSpell1 = GetLocalInt(oParentStack, "X2_L_SPELLTRIGGER1"); 
+	int nSpell2 = GetLocalInt(oParentStack, "X2_L_SPELLTRIGGER2"); 
+	int nSpell3 = GetLocalInt(oParentStack, "X2_L_SPELLTRIGGER3");
+	int nNumberOfTriggers = GetLocalInt(oParentStack, "X2_L_NUMTRIGGERS");
+	SetLocalInt(oChildStack, "X2_L_SPELLTRIGGER1", nSpell1); 
+	SetLocalInt(oChildStack, "X2_L_SPELLTRIGGER2", nSpell2); 
+	SetLocalInt(oChildStack, "X2_L_SPELLTRIGGER3", nSpell3);
+	SetLocalInt(oChildStack, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
 }
  
