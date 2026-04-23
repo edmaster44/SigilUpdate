@@ -212,10 +212,10 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback += "\nBase item: " + IntToString(GetBaseItemType(oItem));
 			sFeedback += "\nValue: " + IntToString(GetGoldPieceValue(oItem));
 			if (PS_GetIsSequencerPot(oItem)){
-				sFeedback += "Spell 1:  " +  IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER1")); 
-				sFeedback += "Spell 2:  " + IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER2")); 
-				sFeedback += "Spell 3:  " + IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER3"));
-				sFeedback += "Num: " + IntToString(GetLocalInt(oItem, "X2_L_NUMTRIGGERS"));
+				sFeedback += "\nSpell 1:  " +  IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER1")); 
+				sFeedback += "\nSpell 2:  " + IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER2")); 
+				sFeedback += "\nSpell 3:  " + IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER3"));
+				sFeedback += "\nNum: " + IntToString(GetLocalInt(oItem, "X2_L_NUMTRIGGERS"));
 			}
 		}
 		SendMessageToPC(oSender, sFeedback);

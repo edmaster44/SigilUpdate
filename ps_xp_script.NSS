@@ -75,7 +75,7 @@ void main(){
 	sXPbanking += "\nYour XP is being calculated as though you were level ";
 	
 	int bDMAdjust = FALSE;
-	float fDMadjust = GetLocalFloat(GetModule(), "XPBOOST");
+	float fDMadjust = GetLocalFloat(GetModule(), "DM_XP_MOD");
 	if (fDMadjust != 1.0 && fDMadjust != 0.0) bDMAdjust = TRUE;
 	
 	object oArea = GetArea(oKiller);

@@ -132,8 +132,8 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 
 		//Next set the item's cost (ammunition is not affected by stack size)
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
-		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
-		{	iCost	/= StringToInt(sStackSize);	}
+		//if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
+		//{	iCost	/= StringToInt(sStackSize);	}
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_gc", -1, DS_ConvertCoinsToGold(iCost));

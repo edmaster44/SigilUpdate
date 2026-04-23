@@ -5,8 +5,12 @@ int PS_GetIsSequencerPot(object oSequencer){
 	string sRef = GetResRef(oSequencer);
 	//check to make sure this is a sequencer pot
 	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
-		sRef == "ps_potion_greatersequncer")
+		sRef == "ps_potion_greatersequncer"){
+		//debug
+			SetTag(oSequencer, "ITSASEQ");
 			return TRUE;
+		}
+			
 	return FALSE;
 }
 
