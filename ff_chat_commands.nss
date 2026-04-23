@@ -9,6 +9,7 @@
 #include "x2_inc_itemprop"
 #include "nwnx_dae"
 #include "ps_inc_wingtail"
+#include "ff_sequencer"
 
 
 int GetHasAllAccess(object oPC);
@@ -206,9 +207,16 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			nItem != OBJECT_TYPE_PLACEABLE){
 				sFeedback = "Invalid item";
 		} else {
-			sFeedback = "The item Tag is " + GetTag(oItem);
-			sFeedback += "\nThe ResRef is " + GetResRef(oItem);
-			sFeedback += "\nThe base item is " + IntToString(GetBaseItemType(oItem));
+			sFeedback = "Tag: " + GetTag(oItem);
+			sFeedback += "\nResRef: " + GetResRef(oItem);
+			sFeedback += "\nBase item: " + IntToString(GetBaseItemType(oItem));
+			sFeedback += "\nValue: " + IntToString(GetGoldPieceValue(oItem));
+			if (PS_GetIsSequencerPot(oItem)){
+				sFeedback += "Spell 1:  " +  IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER1")); 
+				sFeedback += "Spell 2:  " + IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER2")); 
+				sFeedback += "Spell 3:  " + IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER3"));
+				sFeedback += "Num: " + IntToString(GetLocalInt(oItem, "X2_L_NUMTRIGGERS"));
+			}
 		}
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;

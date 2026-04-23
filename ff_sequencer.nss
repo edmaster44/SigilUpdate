@@ -14,7 +14,9 @@ string GetSpellName(int nId){
 	string sNameRef = Get2DAString("spells", "Name", nId);
 	return GetStringByStrRef(StringToInt(sNameRef));
 }
-
+// used sequencer pots MUST be given specific names so that
+// when they are split we can track down the original stack and 
+// get the local integers from it to apply to the new partial stack
 void PS_RenameSequencerPot(object oSequencer, object oCaster){
 	
 	int nSpell1 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1"); 
