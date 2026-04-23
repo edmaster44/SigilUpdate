@@ -117,8 +117,7 @@ int	PRICING_SYSTEM_OLD	= 0;	//Uses GetGoldPieceValue
 int	PRICING_SYSTEM_NEW	= 1;	//Uses new logic
 
 //Pricing options for players selling crafted items to npcs
-const int bCUSTOM_CRAFT_PRICING = TRUE;
-float fCraftProfit = 1.1f; // multiply crafted item value by this amount, so 1.1 = 10% profit over cost
+float fCraftProfit = 1.2f; // multiply crafted item value by this amount, so 1.1 = 10% profit over cost
 
 //Item categories
 int	DS_ARMOR			= 0;	//Shields and armor
@@ -144,9 +143,6 @@ string	DS_BUY_FILTER_MISCELLANEOUS	= "-5";	//Filter for the miscellaneous catego
 //------------------------------PROTOTYPES-------------------------------//
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 
-//This function gets a special value for player-made items to control how
-// much profit can be made from crafters selling to npcs
-int GetCraftedItemValue(object oItem);
 
 //This function closes the shop, it will clear the gui, close it and execute
 //the shop's OnClose script
@@ -202,6 +198,8 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 //int		iCoins		= how many coins we are removing in terms of least valueable
 void DS_TakeCoinsFromCreature(object oCreature, int iCoins);
 
+// some things are meant to be specific prices regardless of store markup or toolset
+//settings
 int GetFixedItemValue(object oItem);
 
 //This function gives the specified creature coins equal to iCoins.  Use the least
@@ -275,7 +273,7 @@ int GetIsQuiverGenerated(object oItem);
 int GetItemUseable(object oItem, object oPC);
 
 //A function to fetch the "real" gold piece value of an item
-int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID);
+int PS_GetItemValue(object oItem, object oPC = OBJECT_SELF, string sCost = "");
 
 //get whether the item is in the database
 int GetItemInDB(object oItem);
@@ -287,7 +285,7 @@ void AddAllItemsInStoreToDatabase(object oStore, object oPC = OBJECT_INVALID);
 int GetCostOfProperty(itemproperty iProp, object oPC = OBJECT_INVALID);
 
 //Get the total cost of the item (manually calculated)
-int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID);
+int GetCostOfItem(object oItem, object oPC = OBJECT_SELF);
 
 //Get the cost of the item from the database (must have already been calculated)
 int GetCostOfItemByString(string sItem, object oPC = OBJECT_INVALID);
@@ -308,7 +306,6 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 //------------------------------FUNCTIONS--------------------------------//
 //------------------------------IMPLEMENTATION---------------------------//
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
-
 
 int GetFixedItemValue(object oItem){
 	int nCost;
@@ -342,18 +339,21 @@ int GetFixedItemValue(object oItem){
 //A function to fetch the "real" gold piece value of an item.
 //Also sets static, low costs for certain consumable crafting materials
 //and for items that are of rp value only
-int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
+int PS_GetItemValue(object oItem, object oPC = OBJECT_SELF, string sCost = "") {
+	int nCost = GetFixedItemValue(oItem);
+	if (nCost != 0) return nCost;
+	if (GetIsPlayerMade(oItem)){
+		int nItem = GetBaseItemType(oItem);
+		string sBaseCost = SearchValIn2da("scod_craft_baseitems", "ID", IntToString(nItem), "BASE_COST");
+		float fBaseCost = StringToFloat(sBaseCost);
+		fBaseCost *= fCraftProfit;
+		return PS_RoundToInt(fBaseCost);
+	}
+	int nOldCost = StringToInt(sCost);
 	SetItemCostVariables(oItem, FALSE, oPC);
-	return GetLocalInt(oItem, "PRICE");
-}
-
-int GetCraftedItemValue(object oItem){
-	int nItem = GetBaseItemType(oItem);
-	
-	string sBaseCost = SearchValIn2da("scod_craft_baseitems", "ID", IntToString(nItem), "BASE_COST");
-	float fBaseCost = StringToFloat(sBaseCost);
-	fBaseCost *= fCraftProfit;
-	return PS_RoundToInt(fBaseCost);
+	int nNewCost = GetLocalInt(oItem, "PRICE");
+	if (nNewCost > nOldCost) return nNewCost;
+	return nOldCost;
 }
 
 void DS_CloseShop(object oPC, object oStore)
@@ -637,7 +637,7 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	// quiver generated ammo cannot be sold, so set price to 0, other ammo max price 1 gold
 	if (DS_GetIsProjectile(oItem)){
 		if (GetIsQuiverGenerated(oItem)) iItemCost = 0;
-		if (iItemCost > 100 ) iItemCost = 100;
+		else if (iItemCost > 100 ) iItemCost = 100;
 	} else if (iItemCost < 1) iItemCost = 1; //non-ammo min price 1 copper
 	
 	//Lastly return the determined item cost
@@ -828,8 +828,15 @@ int DS_GetIsProjectile(object oItem)
 	return FALSE;
 }
 
-float DS_AbsoluteValue(float fValue)
-{	return	pow(pow(fValue, 2.0f), 0.5f);	}
+float DS_AbsoluteValue(float fValue){	
+//risks floating point loss, too complicated
+//return	pow(pow(fValue, 2.0f), 0.5f);
+// the LITERAL definition of absolute value is distance from zero,
+// so if it's a negative number, return the positive, otherwise
+// just return it. -FlattedFifth
+if (fValue < 0.0) return fValue * -1;
+else return fValue;	
+}
 
 int DoesPCHaveFreeInvSlots(object oPC, int iSlots)
 {	//Get the first item in inventory
@@ -1065,15 +1072,15 @@ int GetCostOfItemByString(string sItem, object oPC = OBJECT_INVALID) {
 
 }
 
-int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
+int GetCostOfItem(object oItem, object oPC = OBJECT_SELF) {
 
 	int nCost = 0;
 	itemproperty iProp = GetFirstItemProperty(oItem);
 	
-	//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Get cost for: "+GetName(oItem));
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Get cost for: "+GetName(oItem));
 	
 	nCost += GetBaseCostOfItem(GetBaseItemType(oItem));
-	//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Base item cost: "+IntToString(nCost));
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Base item cost: "+IntToString(nCost));
 	
 	while(GetIsItemPropertyValid(iProp)) {
 	
@@ -1088,7 +1095,7 @@ int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
 	if (nSlots >= 7 && nSlotsLeft > 0)
 		nCost += (nSlotsLeft*1000);
 	
-	//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Final cost for "+GetName(oItem)+": "+IntToString(nCost));
+	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Final cost for "+GetName(oItem)+": "+IntToString(nCost));
 	
 	if (nCost <= 10)
 		return GetGoldPieceValue(oItem);
@@ -1200,7 +1207,7 @@ int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 	
 	//We haven't set the variables yet, or there's something otherwise wrong
 	if (!GetPlotFlag(oItem) && nCost <= 0) {
-		//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no price found, recalculate.");
+		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no price found, recalculate.");
 		return TRUE;
 	}
 		
@@ -1271,7 +1278,7 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 				if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
 			} else {
 			   	nCost = GetCostOfItem(oItem);
-				//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
+				if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
 			}
 		} else {
 			nCost = GetCostOfItem(oItem);

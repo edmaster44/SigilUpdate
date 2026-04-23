@@ -76,7 +76,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	object	oPC		= OBJECT_SELF;	//The player interacting with the gui
 	object	oItem	= IntToObject(StringToInt(sItemID));	//The item in question
 	object	oStore	= StringToObject(sStoreID);
-
+	sItemCost = IntToString(PS_GetItemValue(oItem, oPC, sItemCost));
 
 	//Before we perform specified actions we check what action it is
 	if(iEvent != 13 && iEvent != 14 && iEvent != 15)	//13 and 14 are not store related actions
