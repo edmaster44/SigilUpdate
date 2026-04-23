@@ -290,7 +290,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	}
 	//THE FOLLOWING ARE DEBUGGING COMMANDS THAT ONLY WORK IF USED BY A DM OR ON THE TEST SERVER
 	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") || GetIsDM(oSender)){
-	
 		if (sInput == "#testcraftcost"){
 			if (GetLocalInt(oSender, "TestCraftCost")){
 				SetLocalInt(oSender, "TestCraftCost", FALSE);
@@ -437,6 +436,93 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 	}
 	//end trusted player only debug commands
+	//testers and test server only
+	if (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if (GetStringLeft(sInput, 12) == "#healwandmod"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 12);
+			if (sMessage == ""){
+				sFeedback = "Heal wand costs set to ";
+				float fHealwandMod = GetLocalFloat(GetModule(), "HEAL_WAND_COST_MOD");
+				if (fHealwandMod == 0.0) sFeedback += "100%";
+				else sFeedback += PS_PrettyFloatString(fHealwandMod * 100.0) +"%";
+			} else {
+				SetLocalFloat(GetModule(), "HEAL_WAND_COST_MOD", StringToFloat(sMessage) / 100.0);
+				sFeedback = "Setting heal wand costs to " + sMessage + "%";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 8) == "#wandmod"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 8);
+			if (sMessage == ""){
+				sFeedback = "Non-heal wand costs set to ";
+				float fwandMod = GetLocalFloat(GetModule(), "WAND_COST_MOD");
+				if (fwandMod == 0.0) sFeedback += "100%";
+				else sFeedback += PS_PrettyFloatString(fwandMod * 100.0) +"%";
+			} else {
+				SetLocalFloat(GetModule(), "WAND_COST_MOD", StringToFloat(sMessage) / 100.0);
+				sFeedback = "Setting non-heal wand costs to " + sMessage + "%";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 11) == "#healpotmod"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 11);
+			if (sMessage == ""){
+				sFeedback = "Heal pot costs set to ";
+				float fHealpotMod = GetLocalFloat(GetModule(), "HEAL_POT_COST_MOD");
+				if (fHealpotMod == 0.0) sFeedback += "100%";
+				else sFeedback += PS_PrettyFloatString(fHealpotMod * 100.0) +"%";
+			} else {
+				SetLocalFloat(GetModule(), "HEAL_POT_COST_MOD", StringToFloat(sMessage) / 100.0);
+				sFeedback = "Setting heal pot costs to " + sMessage + "%";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 7) == "#potmod"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 7);
+			if (sMessage == ""){
+				sFeedback = "Non-heal pot costs set to ";
+				float fpotMod = GetLocalFloat(GetModule(), "POT_COST_MOD");
+				if (fpotMod == 0.0) sFeedback += "100%";
+				else sFeedback += PS_PrettyFloatString(fpotMod * 100.0) +"%";
+			} else {
+				SetLocalFloat(GetModule(), "POT_COST_MOD", StringToFloat(sMessage) / 100.0);
+				sFeedback = "Setting non-heal pot costs to " + sMessage + "%";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 14) == "#healscrollmod"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 14);
+			if (sMessage == ""){
+				sFeedback = "Heal scroll costs set to ";
+				float fHealScrollMod = GetLocalFloat(GetModule(), "HEAL_SCROLL_COST_MOD");
+				if (fHealScrollMod == 0.0) sFeedback += "100%";
+				else sFeedback += PS_PrettyFloatString(fHealScrollMod * 100.0) +"%";
+			} else {
+				SetLocalFloat(GetModule(), "HEAL_SCROLL_COST_MOD", StringToFloat(sMessage) / 100.0);
+				sFeedback = "Setting heal scroll costs to " + sMessage + "%";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 10) == "#scrollmod"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 10);
+			if (sMessage == ""){
+				sFeedback = "Non-heal scroll costs set to ";
+				float fScrollMod = GetLocalFloat(GetModule(), "SCROLL_COST_MOD");
+				if (fScrollMod == 0.0) sFeedback += "100%";
+				else sFeedback += PS_PrettyFloatString(fScrollMod * 100.0) +"%";
+			} else {
+				SetLocalFloat(GetModule(), "SCROLL_COST_MOD", StringToFloat(sMessage) / 100.0);
+				sFeedback = "Setting non-heal scroll costs to " + sMessage + "%";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+	}
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
 	return FALSE;

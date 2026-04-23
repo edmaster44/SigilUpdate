@@ -576,7 +576,8 @@ void ff_ShowConsumableCraftCosts(){
 	int nLevel = CIGetSpellInnateLevel(nId, FALSE);
 	int nScroll = CIGetCraftGPCost(oPC, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
 	string sScroll = GetCurrencyFeedback(nScroll, FALSE, FALSE, TRUE);
-	string sMessage = "Scroll cost: " + sScroll + "\n";
+	string sMessage = GetSpellName(nId) + ":\n";
+	sMessage += "Scroll cost: " + sScroll + "\n";
 	
 	int nPot, nWand;
 	string sPot, sWand;

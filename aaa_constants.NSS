@@ -15,6 +15,18 @@ rapsam2003 06/20/2018: Add new spellcasting placeholder feats as constants.
 // number. See implementation in ps_xp_script.nss and ps_inc_chest.nss -FlattedFifth
 const float GOLD_MULTIPLIER = 1.03;	
 
+// placeholder values for when we settle on some sensible changes to costs of consumable crafts
+// see ff_chat_commands for chat commands to adjust these crafting costs and x2_inc_craft to 
+// see implementation
+const float HEAL_SCROLL_COST_MOD = 0.0;
+const float HEAL_POT_COST_MOD = 0.0;
+const float HEAL_WAND_COST_MOD = 0.0;
+const float SCROLL_COST_MOD = 0.0;
+const float POT_COST_MOD = 0.0;
+const float WAND_COST_MOD = 0.0;
+
+
+
 // makes sure that non-partied summons, such as call of the beast, give xp to summoner when they make
 // a kill. Useage: SetLocalObject(oCreature, abilityCaster, oPC); This is checked for in ps_xp_script.nss
 const string abilityCaster = "abilityCaster";
@@ -52,21 +64,6 @@ const int B_TARGETED_SPELLS_FAIL_FOR_BLINDNESS_AND_MISSCHANCE = TRUE;
 // ps_inc_functions
 const int ALLOW_ECL_LEVEL_30 = TRUE;
 
-// if ALLOW_ECL_LEVEL_30 = true then this would reduce the xp gained from turning runes in
-// to marroweater according to ecl. If ecl isn't getting to lvl 30 this doesn't matter
-const int TAX_RUNES_FOR_ECL = FALSE;
-
-// as above, but for the gems with the dao in the central part of elemental earth
-const int TAX_GEMS_FOR_ECL = FALSE;
-
-// as above, but for books being turned into the hall of records
-const int TAX_BOOKS_FOR_ECL = FALSE; 
-
-// as above, but for the interesting skulls turned in at the bones of the night
-const int TAX_SKULLS_FOR_ECL = FALSE;
-
-// as above, but for the corpses turned in at that taxidermist in the market ward
-const int TAX_CORPSES_FOR_ECL = FALSE;
 
 // This is only useful if ALLOW_ECL_LEVEL_30 is false. It would allow characters who have been
 // capped below level 30 to get their crafting skills up to 33. See ps_inc_functions

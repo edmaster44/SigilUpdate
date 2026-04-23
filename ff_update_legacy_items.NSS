@@ -10,7 +10,7 @@
 #include "ginc_crafting"
 
 // function declarations
-void SetNewSequencerDesc(object oItem, string sRef);
+void SetNewSeqRecipeDesc(object oItem, string sRef);
 void FF_UpdateLegacyItems(object oPC, int bSetsOnly = FALSE);
 void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FALSE);
 void UpdateUndeadRegeantDescription(object oRegeant);
@@ -23,10 +23,8 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 	// since multiple checks require knowing the res ref, we'll just get it here.
 	string sRef = GetResRef(oItem);
 	
-	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_r_pot_lseq" ||
-		sRef == "ps_potion_sequencer" || sRef == "ps_r_pot_seq" ||
-		sRef == "ps_potion_greatersequencer" || sRef == "ps_r_pot_gseq"){
-			SetNewSequencerDesc(oItem, sRef);
+	if (sRef == "ps_r_pot_lseq" || sRef == "ps_r_pot_seq" || sRef == "ps_r_pot_gseq"){
+			SetNewSeqRecipeDesc(oItem, sRef);
 			return;
 	}
 	
@@ -353,18 +351,18 @@ void UpdateUndeadRegeantDescription(object oRegeant){
 	SetDescription(oRegeant, sDesc);
 }
 
-void SetNewSequencerDesc(object oItem, string sRef){
+void SetNewSeqRecipeDesc(object oItem, string sRef){
 	
 	string sName, sCost, sSkill;
-	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_r_pot_lseq"){
+	if (sRef == "ps_r_pot_lseq"){
 		sName = "Lesser ";
 		sCost = "2";
 		sSkill = "10";
-	} else if (sRef == "ps_potion_sequencer" || sRef == "ps_r_pot_seq"){
+	} else if (sRef == "ps_r_pot_seq"){
 		sName = "";
 		sCost = "4";
 		sSkill = "20";
-	} else if (sRef == "ps_potion_greatersequencer" || sRef == "ps_r_pot_gseq"){
+	} else if (sRef == "ps_r_pot_gseq"){
 		sName = "Greater ";
 		sCost = "6";
 		sSkill = "30";

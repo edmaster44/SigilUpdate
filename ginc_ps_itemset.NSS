@@ -29,7 +29,7 @@ void RemoveSetBootsAC(object oItem);
 Sword Saint Item Set
 */
 
-void SwordSaint1Standard(object oItem)
+void SwordSaint1Standard(object oItem) //applies to sword
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 	IPSetWeaponEnhancementBonus(oItem, 3, FALSE);
@@ -37,7 +37,7 @@ void SwordSaint1Standard(object oItem)
 	IPSafeAddItemProperty(oItem, ItemPropertyVampiricRegeneration(2), 0.0f, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 }
 
-void SwordSaint1Enhanced(object oItem)
+void SwordSaint1Enhanced(object oItem)//applies to sword
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 	IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(778), 0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -46,12 +46,13 @@ void SwordSaint1Enhanced(object oItem)
 	IPSetWeaponEnhancementBonus(oItem, 5, FALSE);
 	IPSafeAddItemProperty(oItem, ItemPropertyDamageBonus(1,11), 0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 	IPSafeAddItemProperty(oItem, ItemPropertyVampiricRegeneration(4), 0.0f, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+	IPSafeAddItemProperty(oItem, ItemPropertyRegeneration(2),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //Celestial Glory Item Set
 
-void CelestialGloryEnhanced(object oItem)
+void CelestialGloryEnhanced(object oItem) //amulet
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 	IPSafeAddItemProperty(oItem, ItemPropertyACBonus(6),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -60,9 +61,10 @@ void CelestialGloryEnhanced(object oItem)
 	IPSafeAddItemProperty(oItem, ItemPropertyLimitUseBySAlign(IP_CONST_ALIGNMENT_LG),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 	IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1272),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 	IPSafeAddItemProperty(oItem, ItemPropertyAbilityBonus(ABILITY_CHARISMA, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+	IPSafeAddItemProperty(oItem, ItemPropertyRegeneration(1),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 }
 
-void CelestialGloryStandard(object oItem)
+void CelestialGloryStandard(object oItem) //amulet
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 	IPSafeAddItemProperty(oItem, ItemPropertyACBonus(4),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -73,7 +75,7 @@ void CelestialGloryStandard(object oItem)
 ///////////////////////////////////////////////////////////////////////////////
 //Arboreal Archer Item Set
 
-void ArborealArcherEnhanced(object oItem, object oPC)
+void ArborealArcherEnhanced(object oItem, object oPC) // bow
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		// Add weapon-specific properties
@@ -97,9 +99,10 @@ void ArborealArcherEnhanced(object oItem, object oPC)
 		// Add Improved Rapid Shot
 		DelayCommand(3.0, IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(184),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE));
 		DelayCommand(3.1, SendMessageToPC(oPC, "Improved Rapid Shot added."));
+		IPSafeAddItemProperty(oItem, ItemPropertyRegeneration(1),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 }
 
-void ArborealArcherStandard(object oItem)
+void ArborealArcherStandard(object oItem) //bow
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(229),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -114,7 +117,7 @@ void ArborealArcherStandard(object oItem)
 ///////////////////////////////////////////////////////////////////////////////
 //Fallen Shadows Item Set
 
-void FallenShadowsEnhanced(object oItem)
+void FallenShadowsEnhanced(object oItem) //armor
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyACBonus(5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -122,11 +125,14 @@ void FallenShadowsEnhanced(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageReduction(4, 11),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1083),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(733),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		IPSafeAddItemProperty(oItem, ItemPropertyRegeneration(2),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		IPSafeAddItemProperty(oItem, ItemPropertySkillBonus(SKILL_HIDE, 20),0.0f, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		IPSafeAddItemProperty(oItem, ItemPropertySkillBonus(SKILL_MOVE_SILENTLY, 20),0.0f, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		
 	ApplySetBootsAC(oItem, 5);
 }
 
-void FallenShadowsStandard(object oItem)
+void FallenShadowsStandard(object oItem) //armor
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyACBonus(3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -139,7 +145,7 @@ void FallenShadowsStandard(object oItem)
 ///////////////////////////////////////////////////////////////////////////////
 //Slaadskin Item Set
 
-void SlaadskinEnhanced(object oItem)
+void SlaadskinEnhanced(object oItem) //cloak
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyLimitUseByAlign(3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -153,7 +159,7 @@ void SlaadskinEnhanced(object oItem)
 		ApplySetBootsAC(oItem, 5);
 }
 
-void SlaadskinStandard(object oItem)
+void SlaadskinStandard(object oItem) //cloak
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyLimitUseByAlign(3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -168,7 +174,7 @@ void SlaadskinStandard(object oItem)
 ///////////////////////////////////////////////////////////////////////////////
 //Iggwilv Item Set
 
-void IggwilvEnhanced(object oItem)
+void IggwilvEnhanced(object oItem) //cloak
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusSavingThrowVsX(0, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -179,12 +185,12 @@ void IggwilvEnhanced(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(834),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 }
 
-void IggwilvVsGood(object oItem)
+void IggwilvVsGood(object oItem) //cloak
 {
 	IPSafeAddItemProperty(oItem, ItemPropertyDecreaseAbility(4, 6),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);	
 }
 
-void IggwilvStandard(object oItem)
+void IggwilvStandard(object oItem) //cloak
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyAbilityBonus(3, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -195,7 +201,7 @@ void IggwilvStandard(object oItem)
 ///////////////////////////////////////////////////////////////////////////////
 //Brazen Item Set
 
-void BrazenEnhanced(object oItem)
+void BrazenEnhanced(object oItem) //armor
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyACBonus(7),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
@@ -205,11 +211,12 @@ void BrazenEnhanced(object oItem)
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1171),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyLight(3, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageVulnerability(7, 3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		IPSafeAddItemProperty(oItem, ItemPropertyVampiricRegeneration(2), 0.0f, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		
 		ApplySetBootsAC(oItem, 2);
 }
 
-void BrazenStandard(object oItem)
+void BrazenStandard(object oItem) // armor
 {
 	IPRemoveAllItemProperties(oItem, DURATION_TYPE_PERMANENT);
 		IPSafeAddItemProperty(oItem, ItemPropertyACBonus(3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);

@@ -537,13 +537,40 @@ int CIGetCraftGPCost(object oCaster, int nLevel, int nMod){
     // -------------------------------------------------------------------------
     if (nCLevel == 0) nCLevel = nCasterLvl;
     
-	int nRet = 0;
+	float fHealScrollMod = GetLocalFloat(GetModule(), "HEAL_SCROLL_COST_MOD");
+	if (fHealScrollMod <= 0.0) fHealScrollMod = HEAL_SCROLL_COST_MOD;
+	if (fHealScrollMod <= 0.0) fHealScrollMod = 1.0;
 	
-	nRet = PS_RoundToInt(((IntToFloat(nCLevel)/10.0) + IntToFloat(nLevel)) * nMod);
-	//healing spells get a slight discount. Others cost more.
-	if (GetIsHealingSpell(nId)) nRet = PS_RoundToInt(nRet * 0.9, ROUND_DOWN);
-	else nRet = PS_RoundToInt(nRet * 1.5, ROUND_UP);
-    return nRet;
+	float fScrollMod = GetLocalFloat(GetModule(), "SCROLL_COST_MOD");
+	if (fScrollMod <= 0.0) fScrollMod = SCROLL_COST_MOD;
+	if (fScrollMod <= 0.0) fScrollMod = 1.0;
+	
+	float fHealPotMod = GetLocalFloat(GetModule(), "HEAL_POT_COST_MOD");
+	if (fHealPotMod <= 0.0) fHealPotMod = HEAL_POT_COST_MOD;
+	if (fHealPotMod <= 0.0) fHealPotMod = 1.0;
+	
+	float fPotMod = GetLocalFloat(GetModule(), "POT_COST_MOD");
+	if (fPotMod <= 0.0) fPotMod = POT_COST_MOD;
+	if (fPotMod <= 0.0) fPotMod = 1.0;
+	
+	float fHealWandMod = GetLocalFloat(GetModule(), "HEAL_WAND_COST_MOD");
+	if (fHealWandMod <= 0.0) fHealWandMod = HEAL_WAND_COST_MOD;
+	if (fHealWandMod <= 0.0) fHealWandMod = 1.0;
+	
+	float fWandMod = GetLocalFloat(GetModule(), "WAND_COST_MOD");
+	if (fWandMod <= 0.0) fWandMod = WAND_COST_MOD;
+	if (fWandMod <= 0.0) fWandMod = 1.0;
+	
+	int bIsHealing = GetIsHealingSpell(nId);
+	float fEconomyMod;
+	if (nMod == X2_CI_SCRIBESCROLL_COSTMODIFIER)
+		fEconomyMod = (bIsHealing) ? fHealScrollMod : fScrollMod; 
+	else if (nMod == X2_CI_BREWPOTION_COSTMODIFIER)
+		fEconomyMod = (bIsHealing) ? fHealPotMod : fPotMod;
+	else
+		fEconomyMod = (bIsHealing) ? fHealWandMod : fWandMod;
+	int nRet = PS_RoundToInt(((IntToFloat(nCLevel)/10.0) + IntToFloat(nLevel)) * nMod);
+    return PS_RoundToInt(nRet * fEconomyMod);
 
 }
 

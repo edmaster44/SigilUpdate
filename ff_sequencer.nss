@@ -32,7 +32,7 @@ void PS_RenameSequencerPot(object oSequencer, object oCaster){
 	string sName = "<c=cyan>";
 	string sRef = GetResRef(oSequencer);
 	if (sRef == "ps_potion_lessersequencer") sName += "Lesser ";
-	else if (sRef == "ps_potion_greatersequencer") sName += "Greater ";
+	else if (sRef == "ps_potion_greatersequncer") sName += "Greater ";
 	sName += "Sequencer: ";
 	
 	if (nSpell2 == 0 && nSpell3 == 0){
@@ -43,15 +43,13 @@ void PS_RenameSequencerPot(object oSequencer, object oCaster){
 		sName += sSpell1 + ", " + sSpell2 + ", and " + sSpell3;
 	}
 	sName += "</c>";
-	SetItemStackSize(oSequencer, 1);
 	SetFirstName(oSequencer, sName);
-	SetItemStackSize(oSequencer, nStack);
-	SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
-	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", nSpell1); 
-	if (nSpell2 > 0)
-		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", nSpell2); 
-	if (nSpell3 > 0)
-		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", nSpell3);
+	//SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
+	//SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", nSpell1); 
+	//if (nSpell2 > 0)
+	//	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", nSpell2); 
+	//if (nSpell3 > 0)
+	//	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", nSpell3);
 	string sMessage = "Your Sequencer Potion has been renamed.\nThe new name will become visible ";
 	sMessage += "after an area transition.";
 	SendMessageToPC(oCaster, sMessage);

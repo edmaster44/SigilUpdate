@@ -202,6 +202,8 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 //int		iCoins		= how many coins we are removing in terms of least valueable
 void DS_TakeCoinsFromCreature(object oCreature, int iCoins);
 
+int GetFixedItemValue(object oItem);
+
 //This function gives the specified creature coins equal to iCoins.  Use the least
 //valueable currency for iCoins.  So if you wish to give 1 silver, gives 100 iCoins
 //which means give 100 copper and that is translated into 1 silver automatically
@@ -308,15 +310,10 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 
 
-//A function to fetch the "real" gold piece value of an item.
-//Also sets static, low costs for certain consumable crafting materials
-//and for items that are of rp value only
-int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
-
+int GetFixedItemValue(object oItem){
 	int nCost;
 	string sRef = GetResRef(oItem);
-	if (GetIsPlayerMade(oItem)) nCost = GetCraftedItemValue(oItem);
-	else if (sRef == "x2_it_cfm_pbottl") nCost = 50;
+	if (sRef == "x2_it_cfm_pbottl") nCost = 50;
 	else if (sRef == "ps_potion_lessersequencer") nCost = 700;
 	else if (sRef == "ps_potion_sequencer") nCost =  1400;
 	else if	(sRef == "ps_potion_greatersequncer") nCost = 2100; 
@@ -337,14 +334,18 @@ int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
 	else if (FindSubString(sRef, "i_ps_umbrella") != -1) nCost = 3;
 	else if (FindSubString(sRef, "ps_i_basket") != -1) nCost =  3;
 	else if (FindSubString(sRef, "i_ps_cigar") != -1) nCost = 3;
-	else {
-		SetItemCostVariables(oItem, FALSE, oPC);
-		nCost = GetLocalInt(oItem, "PRICE");
-	}
+	else nCost = 0;
+	
 	return nCost;
 }
 
-
+//A function to fetch the "real" gold piece value of an item.
+//Also sets static, low costs for certain consumable crafting materials
+//and for items that are of rp value only
+int PS_GetItemValue(object oItem, object oPC = OBJECT_INVALID) {
+	SetItemCostVariables(oItem, FALSE, oPC);
+	return GetLocalInt(oItem, "PRICE");
+}
 
 int GetCraftedItemValue(object oItem){
 	int nItem = GetBaseItemType(oItem);
@@ -516,19 +517,18 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		string	sItemName	= GetName(oItem) + " (" + sStackSize + ")"; // - "+IntToString(iOldCost);
 		
 		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIconSafe(oItem)) + ".tga";
-		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
-		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
-		{		iItemCost	= 1;	}
-		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
-		if(GetLocalInt(oItem, "DS_SELL_PRICE") > 0)
-		{	iItemCost	= GetLocalInt(oItem, "DS_SELL_PRICE");	}
-		//Finally add the item details into the GUI
 		
-		//Debug Stuff
-		/*int nOldPrice = GetGoldPieceValue(oItem);
-		int nNewPrice = PS_GetItemValue(oItem);
-		SendMessageToPC(oPC, GetName(oItem)+" - Old price: "+IntToString(nOldPrice)+" vs. New: "+IntToString(nNewPrice));
-		*/
+		// some items need to have fixed prices
+		int iItemCost = GetFixedItemValue(oItem) / GetItemStackSize(oItem);
+		// the above returns 0 if the item is not on the list of fixed price items
+		if (iItemCost == 0) iItemCost = FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
+		//If the item cost is less than or equal to 0, set it to 1
+		if(iItemCost <= 0) iItemCost	= 1;
+		//If this is greater than 0, the item was sold, then we set it to 3x purchase price or the above
+		//price, whichever is higher
+		int nBoughtFor = GetLocalInt(oItem, "DS_SELL_PRICE");
+		if(nBoughtFor > 0 && nBoughtFor * 3 > iItemCost) iItemCost = nBoughtFor * 3;
+		//Finally add the item details into the GUI
 		
 		if (GetItemUseable(oItem, oPC) == FALSE){
 			//SendMessageToPC(oPC, "You can't use "+sItemName);
@@ -1070,10 +1070,10 @@ int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
 	int nCost = 0;
 	itemproperty iProp = GetFirstItemProperty(oItem);
 	
-	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Get cost for: "+GetName(oItem));
+	//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Get cost for: "+GetName(oItem));
 	
 	nCost += GetBaseCostOfItem(GetBaseItemType(oItem));
-	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Base item cost: "+IntToString(nCost));
+	//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Base item cost: "+IntToString(nCost));
 	
 	while(GetIsItemPropertyValid(iProp)) {
 	
@@ -1088,11 +1088,12 @@ int GetCostOfItem(object oItem, object oPC = OBJECT_INVALID) {
 	if (nSlots >= 7 && nSlotsLeft > 0)
 		nCost += (nSlotsLeft*1000);
 	
-	if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Final cost for "+GetName(oItem)+": "+IntToString(nCost));
+	//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, "Final cost for "+GetName(oItem)+": "+IntToString(nCost));
 	
 	if (nCost <= 10)
 		return GetGoldPieceValue(oItem);
-	
+	int nSetCost = PS_GetItemValue(oItem);
+	if (nSetCost > nCost) nCost = nSetCost;
 	return nCost;
 
 }
@@ -1199,7 +1200,7 @@ int GetItemCostUpdated(object oItem, object oPC = OBJECT_INVALID) {
 	
 	//We haven't set the variables yet, or there's something otherwise wrong
 	if (!GetPlotFlag(oItem) && nCost <= 0) {
-		if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no price found, recalculate.");
+		//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - no price found, recalculate.");
 		return TRUE;
 	}
 		
@@ -1270,7 +1271,7 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 				if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - using database cost.");
 			} else {
 			   	nCost = GetCostOfItem(oItem);
-				if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
+				//if (GetIsObjectValid(oPC)) SendMessageToPC(oPC, GetName(oItem)+" - calculating cost from scratch.");
 			}
 		} else {
 			nCost = GetCostOfItem(oItem);

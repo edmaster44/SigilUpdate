@@ -76,7 +76,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	object	oPC		= OBJECT_SELF;	//The player interacting with the gui
 	object	oItem	= IntToObject(StringToInt(sItemID));	//The item in question
 	object	oStore	= StringToObject(sStoreID);
-	sItemCost = IntToString(PS_GetItemValue(oItem, oPC));
+
 
 	//Before we perform specified actions we check what action it is
 	if(iEvent != 13 && iEvent != 14 && iEvent != 15)	//13 and 14 are not store related actions
@@ -127,10 +127,9 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
 
-		//Next set the item's cost (ammunition is not affected by stack size)
+		//Next set the item's cost
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
-		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
-		{	iCost	/= StringToInt(sStackSize);	}
+		
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_gc", -1, DS_ConvertCoinsToGold(iCost));
