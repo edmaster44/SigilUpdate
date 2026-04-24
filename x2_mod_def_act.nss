@@ -19,6 +19,7 @@
 #include "x2_inc_switches"
 #include "kinc_crafting"
 #include "class_mageslayer_utils"
+#include "ff_sequencer"
 
 
 void main()
@@ -33,36 +34,41 @@ void main()
 	// the craft potion feat now creates neg energy potions with UNIQUE_POWER_SELF_ONLY spell, so that they
 	// register here, and the material is set so that the potion is identifiable to players even if the 
 	// name and description is changed. The material also identifies what spell we want to cast.
-	if (nItemID == idCraftedPotion)
-	{
-		// new custom materials in iprp_materials.2da are just identifiers for the spells, as explained above
-		// specifically, they are inflict minor = 13, infl light = 14, infl mod = 15, infl serious = 16, 
-		// infl crit = 17, harm = 18, and neg energy ray = 19
-		int matMinor = 13;
-		int matNeg = 19;
-		int nSpellId;
-		int nMaterial = GetItemBaseMaterialType(oItem);
-		if (nMaterial >= matMinor && nMaterial <= matNeg)
-		{
-			switch (nMaterial)
+	// also this is new sequencer potion that uses tag because old sequencer potions break when you split a stack
+	// due to reliance on local integers that are not preserved when a stack is split
+	if (nItemID == idCraftedPotion){
+		if (PS_GetIsNewSequencerPot(oItem))
+			PS_CastSpellFromNewSequencer(oItem, oPC);
+		else {
+			// new custom materials in iprp_materials.2da are just identifiers for the spells, as explained above
+			// specifically, they are inflict minor = 13, infl light = 14, infl mod = 15, infl serious = 16, 
+			// infl crit = 17, harm = 18, and neg energy ray = 19
+			int matMinor = 13;
+			int matNeg = 19;
+			int nSpellId;
+			int nMaterial = GetItemBaseMaterialType(oItem);
+			if (nMaterial >= matMinor && nMaterial <= matNeg)
 			{
-				case 13: nSpellId = 431; break; // inflict minor
-				case 14: nSpellId = 432; break;
-				case 15: nSpellId = 433; break;
-				case 16: nSpellId = 434; break;
-				case 17: nSpellId = 435; break; // inflict crit
-				case 18: nSpellId = 77; break; // harm
-				case 19: nSpellId = 371; break; // negative energy ray
-				default: nSpellId = 0; break;
-			}
-			if (nSpellId != 0)
-			{
-				// if the character is a mage slayer, alert the spellhook that this is actually a potion that is bypassing the pvp settings so 
-				// that an undead mage slayer can drink a potion of neg energy to heal in no pvp areas.
-				// call to class_mageslayer_utils
-				if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC)) SetMageSlayerSpecialItemBoolean(oPC);
-				// character casts the designated spell on themselves, bypassing pvp settings.
-				AssignCommand(oPC, ActionCastSpellAtObject(nSpellId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+				switch (nMaterial)
+				{
+					case 13: nSpellId = 431; break; // inflict minor
+					case 14: nSpellId = 432; break;
+					case 15: nSpellId = 433; break;
+					case 16: nSpellId = 434; break;
+					case 17: nSpellId = 435; break; // inflict crit
+					case 18: nSpellId = 77; break; // harm
+					case 19: nSpellId = 371; break; // negative energy ray
+					default: nSpellId = 0; break;
+				}
+				if (nSpellId != 0)
+				{
+					// if the character is a mage slayer, alert the spellhook that this is actually a potion that is bypassing the pvp settings so 
+					// that an undead mage slayer can drink a potion of neg energy to heal in no pvp areas.
+					// call to class_mageslayer_utils
+					if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oPC)) SetMageSlayerSpecialItemBoolean(oPC);
+					// character casts the designated spell on themselves, bypassing pvp settings.
+					AssignCommand(oPC, ActionCastSpellAtObject(nSpellId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+				}
 			}
 		}	
 	}

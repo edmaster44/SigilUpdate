@@ -1,5 +1,5 @@
 NDB V1.0
-0000060 0000019 0003283 0000009 0000109
+0000061 0000020 0003335 0000009 0000114
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -15,51 +15,52 @@ n11 x0_i0_stringlib
 n12 ginc_param_const
 n13 ginc_crafting
 n14 class_mageslayer_utils
-n15 ps_enchant_lib
-n16 nwnx_sql
-n17 x0_i0_match
-n18 x2_inc_switches
-n19 x2_inc_itemprop
-n20 x0_i0_petrify
-n21 x0_i0_assoc
-n22 ServerExts
-n23 x0_i0_position
-n24 ps_inc_ecl
-n25 ps_inc_casterlevel
-n26 nwnx_dae
-n27 ps_inc_financial
-n28 NW_I0_SPELLS
-n29 x0_i0_partywide
-n30 x0_i0_transport
-n31 x0_i0_common
-n32 nw_i0_plot
-n33 x0_i0_behavior
-n34 x0_i0_modes
-n35 x0_i0_voice
-n36 x0_i0_debug
-n37 x0_i0_equip
-n38 ginc_2da
-n39 ginc_event_handlers
-n40 x0_i0_talent
-n41 x0_i0_combat
-n42 x0_i0_spawncond
-n43 x0_i0_walkway
-n44 x0_i0_anims
-n45 x0_i0_henchman
-n46 ps_adjust_knight
-n47 nwn2_inc_metmag
-n48 nwn2_inc_spells
-n49 ps_inc_melee
-n50 ginc_vars
-n51 ginc_math
-n52 ginc_item
-n53 ps_adjust_barbarian
-n54 ps_rage_func
-n55 x2_i0_spells
-n56 ps_inc_epicsave
-n57 ff_sequencer
-n58 x2_inc_spellhook
-N59 psi_pow_chainsup
+n15 ff_sequencer
+n16 ps_enchant_lib
+n17 nwnx_sql
+n18 x0_i0_match
+n19 x2_inc_switches
+n20 x2_inc_itemprop
+n21 x0_i0_petrify
+n22 x0_i0_assoc
+n23 ServerExts
+n24 x0_i0_position
+n25 ps_inc_ecl
+n26 ps_inc_casterlevel
+n27 nwnx_dae
+n28 ps_inc_financial
+n29 NW_I0_SPELLS
+n30 x0_i0_partywide
+n31 x0_i0_transport
+n32 x0_i0_common
+n33 nw_i0_plot
+n34 x0_i0_behavior
+n35 x0_i0_modes
+n36 x0_i0_voice
+n37 x0_i0_debug
+n38 x0_i0_equip
+n39 ginc_2da
+n40 ginc_event_handlers
+n41 x0_i0_talent
+n42 x0_i0_combat
+n43 x0_i0_spawncond
+n44 x0_i0_walkway
+n45 x0_i0_anims
+n46 x0_i0_henchman
+n47 ps_adjust_knight
+n48 nwn2_inc_metmag
+n49 nwn2_inc_spells
+n50 ps_inc_melee
+n51 ginc_vars
+n52 ginc_math
+n53 ginc_item
+n54 ps_adjust_barbarian
+n55 ps_rage_func
+n56 x2_i0_spells
+n57 ps_inc_epicsave
+n58 ff_arrays
+n59 x2_inc_spellhook
+N60 psi_pow_chainsup
 s 03 vector
 sf f x
 sf f y
@@ -173,6 +174,12 @@ sf i nTrinketUse
 sf i nScrollUse
 sf i nWandUse
 sf i nBuffs
+s 05 dSequencerData
+sf i nMaxSpells
+sf i nNumSpells
+sf i nSpell1
+sf i nSpell2
+sf i nSpell3
 s 03 EnhanceItemPropertyCostValueRet
 sf i act
 sf e4 ip_res
@@ -522,6 +529,8 @@ f ffffffff ffffffff 000 f HEAL_WAND_COST_MOD
 f ffffffff ffffffff 000 f SCROLL_COST_MOD
 f ffffffff ffffffff 000 f POT_COST_MOD
 f ffffffff ffffffff 000 f WAND_COST_MOD
+f ffffffff ffffffff 000 f HEAL_SEQ_COST_MOD
+f ffffffff ffffffff 000 f SEQ_COST_MOD
 f ffffffff ffffffff 000 s abilityCaster
 f ffffffff ffffffff 000 i NULL
 f ffffffff ffffffff 000 i ALLOW_INSTANT_REBUILD
@@ -2198,6 +2207,10 @@ fp o
 f ffffffff ffffffff 001 i PS_CalculateTemplateECL
 fp o
 f ffffffff ffffffff 001 v PS_EnforceMaxLevel
+fp o
+f ffffffff ffffffff 001 i GetOriginalRace
+fp o
+f ffffffff ffffffff 001 i GetOriginalSubRace
 fp o
 f ffffffff ffffffff 002 i GetCasterLevelFromClass
 fp o
@@ -5143,6 +5156,7 @@ f ffffffff ffffffff 000 i STR_REF_IC_DISABLED
 f ffffffff ffffffff 000 i STR_REF_IC_ITEM_USE_NOT_ALLOWED
 f ffffffff ffffffff 000 i FIRST_WAND_ICON
 f ffffffff ffffffff 000 s X2_CI_CRAFTSKILL_CONV
+f ffffffff ffffffff 000 i X2_CI_SEQUENCER_COSTMODIFIER
 f ffffffff ffffffff 000 i X2_CI_BREWPOTION_FEAT_ID
 f ffffffff ffffffff 000 i X2_CI_BREWPOTION_MAXLEVEL
 f ffffffff ffffffff 000 i X2_CI_BREWPOTION_COSTMODIFIER
@@ -6157,16 +6171,147 @@ fp o
 f ffffffff ffffffff 002 i GetIsActivated
 fp o
 fp i
-f ffffffff ffffffff 001 i PS_GetIsSequencerPot
-fp o
-f ffffffff ffffffff 001 s GetSpellName
+f ffffffff ffffffff 000 s sDelimiter
+f ffffffff ffffffff 000 s sMap
+f ffffffff ffffffff 000 i LIST_NULL
+f ffffffff ffffffff 000 i B_CASE
+f ffffffff ffffffff 000 i B_ALLOW_WHITESPACE
+f ffffffff ffffffff 000 i GET_NUM_INDICES
+f ffffffff ffffffff 000 i GET_VALUE_AT_INDEX
+f ffffffff ffffffff 000 i GET_INDEX_OF_VALUE
+f ffffffff ffffffff 000 i REMOVE_VALUE_AT_INDEX
+f ffffffff ffffffff 000 i REMOVE_INSTANCE_OF_VALUE
+f ffffffff ffffffff 000 i INSERT_VALUE_AT_INDEX
+f ffffffff ffffffff 000 i REPLACE_VALUE_AT_INDEX
+f ffffffff ffffffff 000 i COUNT_VALUE
+f ffffffff ffffffff 003 s NewListOf
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s AddToList
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s AddToListAtIndex
+fp s
 fp i
+fp s
+f ffffffff ffffffff 002 s ConvertListToSet
+fp s
+fp i
+f ffffffff ffffffff 003 s ReplaceInListAtIndex
+fp s
+fp i
+fp s
+f ffffffff ffffffff 004 s NewSetOf
+fp s
+fp s
+fp s
+fp i
+f ffffffff ffffffff 004 s AddToSet
+fp s
+fp s
+fp s
+fp i
+f ffffffff ffffffff 004 s AddToSetAtIndex
+fp s
+fp i
+fp s
+fp i
+f ffffffff ffffffff 001 i GetNumberIndices
+fp s
+f ffffffff ffffffff 003 i GetIsInCollection
+fp s
+fp s
+fp i
+f ffffffff ffffffff 003 i GetIndexOfValue
+fp s
+fp s
+fp i
+f ffffffff ffffffff 001 i GetIsEmptyCollection
+fp s
+f ffffffff ffffffff 002 s GetValueAtIndex
+fp s
+fp i
+f ffffffff ffffffff 002 s RemoveIndex
+fp s
+fp i
+f ffffffff ffffffff 003 s RemoveValue
+fp s
+fp s
+fp i
+f ffffffff ffffffff 001 s ReverseCollection
+fp s
+f ffffffff ffffffff 002 s SortCollection
+fp s
+fp i
+f ffffffff ffffffff 005 s IterateList
+fp i
+fp s
+fp i
+fp s
+fp i
+f ffffffff ffffffff 003 s ListSurgery
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s Quicksort
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 s TrimForList
+fp s
+fp i
+f ffffffff ffffffff 003 s TrimInput
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 s TrimKeyValue
+fp s
+fp i
+f ffffffff ffffffff 003 i CheckIsSorted
+fp s
+fp i
+fp i
+f ffffffff ffffffff 004 i GetMedianOfThree
+fp s
+fp s
+fp s
+fp i
+f ffffffff ffffffff 001 i GetNumIndices
+fp s
+f ffffffff ffffffff 004 s ReplaceInSetAtIndex
+fp s
+fp i
+fp s
+fp i
+f ffffffff ffffffff 002 v PS_DoSpellCastCheatMode
+fp o
+fp i
+f ffffffff ffffffff 002 v PS_CastSpellFromNewSequencer
+fp o
+fp o
+f ffffffff ffffffff 001 t0018 PS_GetSequencerData
+fp o
+f ffffffff ffffffff 002 i PS_StoreSpellOnNewSquencerPot
+fp o
+fp o
+f ffffffff ffffffff 001 i PS_GetIsNewSequencerPot
+fp o
+f ffffffff ffffffff 001 i PS_GetIsOldSequencerPot
+fp o
+f ffffffff ffffffff 001 s PS_GetNameForNewSequencerPot
+fp o
+f ffffffff ffffffff 001 s PS_GetNameForOldSequencerPot
+fp o
 f ffffffff ffffffff 002 v PS_RenameSequencerPot
 fp o
 fp o
 f ffffffff ffffffff 002 i PS_PayForSequencerPot
 fp o
 fp o
+f ffffffff ffffffff 001 s GetSpellName
+fp i
 f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
 f ffffffff ffffffff 000 v ff_ShowConsumableCraftCosts
 f ffffffff ffffffff 007 v ED_ApplyEffectToObject
@@ -6237,11 +6382,11 @@ f ffffffff ffffffff 003 e4 GetSimilarItemProperty
 fp o
 fp e4
 fp i
-f ffffffff ffffffff 003 t0018 EnhanceItemPropertyCostValue
+f ffffffff ffffffff 003 t0019 EnhanceItemPropertyCostValue
 fp i
 fp e4
 fp i
-f ffffffff ffffffff 002 t0018 GetItemEnhancedItemProperty
+f ffffffff ffffffff 002 t0019 GetItemEnhancedItemProperty
 fp o
 fp e4
 f ffffffff ffffffff 003 i EnchantItem
@@ -6358,16 +6503,21 @@ l14 0000070 00000078 00000078
 l14 0000071 00000078 00000078
 l14 0000072 00000078 00000078
 l14 0000073 00000078 00000078
-l15 0000216 00000078 00000078
-l15 0000217 00000078 00000078
-l15 0000218 00000078 00000078
-l59 0000022 0000008a 00000090
-l59 0000026 00000090 00000092
-l59 0000027 00000092 000000ad
-l59 0000028 000000cd 000000cf
-l59 0000029 000000e3 000000f6
-l59 0000030 000000f6 00000109
-l59 0000031 00000109 0000011e
-l59 0000032 0000011e 00000139
-l59 0000034 00000139 0000015f
-l59 0000039 00000165 00000167
+l15 0000006 00000078 00000078
+l15 0000007 00000078 00000078
+l15 0000008 00000078 00000078
+l15 0000009 00000078 00000078
+l15 0000010 00000078 00000078
+l16 0000216 00000078 00000078
+l16 0000217 00000078 00000078
+l16 0000218 00000078 00000078
+l60 0000022 0000008a 00000090
+l60 0000026 00000090 00000092
+l60 0000027 00000092 000000ad
+l60 0000028 000000cd 000000cf
+l60 0000029 000000e3 000000f6
+l60 0000030 000000f6 00000109
+l60 0000031 00000109 0000011e
+l60 0000032 0000011e 00000139
+l60 0000034 00000139 0000015f
+l60 0000039 00000165 00000167

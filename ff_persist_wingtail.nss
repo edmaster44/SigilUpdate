@@ -55,7 +55,7 @@ void main(){
 void SetRacialWing(object oPC, object oEssence){
 	int nGender	= GetGender(oPC);
 	string sWing = (nGender == GENDER_MALE) ? "MWING" : "FWING";
-	int nSub = GetLocalInt(oEssence, "OldSubrace");
+	int nSub = GetOriginalSubRace(oPC);
 	int nWing = StringToInt(Get2DAString("racialsubtypes", sWing, nSub));
 	if (nWing != 0){
 		PS_SetWingNumber(oPC, nWing);
@@ -75,8 +75,8 @@ void PS_HD_Dragonflight(object oPC, object oItem){
 	int iTemp		= GetLocalInt(oItem, "TempChange");
 	if (iTemp == 1) return;
 	int iWing, iWingF, iWingM;
-	int iRace		= GetLocalInt(oItem, "OldRace");
-	int iSub		= GetLocalInt(oItem, "OldSubrace");
+	int iRace = GetOriginalRace(oPC);
+	int iSub		= GetOriginalSubRace(oPC);
 	
 	if (iRace == RACIAL_TYPE_INVALID)
 	{	SendMessageToPC(oPC, "Debug: Error, no racial type found."); return;	}

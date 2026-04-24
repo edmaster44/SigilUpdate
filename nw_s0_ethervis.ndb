@@ -1,5 +1,5 @@
 NDB V1.0
-0000056 0000017 0003154 0000441 0001238
+0000057 0000018 0003206 0000478 0001414
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -14,48 +14,49 @@ n10 nwn2_inc_talent
 n11 nw_i0_generic
 n12 x0_i0_spells
 n13 class_mageslayer_utils
-n14 ServerExts
-n15 x0_i0_petrify
-n16 nwnx_sql
-n17 x0_i0_position
-n18 x0_i0_match
-n19 x2_inc_itemprop
-n20 ps_inc_ecl
-n21 ps_inc_casterlevel
-n22 nwnx_dae
-n23 ps_inc_financial
-n24 x2_inc_switches
-n25 ginc_2da
-n26 ginc_vars
-n27 ginc_math
-n28 ginc_item
-n29 nw_i0_plot
-n30 x0_i0_assoc
-n31 NW_I0_SPELLS
-n32 x0_i0_partywide
-n33 x0_i0_transport
-n34 x0_i0_common
-n35 x0_i0_behavior
-n36 x0_i0_modes
-n37 x0_i0_voice
-n38 x0_i0_debug
-n39 x0_i0_equip
-n40 ginc_event_handlers
-n41 x0_i0_talent
-n42 x0_i0_combat
-n43 x0_i0_spawncond
-n44 x0_i0_walkway
-n45 x0_i0_anims
-n46 x0_i0_henchman
-n47 ps_adjust_knight
-n48 nwn2_inc_metmag
-n49 ps_adjust_barbarian
-n50 ps_rage_func
-n51 x2_i0_spells
-n52 ps_inc_epicsave
-n53 ff_sequencer
-n54 x2_inc_spellhook
-N55 nw_s0_ethervis
+n14 ff_sequencer
+n15 ServerExts
+n16 x0_i0_petrify
+n17 nwnx_sql
+n18 x0_i0_position
+n19 x0_i0_match
+n20 x2_inc_itemprop
+n21 ps_inc_ecl
+n22 ps_inc_casterlevel
+n23 nwnx_dae
+n24 ps_inc_financial
+n25 x2_inc_switches
+n26 ginc_2da
+n27 ginc_vars
+n28 ginc_math
+n29 ginc_item
+n30 nw_i0_plot
+n31 x0_i0_assoc
+n32 NW_I0_SPELLS
+n33 x0_i0_partywide
+n34 x0_i0_transport
+n35 x0_i0_common
+n36 x0_i0_behavior
+n37 x0_i0_modes
+n38 x0_i0_voice
+n39 x0_i0_debug
+n40 x0_i0_equip
+n41 ginc_event_handlers
+n42 x0_i0_talent
+n43 x0_i0_combat
+n44 x0_i0_spawncond
+n45 x0_i0_walkway
+n46 x0_i0_anims
+n47 x0_i0_henchman
+n48 ps_adjust_knight
+n49 nwn2_inc_metmag
+n50 ps_adjust_barbarian
+n51 ps_rage_func
+n52 x2_i0_spells
+n53 ps_inc_epicsave
+n54 ff_arrays
+n55 x2_inc_spellhook
+N56 nw_s0_ethervis
 s 03 vector
 sf f x
 sf f y
@@ -161,6 +162,12 @@ sf i nTrinketUse
 sf i nScrollUse
 sf i nWandUse
 sf i nBuffs
+s 05 dSequencerData
+sf i nMaxSpells
+sf i nNumSpells
+sf i nSpell1
+sf i nSpell2
+sf i nSpell3
 f ffffffff ffffffff 000 f GOLD_MULTIPLIER
 f ffffffff ffffffff 000 f HEAL_SCROLL_COST_MOD
 f ffffffff ffffffff 000 f HEAL_POT_COST_MOD
@@ -168,6 +175,8 @@ f ffffffff ffffffff 000 f HEAL_WAND_COST_MOD
 f ffffffff ffffffff 000 f SCROLL_COST_MOD
 f ffffffff ffffffff 000 f POT_COST_MOD
 f ffffffff ffffffff 000 f WAND_COST_MOD
+f ffffffff ffffffff 000 f HEAL_SEQ_COST_MOD
+f ffffffff ffffffff 000 f SEQ_COST_MOD
 f ffffffff ffffffff 000 s abilityCaster
 f ffffffff ffffffff 000 i NULL
 f ffffffff ffffffff 000 i ALLOW_INSTANT_REBUILD
@@ -1624,14 +1633,14 @@ fp i
 f ffffffff ffffffff 002 i IPGetIsCreatureEquippedWeapon
 fp o
 fp i
-f 00007429 00007487 002 i IPGetIsMeleeWeapon
+f 00007476 000074d4 002 i IPGetIsMeleeWeapon
 fp o
 fp i
 f ffffffff ffffffff 003 i IPGetIsPiercingWeapon
 fp o
 fp i
 fp i
-f 00007487 00007510 002 i IPGetIsProjectile
+f 000074d4 0000755d 002 i IPGetIsProjectile
 fp o
 fp i
 f ffffffff ffffffff 002 i IPGetIsThrownWeapon
@@ -1640,7 +1649,7 @@ fp i
 f ffffffff ffffffff 002 i IPGetIsLauncher
 fp o
 fp i
-f 000072ef 000073ab 002 i IPGetIsRangedWeapon
+f 0000733c 000073f8 002 i IPGetIsRangedWeapon
 fp o
 fp i
 f ffffffff ffffffff 002 i IPGetIsInstrument
@@ -1653,7 +1662,7 @@ fp i
 f ffffffff ffffffff 002 i IPGetWeaponSize
 fp o
 fp i
-f 000073ab 00007429 002 s IPGetWeaponCategory
+f 000073f8 00007476 002 s IPGetWeaponCategory
 fp o
 fp i
 f ffffffff ffffffff 004 v IPRemoveMatchingItemProperties
@@ -1679,7 +1688,7 @@ fp i
 fp i
 fp i
 fp i
-f 00004644 000049da 002 i IPGetIPConstCastSpellFromSpellID
+f 00000f29 000012bf 002 i IPGetIPConstCastSpellFromSpellID
 fp i
 fp i
 f ffffffff ffffffff 002 i IPGetItemHasItemOnHitPropertySubType
@@ -1713,7 +1722,7 @@ fp o
 fp e4
 fp i
 fp i
-f 00008797 00008921 001 i IPGetItemSequencerProperty
+f 000087e4 0000896e 001 i IPGetItemSequencerProperty
 fp o
 f ffffffff ffffffff 001 i IPGetIsIntelligentWeapon
 fp o
@@ -1938,15 +1947,19 @@ f ffffffff ffffffff 001 i PS_CalculateTemplateECL
 fp o
 f ffffffff ffffffff 001 v PS_EnforceMaxLevel
 fp o
+f ffffffff ffffffff 001 i GetOriginalRace
+fp o
+f ffffffff ffffffff 001 i GetOriginalSubRace
+fp o
 f ffffffff ffffffff 002 i GetCasterLevelFromClass
 fp o
 fp i
 f ffffffff ffffffff 001 i GetFeatGrantedCasterLevel
 fp o
-f 0000420b 00004445 002 i PsionLevels
+f 000054d3 0000570d 002 i PsionLevels
 fp o
 fp i
-f 00004445 00004644 002 i PsyWarLevels
+f 0000570d 0000590c 002 i PsyWarLevels
 fp o
 fp i
 f ffffffff ffffffff 003 i GetPsyOrPsiCasterLevel
@@ -2038,15 +2051,15 @@ fp i
 f ffffffff ffffffff 002 v dae_AddSpellSkillCategory
 fp i
 fp i
-f 00008d24 00008d55 001 s DS_ConvertCoinsToCopper
+f 00008d59 00008d8a 001 s DS_ConvertCoinsToCopper
 fp i
-f 00008ceb 00008d24 001 s DS_ConvertCoinsToSilver
+f 00008d20 00008d59 001 s DS_ConvertCoinsToSilver
 fp i
-f 00008cba 00008ceb 001 s DS_ConvertCoinsToGold
+f 00008cef 00008d20 001 s DS_ConvertCoinsToGold
 fp i
-f 00008bdf 00008cba 001 v DS_UpdateInventoryCoinValues
+f 00008c14 00008cef 001 v DS_UpdateInventoryCoinValues
 fp o
-f 00004ff3 00005463 004 s GetCurrencyFeedback
+f 000018d8 00001d48 004 s GetCurrencyFeedback
 fp i
 fp i
 fp i
@@ -2056,7 +2069,7 @@ fp o
 fp i
 fp i
 fp i
-f 00008b3f 00008bdf 004 v PS_TakeGoldFromCreature
+f 00008b74 00008c14 004 v PS_TakeGoldFromCreature
 fp i
 fp o
 fp i
@@ -2146,7 +2159,7 @@ fp s
 f ffffffff ffffffff 002 f PS_GetDistanceBetween
 fp o
 fp o
-f 00004e30 00004ff3 002 i PS_RoundToInt
+f 00001715 000018d8 002 i PS_RoundToInt
 fp f
 fp i
 f ffffffff ffffffff 003 f PS_RoundDecimal
@@ -2205,24 +2218,24 @@ f ffffffff ffffffff 003 i PS_GetSkillRank
 fp i
 fp o
 fp i
-f 0000289a 0000298b 002 i GetHasSpiritShamanProgression
+f 00003b62 00003c53 002 i GetHasSpiritShamanProgression
 fp o
 fp i
-f 00002508 0000289a 001 i GetSpiritShamanTRUECasterlevel
+f 000037d0 00003b62 001 i GetSpiritShamanTRUECasterlevel
 fp o
 f ffffffff ffffffff 002 i GetHasKnightProgression
 fp o
 fp i
 f ffffffff ffffffff 001 i GetPaladinAndPRCClassLevels
 fp o
-f 000014d9 000015ca 002 i GetHasRangerProgression
+f 000027a1 00002892 002 i GetHasRangerProgression
 fp o
 fp i
 f ffffffff ffffffff 001 i GetRangerAndPRCClassLevels
 fp o
 f ffffffff ffffffff 001 i PS_IsEquippableCW
 fp o
-f 00000edc 000012cf 002 i PS_GetCasterLevel
+f 000021a4 00002597 002 i PS_GetCasterLevel
 fp o
 fp i
 f ffffffff ffffffff 001 i GetItemIconSafe
@@ -2245,9 +2258,9 @@ fp o
 fp o
 f ffffffff ffffffff 001 i PS_GetEssenceECL
 fp o
-f 00001758 00002085 001 i PS_GetLevelByXP
+f 00002a20 0000334d 001 i PS_GetLevelByXP
 fp o
-f 000016f0 00001758 001 i PS_GetLevel
+f 000029b8 00002a20 001 i PS_GetLevel
 fp o
 f ffffffff ffffffff 001 i PS_GetMaxPartylevel
 fp o
@@ -2269,10 +2282,10 @@ f ffffffff ffffffff 001 i PS_GetPureMageCL
 fp o
 f ffffffff ffffffff 001 i GetWarlockCasterLevel
 fp o
-f 000015ca 000016f0 002 i GetClassBspLevel
+f 00002892 000029b8 002 i GetClassBspLevel
 fp o
 fp i
-f 00003c97 00003d88 002 i GetHasWarlockProgression
+f 00004f5f 00005050 002 i GetHasWarlockProgression
 fp o
 fp i
 f ffffffff ffffffff 001 v DoPsiDeLevelCheck
@@ -2389,58 +2402,58 @@ f ffffffff ffffffff 001 i GetWarlockAndPRCClassLevels
 fp o
 f ffffffff ffffffff 001 v GiveEssenceBlastShapes
 fp o
-f 00003a8b 00003c97 001 i GetWarlockCasterLevelBase
+f 00004d53 00004f5f 001 i GetWarlockCasterLevelBase
 fp o
-f 00002417 00002508 002 i GetHasPaladinProgression
-fp o
-fp i
-f 00002085 00002417 001 i GetPaladinTRUECasterlevel
-fp o
-f 000012cf 000014d9 001 i GetRangerTRUECasterlevel
-fp o
-f 00002c22 00002d13 002 i GetHasWizardProgression
+f 000036df 000037d0 002 i GetHasPaladinProgression
 fp o
 fp i
-f 0000298b 00002c22 001 i GetWizardTRUECasterlevel
+f 0000334d 000036df 001 i GetPaladinTRUECasterlevel
+fp o
+f 00002597 000027a1 001 i GetRangerTRUECasterlevel
+fp o
+f 00003eea 00003fdb 002 i GetHasWizardProgression
+fp o
+fp i
+f 00003c53 00003eea 001 i GetWizardTRUECasterlevel
 fp o
 f ffffffff ffffffff 001 i GetWizardWithoutFeat
 fp o
-f 00002f1d 0000300e 002 i GetHasSorcererProgression
+f 000041e5 000042d6 002 i GetHasSorcererProgression
 fp o
 fp i
-f 00002d13 00002f1d 001 i GetSorcererTRUECasterlevel
+f 00003fdb 000041e5 001 i GetSorcererTRUECasterlevel
 fp o
 f ffffffff ffffffff 001 i GetSorcererAndPRCClassLevels
 fp o
-f 00003218 00003309 002 i GetHasBardProgression
+f 000044e0 000045d1 002 i GetHasBardProgression
 fp o
 fp i
 f ffffffff ffffffff 001 i GetBardAndPRCClassLevels
 fp o
-f 0000300e 00003218 001 i GetBardTRUECasterlevel
+f 000042d6 000044e0 001 i GetBardTRUECasterlevel
 fp o
-f 00003513 00003604 002 i GetHasDruidProgression
+f 000047db 000048cc 002 i GetHasDruidProgression
 fp o
 fp i
 f ffffffff ffffffff 001 i GetDruidAndPRCClassLevels
 fp o
-f 00003309 00003513 001 i GetDruidTRUECasterlevel
+f 000045d1 000047db 001 i GetDruidTRUECasterlevel
 fp o
-f 0000399a 00003a8b 002 i GetHasFavoredSoulProgression
+f 00004c62 00004d53 002 i GetHasFavoredSoulProgression
 fp o
 fp i
 f ffffffff ffffffff 001 i GetFavoredSoulAndPRCClassLevels
 fp o
-f 00003604 0000399a 001 i GetFavoredSoulTRUECasterlevel
+f 000048cc 00004c62 001 i GetFavoredSoulTRUECasterlevel
 fp o
-f 0000411a 0000420b 002 i GetHasClericProgression
+f 000053e2 000054d3 002 i GetHasClericProgression
 fp o
 fp i
 f ffffffff ffffffff 001 i GetTrueClericLevel
 fp i
 f ffffffff ffffffff 001 i GetClericLevel
 fp o
-f 00003d88 0000411a 001 i GetClericTRUECasterlevel
+f 00005050 000053e2 001 i GetClericTRUECasterlevel
 fp o
 f ffffffff ffffffff 001 i GetClericAndPRCClassLevels
 fp o
@@ -2625,13 +2638,13 @@ f ffffffff ffffffff 000 s SCRIPT_EXTENSION_ITEM_EVENT_UNEQUIP
 f ffffffff ffffffff 000 s SCRIPT_EXTENSION_ITEM_EVENT_ACQUIRE
 f ffffffff ffffffff 000 s SCRIPT_EXTENSION_ITEM_EVENT_UNACQUIRE
 f ffffffff ffffffff 000 s SCRIPT_EXTENSION_ITEM_EVENT_SPELLCAST_AT
-f 000091ae 000091e1 001 v SetUserDefinedItemEventNumber
+f 0000aa93 0000aac6 001 v SetUserDefinedItemEventNumber
 fp i
-f 0000947d 000094b6 000 i GetUserDefinedItemEventNumber
+f 0000ad62 0000ad9b 000 i GetUserDefinedItemEventNumber
 f ffffffff ffffffff 002 v SetModuleSwitch
 fp s
 fp i
-f 00009172 000091ae 001 i GetModuleSwitchValue
+f 0000aa57 0000aa93 001 i GetModuleSwitchValue
 fp s
 f ffffffff ffffffff 000 s DOOR_FLAG_RESIST_KNOCK
 f ffffffff ffffffff 003 v SetDoorFlag
@@ -2650,7 +2663,7 @@ fp i
 f ffffffff ffffffff 002 i GetItemFlag
 fp o
 fp s
-f 000081eb 0000828d 002 i ExecuteScriptAndReturnInt
+f 00008238 000082da 002 i ExecuteScriptAndReturnInt
 fp s
 fp o
 f ffffffff ffffffff 001 v SetExecutedScriptReturnValue
@@ -2675,11 +2688,11 @@ f ffffffff ffffffff 001 v ClearCreatureOverrideAIScriptTarget
 fp o
 f ffffffff ffffffff 001 o GetCreatureOverrideAIScriptTarget
 fp o
-f 0000830e 00008353 000 s GetModuleOverrideSpellscript
+f 0000835b 000083a0 000 s GetModuleOverrideSpellscript
 f ffffffff ffffffff 000 v SetModuleOverrideSpellScriptFinished
-f 00008353 000083bf 000 i GetModuleOverrideSpellScriptFinished
-f 000092e2 0000947d 000 s GetEventPostfix
-f 000091e1 000092e2 001 s GetUserDefinedItemEventScriptName
+f 000083a0 0000840c 000 i GetModuleOverrideSpellScriptFinished
+f 0000abc7 0000ad62 000 s GetEventPostfix
+f 0000aac6 0000abc7 001 s GetUserDefinedItemEventScriptName
 fp o
 f ffffffff ffffffff 000 s SPELLS_2DA
 f ffffffff ffffffff 000 s SPELLS_NAME_COL
@@ -2812,6 +2825,7 @@ f ffffffff ffffffff 000 i STR_REF_IC_DISABLED
 f ffffffff ffffffff 000 i STR_REF_IC_ITEM_USE_NOT_ALLOWED
 f ffffffff ffffffff 000 i FIRST_WAND_ICON
 f ffffffff ffffffff 000 s X2_CI_CRAFTSKILL_CONV
+f ffffffff ffffffff 000 i X2_CI_SEQUENCER_COSTMODIFIER
 f ffffffff ffffffff 000 i X2_CI_BREWPOTION_FEAT_ID
 f ffffffff ffffffff 000 i X2_CI_BREWPOTION_MAXLEVEL
 f ffffffff ffffffff 000 i X2_CI_BREWPOTION_COSTMODIFIER
@@ -2844,15 +2858,15 @@ f ffffffff ffffffff 000 i X2_CI_MAGICTYPE_DIVINE
 f ffffffff ffffffff 000 i X2_CI_MODMODE_INVALID
 f ffffffff ffffffff 000 i X2_CI_MODMODE_ARMOR
 f ffffffff ffffffff 000 i X2_CI_MODMODE_WEAPON
-f 000008dd 000009c8 002 i CIGetSpellInnateLevel
+f 00000981 00000a6c 002 i CIGetSpellInnateLevel
 fp i
 fp i
-f 00006f5b 0000713c 001 s GetClassSpellLevelColumn
+f 00006fa8 00007189 001 s GetClassSpellLevelColumn
 fp i
-f 00006e63 00006f5b 002 i GetSpellLevelForClass
+f 00006eb0 00006fa8 002 i GetSpellLevelForClass
 fp i
 fp i
-f 00006e27 00006e63 002 i IsOnSpellList
+f 00006e74 00006eb0 002 i IsOnSpellList
 fp i
 fp i
 f ffffffff ffffffff 002 v MakeItemUseableByClass
@@ -2899,13 +2913,13 @@ fp i
 f ffffffff ffffffff 002 v AppendSpellToName
 fp o
 fp i
-f 000049da 00004e30 001 i GetIsHealingSpell
+f 000012bf 00001715 001 i GetIsHealingSpell
 fp i
 f ffffffff ffffffff 001 i CI_GetClassMagicType
 fp i
 f ffffffff ffffffff 001 s GetMaterialComponentTag
 fp i
-f 000009c8 00000edc 003 i CIGetCraftGPCost
+f 00000a6c 00000f29 003 i CIGetCraftGPCost
 fp o
 fp i
 fp i
@@ -3765,13 +3779,13 @@ fp i
 f ffffffff ffffffff 002 v SetEnchantedItemName
 fp o
 fp o
-f 000094b6 000095e4 001 i IsWorkbench
+f 0000ad9b 0000aec9 001 i IsWorkbench
 fp o
-f 000095e4 00009754 001 i IsSmithWorkbench
+f 0000aec9 0000b039 001 i IsSmithWorkbench
 fp o
-f 00009754 000098c2 001 i IsAlchemyWorkbench
+f 0000b039 0000b1a7 001 i IsAlchemyWorkbench
 fp o
-f 000098c2 00009a30 001 i IsMagicalWorkbench
+f 0000b1a7 0000b315 001 i IsMagicalWorkbench
 fp o
 f ffffffff ffffffff 002 v output
 fp s
@@ -5715,9 +5729,9 @@ f ffffffff ffffffff 000 i PRACTICED_CASTER_SHAMAN
 f ffffffff ffffffff 000 i PRACTICED_CASTER_FS
 f ffffffff ffffffff 000 i PRACTICED_CASTER_WL
 f ffffffff ffffffff 000 i PRACTICED_CASTER_PSION
-f 000061b0 000062e2 001 i GetIsEpicSpellEligibleClass
+f 000061fd 0000632f 001 i GetIsEpicSpellEligibleClass
 fp i
-f 000058bf 000061b0 001 i PS_GetEpicSpellSaveDC
+f 0000590c 000061fd 001 i PS_GetEpicSpellSaveDC
 fp o
 f ffffffff ffffffff 000 i FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE
 f ffffffff ffffffff 000 i MAGE_SLAYER_NORMAL
@@ -5749,29 +5763,29 @@ f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_SCROLL_USE
 f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_WAND_USE
 f ffffffff ffffffff 000 i N_ANTI_DIVINE_MS_BUFFS
 f ffffffff ffffffff 000 i B_USE_VFX_FOR_MS_FAIL
-f 000079ef 00007b9b 001 t0016 GetMageSlayerUsageData
+f 00007a3c 00007be8 001 t0016 GetMageSlayerUsageData
 fp o
-f 00007ef2 000081a7 002 i GetSpellIsHostile
+f 00007f3f 000081f4 002 i GetSpellIsHostile
 fp i
 fp o
 f ffffffff ffffffff 001 v MageSlayerLevels
 fp o
-f 00006d55 00006e27 001 i GetSpellIsDivine
+f 00006da2 00006e74 001 i GetSpellIsDivine
 fp i
-f 0000713c 0000720a 001 i GetSpellIsArcane
+f 00007189 00007257 001 i GetSpellIsArcane
 fp i
-f 00007b9b 00007ef2 002 i GetSpellIsHealing
+f 00007be8 00007f3f 002 i GetSpellIsHealing
 fp i
 fp o
-f 00006b20 00006d55 001 i GetMageSlayerAllowedSpecificItems
+f 00006b6d 00006da2 001 i GetMageSlayerAllowedSpecificItems
 fp o
-f 0000720a 000072ef 001 i GetMageSlayerType
+f 00007257 0000733c 001 i GetMageSlayerType
 fp o
-f 000075e7 000079ef 003 i GetMageSlayerItemOrSpell
+f 00007634 00007a3c 003 i GetMageSlayerItemOrSpell
 fp o
 fp o
 fp i
-f 000062e2 00006b20 005 i GetBypassMageSlayerRestriction
+f 0000632f 00006b6d 005 i GetBypassMageSlayerRestriction
 fp o
 fp o
 fp o
@@ -5789,21 +5803,152 @@ f ffffffff ffffffff 001 i GetItemUsuableByDivine
 fp o
 f ffffffff ffffffff 001 i GetItemUsuableByArcane
 fp o
-f 00007510 000075e7 002 i GetIsActivated
+f 0000755d 00007634 002 i GetIsActivated
 fp o
 fp i
-f 00008921 00008a1d 001 i PS_GetIsSequencerPot
-fp o
-f 00005463 000054bc 001 s GetSpellName
+f ffffffff ffffffff 000 s sDelimiter
+f ffffffff ffffffff 000 s sMap
+f ffffffff ffffffff 000 i LIST_NULL
+f ffffffff ffffffff 000 i B_CASE
+f ffffffff ffffffff 000 i B_ALLOW_WHITESPACE
+f ffffffff ffffffff 000 i GET_NUM_INDICES
+f ffffffff ffffffff 000 i GET_VALUE_AT_INDEX
+f ffffffff ffffffff 000 i GET_INDEX_OF_VALUE
+f ffffffff ffffffff 000 i REMOVE_VALUE_AT_INDEX
+f ffffffff ffffffff 000 i REMOVE_INSTANCE_OF_VALUE
+f ffffffff ffffffff 000 i INSERT_VALUE_AT_INDEX
+f ffffffff ffffffff 000 i REPLACE_VALUE_AT_INDEX
+f ffffffff ffffffff 000 i COUNT_VALUE
+f ffffffff ffffffff 003 s NewListOf
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s AddToList
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s AddToListAtIndex
+fp s
 fp i
-f 00008d55 00009172 002 v PS_RenameSequencerPot
+fp s
+f ffffffff ffffffff 002 s ConvertListToSet
+fp s
+fp i
+f ffffffff ffffffff 003 s ReplaceInListAtIndex
+fp s
+fp i
+fp s
+f ffffffff ffffffff 004 s NewSetOf
+fp s
+fp s
+fp s
+fp i
+f ffffffff ffffffff 004 s AddToSet
+fp s
+fp s
+fp s
+fp i
+f ffffffff ffffffff 004 s AddToSetAtIndex
+fp s
+fp i
+fp s
+fp i
+f 00009882 0000990d 001 i GetNumberIndices
+fp s
+f ffffffff ffffffff 003 i GetIsInCollection
+fp s
+fp s
+fp i
+f ffffffff ffffffff 003 i GetIndexOfValue
+fp s
+fp s
+fp i
+f ffffffff ffffffff 001 i GetIsEmptyCollection
+fp s
+f 0000aa13 0000aa57 002 s GetValueAtIndex
+fp s
+fp i
+f ffffffff ffffffff 002 s RemoveIndex
+fp s
+fp i
+f ffffffff ffffffff 003 s RemoveValue
+fp s
+fp s
+fp i
+f ffffffff ffffffff 001 s ReverseCollection
+fp s
+f ffffffff ffffffff 002 s SortCollection
+fp s
+fp i
+f 0000990d 0000a6a3 005 s IterateList
+fp i
+fp s
+fp i
+fp s
+fp i
+f 0000a808 0000aa13 003 s ListSurgery
+fp s
+fp s
+fp s
+f ffffffff ffffffff 003 s Quicksort
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 s TrimForList
+fp s
+fp i
+f ffffffff ffffffff 003 s TrimInput
+fp s
+fp i
+fp i
+f ffffffff ffffffff 002 s TrimKeyValue
+fp s
+fp i
+f ffffffff ffffffff 003 i CheckIsSorted
+fp s
+fp i
+fp i
+f ffffffff ffffffff 004 i GetMedianOfThree
+fp s
+fp s
+fp s
+fp i
+f 0000a6a3 0000a808 001 i GetNumIndices
+fp s
+f ffffffff ffffffff 004 s ReplaceInSetAtIndex
+fp s
+fp i
+fp s
+fp i
+f ffffffff ffffffff 002 v PS_DoSpellCastCheatMode
+fp o
+fp i
+f ffffffff ffffffff 002 v PS_CastSpellFromNewSequencer
 fp o
 fp o
-f 00008a1d 00008b3f 002 i PS_PayForSequencerPot
+f 000095a7 00009882 001 t0017 PS_GetSequencerData
+fp o
+f ffffffff ffffffff 002 i PS_StoreSpellOnNewSquencerPot
 fp o
 fp o
+f 0000926f 0000935c 001 i PS_GetIsNewSequencerPot
+fp o
+f 0000896e 00008a52 001 i PS_GetIsOldSequencerPot
+fp o
+f 0000935c 000095a7 001 s PS_GetNameForNewSequencerPot
+fp o
+f 00008ed6 0000926f 001 s PS_GetNameForOldSequencerPot
+fp o
+f 00008d8a 00008ed6 002 v PS_RenameSequencerPot
+fp o
+fp o
+f 00008a52 00008b74 002 i PS_PayForSequencerPot
+fp o
+fp o
+f 00001d48 00001da1 001 s GetSpellName
+fp i
 f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
-f 00000684 000008dd 000 v ff_ShowConsumableCraftCosts
+f 00000684 00000981 000 v ff_ShowConsumableCraftCosts
 f ffffffff ffffffff 007 v ED_ApplyEffectToObject
 fp o
 fp i
@@ -5812,9 +5957,9 @@ fp i
 fp e0
 fp o
 fp f
-f 00009c62 00009dc7 001 i GetMissChance
+f 0000b547 0000b6ac 001 i GetMissChance
 fp o
-f 00009a30 00009c62 001 i GetSpellFailedBecauseMissChance
+f 0000b315 0000b547 001 i GetSpellFailedBecauseMissChance
 fp o
 f ffffffff ffffffff 004 v PS_RemoveEffects
 fp o
@@ -5824,10 +5969,10 @@ fp o
 f ffffffff ffffffff 002 i PS_GetHasEffectById
 fp o
 fp i
-f 000081a7 000081eb 000 i X2UseMagicDeviceCheck
-f 000083bf 00008797 001 i X2GetSpellCastOnSequencerItem
+f 000081f4 00008238 000 i X2UseMagicDeviceCheck
+f 0000840c 000087e4 001 i X2GetSpellCastOnSequencerItem
 fp o
-f 0000828d 0000830e 000 i X2RunUserDefinedSpellScript
+f 000082da 0000835b 000 i X2RunUserDefinedSpellScript
 f ffffffff ffffffff 001 i GetSkipByRestoration
 fp i
 f ffffffff ffffffff 001 i X2CastOnItemWasAllowed
@@ -5836,7 +5981,7 @@ f ffffffff ffffffff 000 v X2BreakConcentrationSpells
 f ffffffff ffffffff 001 i X2GetBreakConcentrationCondition
 fp o
 f ffffffff ffffffff 000 v X2DoBreakConcentrationCheck
-f 000054bc 000058bf 000 v DebugSpells
+f 00001da1 000021a4 000 v DebugSpells
 f 00000215 00000684 000 i X2PreSpellCastCode
 f 0000008a 00000215 000 v main
 f 0000000d 00000015 000 v #loader
@@ -5861,427 +6006,464 @@ v 00000383 000003e8 0000000c o oItem
 v 00000388 000003e8 00000010 i nSpellId
 v 0000038d 000003e8 00000014 i nFeatId
 v 0000055f 000005ad 0000000c i nRet
-v 00000684 000008d5 00000000 o oPC
-v 0000068a 000008d5 00000004 i nId
-v 0000068f 000008d5 00000008 i nLevel
-v 000006a5 000008d5 0000000c i nScroll
-v 000006c3 000008d5 00000010 s sScroll
-v 000006e5 000008d5 00000014 s sMessage
-v 00000739 000008d5 00000018 i nPot
-v 0000073b 000008d5 0000001c i nWand
-v 0000073d 000008d5 00000020 s sPot
-v 0000073f 000008d5 00000024 s sWand
-v 0000073f 000008d5 00000028 i bHarmful
-v 000008dd 000009c6 00000000 i #retval
-v 000008dd 000009c0 00000004 i bDefaultZeroToOne
-v 000008dd 000009c0 00000008 i nSpellId
-v 000008df 000009ba 0000000c i nRet
-v 000008df 000009ba 00000010 i nClass
-v 000008ec 000009ba 00000014 i nInnate
-v 000009c8 00000eda 00000000 i #retval
-v 000009c8 00000ed4 00000004 i nMod
-v 000009c8 00000ed4 00000008 i nLevel
-v 000009c8 00000ed4 0000000c o oCaster
-v 000009c8 00000ece 00000010 i nCasterLvl
-v 00000a2e 00000ece 00000014 i nId
-v 00000a33 00000ece 00000018 i nLvlRow
-v 00000a4b 00000ece 0000001c i nCLevel
-v 00000acf 00000ece 00000020 f fHealScrollMod
-v 00000b45 00000ece 00000024 f fScrollMod
-v 00000bb6 00000ece 00000028 f fHealPotMod
-v 00000c29 00000ece 0000002c f fPotMod
-v 00000c97 00000ece 00000030 f fHealWandMod
-v 00000d0b 00000ece 00000034 f fWandMod
-v 00000d7a 00000ece 00000038 i bIsHealing
-v 00000d8c 00000ece 0000003c f fEconomyMod
-v 00000e5e 00000ece 00000040 i nRet
-v 00000edc 000012cd 00000000 i #retval
-v 00000edc 000012c7 00000004 i nPassedClass
-v 00000edc 000012c7 00000008 o oPC
-v 00000ede 000012c1 0000000c i iClass
-v 00000f25 000012c1 00000010 i iCasterLevelTrue
-v 00000f34 000012c1 00000014 i iLevel
-v 000012cf 000014d7 00000000 i #retval
-v 000012cf 000014d1 00000004 o oPC
-v 000012d1 000014cb 00000008 i iSlotNumber
-v 000012d3 000014cb 0000000c i iClass
-v 000012d5 000014cb 00000010 i iTotal
-v 000012d7 000014cb 00000014 i iTrue
-v 0000146b 000014a9 00000018 i nLevel
-v 000014d9 000015c8 00000000 i #retval
-v 000014d9 000015c2 00000004 i iClass
-v 000014d9 000015c2 00000008 o oPC
-v 000014d9 000015bc 0000000c s BspCasterFeat
-v 000015ca 000016ee 00000000 i #retval
-v 000015ca 000016e8 00000004 i nClass
-v 000015ca 000016e8 00000008 o oPC
-v 000015ca 000016e2 0000000c s BspLevelTable
-v 00001600 000016e2 00000010 i iMax
-v 00001617 000016e2 00000014 i iBSP
-v 00001617 000016e2 00000018 i iTotal
-v 0000161d 000016e2 0000001c i iLoop
-v 000016f0 00001756 00000000 i #retval
-v 000016f0 00001750 00000004 o oPC
-v 00001758 00002083 00000000 i #retval
-v 00001758 0000207d 00000004 o oPC
-v 00001758 00002077 00000008 i nKXP
-v 00002085 00002415 00000000 i #retval
-v 00002085 0000240f 00000004 o oPC
-v 00002087 00002409 00000008 i iSlotNumber
-v 00002089 00002409 0000000c i iClass
-v 0000208b 00002409 00000010 i iTotal
-v 0000208d 00002409 00000014 i iTrue
-v 00002221 0000225f 00000018 i iLevel
-v 00002417 00002506 00000000 i #retval
-v 00002417 00002500 00000004 i iClass
-v 00002417 00002500 00000008 o oPC
-v 00002417 000024fa 0000000c s BspCasterFeat
-v 00002508 00002898 00000000 i #retval
-v 00002508 00002892 00000004 o oPC
-v 0000250a 0000288c 00000008 i iSlotNumber
-v 0000250c 0000288c 0000000c i iClass
-v 0000250e 0000288c 00000010 i iTotal
-v 00002510 0000288c 00000014 i iTrue
-v 000026a4 000026e2 00000018 i iLevel
-v 0000289a 00002989 00000000 i #retval
-v 0000289a 00002983 00000004 i iClass
-v 0000289a 00002983 00000008 o oPC
-v 0000289a 0000297d 0000000c s BspCasterFeat
-v 0000298b 00002c20 00000000 i #retval
-v 0000298b 00002c1a 00000004 o oPC
-v 0000298d 00002c14 00000008 i iSlotNumber
-v 0000298f 00002c14 0000000c i iClass
-v 00002991 00002c14 00000010 i iTotal
-v 00002993 00002c14 00000014 i iTrue
-v 00002b27 00002b65 00000018 i nLevel
-v 00002b6b 00002c14 00000018 i iRedWizard
-v 00002c22 00002d11 00000000 i #retval
-v 00002c22 00002d0b 00000004 i iClass
-v 00002c22 00002d0b 00000008 o oPC
-v 00002c22 00002d05 0000000c s BspCasterFeat
-v 00002d13 00002f1b 00000000 i #retval
-v 00002d13 00002f15 00000004 o oPC
-v 00002d15 00002f0f 00000008 i iSlotNumber
-v 00002d17 00002f0f 0000000c i iClass
-v 00002d19 00002f0f 00000010 i iTotal
-v 00002d1b 00002f0f 00000014 i iTrue
-v 00002eaf 00002eed 00000018 i nLevel
-v 00002f1d 0000300c 00000000 i #retval
-v 00002f1d 00003006 00000004 i iClass
-v 00002f1d 00003006 00000008 o oPC
-v 00002f1d 00003000 0000000c s BspCasterFeat
-v 0000300e 00003216 00000000 i #retval
-v 0000300e 00003210 00000004 o oPC
-v 00003010 0000320a 00000008 i iSlotNumber
-v 00003012 0000320a 0000000c i iClass
-v 00003014 0000320a 00000010 i iTotal
-v 00003016 0000320a 00000014 i iTrue
-v 000031aa 000031e8 00000018 i nLevel
-v 00003218 00003307 00000000 i #retval
-v 00003218 00003301 00000004 i iClass
-v 00003218 00003301 00000008 o oPC
-v 00003218 000032fb 0000000c s BspCasterFeat
-v 00003309 00003511 00000000 i #retval
-v 00003309 0000350b 00000004 o oPC
-v 0000330b 00003505 00000008 i iSlotNumber
-v 0000330d 00003505 0000000c i iClass
-v 0000330f 00003505 00000010 i iTotal
-v 00003311 00003505 00000014 i iTrue
-v 000034a5 000034e3 00000018 i nLevel
-v 00003513 00003602 00000000 i #retval
-v 00003513 000035fc 00000004 i iClass
-v 00003513 000035fc 00000008 o oPC
-v 00003513 000035f6 0000000c s BspCasterFeat
-v 00003604 00003998 00000000 i #retval
-v 00003604 00003992 00000004 o oPC
-v 00003641 0000398c 00000008 i iSlotNumber
-v 00003643 0000398c 0000000c i iClass
-v 00003645 0000398c 00000010 i iTrue
-v 00003645 0000398c 00000014 i iTotal
-v 000037a4 000037e2 00000018 i nLevel
-v 0000399a 00003a89 00000000 i #retval
-v 0000399a 00003a83 00000004 i iClass
-v 0000399a 00003a83 00000008 o oPC
-v 0000399a 00003a7d 0000000c s BspCasterFeat
-v 00003a8b 00003c95 00000000 i #retval
-v 00003a8b 00003c8f 00000004 o oPC
-v 00003a8d 00003c89 00000008 i iSlotNumber
-v 00003a8f 00003c89 0000000c i iClass
-v 00003a8f 00003c89 00000010 i iTotal
-v 00003c29 00003c67 00000014 i nLevel
-v 00003c97 00003d86 00000000 i #retval
-v 00003c97 00003d80 00000004 i iClass
-v 00003c97 00003d80 00000008 o oPC
-v 00003c97 00003d7a 0000000c s BspCasterFeat
-v 00003d88 00004118 00000000 i #retval
-v 00003d88 00004112 00000004 o oPC
-v 00003d8a 0000410c 00000008 i iSlotNumber
-v 00003d8c 0000410c 0000000c i iClass
-v 00003d8e 0000410c 00000010 i iTotal
-v 00003d90 0000410c 00000014 i iTrue
-v 00003f24 00003f62 00000018 i nLevel
-v 0000411a 00004209 00000000 i #retval
-v 0000411a 00004203 00000004 i iClass
-v 0000411a 00004203 00000008 o oPC
-v 0000411a 000041fd 0000000c s BspCasterFeat
-v 0000420b 00004443 00000000 i #retval
-v 0000420b 0000443d 00000004 i bIgnorePracticed
-v 0000420b 0000443d 00000008 o oPC
-v 0000420b 00004437 0000000c i iTotal
-v 000042fa 00004437 00000010 i nDragon
-v 0000432c 0000437d 00000014 i nNewDragon
-v 000043bc 00004415 00000014 i nHD
-v 00004445 00004642 00000000 i #retval
-v 00004445 0000463c 00000004 i bIgnorePracticed
-v 00004445 0000463c 00000008 o oPC
-v 00004445 00004636 0000000c i iTotal
-v 000044b3 00004636 00000010 i nGemDragon
-v 0000452b 0000457c 00000014 i nDragonLevel
-v 000045bb 00004614 00000014 i nHD
-v 00004644 000049d8 00000000 i #retval
-v 00004644 000049d2 00000004 i nCasterLvl
-v 00004644 000049d2 00000008 i nSpellID
-v 00004644 000049cc 0000000c s sTemp
-v 0000472c 000049cc 00000010 i nSpellPrpIdx
-v 00004739 000049cc 00000014 s sMed
-v 00004765 000049cc 00000018 s sHigh
-v 00004792 000049cc 0000001c i nMedIPIdx
-v 00004798 000049cc 00000020 i nHighIPIdx
-v 00004840 000049cc 00000024 i nMedCL
-v 00004846 000049cc 00000028 i nHighCL
-v 000049da 00004e2e 00000000 i #retval
-v 000049da 00004e28 00000004 i nId
-v 00004e30 00004ff1 00000000 i #retval
-v 00004e30 00004feb 00000004 i nRoundTo
-v 00004e30 00004feb 00000008 f fNum
-v 00004e8c 00004fe5 0000000c i nInt
-v 00004eca 00004fe5 00000010 f fDec
-v 00004ff3 00005461 00000000 s #retval
-v 00004ff3 0000545b 00000004 i bJustNumbers
-v 00004ff3 0000545b 00000008 i bFromLoot
-v 00004ff3 0000545b 0000000c i bGained
-v 00004ff3 0000545b 00000010 i nGP
-v 00004ff3 00005455 00000014 i nGold
-v 00005003 00005455 00000018 i nSilver
-v 0000501b 00005455 0000001c i nCopper
-v 0000502d 00005455 00000020 s sMessage
-v 00005463 000054ba 00000000 s #retval
-v 00005463 000054b4 00000004 i nId
-v 00005463 000054ae 00000008 s sNameRef
-v 000054e3 000058b7 00000000 i nId
-v 000054e8 000058b7 00000004 i nNameRef
-v 0000550c 000058b7 00000008 s sDebug
-v 000055a8 000058b7 0000000c i nClass
-v 00005725 000058b7 00000010 i nDC
-v 00005725 000058b7 00000014 i nInnate
-v 000058bf 000061ae 00000000 i #retval
-v 000058bf 000061a8 00000004 o oPC
-v 000058bf 000061a2 00000008 i nOGDC
-v 000058c4 000061a2 0000000c i nId
-v 000058c9 000061a2 00000010 i nInnate
-v 00005921 000061a2 00000014 i nDC
-v 00005929 000061a2 00000018 i nHighestClass
-v 0000592b 000061a2 0000001c i nCurrentClass
-v 0000592d 000061a2 00000020 i nCurrentCL
-v 0000592f 000061a2 00000024 i nMod
-v 0000592f 000061a2 00000028 i nHighestCL
-v 00005937 000061a2 0000002c i i
-v 00005a1e 000061a2 00000030 i nPrac
-v 00005cb5 000061a2 00000034 i nBonus
-v 00005d48 000061a2 00000038 i nFocus
-v 00005d4a 000061a2 0000003c i nGrFocus
-v 00005d4c 000061a2 00000040 i nEpFocus
-v 00005d4c 000061a2 00000044 s sSchool
-v 000061b0 000062e0 00000000 i #retval
-v 000061b0 000062da 00000004 i nClass
-v 000062e2 00006b1e 00000000 i #retval
-v 000062e2 00006b18 00000004 i nFeatId
-v 000062e2 00006b18 00000008 i nSpellId
-v 000062e2 00006b18 0000000c o oItem
-v 000062e2 00006b18 00000010 o oCaster
-v 000062e2 00006b18 00000014 o oTarget
-v 00006382 00006b12 00000018 i bDivineSpell
-v 00006392 00006b12 0000001c i bArcaneSpell
-v 000063a2 00006b12 00000020 i bCasterIsSlayer
-v 000063bb 00006b12 00000024 i bTargetIsSlayer
-v 000063d4 00006b12 00000028 i bCasterCanCast
-v 000063de 00006b12 0000002c i bTargetCanReceive
-v 000063e8 00006b12 00000030 i bCanCastSpell
-v 000063ee 00006b12 00000034 i nItem
-v 000063fb 00006b12 00000038 i nSlayerType
-v 00006477 00006b12 0000003c s sCasterMessage
-v 00006492 00006b12 00000040 s sTargetMessage
-v 00006989 00006a7e 00000044 s sAlreadyCast
-v 00006a0e 00006a78 00000048 e0 eVis
-v 00006b20 00006d53 00000000 i #retval
-v 00006b20 00006d4d 00000004 o oItem
-v 00006b20 00006d47 00000008 s sRes
-v 00006b2d 00006d47 0000000c i bCanUse
-v 00006d55 00006e25 00000000 i #retval
-v 00006d55 00006e1f 00000004 i nSpellId
-v 00006d55 00006e19 00000008 i bRet
-v 00006e27 00006e61 00000000 i #retval
-v 00006e27 00006e5b 00000004 i iClass
-v 00006e27 00006e5b 00000008 i iSpell
-v 00006e63 00006f59 00000000 i #retval
-v 00006e63 00006f53 00000004 i iClass
-v 00006e63 00006f53 00000008 i iSpell
-v 00006e65 00006f4d 0000000c i iSpellLevel
-v 00006e65 00006f4d 00000010 i nMasterSpell
-v 00006eb7 00006f4d 00000014 s sCol
-v 00006ec7 00006f4d 00000018 s sSpellLevel
-v 00006f5b 0000713a 00000000 s #retval
-v 00006f5b 00007134 00000004 i iClass
-v 00006f5d 0000712e 00000008 s sCol
-v 0000713c 00007208 00000000 i #retval
-v 0000713c 00007202 00000004 i nSpellId
-v 0000713c 000071fc 00000008 i bRet
-v 0000720a 000072ed 00000000 i #retval
-v 0000720a 000072e7 00000004 o oPC
-v 000072ef 000073a9 00000000 i #retval
-v 000072ef 000073a3 00000004 i nItem
-v 000072ef 000073a3 00000008 o oItem
-v 000072ef 0000739d 0000000c s sType
-v 000073ab 00007427 00000000 s #retval
-v 000073ab 00007421 00000004 i nItem
-v 000073ab 00007421 00000008 o oItem
-v 00007429 00007485 00000000 i #retval
-v 00007429 0000747f 00000004 i nItem
-v 00007429 0000747f 00000008 o oItem
-v 00007429 00007479 0000000c s sString
-v 00007487 0000750e 00000000 i #retval
-v 00007487 00007508 00000004 i nItem
-v 00007487 00007508 00000008 o oItem
-v 00007487 00007502 0000000c s sType
-v 00007510 000075e5 00000000 i #retval
-v 00007510 000075df 00000004 i nSpellId
-v 00007510 000075df 00000008 o oItem
-v 00007510 000075d9 0000000c e4 ip
-v 00007530 000075b3 00000010 i ipType
-v 00007553 00007592 00000014 i ipSub
-v 000075e7 000079ed 00000000 i #retval
-v 000075e7 000079e7 00000004 i nSpellId
-v 000075e7 000079e7 00000008 o oItem
-v 000075e7 000079e7 0000000c o oPC
-v 000075e7 000079e1 00000010 i nItem
-v 000075f6 000079e1 00000014 i nThis
-v 000075f6 000079e1 00000018 i bAllowed
-v 000075fc 000079e1 0000001c t0016 dItemUsage
-v 00007614 000079e1 00000030 s sRes
-v 00007621 000079e1 00000034 i bCanUse
-v 000079ef 00007b99 00000000 t0016 #retval
-v 000079ef 00007b93 00000014 o oPC
-v 000079ef 00007b8d 00000018 i nSlayerType
-v 00007a09 00007b8d 0000001c t0016 dItemUsage
-v 00007b9b 00007ef0 00000000 i #retval
-v 00007b9b 00007eea 00000004 o oPC
-v 00007b9b 00007eea 00000008 i nSpellId
-v 00007b9b 00007ee4 0000000c i bIsHealing
-v 00007ba1 00007ee4 00000010 s sSpellName
-v 00007ef2 000081a5 00000000 i #retval
-v 00007ef2 0000819f 00000004 o oPC
-v 00007ef2 0000819f 00000008 i nSpellId
-v 00007ef2 00008199 0000000c i bSpellIsHostile
-v 00007f22 00008199 00000010 s sSpellName
-v 000081a7 000081e9 00000000 i #retval
-v 000081a7 000081e3 00000004 i nRet
-v 000081eb 0000828b 00000000 i #retval
-v 000081eb 00008285 00000004 o oTarget
-v 000081eb 00008285 00000008 s sScript
-v 00008221 0000827f 0000000c i nRet
-v 0000828d 0000830c 00000000 i #retval
-v 0000828d 00008306 00000004 s sScript
-v 0000830e 00008351 00000000 s #retval
-v 0000830e 0000834b 00000004 s sScript
-v 00008353 000083bd 00000000 i #retval
-v 00008353 000083b7 00000004 i nRet
-v 000083bf 00008795 00000000 i #retval
-v 000083bf 0000878f 00000004 o oItem
-v 000083ee 00008789 00000008 i nMaxSeqSpells
-v 0000843e 000084d9 0000000c i nBt
-v 000084df 00008789 0000000c i nHostile
-v 0000857b 00008789 00000010 i nNumberOfTriggers
-v 00008602 00008720 00000014 e0 eVisual
-v 00008627 00008720 00000018 i nSID
-v 00008797 0000891f 00000000 i #retval
-v 00008797 00008919 00000004 o oItem
-v 000087ce 00008913 00000008 i nCnt
-v 000087d0 00008913 0000000c e4 ip
-v 00008921 00008a1b 00000000 i #retval
-v 00008921 00008a15 00000004 o oSequencer
-v 00008921 00008a0f 00000008 s sRef
-v 00008a1d 00008b3d 00000000 i #retval
-v 00008a1d 00008b37 00000004 o oCaster
-v 00008a1d 00008b37 00000008 o oSequencer
-v 00008a1d 00008b31 0000000c i nId
-v 00008a22 00008b31 00000010 i nLevel
-v 00008a38 00008b31 00000014 i nGold
-v 00008b3f 00008bd7 00000000 i bDisplayFeedback
-v 00008b3f 00008bd7 00000004 i bDestroy
-v 00008b3f 00008bd7 00000008 o oCreature
-v 00008b3f 00008bd7 0000000c i nGP
-v 00008b69 00008ba0 00000010 s sMessage
-v 00008bdf 00008cb2 00000000 o oPC
-v 00008bdf 00008cac 00000004 i iCoins
-v 00008cba 00008ce9 00000000 s #retval
-v 00008cba 00008ce3 00000004 i iCoins
-v 00008ceb 00008d22 00000000 s #retval
-v 00008ceb 00008d1c 00000004 i iCoins
-v 00008d24 00008d53 00000000 s #retval
-v 00008d24 00008d4d 00000004 i iCoins
-v 00008d55 0000916a 00000000 o oCaster
-v 00008d55 0000916a 00000004 o oSequencer
-v 00008d55 00009164 00000008 i nSpell1
-v 00008d78 00009164 0000000c i nSpell2
-v 00008d9b 00009164 00000010 i nSpell3
-v 00008df4 00009164 00000014 i nNumberOfTriggers
-v 00008e15 00009164 00000018 i nStack
-v 00008e22 00009164 0000001c s sSpell1
-v 00008e3c 00009164 00000020 s sSpell2
-v 00008e3e 00009164 00000024 s sSpell3
-v 00008eb6 00009164 00000028 s sName
-v 00008ec2 00009164 0000002c s sRef
-v 000090cd 00009164 00000030 s sMessage
-v 00009172 000091ac 00000000 i #retval
-v 00009172 000091a6 00000004 s sModuleSwitchConstant
-v 00009172 000091a0 00000008 i nRet
-v 000091ae 000091d9 00000000 i nEvent
-v 000091e1 000092e0 00000000 s #retval
-v 000091e1 000092da 00000004 o oItem
-v 000091e1 000092d4 00000008 s sPrefix
-v 0000920d 000092d4 0000000c s sTag
-v 00009224 000092d4 00000010 i iMaxPreExtensionLength
-v 000092e2 0000947b 00000000 s #retval
-v 000092e2 00009475 00000004 s sPostfix
-v 000092e6 00009475 00000008 i nEvent
-v 0000947d 000094b4 00000000 i #retval
-v 000094b6 000095e2 00000000 i #retval
-v 000094b6 000095dc 00000004 o oTarget
-v 000094b6 000095d6 00000008 s sTargetTag
-v 000094c3 000095d6 0000000c s sTargetTagPrefix
-v 000095e4 00009752 00000000 i #retval
-v 000095e4 0000974c 00000004 o oTarget
-v 000095e4 00009746 00000008 i iObjType
-v 00009621 00009746 0000000c s sTargetTag
-v 00009754 000098c0 00000000 i #retval
-v 00009754 000098ba 00000004 o oTarget
-v 00009754 000098b4 00000008 i iObjType
-v 00009791 000098b4 0000000c s sTargetTag
-v 000098c2 00009a2e 00000000 i #retval
-v 000098c2 00009a28 00000004 o oTarget
-v 000098c2 00009a22 00000008 i iObjType
-v 000098ff 00009a22 0000000c s sTargetTag
-v 00009a30 00009c60 00000000 i #retval
-v 00009a30 00009c5a 00000004 o oCaster
-v 00009a30 00009c54 00000008 i nMiss
-v 00009a90 00009c54 0000000c o oTarget
-v 00009a95 00009c54 00000010 e2 lTarget
-v 00009b63 00009c54 00000014 i nRoll
-v 00009c62 00009dc5 00000000 i #retval
-v 00009c62 00009dbf 00000004 o oCaster
-v 00009c9b 00009db9 00000008 i nReturn
-v 00009ca1 00009db9 0000000c i nMiss
-v 00009ca7 00009db9 00000010 e0 eEff
+v 00000684 00000979 00000000 o oPC
+v 0000068a 00000979 00000004 i nId
+v 0000068f 00000979 00000008 i nLevel
+v 000006a5 00000979 0000000c i nCost
+v 000006c3 00000979 00000010 s sCost
+v 000006e5 00000979 00000014 s sMessage
+v 00000737 00000979 00000018 i bHarmful
+v 00000981 00000a6a 00000000 i #retval
+v 00000981 00000a64 00000004 i bDefaultZeroToOne
+v 00000981 00000a64 00000008 i nSpellId
+v 00000983 00000a5e 0000000c i nRet
+v 00000983 00000a5e 00000010 i nClass
+v 00000990 00000a5e 00000014 i nInnate
+v 00000a6c 00000f27 00000000 i #retval
+v 00000a6c 00000f21 00000004 i nMod
+v 00000a6c 00000f21 00000008 i nLevel
+v 00000a6c 00000f21 0000000c o oCaster
+v 00000a6c 00000f1b 00000010 i nCL
+v 00000ac9 00000f1b 00000014 i nId
+v 00000ace 00000f1b 00000018 i nLvlRow
+v 00000ae6 00000f1b 0000001c i nCLevel
+v 00000b6a 00000f1b 00000020 i bIsHealing
+v 00000b7c 00000f1b 00000024 f fAddCostMod
+v 00000b7e 00000f1b 00000028 f fVar
+v 00000b80 00000f1b 0000002c s sVar
+v 00000b82 00000f1b 00000030 i nRet
+v 00000f29 000012bd 00000000 i #retval
+v 00000f29 000012b7 00000004 i nCasterLvl
+v 00000f29 000012b7 00000008 i nSpellID
+v 00000f29 000012b1 0000000c s sTemp
+v 00001011 000012b1 00000010 i nSpellPrpIdx
+v 0000101e 000012b1 00000014 s sMed
+v 0000104a 000012b1 00000018 s sHigh
+v 00001077 000012b1 0000001c i nMedIPIdx
+v 0000107d 000012b1 00000020 i nHighIPIdx
+v 00001125 000012b1 00000024 i nMedCL
+v 0000112b 000012b1 00000028 i nHighCL
+v 000012bf 00001713 00000000 i #retval
+v 000012bf 0000170d 00000004 i nId
+v 00001715 000018d6 00000000 i #retval
+v 00001715 000018d0 00000004 i nRoundTo
+v 00001715 000018d0 00000008 f fNum
+v 00001771 000018ca 0000000c i nInt
+v 000017af 000018ca 00000010 f fDec
+v 000018d8 00001d46 00000000 s #retval
+v 000018d8 00001d40 00000004 i bJustNumbers
+v 000018d8 00001d40 00000008 i bFromLoot
+v 000018d8 00001d40 0000000c i bGained
+v 000018d8 00001d40 00000010 i nGP
+v 000018d8 00001d3a 00000014 i nGold
+v 000018e8 00001d3a 00000018 i nSilver
+v 00001900 00001d3a 0000001c i nCopper
+v 00001912 00001d3a 00000020 s sMessage
+v 00001d48 00001d9f 00000000 s #retval
+v 00001d48 00001d99 00000004 i nId
+v 00001d48 00001d93 00000008 s sNameRef
+v 00001dc8 0000219c 00000000 i nId
+v 00001dcd 0000219c 00000004 i nNameRef
+v 00001df1 0000219c 00000008 s sDebug
+v 00001e8d 0000219c 0000000c i nClass
+v 0000200a 0000219c 00000010 i nDC
+v 0000200a 0000219c 00000014 i nInnate
+v 000021a4 00002595 00000000 i #retval
+v 000021a4 0000258f 00000004 i nPassedClass
+v 000021a4 0000258f 00000008 o oPC
+v 000021a6 00002589 0000000c i iClass
+v 000021ed 00002589 00000010 i iCasterLevelTrue
+v 000021fc 00002589 00000014 i iLevel
+v 00002597 0000279f 00000000 i #retval
+v 00002597 00002799 00000004 o oPC
+v 00002599 00002793 00000008 i iSlotNumber
+v 0000259b 00002793 0000000c i iClass
+v 0000259d 00002793 00000010 i iTotal
+v 0000259f 00002793 00000014 i iTrue
+v 00002733 00002771 00000018 i nLevel
+v 000027a1 00002890 00000000 i #retval
+v 000027a1 0000288a 00000004 i iClass
+v 000027a1 0000288a 00000008 o oPC
+v 000027a1 00002884 0000000c s BspCasterFeat
+v 00002892 000029b6 00000000 i #retval
+v 00002892 000029b0 00000004 i nClass
+v 00002892 000029b0 00000008 o oPC
+v 00002892 000029aa 0000000c s BspLevelTable
+v 000028c8 000029aa 00000010 i iMax
+v 000028df 000029aa 00000014 i iBSP
+v 000028df 000029aa 00000018 i iTotal
+v 000028e5 000029aa 0000001c i iLoop
+v 000029b8 00002a1e 00000000 i #retval
+v 000029b8 00002a18 00000004 o oPC
+v 00002a20 0000334b 00000000 i #retval
+v 00002a20 00003345 00000004 o oPC
+v 00002a20 0000333f 00000008 i nKXP
+v 0000334d 000036dd 00000000 i #retval
+v 0000334d 000036d7 00000004 o oPC
+v 0000334f 000036d1 00000008 i iSlotNumber
+v 00003351 000036d1 0000000c i iClass
+v 00003353 000036d1 00000010 i iTotal
+v 00003355 000036d1 00000014 i iTrue
+v 000034e9 00003527 00000018 i iLevel
+v 000036df 000037ce 00000000 i #retval
+v 000036df 000037c8 00000004 i iClass
+v 000036df 000037c8 00000008 o oPC
+v 000036df 000037c2 0000000c s BspCasterFeat
+v 000037d0 00003b60 00000000 i #retval
+v 000037d0 00003b5a 00000004 o oPC
+v 000037d2 00003b54 00000008 i iSlotNumber
+v 000037d4 00003b54 0000000c i iClass
+v 000037d6 00003b54 00000010 i iTotal
+v 000037d8 00003b54 00000014 i iTrue
+v 0000396c 000039aa 00000018 i iLevel
+v 00003b62 00003c51 00000000 i #retval
+v 00003b62 00003c4b 00000004 i iClass
+v 00003b62 00003c4b 00000008 o oPC
+v 00003b62 00003c45 0000000c s BspCasterFeat
+v 00003c53 00003ee8 00000000 i #retval
+v 00003c53 00003ee2 00000004 o oPC
+v 00003c55 00003edc 00000008 i iSlotNumber
+v 00003c57 00003edc 0000000c i iClass
+v 00003c59 00003edc 00000010 i iTotal
+v 00003c5b 00003edc 00000014 i iTrue
+v 00003def 00003e2d 00000018 i nLevel
+v 00003e33 00003edc 00000018 i iRedWizard
+v 00003eea 00003fd9 00000000 i #retval
+v 00003eea 00003fd3 00000004 i iClass
+v 00003eea 00003fd3 00000008 o oPC
+v 00003eea 00003fcd 0000000c s BspCasterFeat
+v 00003fdb 000041e3 00000000 i #retval
+v 00003fdb 000041dd 00000004 o oPC
+v 00003fdd 000041d7 00000008 i iSlotNumber
+v 00003fdf 000041d7 0000000c i iClass
+v 00003fe1 000041d7 00000010 i iTotal
+v 00003fe3 000041d7 00000014 i iTrue
+v 00004177 000041b5 00000018 i nLevel
+v 000041e5 000042d4 00000000 i #retval
+v 000041e5 000042ce 00000004 i iClass
+v 000041e5 000042ce 00000008 o oPC
+v 000041e5 000042c8 0000000c s BspCasterFeat
+v 000042d6 000044de 00000000 i #retval
+v 000042d6 000044d8 00000004 o oPC
+v 000042d8 000044d2 00000008 i iSlotNumber
+v 000042da 000044d2 0000000c i iClass
+v 000042dc 000044d2 00000010 i iTotal
+v 000042de 000044d2 00000014 i iTrue
+v 00004472 000044b0 00000018 i nLevel
+v 000044e0 000045cf 00000000 i #retval
+v 000044e0 000045c9 00000004 i iClass
+v 000044e0 000045c9 00000008 o oPC
+v 000044e0 000045c3 0000000c s BspCasterFeat
+v 000045d1 000047d9 00000000 i #retval
+v 000045d1 000047d3 00000004 o oPC
+v 000045d3 000047cd 00000008 i iSlotNumber
+v 000045d5 000047cd 0000000c i iClass
+v 000045d7 000047cd 00000010 i iTotal
+v 000045d9 000047cd 00000014 i iTrue
+v 0000476d 000047ab 00000018 i nLevel
+v 000047db 000048ca 00000000 i #retval
+v 000047db 000048c4 00000004 i iClass
+v 000047db 000048c4 00000008 o oPC
+v 000047db 000048be 0000000c s BspCasterFeat
+v 000048cc 00004c60 00000000 i #retval
+v 000048cc 00004c5a 00000004 o oPC
+v 00004909 00004c54 00000008 i iSlotNumber
+v 0000490b 00004c54 0000000c i iClass
+v 0000490d 00004c54 00000010 i iTrue
+v 0000490d 00004c54 00000014 i iTotal
+v 00004a6c 00004aaa 00000018 i nLevel
+v 00004c62 00004d51 00000000 i #retval
+v 00004c62 00004d4b 00000004 i iClass
+v 00004c62 00004d4b 00000008 o oPC
+v 00004c62 00004d45 0000000c s BspCasterFeat
+v 00004d53 00004f5d 00000000 i #retval
+v 00004d53 00004f57 00000004 o oPC
+v 00004d55 00004f51 00000008 i iSlotNumber
+v 00004d57 00004f51 0000000c i iClass
+v 00004d57 00004f51 00000010 i iTotal
+v 00004ef1 00004f2f 00000014 i nLevel
+v 00004f5f 0000504e 00000000 i #retval
+v 00004f5f 00005048 00000004 i iClass
+v 00004f5f 00005048 00000008 o oPC
+v 00004f5f 00005042 0000000c s BspCasterFeat
+v 00005050 000053e0 00000000 i #retval
+v 00005050 000053da 00000004 o oPC
+v 00005052 000053d4 00000008 i iSlotNumber
+v 00005054 000053d4 0000000c i iClass
+v 00005056 000053d4 00000010 i iTotal
+v 00005058 000053d4 00000014 i iTrue
+v 000051ec 0000522a 00000018 i nLevel
+v 000053e2 000054d1 00000000 i #retval
+v 000053e2 000054cb 00000004 i iClass
+v 000053e2 000054cb 00000008 o oPC
+v 000053e2 000054c5 0000000c s BspCasterFeat
+v 000054d3 0000570b 00000000 i #retval
+v 000054d3 00005705 00000004 i bIgnorePracticed
+v 000054d3 00005705 00000008 o oPC
+v 000054d3 000056ff 0000000c i iTotal
+v 000055c2 000056ff 00000010 i nDragon
+v 000055f4 00005645 00000014 i nNewDragon
+v 00005684 000056dd 00000014 i nHD
+v 0000570d 0000590a 00000000 i #retval
+v 0000570d 00005904 00000004 i bIgnorePracticed
+v 0000570d 00005904 00000008 o oPC
+v 0000570d 000058fe 0000000c i iTotal
+v 0000577b 000058fe 00000010 i nGemDragon
+v 000057f3 00005844 00000014 i nDragonLevel
+v 00005883 000058dc 00000014 i nHD
+v 0000590c 000061fb 00000000 i #retval
+v 0000590c 000061f5 00000004 o oPC
+v 0000590c 000061ef 00000008 i nOGDC
+v 00005911 000061ef 0000000c i nId
+v 00005916 000061ef 00000010 i nInnate
+v 0000596e 000061ef 00000014 i nDC
+v 00005976 000061ef 00000018 i nHighestClass
+v 00005978 000061ef 0000001c i nCurrentClass
+v 0000597a 000061ef 00000020 i nCurrentCL
+v 0000597c 000061ef 00000024 i nMod
+v 0000597c 000061ef 00000028 i nHighestCL
+v 00005984 000061ef 0000002c i i
+v 00005a6b 000061ef 00000030 i nPrac
+v 00005d02 000061ef 00000034 i nBonus
+v 00005d95 000061ef 00000038 i nFocus
+v 00005d97 000061ef 0000003c i nGrFocus
+v 00005d99 000061ef 00000040 i nEpFocus
+v 00005d99 000061ef 00000044 s sSchool
+v 000061fd 0000632d 00000000 i #retval
+v 000061fd 00006327 00000004 i nClass
+v 0000632f 00006b6b 00000000 i #retval
+v 0000632f 00006b65 00000004 i nFeatId
+v 0000632f 00006b65 00000008 i nSpellId
+v 0000632f 00006b65 0000000c o oItem
+v 0000632f 00006b65 00000010 o oCaster
+v 0000632f 00006b65 00000014 o oTarget
+v 000063cf 00006b5f 00000018 i bDivineSpell
+v 000063df 00006b5f 0000001c i bArcaneSpell
+v 000063ef 00006b5f 00000020 i bCasterIsSlayer
+v 00006408 00006b5f 00000024 i bTargetIsSlayer
+v 00006421 00006b5f 00000028 i bCasterCanCast
+v 0000642b 00006b5f 0000002c i bTargetCanReceive
+v 00006435 00006b5f 00000030 i bCanCastSpell
+v 0000643b 00006b5f 00000034 i nItem
+v 00006448 00006b5f 00000038 i nSlayerType
+v 000064c4 00006b5f 0000003c s sCasterMessage
+v 000064df 00006b5f 00000040 s sTargetMessage
+v 000069d6 00006acb 00000044 s sAlreadyCast
+v 00006a5b 00006ac5 00000048 e0 eVis
+v 00006b6d 00006da0 00000000 i #retval
+v 00006b6d 00006d9a 00000004 o oItem
+v 00006b6d 00006d94 00000008 s sRes
+v 00006b7a 00006d94 0000000c i bCanUse
+v 00006da2 00006e72 00000000 i #retval
+v 00006da2 00006e6c 00000004 i nSpellId
+v 00006da2 00006e66 00000008 i bRet
+v 00006e74 00006eae 00000000 i #retval
+v 00006e74 00006ea8 00000004 i iClass
+v 00006e74 00006ea8 00000008 i iSpell
+v 00006eb0 00006fa6 00000000 i #retval
+v 00006eb0 00006fa0 00000004 i iClass
+v 00006eb0 00006fa0 00000008 i iSpell
+v 00006eb2 00006f9a 0000000c i iSpellLevel
+v 00006eb2 00006f9a 00000010 i nMasterSpell
+v 00006f04 00006f9a 00000014 s sCol
+v 00006f14 00006f9a 00000018 s sSpellLevel
+v 00006fa8 00007187 00000000 s #retval
+v 00006fa8 00007181 00000004 i iClass
+v 00006faa 0000717b 00000008 s sCol
+v 00007189 00007255 00000000 i #retval
+v 00007189 0000724f 00000004 i nSpellId
+v 00007189 00007249 00000008 i bRet
+v 00007257 0000733a 00000000 i #retval
+v 00007257 00007334 00000004 o oPC
+v 0000733c 000073f6 00000000 i #retval
+v 0000733c 000073f0 00000004 i nItem
+v 0000733c 000073f0 00000008 o oItem
+v 0000733c 000073ea 0000000c s sType
+v 000073f8 00007474 00000000 s #retval
+v 000073f8 0000746e 00000004 i nItem
+v 000073f8 0000746e 00000008 o oItem
+v 00007476 000074d2 00000000 i #retval
+v 00007476 000074cc 00000004 i nItem
+v 00007476 000074cc 00000008 o oItem
+v 00007476 000074c6 0000000c s sString
+v 000074d4 0000755b 00000000 i #retval
+v 000074d4 00007555 00000004 i nItem
+v 000074d4 00007555 00000008 o oItem
+v 000074d4 0000754f 0000000c s sType
+v 0000755d 00007632 00000000 i #retval
+v 0000755d 0000762c 00000004 i nSpellId
+v 0000755d 0000762c 00000008 o oItem
+v 0000755d 00007626 0000000c e4 ip
+v 0000757d 00007600 00000010 i ipType
+v 000075a0 000075df 00000014 i ipSub
+v 00007634 00007a3a 00000000 i #retval
+v 00007634 00007a34 00000004 i nSpellId
+v 00007634 00007a34 00000008 o oItem
+v 00007634 00007a34 0000000c o oPC
+v 00007634 00007a2e 00000010 i nItem
+v 00007643 00007a2e 00000014 i nThis
+v 00007643 00007a2e 00000018 i bAllowed
+v 00007649 00007a2e 0000001c t0016 dItemUsage
+v 00007661 00007a2e 00000030 s sRes
+v 0000766e 00007a2e 00000034 i bCanUse
+v 00007a3c 00007be6 00000000 t0016 #retval
+v 00007a3c 00007be0 00000014 o oPC
+v 00007a3c 00007bda 00000018 i nSlayerType
+v 00007a56 00007bda 0000001c t0016 dItemUsage
+v 00007be8 00007f3d 00000000 i #retval
+v 00007be8 00007f37 00000004 o oPC
+v 00007be8 00007f37 00000008 i nSpellId
+v 00007be8 00007f31 0000000c i bIsHealing
+v 00007bee 00007f31 00000010 s sSpellName
+v 00007f3f 000081f2 00000000 i #retval
+v 00007f3f 000081ec 00000004 o oPC
+v 00007f3f 000081ec 00000008 i nSpellId
+v 00007f3f 000081e6 0000000c i bSpellIsHostile
+v 00007f6f 000081e6 00000010 s sSpellName
+v 000081f4 00008236 00000000 i #retval
+v 000081f4 00008230 00000004 i nRet
+v 00008238 000082d8 00000000 i #retval
+v 00008238 000082d2 00000004 o oTarget
+v 00008238 000082d2 00000008 s sScript
+v 0000826e 000082cc 0000000c i nRet
+v 000082da 00008359 00000000 i #retval
+v 000082da 00008353 00000004 s sScript
+v 0000835b 0000839e 00000000 s #retval
+v 0000835b 00008398 00000004 s sScript
+v 000083a0 0000840a 00000000 i #retval
+v 000083a0 00008404 00000004 i nRet
+v 0000840c 000087e2 00000000 i #retval
+v 0000840c 000087dc 00000004 o oItem
+v 0000843b 000087d6 00000008 i nMaxSeqSpells
+v 0000848b 00008526 0000000c i nBt
+v 0000852c 000087d6 0000000c i nHostile
+v 000085c8 000087d6 00000010 i nNumberOfTriggers
+v 0000864f 0000876d 00000014 e0 eVisual
+v 00008674 0000876d 00000018 i nSID
+v 000087e4 0000896c 00000000 i #retval
+v 000087e4 00008966 00000004 o oItem
+v 0000881b 00008960 00000008 i nCnt
+v 0000881d 00008960 0000000c e4 ip
+v 0000896e 00008a50 00000000 i #retval
+v 0000896e 00008a4a 00000004 o oSequencer
+v 0000896e 00008a44 00000008 s sRef
+v 00008a52 00008b72 00000000 i #retval
+v 00008a52 00008b6c 00000004 o oCaster
+v 00008a52 00008b6c 00000008 o oSequencer
+v 00008a52 00008b66 0000000c i nId
+v 00008a57 00008b66 00000010 i nLevel
+v 00008a6d 00008b66 00000014 i nGold
+v 00008b74 00008c0c 00000000 i bDisplayFeedback
+v 00008b74 00008c0c 00000004 i bDestroy
+v 00008b74 00008c0c 00000008 o oCreature
+v 00008b74 00008c0c 0000000c i nGP
+v 00008b9e 00008bd5 00000010 s sMessage
+v 00008c14 00008ce7 00000000 o oPC
+v 00008c14 00008ce1 00000004 i iCoins
+v 00008cef 00008d1e 00000000 s #retval
+v 00008cef 00008d18 00000004 i iCoins
+v 00008d20 00008d57 00000000 s #retval
+v 00008d20 00008d51 00000004 i iCoins
+v 00008d59 00008d88 00000000 s #retval
+v 00008d59 00008d82 00000004 i iCoins
+v 00008d8a 00008ece 00000000 o oCaster
+v 00008d8a 00008ece 00000004 o oSequencer
+v 00008d8c 00008ec8 00000008 s sName
+v 00008e31 00008ec8 0000000c s sMessage
+v 00008ed6 0000926d 00000000 s #retval
+v 00008ed6 00009267 00000004 o oSequencer
+v 00008ed6 00009261 00000008 i nSpell1
+v 00008ef9 00009261 0000000c i nSpell2
+v 00008f1c 00009261 00000010 i nSpell3
+v 00008f81 00009261 00000014 i nNumberOfTriggers
+v 00008fa2 00009261 00000018 i nStack
+v 00008faf 00009261 0000001c s sSpell1
+v 00008fc9 00009261 00000020 s sSpell2
+v 00008fcb 00009261 00000024 s sSpell3
+v 00009043 00009261 00000028 s sName
+v 0000904f 00009261 0000002c s sRef
+v 0000926f 0000935a 00000000 i #retval
+v 0000926f 00009354 00000004 o oSequencer
+v 0000926f 0000934e 00000008 s sRef
+v 0000935c 000095a5 00000000 s #retval
+v 0000935c 0000959f 00000004 o oSequencer
+v 0000935c 00009599 00000008 t0017 data
+v 00009374 00009599 0000001c s sName
+v 000095a7 00009880 00000000 t0017 #retval
+v 000095a7 0000987a 00000014 o oSequencer
+v 000095a7 00009874 00000018 s sList
+v 000095be 00009874 0000001c t0017 data
+v 000095be 00009874 00000030 s sRef
+v 00009882 0000990b 00000000 i #retval
+v 00009882 00009905 00000004 s sCol
+v 00009882 000098ff 00000008 s sIndices
+v 0000990d 0000a6a1 00000000 s #retval
+v 0000990d 0000a69b 00000004 i bCaseSensitive
+v 0000990d 0000a69b 00000008 s sValue
+v 0000990d 0000a69b 0000000c i nIndex
+v 0000990d 0000a69b 00000010 s sCol
+v 0000990d 0000a69b 00000014 i nTask
+v 0000990d 0000a695 00000018 i nSize
+v 00009c30 0000a695 0000001c i nDelimPos
+v 00009f99 0000a677 00000020 i nCount
+v 00009f9f 0000a677 00000024 s sRemainder
+v 00009fa7 0000a677 00000028 i nLength
+v 00009fb4 0000a677 0000002c s sCurrentValue
+v 0000a24a 0000a677 00000030 i nCurrentIndex
+v 0000a250 0000a677 00000034 s sPrevious
+v 0000a6a3 0000a806 00000000 i #retval
+v 0000a6a3 0000a800 00000004 s sCol
+v 0000a6d1 0000a7fa 00000008 i nDelim
+v 0000a72d 0000a7fa 0000000c i nLength
+v 0000a73c 0000a7fa 00000010 i i
+v 0000a73e 0000a7fa 00000014 s c
+v 0000a808 0000aa11 00000000 s #retval
+v 0000a808 0000aa0b 00000004 s sRemainder
+v 0000a808 0000aa0b 00000008 s sInsert
+v 0000a808 0000aa0b 0000000c s sPrevious
+v 0000aa13 0000aa55 00000000 s #retval
+v 0000aa13 0000aa4f 00000004 i nIndex
+v 0000aa13 0000aa4f 00000008 s sCol
+v 0000aa57 0000aa91 00000000 i #retval
+v 0000aa57 0000aa8b 00000004 s sModuleSwitchConstant
+v 0000aa57 0000aa85 00000008 i nRet
+v 0000aa93 0000aabe 00000000 i nEvent
+v 0000aac6 0000abc5 00000000 s #retval
+v 0000aac6 0000abbf 00000004 o oItem
+v 0000aac6 0000abb9 00000008 s sPrefix
+v 0000aaf2 0000abb9 0000000c s sTag
+v 0000ab09 0000abb9 00000010 i iMaxPreExtensionLength
+v 0000abc7 0000ad60 00000000 s #retval
+v 0000abc7 0000ad5a 00000004 s sPostfix
+v 0000abcb 0000ad5a 00000008 i nEvent
+v 0000ad62 0000ad99 00000000 i #retval
+v 0000ad9b 0000aec7 00000000 i #retval
+v 0000ad9b 0000aec1 00000004 o oTarget
+v 0000ad9b 0000aebb 00000008 s sTargetTag
+v 0000ada8 0000aebb 0000000c s sTargetTagPrefix
+v 0000aec9 0000b037 00000000 i #retval
+v 0000aec9 0000b031 00000004 o oTarget
+v 0000aec9 0000b02b 00000008 i iObjType
+v 0000af06 0000b02b 0000000c s sTargetTag
+v 0000b039 0000b1a5 00000000 i #retval
+v 0000b039 0000b19f 00000004 o oTarget
+v 0000b039 0000b199 00000008 i iObjType
+v 0000b076 0000b199 0000000c s sTargetTag
+v 0000b1a7 0000b313 00000000 i #retval
+v 0000b1a7 0000b30d 00000004 o oTarget
+v 0000b1a7 0000b307 00000008 i iObjType
+v 0000b1e4 0000b307 0000000c s sTargetTag
+v 0000b315 0000b545 00000000 i #retval
+v 0000b315 0000b53f 00000004 o oCaster
+v 0000b315 0000b539 00000008 i nMiss
+v 0000b375 0000b539 0000000c o oTarget
+v 0000b37a 0000b539 00000010 e2 lTarget
+v 0000b448 0000b539 00000014 i nRoll
+v 0000b547 0000b6aa 00000000 i #retval
+v 0000b547 0000b6a4 00000004 o oCaster
+v 0000b580 0000b69e 00000008 i nReturn
+v 0000b586 0000b69e 0000000c i nMiss
+v 0000b58c 0000b69e 00000010 e0 eEff
 l00 0000048 00000015 0000002c
 l01 0000037 0000002c 0000002c
 l01 0000038 0000002c 0000002c
@@ -6371,1152 +6553,1328 @@ l13 0000070 00000078 00000078
 l13 0000071 00000078 00000078
 l13 0000072 00000078 00000078
 l13 0000073 00000078 00000078
-l55 0000032 0000008a 00000094
-l55 0000035 0000009a 000000a0
-l55 0000041 000000a0 000000a5
-l55 0000043 000000a5 000000b6
-l55 0000045 000000b6 000000d3
-l55 0000046 000000d3 000000ea
-l55 0000047 000000ea 000000fb
-l55 0000051 000000fb 00000110
-l55 0000052 00000110 00000133
-l55 0000054 00000133 00000156
-l55 0000056 00000156 0000015b
-l55 0000057 0000015b 0000016f
-l55 0000059 0000016f 0000018d
-l55 0000062 0000018d 000001b1
-l55 0000064 000001b1 000001c1
-l55 0000066 000001c7 000001e5
-l55 0000069 000001e5 0000020d
-l55 0000071 00000213 00000215
-l54 0000073 00000215 0000021a
-l54 0000076 0000021a 0000022f
-l54 0000077 00000235 00000242
-l54 0000078 00000242 00000294
-l54 0000079 0000029a 000002a0
-l54 0000080 000002a0 000002ba
-l54 0000085 000002c0 000002c6
-l54 0000087 000002c6 000002c8
-l54 0000096 000002c8 000002d5
-l54 0000098 000002db 0000031d
-l54 0000100 00000323 0000033d
-l54 0000107 0000033d 0000037d
-l54 0000110 00000383 00000388
-l54 0000111 00000388 0000038d
-l54 0000112 0000038d 00000392
-l54 0000114 00000392 000003c8
-l54 0000121 000003ee 0000041b
-l54 0000122 00000421 00000435
-l54 0000123 0000043b 0000043d
-l54 0000126 00000453 0000045b
-l54 0000131 00000461 00000477
-l54 0000137 00000477 000004a9
-l54 0000143 000004af 000004b7
-l54 0000144 000004bd 000004ea
-l54 0000150 000004ea 000004f2
-l54 0000152 000004f8 00000518
-l54 0000158 00000518 0000054d
-l54 0000160 00000553 0000055f
-l54 0000161 0000055f 0000057d
-l54 0000162 0000057d 0000058d
-l54 0000164 00000593 000005ad
-l54 0000184 000005b3 000005e5
-l54 0000190 000005eb 000005fb
-l54 0000192 00000601 00000615
-l54 0000194 00000615 00000638
-l54 0000198 00000638 00000646
-l54 0000201 00000660 0000067c
-l54 0000202 00000682 00000684
-l54 0000574 00000684 0000068a
-l54 0000575 0000068a 0000068f
-l54 0000576 0000068f 000006a5
-l54 0000577 000006a5 000006c3
-l54 0000578 000006c3 000006e5
-l54 0000579 000006e5 000006fd
-l54 0000580 000006fd 00000737
-l54 0000582 00000737 0000073b
-l54 0000583 0000073b 0000073f
-l54 0000584 0000073f 0000076d
-l54 0000585 0000076d 00000777
-l54 0000586 0000077d 000007a9
-l54 0000587 000007a9 000007d9
-l54 0000588 000007d9 0000081d
-l54 0000591 0000081d 0000082d
-l54 0000592 00000833 0000085f
-l54 0000593 0000085f 0000088f
-l54 0000594 0000088f 000008c0
-l54 0000597 000008c0 000008d5
-l54 0000598 000008db 000008dd
-l03 0000294 000008dd 000008df
-l03 0000295 000008df 000008ec
-l03 0000296 000008ec 00000912
-l03 0000297 00000912 00000924
-l03 0000298 00000946 00000948
-l03 0000299 0000095e 0000096e
-l03 0000300 00000974 00000984
-l03 0000301 0000098a 0000099e
-l03 0000303 0000099e 000009ba
-l03 0000304 000009c0 000009c8
-l03 0000525 000009c8 000009de
-l03 0000526 000009de 000009ee
-l03 0000527 000009f4 00000a14
-l03 0000529 00000a2e 00000a33
-l03 0000530 00000a33 00000a4b
-l03 0000531 00000a4b 00000a79
-l03 0000533 00000a79 00000a89
-l03 0000538 00000aa3 00000ab3
-l03 0000540 00000acf 00000af1
-l03 0000541 00000af1 00000b01
-l03 0000542 00000b1b 00000b2b
-l03 0000544 00000b45 00000b62
-l03 0000545 00000b62 00000b72
-l03 0000546 00000b8c 00000b9c
-l03 0000548 00000bb6 00000bd5
-l03 0000549 00000bd5 00000be5
-l03 0000550 00000bff 00000c0f
-l03 0000552 00000c29 00000c43
-l03 0000553 00000c43 00000c53
-l03 0000554 00000c6d 00000c7d
-l03 0000556 00000c97 00000cb7
-l03 0000557 00000cb7 00000cc7
-l03 0000558 00000ce1 00000cf1
-l03 0000560 00000d0b 00000d26
-l03 0000561 00000d26 00000d36
-l03 0000562 00000d50 00000d60
-l03 0000564 00000d7a 00000d8a
-l03 0000565 00000d8a 00000d8c
-l03 0000566 00000d8c 00000d9c
-l03 0000567 00000da2 00000dd4
-l03 0000568 00000dda 00000ddc
-l03 0000569 00000df2 00000e24
-l03 0000570 00000e2a 00000e2c
-l03 0000571 00000e2c 00000e5e
-l03 0000572 00000e5e 00000e9a
-l03 0000573 00000e9a 00000ece
-l03 0000575 00000ed4 00000edc
-l02 0002695 00000edc 00000ede
-l02 0002696 00000ede 00000eee
-l02 0002697 00000f0d 00000f0f
-l02 0002698 00000f25 00000f32
-l02 0002699 00000f32 00000f34
-l02 0002700 00000f34 00000f61
-l02 0002701 00000f67 00000f83
-l02 0002703 00000f83 00000f93
-l02 0002704 00000fbd 00000fbf
-l02 0002705 00000ff9 00000ffb
-l02 0002706 00001035 00001037
-l02 0002707 00001071 00001073
-l02 0002708 000010ad 000010af
-l02 0002709 000010e9 000010eb
-l02 0002710 00001125 00001127
-l02 0002711 00001161 00001163
-l02 0002712 0000119d 0000119f
-l02 0002713 000011d9 000011db
-l02 0002714 0000121b 0000121d
-l02 0002716 00001257 00001289
-l02 0002717 0000128f 000012a5
-l02 0002719 000012a5 000012c1
-l02 0002720 000012c7 000012cf
-l02 0001909 000012cf 000012d1
-l02 0001910 000012d3 000012d5
-l02 0001912 000012d7 000012f2
-l02 0001914 00001312 00001326
-l02 0001916 0000133c 0000135f
-l02 0001918 0000135f 0000136f
-l02 0001920 0000137b 0000138b
-l02 0001921 000013c4 000013c6
-l02 0001914 00001414 00001428
-l02 0001924 0000142e 00001447
-l02 0001925 0000144d 0000146b
-l02 0001926 0000146b 0000147b
-l02 0001927 0000147b 0000148d
-l02 0001930 000014af 000014cb
-l02 0001931 000014d1 000014d9
-l02 0001879 000014d9 0000150e
-l02 0001880 0000150e 0000151c
-l02 0001884 0000153c 0000157a
-l02 0001885 000015a0 000015a2
-l02 0001886 000015c2 000015ca
-l02 0001147 000015ca 00001600
-l02 0001149 00001600 00001615
-l02 0001150 00001615 00001617
-l02 0001151 00001617 0000161d
-l02 0001152 0000161d 00001623
-l02 0001154 00001623 0000163b
-l02 0001156 0000163b 00001682
-l02 0001157 00001682 00001692
-l02 0001158 000016ac 000016c0
-l02 0001160 000016c6 000016e2
-l02 0001161 000016e8 000016f0
-l02 0002828 000016f0 000016fd
-l02 0002829 0000172d 0000172f
-l02 0002842 00001750 00001758
-l02 0002791 00001758 0000176d
-l02 0002792 0000176d 0000177d
-l02 0002793 0000179d 000017cd
-l02 0002794 000017ed 0000181d
-l02 0002795 0000183d 0000186d
-l02 0002796 0000188d 000018bd
-l02 0002797 000018dd 0000190d
-l02 0002798 0000192d 0000195d
-l02 0002799 0000197d 000019ad
-l02 0002800 000019cd 000019fd
-l02 0002801 00001a1d 00001a4d
-l02 0002802 00001a6d 00001a9d
-l02 0002803 00001abd 00001aed
-l02 0002804 00001b0d 00001b3d
-l02 0002805 00001b5d 00001b8d
-l02 0002806 00001bad 00001bdd
-l02 0002807 00001bfd 00001c2d
-l02 0002808 00001c4d 00001c7d
-l02 0002809 00001c9d 00001ccd
-l02 0002810 00001ced 00001d1d
-l02 0002811 00001d3d 00001d6d
-l02 0002812 00001d8d 00001dbd
-l02 0002813 00001ddd 00001e0d
-l02 0002814 00001e2d 00001e5d
-l02 0002815 00001e7d 00001ead
-l02 0002816 00001ecd 00001efd
-l02 0002817 00001f1d 00001f4d
-l02 0002818 00001f6d 00001f9d
-l02 0002819 00001fbd 00001fed
-l02 0002820 0000200d 0000203d
-l02 0002821 0000205d 00002077
-l02 0002822 0000207d 00002085
-l02 0001786 00002085 00002087
-l02 0001787 00002089 0000208b
-l02 0001789 0000208d 000020a8
-l02 0001791 000020c8 000020dc
-l02 0001793 000020f2 00002115
-l02 0001795 00002115 00002125
-l02 0001797 00002131 00002141
-l02 0001798 0000217a 0000217c
-l02 0001791 000021ca 000021de
-l02 0001801 000021e4 000021fd
-l02 0001802 00002203 00002221
-l02 0001803 00002221 00002231
-l02 0001804 00002231 00002243
-l02 0001807 00002265 00002275
-l02 0001809 0000227b 00002296
-l02 0001810 0000229c 000022c7
-l02 0001812 000022c7 000022d7
-l02 0001814 000022dd 000022f8
-l02 0001815 000022fe 00002329
-l02 0001817 00002329 00002339
-l02 0001819 0000233f 0000235a
-l02 0001820 00002360 0000238b
-l02 0001822 0000238b 0000239b
-l02 0001824 000023a1 000023bc
-l02 0001825 000023c2 000023ed
-l02 0001828 000023ed 00002409
-l02 0001829 0000240f 00002417
-l02 0001755 00002417 0000244c
-l02 0001756 0000244c 0000245a
-l02 0001760 0000247a 000024b8
-l02 0001761 000024de 000024e0
-l02 0001762 00002500 00002508
-l02 0001659 00002508 0000250a
-l02 0001660 0000250c 0000250e
-l02 0001662 00002510 0000252b
-l02 0001664 0000254b 0000255f
-l02 0001666 00002575 00002598
-l02 0001668 00002598 000025a8
-l02 0001670 000025b4 000025c4
-l02 0001671 000025fd 000025ff
-l02 0001664 0000264d 00002661
-l02 0001674 00002667 00002680
-l02 0001675 00002686 000026a4
-l02 0001676 000026a4 000026b4
-l02 0001677 000026b4 000026c6
-l02 0001679 000026e8 000026f8
-l02 0001681 000026fe 00002719
-l02 0001682 0000271f 0000274a
-l02 0001684 0000274a 0000275a
-l02 0001686 00002760 0000277b
-l02 0001687 00002781 000027ac
-l02 0001690 000027ac 000027bc
-l02 0001692 000027c2 000027dd
-l02 0001693 000027e3 0000280e
-l02 0001695 0000280e 0000281e
-l02 0001697 00002824 0000283f
-l02 0001698 00002845 00002870
-l02 0001703 00002870 0000288c
-l02 0001704 00002892 0000289a
-l02 0001648 0000289a 000028cf
-l02 0001649 000028cf 000028dd
-l02 0001653 000028fd 0000293b
-l02 0001654 00002961 00002963
-l02 0001655 00002983 0000298b
-l02 0001991 0000298b 0000298d
-l02 0001992 0000298f 00002991
-l02 0001994 00002993 000029ae
-l02 0001996 000029ce 000029e2
-l02 0001998 000029f8 00002a1b
-l02 0002000 00002a1b 00002a2b
-l02 0002002 00002a37 00002a47
-l02 0002003 00002a80 00002a82
-l02 0001996 00002ad0 00002ae4
-l02 0002006 00002aea 00002b03
-l02 0002007 00002b09 00002b27
-l02 0002008 00002b27 00002b37
-l02 0002009 00002b37 00002b49
-l02 0002011 00002b6b 00002b7e
-l02 0002012 00002b7e 00002b8e
-l02 0002014 00002b94 00002ba4
-l02 0002015 00002bce 00002bd0
-l02 0002019 00002bf8 00002c14
-l02 0002020 00002c1a 00002c22
-l02 0001980 00002c22 00002c57
-l02 0001981 00002c57 00002c65
-l02 0001985 00002c85 00002cc3
-l02 0001986 00002ce9 00002ceb
-l02 0001987 00002d0b 00002d13
-l02 0002077 00002d13 00002d15
-l02 0002078 00002d17 00002d19
-l02 0002080 00002d1b 00002d36
-l02 0002082 00002d56 00002d6a
-l02 0002084 00002d80 00002da3
-l02 0002086 00002da3 00002db3
-l02 0002088 00002dbf 00002dcf
-l02 0002089 00002e08 00002e0a
-l02 0002082 00002e58 00002e6c
-l02 0002092 00002e72 00002e8b
-l02 0002093 00002e91 00002eaf
-l02 0002094 00002eaf 00002ebf
-l02 0002095 00002ebf 00002ed1
-l02 0002098 00002ef3 00002f0f
-l02 0002099 00002f15 00002f1d
-l02 0002066 00002f1d 00002f52
-l02 0002067 00002f52 00002f60
-l02 0002071 00002f80 00002fbe
-l02 0002072 00002fe4 00002fe6
-l02 0002073 00003006 0000300e
-l02 0002203 0000300e 00003010
-l02 0002204 00003012 00003014
-l02 0002206 00003016 00003031
-l02 0002208 00003051 00003065
-l02 0002210 0000307b 0000309e
-l02 0002212 0000309e 000030ae
-l02 0002214 000030ba 000030ca
-l02 0002215 00003103 00003105
-l02 0002208 00003153 00003167
-l02 0002218 0000316d 00003186
-l02 0002219 0000318c 000031aa
-l02 0002220 000031aa 000031ba
-l02 0002221 000031ba 000031cc
-l02 0002223 000031ee 0000320a
-l02 0002224 00003210 00003218
-l02 0002173 00003218 0000324d
-l02 0002174 0000324d 0000325b
-l02 0002178 0000327b 000032b9
-l02 0002179 000032df 000032e1
-l02 0002180 00003301 00003309
-l02 0002310 00003309 0000330b
-l02 0002311 0000330d 0000330f
-l02 0002313 00003311 0000332c
-l02 0002315 0000334c 00003360
-l02 0002317 00003376 00003399
-l02 0002319 00003399 000033a9
-l02 0002321 000033b5 000033c5
-l02 0002322 000033fe 00003400
-l02 0002315 0000344e 00003462
-l02 0002325 00003468 00003481
-l02 0002326 00003487 000034a5
-l02 0002327 000034a5 000034b5
-l02 0002328 000034b5 000034c7
-l02 0002330 000034e9 00003505
-l02 0002331 0000350b 00003513
-l02 0002280 00003513 00003548
-l02 0002281 00003548 00003556
-l02 0002285 00003576 000035b4
-l02 0002286 000035da 000035dc
-l02 0002287 000035fc 00003604
-l02 0002417 00003604 0000361f
-l02 0002419 0000363f 00003641
-l02 0002420 00003645 0000364b
-l02 0002423 0000364b 0000365f
-l02 0002425 00003675 00003698
-l02 0002427 00003698 000036a8
-l02 0002429 000036b4 000036c4
-l02 0002430 000036fd 000036ff
-l02 0002423 0000374d 00003761
-l02 0002433 00003767 00003780
-l02 0002434 00003786 000037a4
-l02 0002435 000037a4 000037b4
-l02 0002436 000037b4 000037c6
-l02 0002439 000037e8 000037f8
-l02 0002440 000037fe 00003819
-l02 0002441 0000381f 0000384a
-l02 0002443 0000384a 0000385a
-l02 0002444 00003860 0000387b
-l02 0002445 00003881 000038ac
-l02 0002447 000038ac 000038bc
-l02 0002448 000038c2 000038dd
-l02 0002449 000038e3 0000390e
-l02 0002451 0000390e 0000391e
-l02 0002452 00003924 0000393f
-l02 0002453 00003945 00003970
-l02 0002456 00003970 0000398c
-l02 0002457 00003992 0000399a
-l02 0002386 0000399a 000039cf
-l02 0002387 000039cf 000039dd
-l02 0002391 000039fd 00003a3b
-l02 0002392 00003a61 00003a63
-l02 0002393 00003a83 00003a8b
-l02 0001540 00003a8b 00003a8d
-l02 0001541 00003a8d 00003a8f
-l02 0001542 00003a8f 00003a95
-l02 0001544 00003a95 00003ab0
-l02 0001546 00003ad0 00003ae4
-l02 0001548 00003afa 00003b1d
-l02 0001550 00003b1d 00003b2d
-l02 0001552 00003b39 00003b49
-l02 0001553 00003b82 00003b84
-l02 0001546 00003bd2 00003be6
-l02 0001556 00003bec 00003c05
-l02 0001557 00003c0b 00003c29
-l02 0001558 00003c29 00003c39
-l02 0001559 00003c39 00003c4b
-l02 0001562 00003c6d 00003c89
-l02 0001563 00003c8f 00003c97
-l02 0001191 00003c97 00003ccc
-l02 0001192 00003ccc 00003cda
-l02 0001194 00003cfa 00003d38
-l02 0001195 00003d5e 00003d60
-l02 0001196 00003d80 00003d88
-l02 0002580 00003d88 00003d8a
-l02 0002581 00003d8c 00003d8e
-l02 0002583 00003d90 00003dab
-l02 0002585 00003dcb 00003ddf
-l02 0002587 00003df5 00003e18
-l02 0002589 00003e18 00003e28
-l02 0002591 00003e34 00003e44
-l02 0002592 00003e7d 00003e7f
-l02 0002585 00003ecd 00003ee1
-l02 0002595 00003ee7 00003f00
-l02 0002596 00003f06 00003f24
-l02 0002597 00003f24 00003f34
-l02 0002598 00003f34 00003f46
-l02 0002600 00003f68 00003f78
-l02 0002602 00003f7e 00003f99
-l02 0002603 00003f9f 00003fca
-l02 0002605 00003fca 00003fda
-l02 0002607 00003fe0 00003ffb
-l02 0002608 00004001 0000402c
-l02 0002611 0000402c 0000403c
-l02 0002613 00004042 0000405d
-l02 0002614 00004063 0000408e
-l02 0002616 0000408e 0000409e
-l02 0002618 000040a4 000040bf
-l02 0002619 000040c5 000040f0
-l02 0002623 000040f0 0000410c
-l02 0002624 00004112 0000411a
-l02 0002508 0000411a 0000414f
-l02 0002509 0000414f 0000415d
-l02 0002513 0000417d 000041bb
-l02 0002514 000041e1 000041e3
-l02 0002515 00004203 0000420b
-l21 0000060 0000420b 0000421e
-l21 0000061 0000421e 0000422e
-l21 0000063 0000424e 00004279
-l21 0000064 00004279 000042a4
-l21 0000065 000042a4 000042cf
-l21 0000066 000042cf 000042fa
-l21 0000067 000042fa 0000430d
-l21 0000068 0000430d 00004326
-l21 0000069 0000432c 00004347
-l21 0000070 00004347 00004357
-l21 0000072 00004383 000043b6
-l21 0000073 000043bc 000043c9
-l21 0000074 000043c9 000043e7
-l21 0000075 000043e7 000043f9
-l21 0000077 0000441b 00004437
-l21 0000078 0000443d 00004445
-l21 0000083 00004445 00004458
-l21 0000084 00004458 00004468
-l21 0000086 00004488 000044b3
-l21 0000091 000044b3 000044c6
-l21 0000092 000044c6 000044d6
-l21 0000093 0000450c 00004525
-l21 0000094 0000452b 00004546
-l21 0000095 00004546 00004556
-l21 0000097 00004582 000045b5
-l21 0000098 000045bb 000045c8
-l21 0000099 000045c8 000045e6
-l21 0000100 000045e6 000045f8
-l21 0000102 0000461a 00004636
-l21 0000103 0000463c 00004644
-l19 0001233 00004644 00004677
-l19 0001235 00004677 000046a7
-l19 0001236 000046ad 00004712
-l19 0001237 00004712 0000472c
-l19 0001240 0000472c 00004739
-l19 0001242 00004739 00004765
-l19 0001243 00004765 00004792
-l19 0001245 00004792 00004798
-l19 0001246 00004798 0000479e
-l19 0001247 0000479e 000047ce
-l19 0001248 000047ef 0000481f
-l19 0001250 00004840 00004846
-l19 0001251 00004846 0000484c
-l19 0001252 0000484c 0000485c
-l19 0001253 00004862 0000489e
-l19 0001255 0000489e 000048ae
-l19 0001256 000048b4 000048f0
-l19 0001258 000048f0 00004900
-l19 0001259 00004906 0000492e
-l19 0001260 00004934 00004950
-l19 0001263 00004950 00004960
-l19 0001264 00004966 0000498e
-l19 0001265 00004994 000049b0
-l19 0001268 000049b0 000049cc
-l19 0001269 000049d2 000049da
-l03 0000262 000049da 00004bcc
-l03 0000263 00004bcc 00004bcc
-l03 0000264 00004be6 00004be6
-l03 0000265 00004c00 00004c00
-l03 0000266 00004c1a 00004c1a
-l03 0000267 00004c34 00004c34
-l03 0000268 00004c4e 00004c4e
-l03 0000269 00004c68 00004c68
-l03 0000270 00004c82 00004c82
-l03 0000271 00004c9c 00004c9c
-l03 0000272 00004cb6 00004cb6
-l03 0000273 00004cd0 00004cd0
-l03 0000274 00004cea 00004cea
-l03 0000275 00004d04 00004d04
-l03 0000276 00004d1e 00004d1e
-l03 0000277 00004d38 00004d38
-l03 0000278 00004d52 00004d52
-l03 0000279 00004d6c 00004d6c
-l03 0000280 00004d86 00004d86
-l03 0000281 00004da0 00004da0
-l03 0000282 00004dba 00004dba
-l03 0000283 00004dd4 00004dd4
-l03 0000284 00004dee 00004dee
-l03 0000286 00004e0e 00004e28
-l03 0000287 00004e28 00004e30
-l02 0000739 00004e30 00004e40
-l02 0000740 00004e60 00004e62
-l02 0000744 00004e8c 00004e99
-l02 0000748 00004e99 00004eb0
-l02 0000751 00004eca 00004ee1
-l02 0000752 00004ee1 00004ef1
-l02 0000753 00004f19 00004f1b
-l02 0000754 00004f53 00004f55
-l02 0000756 00004f8f 00004f9f
-l02 0000757 00004fc9 00004fe5
-l02 0000758 00004feb 00004ff3
-l23 0000065 00004ff3 00005003
-l23 0000066 00005003 0000501b
-l23 0000067 0000501b 0000502b
-l23 0000069 0000502b 0000502d
-l23 0000070 0000502d 00005035
-l23 0000071 00005053 00005055
-l23 0000072 0000508d 000050c7
-l23 0000073 000050cd 00005119
-l23 0000074 00005119 0000514b
-l23 0000076 0000514b 0000515b
-l23 0000077 00005161 00005191
-l23 0000079 00005191 000051a1
-l23 0000080 000051a7 000051d7
-l23 0000081 00005215 00005217
-l23 0000082 0000528a 0000528c
-l23 0000083 00005305 00005307
-l23 0000085 0000537d 0000538d
-l23 0000086 00005393 000053c3
-l23 0000087 000053ea 0000541c
-l23 0000089 0000541c 00005439
-l23 0000090 00005439 00005455
-l23 0000091 0000545b 00005463
-l53 0000018 00005463 00005482
-l53 0000019 00005482 000054ae
-l53 0000020 000054b4 000054bc
-l54 0000539 000054bc 000054d7
-l54 0000541 000054e3 000054e8
-l54 0000542 000054e8 0000550c
-l54 0000543 0000550c 0000551f
-l54 0000544 0000551f 00005584
-l54 0000545 00005584 000055a8
-l54 0000546 000055a8 000055ad
-l54 0000547 000055ad 000055bd
-l54 0000548 000055c3 000055e8
-l54 0000549 000055e8 00005624
-l54 0000550 0000562a 0000562c
-l54 0000551 0000562c 0000565f
-l54 0000552 0000565f 0000568a
-l54 0000553 0000568a 000056c8
-l54 0000555 000056c8 000056df
-l54 0000556 000056e5 00005723
-l54 0000557 00005723 00005725
-l54 0000558 00005725 0000574b
-l54 0000559 0000574b 0000575b
-l54 0000560 00005783 00005785
-l54 0000561 00005798 000057cd
-l54 0000563 000057cd 000057e0
-l54 0000564 000057e0 000057f0
-l54 0000565 000057f6 00005831
-l54 0000566 00005831 00005861
-l54 0000567 00005861 000058a4
-l54 0000569 000058a4 000058b7
-l54 0000570 000058bd 000058bf
-l52 0000025 000058bf 000058c4
-l52 0000026 000058c4 000058c9
-l52 0000027 000058c9 000058ef
-l52 0000028 000058ef 000058ff
-l52 0000030 00005921 00005927
-l52 0000032 00005927 0000592f
-l52 0000033 0000592f 00005935
-l52 0000034 00005935 00005937
-l52 0000035 00005937 0000594b
-l52 0000036 00005961 00005984
-l52 0000037 00005984 00005994
-l52 0000038 0000599a 000059c0
-l52 0000039 000059c0 000059d2
-l52 0000040 000059d8 000059ee
-l52 0000041 000059ee 00005a04
-l52 0000035 00005a04 00005a18
-l52 0000045 00005a1e 00005a24
-l52 0000046 00005a24 00005ae2
-l52 0000047 00005ae2 00005ae2
-l52 0000048 00005ae2 00005af6
-l52 0000049 00005af6 00005b0a
-l52 0000050 00005b0a 00005b10
-l52 0000052 00005b10 00005b10
-l52 0000053 00005b10 00005b24
-l52 0000054 00005b24 00005b38
-l52 0000055 00005b38 00005b3e
-l52 0000057 00005b3e 00005b3e
-l52 0000058 00005b3e 00005b52
-l52 0000059 00005b52 00005b66
-l52 0000060 00005b66 00005b6c
-l52 0000062 00005b6c 00005b6c
-l52 0000063 00005b6c 00005b80
-l52 0000064 00005b80 00005b94
-l52 0000065 00005b94 00005b9a
-l52 0000067 00005b9a 00005b9a
-l52 0000068 00005b9a 00005bae
-l52 0000069 00005bae 00005bc2
-l52 0000070 00005bc2 00005bc8
-l52 0000072 00005bc8 00005bc8
-l52 0000073 00005bc8 00005bdc
-l52 0000074 00005bdc 00005bf0
-l52 0000075 00005bf0 00005bf6
-l52 0000077 00005bf6 00005bf6
-l52 0000078 00005bf6 00005c0a
-l52 0000079 00005c0a 00005c1e
-l52 0000080 00005c1e 00005c24
-l52 0000082 00005c24 00005c24
-l52 0000083 00005c24 00005c38
-l52 0000084 00005c38 00005c4c
-l52 0000085 00005c4c 00005c52
-l52 0000087 00005c52 00005c52
-l52 0000088 00005c52 00005c6e
-l52 0000092 00005c74 00005c84
-l52 0000095 00005cb5 00005ccd
-l52 0000096 00005ccd 00005cdd
-l52 0000097 00005cf7 00005d17
-l52 0000101 00005d17 00005d46
-l52 0000103 00005d46 00005d4c
-l52 0000104 00005d4c 00005d72
-l52 0000105 00005d72 00005d81
-l52 0000106 00005d87 00005d9b
-l52 0000107 00005d9b 00005daf
-l52 0000108 00005daf 00005dc3
-l52 0000109 00005dc9 00005dcb
-l52 0000110 00005de0 00005df4
-l52 0000111 00005df4 00005e08
-l52 0000112 00005e08 00005e1c
-l52 0000113 00005e22 00005e24
-l52 0000114 00005e39 00005e4d
-l52 0000115 00005e4d 00005e61
-l52 0000116 00005e61 00005e75
-l52 0000117 00005e7b 00005e7d
-l52 0000118 00005e92 00005ea6
-l52 0000119 00005ea6 00005eba
-l52 0000120 00005eba 00005ece
-l52 0000121 00005ed4 00005ed6
-l52 0000122 00005eeb 00005eff
-l52 0000123 00005eff 00005f13
-l52 0000124 00005f13 00005f27
-l52 0000125 00005f2d 00005f2f
-l52 0000126 00005f44 00005f58
-l52 0000127 00005f58 00005f6c
-l52 0000128 00005f6c 00005f80
-l52 0000129 00005f86 00005f88
-l52 0000130 00005f9d 00005fb1
-l52 0000131 00005fb1 00005fc5
-l52 0000132 00005fc5 00005fd9
-l52 0000133 00005fdf 00005fe1
-l52 0000134 00005ff6 0000600a
-l52 0000135 0000600a 0000601e
-l52 0000136 0000601e 00006032
-l52 0000137 00006038 0000603a
-l52 0000139 0000604c 0000605a
-l52 0000140 00006060 0000607b
-l52 0000141 000060a5 000060a7
-l52 0000142 000060ec 000060ee
-l52 0000145 00006123 0000613e
-l52 0000147 00006158 0000616a
-l52 0000149 00006186 000061a2
-l52 0000150 000061a8 000061b0
-l52 0000013 000061b0 000062a0
-l52 0000016 000062a6 000062c0
-l52 0000018 000062c0 000062da
-l52 0000019 000062da 000062e2
-l13 0000181 000062e2 00006332
-l13 0000188 00006352 00006362
-l13 0000193 00006382 00006392
-l13 0000194 00006392 000063a2
-l13 0000198 000063a2 000063bb
-l13 0000199 000063bb 000063d4
-l13 0000200 000063d4 000063de
-l13 0000201 000063de 000063e8
-l13 0000202 000063e8 000063ee
-l13 0000203 000063ee 000063fb
-l13 0000205 000063fb 00006401
-l13 0000206 00006401 00006409
-l13 0000210 0000642d 0000645d
-l13 0000212 00006477 00006492
-l13 0000213 00006492 000064cf
-l13 0000216 000064cf 000064d7
-l13 0000221 000064dd 000064ed
-l13 0000227 000064f3 00006513
-l13 0000229 00006519 0000653f
-l13 0000233 0000653f 00006553
-l13 0000237 00006559 0000655b
-l13 0000239 0000655b 0000658f
-l13 0000243 0000658f 00006671
-l13 0000247 00006677 0000669f
-l13 0000248 000066a5 000066b9
-l13 0000249 000066bf 000066c1
-l13 0000250 000066ef 00006703
-l13 0000251 00006709 0000670b
-l13 0000252 0000674b 0000675f
-l13 0000255 00006765 00006767
-l13 0000256 0000678d 000067a1
-l13 0000262 000067a1 000067b3
-l13 0000268 000067cf 000067f9
-l13 0000270 000067ff 0000680d
-l13 0000271 00006830 00006883
-l13 0000274 00006883 0000689b
-l13 0000276 000068a1 000068b5
-l13 0000278 000068bb 000068bd
-l13 0000280 000068bd 000068db
-l13 0000281 000068e1 000068f5
-l13 0000286 000068f5 00006915
-l13 0000288 0000692f 0000693f
-l13 0000295 00006945 00006983
-l13 0000297 00006989 000069b1
-l13 0000298 000069b1 000069ce
-l13 0000300 000069d4 00006a0e
-l13 0000301 00006a0e 00006a1f
-l13 0000302 00006a1f 00006a5d
-l13 0000303 00006a5d 00006a78
-l13 0000307 00006a84 00006a91
-l13 0000308 00006aac 00006adb
-l13 0000310 00006af6 00006b12
-l13 0000311 00006b18 00006b20
-l13 0000433 00006b20 00006b2d
-l13 0000434 00006b2d 00006b33
-l13 0000435 00006b33 00006b52
-l13 0000436 00006b72 00006b74
-l13 0000437 00006bbf 00006bc1
-l13 0000438 00006c0f 00006c11
-l13 0000439 00006c5a 00006c5c
-l13 0000440 00006ca2 00006ca4
-l13 0000441 00006cea 00006cec
-l13 0000443 00006d2b 00006d47
-l13 0000444 00006d4d 00006d55
-l13 0000649 00006d55 00006d5b
-l13 0000650 00006d5b 00006de3
-l13 0000655 00006de9 00006dfd
-l13 0000657 00006dfd 00006e19
-l13 0000658 00006e1f 00006e27
-l03 0000348 00006e27 00006e5b
-l03 0000349 00006e5b 00006e63
-l03 0000329 00006e63 00006e65
-l03 0000330 00006e65 00006e8b
-l03 0000331 00006e8b 00006e9b
-l03 0000332 00006eb7 00006ec7
-l03 0000333 00006ec7 00006ee6
-l03 0000335 00006ee6 00006ef4
-l03 0000336 00006efa 00006f0e
-l03 0000337 00006f14 00006f16
-l03 0000338 00006f16 00006f31
-l03 0000343 00006f31 00006f4d
-l03 0000344 00006f53 00006f5b
-l03 0000309 00006f5b 00006f5d
-l03 0000311 00006f5d 0000701b
-l03 0000313 0000701b 0000701b
-l03 0000314 00007037 00007037
-l03 0000315 00007055 00007055
-l03 0000316 00007072 00007072
-l03 0000317 00007091 00007091
-l03 0000318 000070af 000070af
-l03 0000319 000070af 000070af
-l03 0000320 000070cf 000070cf
-l03 0000321 000070ee 000070ee
-l03 0000323 00007112 0000712e
-l03 0000324 00007134 0000713c
-l13 0000662 0000713c 00007142
-l13 0000663 00007142 000071c6
-l13 0000667 000071cc 000071e0
-l13 0000669 000071e0 000071fc
-l13 0000670 00007202 0000720a
-l13 0000641 0000720a 00007223
-l13 0000642 00007249 0000724b
-l13 0000643 0000728a 0000728c
-l13 0000644 000072cb 000072cd
-l13 0000645 000072e7 000072ef
-l19 0001071 000072ef 00007307
-l19 0001072 00007307 00007363
-l19 0001074 00007369 00007383
-l19 0001076 00007383 0000739d
-l19 0001079 000073a3 000073ab
-l19 0000996 000073ab 000073bb
-l19 0000997 000073dc 00007421
-l19 0000998 00007421 00007429
-l19 0001085 00007429 00007441
-l19 0001086 00007441 00007479
-l19 0001149 0000747f 00007487
-l19 0001033 00007487 0000749f
-l19 0001034 0000749f 000074c8
-l19 0001035 000074e8 00007502
-l19 0001040 00007508 00007510
-l13 0000449 00007510 0000751d
-l13 0000450 0000751d 00007530
-l13 0000452 00007530 0000753d
-l13 0000453 0000753d 0000754d
-l13 0000455 00007553 00007560
-l13 0000456 00007560 00007572
-l13 0000458 00007598 000075b3
-l13 0000460 000075bf 000075d9
-l13 0000461 000075df 000075e7
-l13 0000497 000075e7 000075f4
-l13 0000498 000075f4 000075f6
-l13 0000499 000075f6 000075fc
-l13 0000501 000075fc 00007614
-l13 0000503 00007614 00007621
-l13 0000504 00007621 00007627
-l13 0000505 00007627 00007646
-l13 0000508 00007660 000076b0
-l13 0000511 000076d2 000076d4
-l13 0000514 00007721 00007723
-l13 0000517 00007795 00007797
-l13 0000519 00007809 0000780b
-l13 0000522 00007821 0000789d
-l13 0000524 0000789d 0000789d
-l13 0000525 000078b7 000078b7
-l13 0000526 000078e3 000078e3
-l13 0000527 00007907 00007907
-l13 0000528 0000792b 0000792b
-l13 0000530 00007969 0000797d
-l13 0000532 00007989 0000798b
-l13 0000534 0000798b 0000799f
-l13 0000536 000079a5 000079a5
-l13 0000538 000079c5 000079e1
-l13 0000539 000079e7 000079ef
-l13 0000466 000079ef 000079ff
-l13 0000467 000079ff 00007a09
-l13 0000468 00007a09 00007a19
-l13 0000470 00007a1f 00007a33
-l13 0000471 00007a33 00007a47
-l13 0000472 00007a47 00007a5b
-l13 0000473 00007a5b 00007a6f
-l13 0000474 00007a6f 00007a83
-l13 0000476 00007a89 00007a8b
-l13 0000478 00007aa1 00007ab5
-l13 0000479 00007ab5 00007ac9
-l13 0000480 00007ac9 00007add
-l13 0000481 00007add 00007af1
-l13 0000482 00007af1 00007b05
-l13 0000484 00007b0b 00007b0d
-l13 0000486 00007b0d 00007b21
-l13 0000487 00007b21 00007b35
-l13 0000488 00007b35 00007b49
-l13 0000489 00007b49 00007b5d
-l13 0000490 00007b5d 00007b71
-l13 0000492 00007b71 00007b8d
-l13 0000493 00007b93 00007b9b
-l13 0000543 00007b9b 00007ba1
-l13 0000544 00007ba1 00007bd0
-l13 0000545 00007bd0 00007be5
-l13 0000547 00007beb 00007c51
-l13 0000549 00007c51 00007c51
-l13 0000550 00007c6b 00007c6b
-l13 0000551 00007c85 00007c85
-l13 0000552 00007c9f 00007c9f
-l13 0000553 00007cb9 00007cb9
-l13 0000555 00007cd9 00007cff
-l13 0000557 00007d1f 00007d21
-l13 0000559 00007d21 00007d5b
-l13 0000561 00007d5b 00007d5b
-l13 0000562 00007d75 00007d75
-l13 0000563 00007d8f 00007d8f
-l13 0000565 00007daf 00007dd2
-l13 0000567 00007dec 00007dfc
-l13 0000569 00007e02 00007e27
-l13 0000570 00007e41 00007e6a
-l13 0000571 00007e84 00007eae
-l13 0000573 00007ec8 00007ee4
-l13 0000574 00007eea 00007ef2
-l13 0000578 00007ef2 00007f22
-l13 0000579 00007f22 00007f51
-l13 0000580 00007f51 00007f66
-l13 0000582 00007f6c 00007ffe
-l13 0000584 00007ffe 00007ffe
-l13 0000585 00008018 00008018
-l13 0000586 00008032 00008032
-l13 0000587 0000804c 0000804c
-l13 0000588 00008066 00008066
-l13 0000589 00008080 00008080
-l13 0000590 0000809a 0000809a
-l13 0000592 000080e6 000080e8
-l13 0000594 00008131 00008133
-l13 0000599 0000817d 00008199
-l13 0000600 0000819f 000081a7
-l54 0000212 000081a7 000081c7
-l54 0000213 000081c7 000081e3
-l54 0000214 000081e9 000081eb
-l24 0000710 000081eb 0000820c
-l24 0000711 0000820c 00008221
-l24 0000712 00008221 00008242
-l24 0000713 00008242 00008263
-l24 0000714 00008263 0000827f
-l24 0000715 00008285 0000828d
-l54 0000222 0000828d 00008295
-l54 0000223 00008295 000082a3
-l54 0000225 000082a9 000082bc
-l54 0000226 000082bc 000082cc
-l54 0000228 000082d2 000082ec
-l54 0000231 000082ec 00008306
-l54 0000232 0000830c 0000830e
-l24 0000546 0000830e 0000832f
-l24 0000547 0000832f 0000834b
-l24 0000548 00008351 00008353
-l24 0000563 00008353 00008377
-l24 0000564 00008377 0000839b
-l24 0000565 0000839b 000083b7
-l24 0000566 000083bd 000083bf
-l54 0000248 000083bf 000083ce
-l54 0000250 000083d4 000083ee
-l54 0000253 000083ee 000083fe
-l54 0000254 000083fe 0000840e
-l54 0000256 00008414 0000842e
-l54 0000259 0000842e 00008438
-l54 0000262 0000843e 00008448
-l54 0000263 00008448 00008478
-l54 0000265 0000847e 000084bf
-l54 0000266 000084bf 000084d9
-l54 0000271 000084df 0000850a
-l54 0000272 0000850a 0000851a
-l54 0000274 00008520 00008561
-l54 0000275 00008561 0000857b
-l54 0000278 0000857b 0000859c
-l54 0000280 0000859c 000085ae
-l54 0000284 000085b4 000085c4
-l54 0000285 000085ca 000085e2
-l54 0000286 000085e8 00008602
-l54 0000289 00008602 00008613
-l54 0000290 00008613 00008627
-l54 0000292 00008627 00008634
-l54 0000293 00008634 0000866d
-l54 0000294 0000866d 00008696
-l54 0000295 00008696 000086b5
-l54 0000296 000086b5 000086f6
-l54 0000299 000086f6 00008706
-l54 0000300 0000870c 00008720
-l54 0000302 0000872c 0000872e
-l54 0000304 0000872e 0000876f
-l54 0000307 0000876f 00008789
-l54 0000308 0000878f 00008797
-l19 0001743 00008797 000087ac
-l19 0001745 000087b2 000087cc
-l19 0001748 000087cc 000087ce
-l19 0001749 000087ce 000087d0
-l19 0001751 000087d0 000087eb
-l19 0001753 000087eb 0000881e
-l19 0001755 0000881e 00008833
-l19 0001757 00008839 0000884e
-l19 0001759 00008854 00008868
-l19 0001761 0000886e 00008870
-l19 0001763 0000888b 0000889f
-l19 0001765 000088a5 000088a7
-l19 0001767 000088c2 000088d6
-l19 0001770 000088d6 000088f1
-l19 0001773 000088f7 00008913
-l19 0001774 00008919 00008921
-l53 0000005 00008921 0000892e
-l53 0000007 0000892e 000089bd
-l53 0000010 000089c3 000089db
-l53 0000011 000089db 000089f5
-l53 0000014 000089f5 00008a0f
-l53 0000015 00008a15 00008a1d
-l53 0000066 00008a1d 00008a22
-l53 0000067 00008a22 00008a38
-l53 0000068 00008a38 00008a56
-l53 0000069 00008a56 00008a7b
-l53 0000071 00008a7b 00008a92
-l53 0000072 00008a98 00008adb
-l53 0000073 00008adb 00008af5
-l53 0000075 00008af5 00008b17
-l53 0000076 00008b17 00008b31
-l53 0000077 00008b37 00008b3f
-l23 0000106 00008b3f 00008b4f
-l23 0000107 00008b5b 00008b63
-l23 0000108 00008b69 00008b8b
-l23 0000109 00008b8b 00008ba0
-l23 0000111 00008ba6 00008bc9
-l23 0000112 00008bc9 00008bd7
-l23 0000113 00008bd7 00008bdf
-l23 0000057 00008bdf 00008bec
-l23 0000059 00008bec 00008c2c
-l23 0000060 00008c2c 00008c6c
-l23 0000061 00008c6c 00008cac
-l23 0000062 00008cb2 00008cba
-l23 0000053 00008cba 00008ce3
-l23 0000054 00008ce3 00008ceb
-l23 0000049 00008ceb 00008d1c
-l23 0000050 00008d1c 00008d24
-l23 0000045 00008d24 00008d4d
-l23 0000046 00008d4d 00008d55
-l53 0000026 00008d55 00008d78
-l53 0000027 00008d78 00008d9b
-l53 0000028 00008d9b 00008dbe
-l53 0000030 00008dbe 00008de2
-l53 0000031 00008df4 00008e15
-l53 0000032 00008e15 00008e22
-l53 0000033 00008e22 00008e3a
-l53 0000034 00008e3a 00008e3e
-l53 0000035 00008e3e 00008e4e
-l53 0000036 00008e7a 00008e8a
-l53 0000038 00008eb6 00008ec2
-l53 0000039 00008ec2 00008ecf
-l53 0000040 00008ecf 00008ef6
-l53 0000041 00008f25 00008f27
-l53 0000042 00008f78 00008f9f
-l53 0000044 00008f9f 00008fcf
-l53 0000045 00008fd5 00008ff5
-l53 0000046 00008ffb 00008ffd
-l53 0000047 00009013 00009048
-l53 0000048 0000904e 00009050
-l53 0000049 00009050 00009098
-l53 0000051 00009098 000090b8
-l53 0000052 000090b8 000090cd
-l53 0000059 000090cd 0000911a
-l53 0000060 0000911a 0000914f
-l53 0000061 0000914f 00009164
-l53 0000062 0000916a 00009172
-l24 0000503 00009172 00009184
-l24 0000504 00009184 000091a0
-l24 0000505 000091a6 000091ae
-l24 0000636 000091ae 000091d9
-l24 0000637 000091d9 000091e1
-l24 0000678 000091e1 0000920d
-l24 0000679 0000920d 00009224
-l24 0000680 00009224 0000922a
-l24 0000682 0000922a 00009252
-l24 0000684 00009258 0000926f
-l24 0000686 00009275 00009298
-l24 0000688 00009298 000092b8
-l24 0000690 000092b8 000092d4
-l24 0000691 000092da 000092e2
-l24 0000642 000092e2 000092e6
-l24 0000643 000092e6 000092ee
-l24 0000645 000092ee 00009396
-l24 0000647 00009396 00009396
-l24 0000648 00009396 000093ab
-l24 0000649 000093ab 000093b1
-l24 0000650 000093b1 000093b1
-l24 0000651 000093b1 000093c6
-l24 0000652 000093c6 000093cc
-l24 0000653 000093cc 000093cc
-l24 0000654 000093cc 000093e1
-l24 0000655 000093e1 000093e7
-l24 0000656 000093e7 000093e7
-l24 0000657 000093e7 000093fc
-l24 0000658 000093fc 00009402
-l24 0000659 00009402 00009402
-l24 0000660 00009402 00009417
-l24 0000661 00009417 0000941d
-l24 0000662 0000941d 0000941d
-l24 0000663 0000941d 00009432
-l24 0000664 00009432 00009438
-l24 0000665 00009438 00009438
-l24 0000666 00009438 0000944d
-l24 0000667 0000944d 00009453
-l24 0000669 00009459 00009475
-l24 0000670 0000947b 0000947d
-l24 0000621 0000947d 000094b4
-l24 0000622 000094b4 000094b6
-l06 0000359 000094b6 000094c3
-l06 0000360 000094c3 000094e6
-l06 0000361 000094e6 0000952c
-l06 0000362 00009532 0000954c
-l06 0000364 0000954c 0000959c
-l06 0000365 000095a2 000095bc
-l06 0000367 000095bc 000095d6
-l06 0000368 000095dc 000095e4
-l06 0000316 000095e4 000095f1
-l06 0000317 000095f1 00009601
-l06 0000318 00009607 00009621
-l06 0000321 00009621 0000962e
-l06 0000322 0000962e 000096c6
-l06 0000324 000096cc 000096e6
-l06 0000326 000096e6 0000970c
-l06 0000327 00009712 0000972c
-l06 0000329 0000972c 00009746
-l06 0000330 0000974c 00009754
-l06 0000336 00009754 00009761
-l06 0000337 00009761 00009771
-l06 0000338 00009777 00009791
-l06 0000341 00009791 0000979e
-l06 0000342 0000979e 00009837
-l06 0000344 0000983d 00009857
-l06 0000346 00009857 0000987a
-l06 0000347 00009880 0000989a
-l06 0000349 0000989a 000098b4
-l06 0000350 000098ba 000098c2
-l06 0000297 000098c2 000098cf
-l06 0000298 000098cf 000098df
-l06 0000299 000098e5 000098ff
-l06 0000302 000098ff 0000990c
-l06 0000303 0000990c 000099a5
-l06 0000305 000099ab 000099c5
-l06 0000307 000099c5 000099e8
-l06 0000308 000099ee 00009a08
-l06 0000310 00009a08 00009a22
-l06 0000311 00009a28 00009a30
-l54 0000509 00009a30 00009a40
-l54 0000511 00009a40 00009a70
-l54 0000513 00009a90 00009a95
-l54 0000514 00009a95 00009a9a
-l54 0000516 00009a9a 00009aa7
-l54 0000517 00009aad 00009abf
-l54 0000518 00009ae5 00009ae7
-l54 0000519 00009ae7 00009af9
-l54 0000520 00009aff 00009b21
-l54 0000521 00009b27 00009b41
-l54 0000522 00009b47 00009b49
-l54 0000525 00009b63 00009b6e
-l54 0000528 00009b6e 00009ba9
-l54 0000530 00009bc8 00009bda
-l54 0000531 00009be0 00009c20
-l54 0000532 00009c20 00009c3a
-l54 0000534 00009c3a 00009c54
-l54 0000535 00009c5a 00009c62
-l54 0000485 00009c62 00009c7b
-l54 0000487 00009c9b 00009ca1
-l54 0000488 00009ca1 00009ca7
-l54 0000489 00009ca7 00009cb4
-l54 0000490 00009cb4 00009cc7
-l54 0000491 00009cc7 00009cdb
-l54 0000492 00009cdb 00009cf0
-l54 0000493 00009cf6 00009d17
-l54 0000494 00009d1d 00009d1f
-l54 0000495 00009d3a 00009d4e
-l54 0000497 00009d4e 00009d60
-l54 0000498 00009d7c 00009d97
-l54 0000500 00009d9d 00009db9
-l54 0000501 00009dbf 00009dc7
+l14 0000006 00000078 00000078
+l14 0000007 00000078 00000078
+l14 0000008 00000078 00000078
+l14 0000009 00000078 00000078
+l14 0000010 00000078 00000078
+l56 0000032 0000008a 00000094
+l56 0000035 0000009a 000000a0
+l56 0000041 000000a0 000000a5
+l56 0000043 000000a5 000000b6
+l56 0000045 000000b6 000000d3
+l56 0000046 000000d3 000000ea
+l56 0000047 000000ea 000000fb
+l56 0000051 000000fb 00000110
+l56 0000052 00000110 00000133
+l56 0000054 00000133 00000156
+l56 0000056 00000156 0000015b
+l56 0000057 0000015b 0000016f
+l56 0000059 0000016f 0000018d
+l56 0000062 0000018d 000001b1
+l56 0000064 000001b1 000001c1
+l56 0000066 000001c7 000001e5
+l56 0000069 000001e5 0000020d
+l56 0000071 00000213 00000215
+l55 0000073 00000215 0000021a
+l55 0000076 0000021a 0000022f
+l55 0000077 00000235 00000242
+l55 0000078 00000242 00000294
+l55 0000079 0000029a 000002a0
+l55 0000080 000002a0 000002ba
+l55 0000085 000002c0 000002c6
+l55 0000087 000002c6 000002c8
+l55 0000096 000002c8 000002d5
+l55 0000098 000002db 0000031d
+l55 0000100 00000323 0000033d
+l55 0000107 0000033d 0000037d
+l55 0000110 00000383 00000388
+l55 0000111 00000388 0000038d
+l55 0000112 0000038d 00000392
+l55 0000114 00000392 000003c8
+l55 0000121 000003ee 0000041b
+l55 0000122 00000421 00000435
+l55 0000123 0000043b 0000043d
+l55 0000126 00000453 0000045b
+l55 0000131 00000461 00000477
+l55 0000137 00000477 000004a9
+l55 0000143 000004af 000004b7
+l55 0000144 000004bd 000004ea
+l55 0000150 000004ea 000004f2
+l55 0000152 000004f8 00000518
+l55 0000158 00000518 0000054d
+l55 0000160 00000553 0000055f
+l55 0000161 0000055f 0000057d
+l55 0000162 0000057d 0000058d
+l55 0000164 00000593 000005ad
+l55 0000184 000005b3 000005e5
+l55 0000190 000005eb 000005fb
+l55 0000192 00000601 00000615
+l55 0000194 00000615 00000638
+l55 0000198 00000638 00000646
+l55 0000201 00000660 0000067c
+l55 0000202 00000682 00000684
+l55 0000574 00000684 0000068a
+l55 0000575 0000068a 0000068f
+l55 0000576 0000068f 000006a5
+l55 0000577 000006a5 000006c3
+l55 0000578 000006c3 000006e5
+l55 0000579 000006e5 000006fd
+l55 0000580 000006fd 00000737
+l55 0000582 00000737 00000765
+l55 0000583 00000765 0000076f
+l55 0000584 00000775 00000785
+l55 0000585 0000078b 000007b7
+l55 0000586 000007b7 000007e7
+l55 0000587 000007e7 00000821
+l55 0000589 00000821 0000084d
+l55 0000590 0000084d 0000087d
+l55 0000591 0000087d 000008c1
+l55 0000594 000008c1 000008d1
+l55 0000595 000008d7 00000903
+l55 0000596 00000903 00000933
+l55 0000597 00000933 00000964
+l55 0000600 00000964 00000979
+l55 0000601 0000097f 00000981
+l03 0000297 00000981 00000983
+l03 0000298 00000983 00000990
+l03 0000299 00000990 000009b6
+l03 0000300 000009b6 000009c8
+l03 0000301 000009ea 000009ec
+l03 0000302 00000a02 00000a12
+l03 0000303 00000a18 00000a28
+l03 0000304 00000a2e 00000a42
+l03 0000306 00000a42 00000a5e
+l03 0000307 00000a64 00000a6c
+l03 0000533 00000a6c 00000a79
+l03 0000534 00000a79 00000a89
+l03 0000535 00000a8f 00000aaf
+l03 0000537 00000ac9 00000ace
+l03 0000538 00000ace 00000ae6
+l03 0000539 00000ae6 00000b14
+l03 0000541 00000b14 00000b24
+l03 0000543 00000b3e 00000b4e
+l03 0000548 00000b6a 00000b7a
+l03 0000549 00000b7a 00000b7e
+l03 0000550 00000b7e 00000b80
+l03 0000551 00000b80 00000b82
+l03 0000552 00000b82 00000b92
+l03 0000553 00000b98 00000be5
+l03 0000554 00000be5 00000c13
+l03 0000556 00000c19 00000c1b
+l03 0000557 00000c31 00000c78
+l03 0000558 00000c78 00000ca6
+l03 0000560 00000cac 00000cae
+l03 0000561 00000cc4 00000d0d
+l03 0000562 00000d0d 00000d3b
+l03 0000564 00000d41 00000d43
+l03 0000565 00000d59 00000da0
+l03 0000566 00000da0 00000dce
+l03 0000569 00000dce 00000dee
+l03 0000570 00000dee 00000dfe
+l03 0000571 00000e1a 00000e2a
+l03 0000573 00000e44 00000e54
+l03 0000574 00000e5a 00000e95
+l03 0000575 00000e9b 00000e9d
+l03 0000577 00000ee7 00000f1b
+l03 0000578 00000f21 00000f29
+l20 0001233 00000f29 00000f5c
+l20 0001235 00000f5c 00000f8c
+l20 0001236 00000f92 00000ff7
+l20 0001237 00000ff7 00001011
+l20 0001240 00001011 0000101e
+l20 0001242 0000101e 0000104a
+l20 0001243 0000104a 00001077
+l20 0001245 00001077 0000107d
+l20 0001246 0000107d 00001083
+l20 0001247 00001083 000010b3
+l20 0001248 000010d4 00001104
+l20 0001250 00001125 0000112b
+l20 0001251 0000112b 00001131
+l20 0001252 00001131 00001141
+l20 0001253 00001147 00001183
+l20 0001255 00001183 00001193
+l20 0001256 00001199 000011d5
+l20 0001258 000011d5 000011e5
+l20 0001259 000011eb 00001213
+l20 0001260 00001219 00001235
+l20 0001263 00001235 00001245
+l20 0001264 0000124b 00001273
+l20 0001265 00001279 00001295
+l20 0001268 00001295 000012b1
+l20 0001269 000012b7 000012bf
+l03 0000265 000012bf 000014b1
+l03 0000266 000014b1 000014b1
+l03 0000267 000014cb 000014cb
+l03 0000268 000014e5 000014e5
+l03 0000269 000014ff 000014ff
+l03 0000270 00001519 00001519
+l03 0000271 00001533 00001533
+l03 0000272 0000154d 0000154d
+l03 0000273 00001567 00001567
+l03 0000274 00001581 00001581
+l03 0000275 0000159b 0000159b
+l03 0000276 000015b5 000015b5
+l03 0000277 000015cf 000015cf
+l03 0000278 000015e9 000015e9
+l03 0000279 00001603 00001603
+l03 0000280 0000161d 0000161d
+l03 0000281 00001637 00001637
+l03 0000282 00001651 00001651
+l03 0000283 0000166b 0000166b
+l03 0000284 00001685 00001685
+l03 0000285 0000169f 0000169f
+l03 0000286 000016b9 000016b9
+l03 0000287 000016d3 000016d3
+l03 0000289 000016f3 0000170d
+l03 0000290 0000170d 00001715
+l02 0000740 00001715 00001725
+l02 0000741 00001745 00001747
+l02 0000745 00001771 0000177e
+l02 0000749 0000177e 00001795
+l02 0000752 000017af 000017c6
+l02 0000753 000017c6 000017d6
+l02 0000754 000017fe 00001800
+l02 0000755 00001838 0000183a
+l02 0000757 00001874 00001884
+l02 0000758 000018ae 000018ca
+l02 0000759 000018d0 000018d8
+l24 0000065 000018d8 000018e8
+l24 0000066 000018e8 00001900
+l24 0000067 00001900 00001910
+l24 0000069 00001910 00001912
+l24 0000070 00001912 0000191a
+l24 0000071 00001938 0000193a
+l24 0000072 00001972 000019ac
+l24 0000073 000019b2 000019fe
+l24 0000074 000019fe 00001a30
+l24 0000076 00001a30 00001a40
+l24 0000077 00001a46 00001a76
+l24 0000079 00001a76 00001a86
+l24 0000080 00001a8c 00001abc
+l24 0000081 00001afa 00001afc
+l24 0000082 00001b6f 00001b71
+l24 0000083 00001bea 00001bec
+l24 0000085 00001c62 00001c72
+l24 0000086 00001c78 00001ca8
+l24 0000087 00001ccf 00001d01
+l24 0000089 00001d01 00001d1e
+l24 0000090 00001d1e 00001d3a
+l24 0000091 00001d40 00001d48
+l14 0000135 00001d48 00001d67
+l14 0000136 00001d67 00001d93
+l14 0000137 00001d99 00001da1
+l55 0000539 00001da1 00001dbc
+l55 0000541 00001dc8 00001dcd
+l55 0000542 00001dcd 00001df1
+l55 0000543 00001df1 00001e04
+l55 0000544 00001e04 00001e69
+l55 0000545 00001e69 00001e8d
+l55 0000546 00001e8d 00001e92
+l55 0000547 00001e92 00001ea2
+l55 0000548 00001ea8 00001ecd
+l55 0000549 00001ecd 00001f09
+l55 0000550 00001f0f 00001f11
+l55 0000551 00001f11 00001f44
+l55 0000552 00001f44 00001f6f
+l55 0000553 00001f6f 00001fad
+l55 0000555 00001fad 00001fc4
+l55 0000556 00001fca 00002008
+l55 0000557 00002008 0000200a
+l55 0000558 0000200a 00002030
+l55 0000559 00002030 00002040
+l55 0000560 00002068 0000206a
+l55 0000561 0000207d 000020b2
+l55 0000563 000020b2 000020c5
+l55 0000564 000020c5 000020d5
+l55 0000565 000020db 00002116
+l55 0000566 00002116 00002146
+l55 0000567 00002146 00002189
+l55 0000569 00002189 0000219c
+l55 0000570 000021a2 000021a4
+l02 0002696 000021a4 000021a6
+l02 0002697 000021a6 000021b6
+l02 0002698 000021d5 000021d7
+l02 0002699 000021ed 000021fa
+l02 0002700 000021fa 000021fc
+l02 0002701 000021fc 00002229
+l02 0002702 0000222f 0000224b
+l02 0002704 0000224b 0000225b
+l02 0002705 00002285 00002287
+l02 0002706 000022c1 000022c3
+l02 0002707 000022fd 000022ff
+l02 0002708 00002339 0000233b
+l02 0002709 00002375 00002377
+l02 0002710 000023b1 000023b3
+l02 0002711 000023ed 000023ef
+l02 0002712 00002429 0000242b
+l02 0002713 00002465 00002467
+l02 0002714 000024a1 000024a3
+l02 0002715 000024e3 000024e5
+l02 0002717 0000251f 00002551
+l02 0002718 00002557 0000256d
+l02 0002720 0000256d 00002589
+l02 0002721 0000258f 00002597
+l02 0001910 00002597 00002599
+l02 0001911 0000259b 0000259d
+l02 0001913 0000259f 000025ba
+l02 0001915 000025da 000025ee
+l02 0001917 00002604 00002627
+l02 0001919 00002627 00002637
+l02 0001921 00002643 00002653
+l02 0001922 0000268c 0000268e
+l02 0001915 000026dc 000026f0
+l02 0001925 000026f6 0000270f
+l02 0001926 00002715 00002733
+l02 0001927 00002733 00002743
+l02 0001928 00002743 00002755
+l02 0001931 00002777 00002793
+l02 0001932 00002799 000027a1
+l02 0001880 000027a1 000027d6
+l02 0001881 000027d6 000027e4
+l02 0001885 00002804 00002842
+l02 0001886 00002868 0000286a
+l02 0001887 0000288a 00002892
+l02 0001148 00002892 000028c8
+l02 0001150 000028c8 000028dd
+l02 0001151 000028dd 000028df
+l02 0001152 000028df 000028e5
+l02 0001153 000028e5 000028eb
+l02 0001155 000028eb 00002903
+l02 0001157 00002903 0000294a
+l02 0001158 0000294a 0000295a
+l02 0001159 00002974 00002988
+l02 0001161 0000298e 000029aa
+l02 0001162 000029b0 000029b8
+l02 0002829 000029b8 000029c5
+l02 0002830 000029f5 000029f7
+l02 0002843 00002a18 00002a20
+l02 0002792 00002a20 00002a35
+l02 0002793 00002a35 00002a45
+l02 0002794 00002a65 00002a95
+l02 0002795 00002ab5 00002ae5
+l02 0002796 00002b05 00002b35
+l02 0002797 00002b55 00002b85
+l02 0002798 00002ba5 00002bd5
+l02 0002799 00002bf5 00002c25
+l02 0002800 00002c45 00002c75
+l02 0002801 00002c95 00002cc5
+l02 0002802 00002ce5 00002d15
+l02 0002803 00002d35 00002d65
+l02 0002804 00002d85 00002db5
+l02 0002805 00002dd5 00002e05
+l02 0002806 00002e25 00002e55
+l02 0002807 00002e75 00002ea5
+l02 0002808 00002ec5 00002ef5
+l02 0002809 00002f15 00002f45
+l02 0002810 00002f65 00002f95
+l02 0002811 00002fb5 00002fe5
+l02 0002812 00003005 00003035
+l02 0002813 00003055 00003085
+l02 0002814 000030a5 000030d5
+l02 0002815 000030f5 00003125
+l02 0002816 00003145 00003175
+l02 0002817 00003195 000031c5
+l02 0002818 000031e5 00003215
+l02 0002819 00003235 00003265
+l02 0002820 00003285 000032b5
+l02 0002821 000032d5 00003305
+l02 0002822 00003325 0000333f
+l02 0002823 00003345 0000334d
+l02 0001787 0000334d 0000334f
+l02 0001788 00003351 00003353
+l02 0001790 00003355 00003370
+l02 0001792 00003390 000033a4
+l02 0001794 000033ba 000033dd
+l02 0001796 000033dd 000033ed
+l02 0001798 000033f9 00003409
+l02 0001799 00003442 00003444
+l02 0001792 00003492 000034a6
+l02 0001802 000034ac 000034c5
+l02 0001803 000034cb 000034e9
+l02 0001804 000034e9 000034f9
+l02 0001805 000034f9 0000350b
+l02 0001808 0000352d 0000353d
+l02 0001810 00003543 0000355e
+l02 0001811 00003564 0000358f
+l02 0001813 0000358f 0000359f
+l02 0001815 000035a5 000035c0
+l02 0001816 000035c6 000035f1
+l02 0001818 000035f1 00003601
+l02 0001820 00003607 00003622
+l02 0001821 00003628 00003653
+l02 0001823 00003653 00003663
+l02 0001825 00003669 00003684
+l02 0001826 0000368a 000036b5
+l02 0001829 000036b5 000036d1
+l02 0001830 000036d7 000036df
+l02 0001756 000036df 00003714
+l02 0001757 00003714 00003722
+l02 0001761 00003742 00003780
+l02 0001762 000037a6 000037a8
+l02 0001763 000037c8 000037d0
+l02 0001660 000037d0 000037d2
+l02 0001661 000037d4 000037d6
+l02 0001663 000037d8 000037f3
+l02 0001665 00003813 00003827
+l02 0001667 0000383d 00003860
+l02 0001669 00003860 00003870
+l02 0001671 0000387c 0000388c
+l02 0001672 000038c5 000038c7
+l02 0001665 00003915 00003929
+l02 0001675 0000392f 00003948
+l02 0001676 0000394e 0000396c
+l02 0001677 0000396c 0000397c
+l02 0001678 0000397c 0000398e
+l02 0001680 000039b0 000039c0
+l02 0001682 000039c6 000039e1
+l02 0001683 000039e7 00003a12
+l02 0001685 00003a12 00003a22
+l02 0001687 00003a28 00003a43
+l02 0001688 00003a49 00003a74
+l02 0001691 00003a74 00003a84
+l02 0001693 00003a8a 00003aa5
+l02 0001694 00003aab 00003ad6
+l02 0001696 00003ad6 00003ae6
+l02 0001698 00003aec 00003b07
+l02 0001699 00003b0d 00003b38
+l02 0001704 00003b38 00003b54
+l02 0001705 00003b5a 00003b62
+l02 0001649 00003b62 00003b97
+l02 0001650 00003b97 00003ba5
+l02 0001654 00003bc5 00003c03
+l02 0001655 00003c29 00003c2b
+l02 0001656 00003c4b 00003c53
+l02 0001992 00003c53 00003c55
+l02 0001993 00003c57 00003c59
+l02 0001995 00003c5b 00003c76
+l02 0001997 00003c96 00003caa
+l02 0001999 00003cc0 00003ce3
+l02 0002001 00003ce3 00003cf3
+l02 0002003 00003cff 00003d0f
+l02 0002004 00003d48 00003d4a
+l02 0001997 00003d98 00003dac
+l02 0002007 00003db2 00003dcb
+l02 0002008 00003dd1 00003def
+l02 0002009 00003def 00003dff
+l02 0002010 00003dff 00003e11
+l02 0002012 00003e33 00003e46
+l02 0002013 00003e46 00003e56
+l02 0002015 00003e5c 00003e6c
+l02 0002016 00003e96 00003e98
+l02 0002020 00003ec0 00003edc
+l02 0002021 00003ee2 00003eea
+l02 0001981 00003eea 00003f1f
+l02 0001982 00003f1f 00003f2d
+l02 0001986 00003f4d 00003f8b
+l02 0001987 00003fb1 00003fb3
+l02 0001988 00003fd3 00003fdb
+l02 0002078 00003fdb 00003fdd
+l02 0002079 00003fdf 00003fe1
+l02 0002081 00003fe3 00003ffe
+l02 0002083 0000401e 00004032
+l02 0002085 00004048 0000406b
+l02 0002087 0000406b 0000407b
+l02 0002089 00004087 00004097
+l02 0002090 000040d0 000040d2
+l02 0002083 00004120 00004134
+l02 0002093 0000413a 00004153
+l02 0002094 00004159 00004177
+l02 0002095 00004177 00004187
+l02 0002096 00004187 00004199
+l02 0002099 000041bb 000041d7
+l02 0002100 000041dd 000041e5
+l02 0002067 000041e5 0000421a
+l02 0002068 0000421a 00004228
+l02 0002072 00004248 00004286
+l02 0002073 000042ac 000042ae
+l02 0002074 000042ce 000042d6
+l02 0002204 000042d6 000042d8
+l02 0002205 000042da 000042dc
+l02 0002207 000042de 000042f9
+l02 0002209 00004319 0000432d
+l02 0002211 00004343 00004366
+l02 0002213 00004366 00004376
+l02 0002215 00004382 00004392
+l02 0002216 000043cb 000043cd
+l02 0002209 0000441b 0000442f
+l02 0002219 00004435 0000444e
+l02 0002220 00004454 00004472
+l02 0002221 00004472 00004482
+l02 0002222 00004482 00004494
+l02 0002224 000044b6 000044d2
+l02 0002225 000044d8 000044e0
+l02 0002174 000044e0 00004515
+l02 0002175 00004515 00004523
+l02 0002179 00004543 00004581
+l02 0002180 000045a7 000045a9
+l02 0002181 000045c9 000045d1
+l02 0002311 000045d1 000045d3
+l02 0002312 000045d5 000045d7
+l02 0002314 000045d9 000045f4
+l02 0002316 00004614 00004628
+l02 0002318 0000463e 00004661
+l02 0002320 00004661 00004671
+l02 0002322 0000467d 0000468d
+l02 0002323 000046c6 000046c8
+l02 0002316 00004716 0000472a
+l02 0002326 00004730 00004749
+l02 0002327 0000474f 0000476d
+l02 0002328 0000476d 0000477d
+l02 0002329 0000477d 0000478f
+l02 0002331 000047b1 000047cd
+l02 0002332 000047d3 000047db
+l02 0002281 000047db 00004810
+l02 0002282 00004810 0000481e
+l02 0002286 0000483e 0000487c
+l02 0002287 000048a2 000048a4
+l02 0002288 000048c4 000048cc
+l02 0002418 000048cc 000048e7
+l02 0002420 00004907 00004909
+l02 0002421 0000490d 00004913
+l02 0002424 00004913 00004927
+l02 0002426 0000493d 00004960
+l02 0002428 00004960 00004970
+l02 0002430 0000497c 0000498c
+l02 0002431 000049c5 000049c7
+l02 0002424 00004a15 00004a29
+l02 0002434 00004a2f 00004a48
+l02 0002435 00004a4e 00004a6c
+l02 0002436 00004a6c 00004a7c
+l02 0002437 00004a7c 00004a8e
+l02 0002440 00004ab0 00004ac0
+l02 0002441 00004ac6 00004ae1
+l02 0002442 00004ae7 00004b12
+l02 0002444 00004b12 00004b22
+l02 0002445 00004b28 00004b43
+l02 0002446 00004b49 00004b74
+l02 0002448 00004b74 00004b84
+l02 0002449 00004b8a 00004ba5
+l02 0002450 00004bab 00004bd6
+l02 0002452 00004bd6 00004be6
+l02 0002453 00004bec 00004c07
+l02 0002454 00004c0d 00004c38
+l02 0002457 00004c38 00004c54
+l02 0002458 00004c5a 00004c62
+l02 0002387 00004c62 00004c97
+l02 0002388 00004c97 00004ca5
+l02 0002392 00004cc5 00004d03
+l02 0002393 00004d29 00004d2b
+l02 0002394 00004d4b 00004d53
+l02 0001541 00004d53 00004d55
+l02 0001542 00004d55 00004d57
+l02 0001543 00004d57 00004d5d
+l02 0001545 00004d5d 00004d78
+l02 0001547 00004d98 00004dac
+l02 0001549 00004dc2 00004de5
+l02 0001551 00004de5 00004df5
+l02 0001553 00004e01 00004e11
+l02 0001554 00004e4a 00004e4c
+l02 0001547 00004e9a 00004eae
+l02 0001557 00004eb4 00004ecd
+l02 0001558 00004ed3 00004ef1
+l02 0001559 00004ef1 00004f01
+l02 0001560 00004f01 00004f13
+l02 0001563 00004f35 00004f51
+l02 0001564 00004f57 00004f5f
+l02 0001192 00004f5f 00004f94
+l02 0001193 00004f94 00004fa2
+l02 0001195 00004fc2 00005000
+l02 0001196 00005026 00005028
+l02 0001197 00005048 00005050
+l02 0002581 00005050 00005052
+l02 0002582 00005054 00005056
+l02 0002584 00005058 00005073
+l02 0002586 00005093 000050a7
+l02 0002588 000050bd 000050e0
+l02 0002590 000050e0 000050f0
+l02 0002592 000050fc 0000510c
+l02 0002593 00005145 00005147
+l02 0002586 00005195 000051a9
+l02 0002596 000051af 000051c8
+l02 0002597 000051ce 000051ec
+l02 0002598 000051ec 000051fc
+l02 0002599 000051fc 0000520e
+l02 0002601 00005230 00005240
+l02 0002603 00005246 00005261
+l02 0002604 00005267 00005292
+l02 0002606 00005292 000052a2
+l02 0002608 000052a8 000052c3
+l02 0002609 000052c9 000052f4
+l02 0002612 000052f4 00005304
+l02 0002614 0000530a 00005325
+l02 0002615 0000532b 00005356
+l02 0002617 00005356 00005366
+l02 0002619 0000536c 00005387
+l02 0002620 0000538d 000053b8
+l02 0002624 000053b8 000053d4
+l02 0002625 000053da 000053e2
+l02 0002509 000053e2 00005417
+l02 0002510 00005417 00005425
+l02 0002514 00005445 00005483
+l02 0002515 000054a9 000054ab
+l02 0002516 000054cb 000054d3
+l22 0000060 000054d3 000054e6
+l22 0000061 000054e6 000054f6
+l22 0000063 00005516 00005541
+l22 0000064 00005541 0000556c
+l22 0000065 0000556c 00005597
+l22 0000066 00005597 000055c2
+l22 0000067 000055c2 000055d5
+l22 0000068 000055d5 000055ee
+l22 0000069 000055f4 0000560f
+l22 0000070 0000560f 0000561f
+l22 0000072 0000564b 0000567e
+l22 0000073 00005684 00005691
+l22 0000074 00005691 000056af
+l22 0000075 000056af 000056c1
+l22 0000077 000056e3 000056ff
+l22 0000078 00005705 0000570d
+l22 0000083 0000570d 00005720
+l22 0000084 00005720 00005730
+l22 0000086 00005750 0000577b
+l22 0000091 0000577b 0000578e
+l22 0000092 0000578e 0000579e
+l22 0000093 000057d4 000057ed
+l22 0000094 000057f3 0000580e
+l22 0000095 0000580e 0000581e
+l22 0000097 0000584a 0000587d
+l22 0000098 00005883 00005890
+l22 0000099 00005890 000058ae
+l22 0000100 000058ae 000058c0
+l22 0000102 000058e2 000058fe
+l22 0000103 00005904 0000590c
+l53 0000025 0000590c 00005911
+l53 0000026 00005911 00005916
+l53 0000027 00005916 0000593c
+l53 0000028 0000593c 0000594c
+l53 0000030 0000596e 00005974
+l53 0000032 00005974 0000597c
+l53 0000033 0000597c 00005982
+l53 0000034 00005982 00005984
+l53 0000035 00005984 00005998
+l53 0000036 000059ae 000059d1
+l53 0000037 000059d1 000059e1
+l53 0000038 000059e7 00005a0d
+l53 0000039 00005a0d 00005a1f
+l53 0000040 00005a25 00005a3b
+l53 0000041 00005a3b 00005a51
+l53 0000035 00005a51 00005a65
+l53 0000045 00005a6b 00005a71
+l53 0000046 00005a71 00005b2f
+l53 0000047 00005b2f 00005b2f
+l53 0000048 00005b2f 00005b43
+l53 0000049 00005b43 00005b57
+l53 0000050 00005b57 00005b5d
+l53 0000052 00005b5d 00005b5d
+l53 0000053 00005b5d 00005b71
+l53 0000054 00005b71 00005b85
+l53 0000055 00005b85 00005b8b
+l53 0000057 00005b8b 00005b8b
+l53 0000058 00005b8b 00005b9f
+l53 0000059 00005b9f 00005bb3
+l53 0000060 00005bb3 00005bb9
+l53 0000062 00005bb9 00005bb9
+l53 0000063 00005bb9 00005bcd
+l53 0000064 00005bcd 00005be1
+l53 0000065 00005be1 00005be7
+l53 0000067 00005be7 00005be7
+l53 0000068 00005be7 00005bfb
+l53 0000069 00005bfb 00005c0f
+l53 0000070 00005c0f 00005c15
+l53 0000072 00005c15 00005c15
+l53 0000073 00005c15 00005c29
+l53 0000074 00005c29 00005c3d
+l53 0000075 00005c3d 00005c43
+l53 0000077 00005c43 00005c43
+l53 0000078 00005c43 00005c57
+l53 0000079 00005c57 00005c6b
+l53 0000080 00005c6b 00005c71
+l53 0000082 00005c71 00005c71
+l53 0000083 00005c71 00005c85
+l53 0000084 00005c85 00005c99
+l53 0000085 00005c99 00005c9f
+l53 0000087 00005c9f 00005c9f
+l53 0000088 00005c9f 00005cbb
+l53 0000092 00005cc1 00005cd1
+l53 0000095 00005d02 00005d1a
+l53 0000096 00005d1a 00005d2a
+l53 0000097 00005d44 00005d64
+l53 0000101 00005d64 00005d93
+l53 0000103 00005d93 00005d99
+l53 0000104 00005d99 00005dbf
+l53 0000105 00005dbf 00005dce
+l53 0000106 00005dd4 00005de8
+l53 0000107 00005de8 00005dfc
+l53 0000108 00005dfc 00005e10
+l53 0000109 00005e16 00005e18
+l53 0000110 00005e2d 00005e41
+l53 0000111 00005e41 00005e55
+l53 0000112 00005e55 00005e69
+l53 0000113 00005e6f 00005e71
+l53 0000114 00005e86 00005e9a
+l53 0000115 00005e9a 00005eae
+l53 0000116 00005eae 00005ec2
+l53 0000117 00005ec8 00005eca
+l53 0000118 00005edf 00005ef3
+l53 0000119 00005ef3 00005f07
+l53 0000120 00005f07 00005f1b
+l53 0000121 00005f21 00005f23
+l53 0000122 00005f38 00005f4c
+l53 0000123 00005f4c 00005f60
+l53 0000124 00005f60 00005f74
+l53 0000125 00005f7a 00005f7c
+l53 0000126 00005f91 00005fa5
+l53 0000127 00005fa5 00005fb9
+l53 0000128 00005fb9 00005fcd
+l53 0000129 00005fd3 00005fd5
+l53 0000130 00005fea 00005ffe
+l53 0000131 00005ffe 00006012
+l53 0000132 00006012 00006026
+l53 0000133 0000602c 0000602e
+l53 0000134 00006043 00006057
+l53 0000135 00006057 0000606b
+l53 0000136 0000606b 0000607f
+l53 0000137 00006085 00006087
+l53 0000139 00006099 000060a7
+l53 0000140 000060ad 000060c8
+l53 0000141 000060f2 000060f4
+l53 0000142 00006139 0000613b
+l53 0000145 00006170 0000618b
+l53 0000147 000061a5 000061b7
+l53 0000149 000061d3 000061ef
+l53 0000150 000061f5 000061fd
+l53 0000013 000061fd 000062ed
+l53 0000016 000062f3 0000630d
+l53 0000018 0000630d 00006327
+l53 0000019 00006327 0000632f
+l13 0000181 0000632f 0000637f
+l13 0000188 0000639f 000063af
+l13 0000193 000063cf 000063df
+l13 0000194 000063df 000063ef
+l13 0000198 000063ef 00006408
+l13 0000199 00006408 00006421
+l13 0000200 00006421 0000642b
+l13 0000201 0000642b 00006435
+l13 0000202 00006435 0000643b
+l13 0000203 0000643b 00006448
+l13 0000205 00006448 0000644e
+l13 0000206 0000644e 00006456
+l13 0000210 0000647a 000064aa
+l13 0000212 000064c4 000064df
+l13 0000213 000064df 0000651c
+l13 0000216 0000651c 00006524
+l13 0000221 0000652a 0000653a
+l13 0000227 00006540 00006560
+l13 0000229 00006566 0000658c
+l13 0000233 0000658c 000065a0
+l13 0000237 000065a6 000065a8
+l13 0000239 000065a8 000065dc
+l13 0000243 000065dc 000066be
+l13 0000247 000066c4 000066ec
+l13 0000248 000066f2 00006706
+l13 0000249 0000670c 0000670e
+l13 0000250 0000673c 00006750
+l13 0000251 00006756 00006758
+l13 0000252 00006798 000067ac
+l13 0000255 000067b2 000067b4
+l13 0000256 000067da 000067ee
+l13 0000262 000067ee 00006800
+l13 0000268 0000681c 00006846
+l13 0000270 0000684c 0000685a
+l13 0000271 0000687d 000068d0
+l13 0000274 000068d0 000068e8
+l13 0000276 000068ee 00006902
+l13 0000278 00006908 0000690a
+l13 0000280 0000690a 00006928
+l13 0000281 0000692e 00006942
+l13 0000286 00006942 00006962
+l13 0000288 0000697c 0000698c
+l13 0000295 00006992 000069d0
+l13 0000297 000069d6 000069fe
+l13 0000298 000069fe 00006a1b
+l13 0000300 00006a21 00006a5b
+l13 0000301 00006a5b 00006a6c
+l13 0000302 00006a6c 00006aaa
+l13 0000303 00006aaa 00006ac5
+l13 0000307 00006ad1 00006ade
+l13 0000308 00006af9 00006b28
+l13 0000310 00006b43 00006b5f
+l13 0000311 00006b65 00006b6d
+l13 0000433 00006b6d 00006b7a
+l13 0000434 00006b7a 00006b80
+l13 0000435 00006b80 00006b9f
+l13 0000436 00006bbf 00006bc1
+l13 0000437 00006c0c 00006c0e
+l13 0000438 00006c5c 00006c5e
+l13 0000439 00006ca7 00006ca9
+l13 0000440 00006cef 00006cf1
+l13 0000441 00006d37 00006d39
+l13 0000443 00006d78 00006d94
+l13 0000444 00006d9a 00006da2
+l13 0000649 00006da2 00006da8
+l13 0000650 00006da8 00006e30
+l13 0000655 00006e36 00006e4a
+l13 0000657 00006e4a 00006e66
+l13 0000658 00006e6c 00006e74
+l03 0000351 00006e74 00006ea8
+l03 0000352 00006ea8 00006eb0
+l03 0000332 00006eb0 00006eb2
+l03 0000333 00006eb2 00006ed8
+l03 0000334 00006ed8 00006ee8
+l03 0000335 00006f04 00006f14
+l03 0000336 00006f14 00006f33
+l03 0000338 00006f33 00006f41
+l03 0000339 00006f47 00006f5b
+l03 0000340 00006f61 00006f63
+l03 0000341 00006f63 00006f7e
+l03 0000346 00006f7e 00006f9a
+l03 0000347 00006fa0 00006fa8
+l03 0000312 00006fa8 00006faa
+l03 0000314 00006faa 00007068
+l03 0000316 00007068 00007068
+l03 0000317 00007084 00007084
+l03 0000318 000070a2 000070a2
+l03 0000319 000070bf 000070bf
+l03 0000320 000070de 000070de
+l03 0000321 000070fc 000070fc
+l03 0000322 000070fc 000070fc
+l03 0000323 0000711c 0000711c
+l03 0000324 0000713b 0000713b
+l03 0000326 0000715f 0000717b
+l03 0000327 00007181 00007189
+l13 0000662 00007189 0000718f
+l13 0000663 0000718f 00007213
+l13 0000667 00007219 0000722d
+l13 0000669 0000722d 00007249
+l13 0000670 0000724f 00007257
+l13 0000641 00007257 00007270
+l13 0000642 00007296 00007298
+l13 0000643 000072d7 000072d9
+l13 0000644 00007318 0000731a
+l13 0000645 00007334 0000733c
+l20 0001071 0000733c 00007354
+l20 0001072 00007354 000073b0
+l20 0001074 000073b6 000073d0
+l20 0001076 000073d0 000073ea
+l20 0001079 000073f0 000073f8
+l20 0000996 000073f8 00007408
+l20 0000997 00007429 0000746e
+l20 0000998 0000746e 00007476
+l20 0001085 00007476 0000748e
+l20 0001086 0000748e 000074c6
+l20 0001149 000074cc 000074d4
+l20 0001033 000074d4 000074ec
+l20 0001034 000074ec 00007515
+l20 0001035 00007535 0000754f
+l20 0001040 00007555 0000755d
+l13 0000449 0000755d 0000756a
+l13 0000450 0000756a 0000757d
+l13 0000452 0000757d 0000758a
+l13 0000453 0000758a 0000759a
+l13 0000455 000075a0 000075ad
+l13 0000456 000075ad 000075bf
+l13 0000458 000075e5 00007600
+l13 0000460 0000760c 00007626
+l13 0000461 0000762c 00007634
+l13 0000497 00007634 00007641
+l13 0000498 00007641 00007643
+l13 0000499 00007643 00007649
+l13 0000501 00007649 00007661
+l13 0000503 00007661 0000766e
+l13 0000504 0000766e 00007674
+l13 0000505 00007674 00007693
+l13 0000508 000076ad 000076fd
+l13 0000511 0000771f 00007721
+l13 0000514 0000776e 00007770
+l13 0000517 000077e2 000077e4
+l13 0000519 00007856 00007858
+l13 0000522 0000786e 000078ea
+l13 0000524 000078ea 000078ea
+l13 0000525 00007904 00007904
+l13 0000526 00007930 00007930
+l13 0000527 00007954 00007954
+l13 0000528 00007978 00007978
+l13 0000530 000079b6 000079ca
+l13 0000532 000079d6 000079d8
+l13 0000534 000079d8 000079ec
+l13 0000536 000079f2 000079f2
+l13 0000538 00007a12 00007a2e
+l13 0000539 00007a34 00007a3c
+l13 0000466 00007a3c 00007a4c
+l13 0000467 00007a4c 00007a56
+l13 0000468 00007a56 00007a66
+l13 0000470 00007a6c 00007a80
+l13 0000471 00007a80 00007a94
+l13 0000472 00007a94 00007aa8
+l13 0000473 00007aa8 00007abc
+l13 0000474 00007abc 00007ad0
+l13 0000476 00007ad6 00007ad8
+l13 0000478 00007aee 00007b02
+l13 0000479 00007b02 00007b16
+l13 0000480 00007b16 00007b2a
+l13 0000481 00007b2a 00007b3e
+l13 0000482 00007b3e 00007b52
+l13 0000484 00007b58 00007b5a
+l13 0000486 00007b5a 00007b6e
+l13 0000487 00007b6e 00007b82
+l13 0000488 00007b82 00007b96
+l13 0000489 00007b96 00007baa
+l13 0000490 00007baa 00007bbe
+l13 0000492 00007bbe 00007bda
+l13 0000493 00007be0 00007be8
+l13 0000543 00007be8 00007bee
+l13 0000544 00007bee 00007c1d
+l13 0000545 00007c1d 00007c32
+l13 0000547 00007c38 00007c9e
+l13 0000549 00007c9e 00007c9e
+l13 0000550 00007cb8 00007cb8
+l13 0000551 00007cd2 00007cd2
+l13 0000552 00007cec 00007cec
+l13 0000553 00007d06 00007d06
+l13 0000555 00007d26 00007d4c
+l13 0000557 00007d6c 00007d6e
+l13 0000559 00007d6e 00007da8
+l13 0000561 00007da8 00007da8
+l13 0000562 00007dc2 00007dc2
+l13 0000563 00007ddc 00007ddc
+l13 0000565 00007dfc 00007e1f
+l13 0000567 00007e39 00007e49
+l13 0000569 00007e4f 00007e74
+l13 0000570 00007e8e 00007eb7
+l13 0000571 00007ed1 00007efb
+l13 0000573 00007f15 00007f31
+l13 0000574 00007f37 00007f3f
+l13 0000578 00007f3f 00007f6f
+l13 0000579 00007f6f 00007f9e
+l13 0000580 00007f9e 00007fb3
+l13 0000582 00007fb9 0000804b
+l13 0000584 0000804b 0000804b
+l13 0000585 00008065 00008065
+l13 0000586 0000807f 0000807f
+l13 0000587 00008099 00008099
+l13 0000588 000080b3 000080b3
+l13 0000589 000080cd 000080cd
+l13 0000590 000080e7 000080e7
+l13 0000592 00008133 00008135
+l13 0000594 0000817e 00008180
+l13 0000599 000081ca 000081e6
+l13 0000600 000081ec 000081f4
+l55 0000212 000081f4 00008214
+l55 0000213 00008214 00008230
+l55 0000214 00008236 00008238
+l25 0000710 00008238 00008259
+l25 0000711 00008259 0000826e
+l25 0000712 0000826e 0000828f
+l25 0000713 0000828f 000082b0
+l25 0000714 000082b0 000082cc
+l25 0000715 000082d2 000082da
+l55 0000222 000082da 000082e2
+l55 0000223 000082e2 000082f0
+l55 0000225 000082f6 00008309
+l55 0000226 00008309 00008319
+l55 0000228 0000831f 00008339
+l55 0000231 00008339 00008353
+l55 0000232 00008359 0000835b
+l25 0000546 0000835b 0000837c
+l25 0000547 0000837c 00008398
+l25 0000548 0000839e 000083a0
+l25 0000563 000083a0 000083c4
+l25 0000564 000083c4 000083e8
+l25 0000565 000083e8 00008404
+l25 0000566 0000840a 0000840c
+l55 0000248 0000840c 0000841b
+l55 0000250 00008421 0000843b
+l55 0000253 0000843b 0000844b
+l55 0000254 0000844b 0000845b
+l55 0000256 00008461 0000847b
+l55 0000259 0000847b 00008485
+l55 0000262 0000848b 00008495
+l55 0000263 00008495 000084c5
+l55 0000265 000084cb 0000850c
+l55 0000266 0000850c 00008526
+l55 0000271 0000852c 00008557
+l55 0000272 00008557 00008567
+l55 0000274 0000856d 000085ae
+l55 0000275 000085ae 000085c8
+l55 0000278 000085c8 000085e9
+l55 0000280 000085e9 000085fb
+l55 0000284 00008601 00008611
+l55 0000285 00008617 0000862f
+l55 0000286 00008635 0000864f
+l55 0000289 0000864f 00008660
+l55 0000290 00008660 00008674
+l55 0000292 00008674 00008681
+l55 0000293 00008681 000086ba
+l55 0000294 000086ba 000086e3
+l55 0000295 000086e3 00008702
+l55 0000296 00008702 00008743
+l55 0000299 00008743 00008753
+l55 0000300 00008759 0000876d
+l55 0000302 00008779 0000877b
+l55 0000304 0000877b 000087bc
+l55 0000307 000087bc 000087d6
+l55 0000308 000087dc 000087e4
+l20 0001743 000087e4 000087f9
+l20 0001745 000087ff 00008819
+l20 0001748 00008819 0000881b
+l20 0001749 0000881b 0000881d
+l20 0001751 0000881d 00008838
+l20 0001753 00008838 0000886b
+l20 0001755 0000886b 00008880
+l20 0001757 00008886 0000889b
+l20 0001759 000088a1 000088b5
+l20 0001761 000088bb 000088bd
+l20 0001763 000088d8 000088ec
+l20 0001765 000088f2 000088f4
+l20 0001767 0000890f 00008923
+l20 0001770 00008923 0000893e
+l20 0001773 00008944 00008960
+l20 0001774 00008966 0000896e
+l14 0000124 0000896e 0000897b
+l14 0000126 0000897b 00008a0a
+l14 0000128 00008a10 00008a2a
+l14 0000131 00008a2a 00008a44
+l14 0000132 00008a4a 00008a52
+l14 0000202 00008a52 00008a57
+l14 0000203 00008a57 00008a6d
+l14 0000204 00008a6d 00008a8b
+l14 0000205 00008a8b 00008ab0
+l14 0000207 00008ab0 00008ac7
+l14 0000208 00008acd 00008b10
+l14 0000209 00008b10 00008b2a
+l14 0000211 00008b2a 00008b4c
+l14 0000212 00008b4c 00008b66
+l14 0000213 00008b6c 00008b74
+l24 0000106 00008b74 00008b84
+l24 0000107 00008b90 00008b98
+l24 0000108 00008b9e 00008bc0
+l24 0000109 00008bc0 00008bd5
+l24 0000111 00008bdb 00008bfe
+l24 0000112 00008bfe 00008c0c
+l24 0000113 00008c0c 00008c14
+l24 0000057 00008c14 00008c21
+l24 0000059 00008c21 00008c61
+l24 0000060 00008c61 00008ca1
+l24 0000061 00008ca1 00008ce1
+l24 0000062 00008ce7 00008cef
+l24 0000053 00008cef 00008d18
+l24 0000054 00008d18 00008d20
+l24 0000049 00008d20 00008d51
+l24 0000050 00008d51 00008d59
+l24 0000045 00008d59 00008d82
+l24 0000046 00008d82 00008d8a
+l14 0000190 00008d8a 00008d8c
+l14 0000191 00008d8c 00008d9c
+l14 0000192 00008dc6 00008dc8
+l14 0000193 00008dfc 00008e0a
+l14 0000194 00008e1c 00008e31
+l14 0000195 00008e31 00008e7e
+l14 0000196 00008e7e 00008eb3
+l14 0000197 00008eb3 00008ec8
+l14 0000198 00008ece 00008ed6
+l14 0000158 00008ed6 00008ef9
+l14 0000159 00008ef9 00008f1c
+l14 0000160 00008f1c 00008f3f
+l14 0000162 00008f3f 00008f63
+l14 0000163 00008f81 00008fa2
+l14 0000164 00008fa2 00008faf
+l14 0000165 00008faf 00008fc7
+l14 0000166 00008fc7 00008fcb
+l14 0000167 00008fcb 00008fdb
+l14 0000168 00009007 00009017
+l14 0000170 00009043 0000904f
+l14 0000171 0000904f 0000905c
+l14 0000172 0000905c 00009083
+l14 0000173 000090b2 000090b4
+l14 0000174 00009105 0000912c
+l14 0000176 0000912c 0000915c
+l14 0000177 00009162 00009182
+l14 0000178 00009188 0000918a
+l14 0000179 000091a0 000091d5
+l14 0000180 000091db 000091dd
+l14 0000181 000091dd 00009225
+l14 0000183 00009225 00009245
+l14 0000184 00009245 00009261
+l14 0000185 00009267 0000926f
+l14 0000113 0000926f 0000927c
+l14 0000115 0000927c 00009314
+l14 0000117 0000931a 00009334
+l14 0000120 00009334 0000934e
+l14 0000121 00009354 0000935c
+l14 0000140 0000935c 00009374
+l14 0000141 00009374 00009380
+l14 0000142 00009380 00009390
+l14 0000143 000093bf 000093c1
+l14 0000144 000093fb 00009434
+l14 0000145 00009434 00009464
+l14 0000146 0000946a 00009490
+l14 0000147 00009496 00009498
+l14 0000148 000094ae 000094e1
+l14 0000149 000094e1 00009507
+l14 0000150 0000950d 0000950f
+l14 0000151 0000950f 0000954b
+l14 0000152 0000954b 0000957d
+l14 0000154 0000957d 00009599
+l14 0000155 0000959f 000095a7
+l14 0000079 000095a7 000095b4
+l14 0000080 000095b4 000095be
+l14 0000081 000095be 000095cb
+l14 0000082 000095cb 000095f5
+l14 0000083 000095fb 0000960f
+l14 0000084 00009615 00009617
+l14 0000085 00009641 00009655
+l14 0000086 0000965b 0000965d
+l14 0000087 0000968d 000096a1
+l14 0000088 000096a7 000096a9
+l14 0000089 000096a9 000096bd
+l14 0000090 000096bd 000096d9
+l14 0000092 000096d9 000096f7
+l14 0000093 000096f7 00009707
+l14 0000094 0000970d 00009721
+l14 0000095 00009721 00009735
+l14 0000096 00009735 00009749
+l14 0000097 00009749 00009765
+l14 0000099 00009765 0000978e
+l14 0000100 0000978e 0000979e
+l14 0000101 000097a4 000097cd
+l14 0000102 000097cd 000097dd
+l14 0000103 000097e3 0000980c
+l14 0000104 00009812 00009814
+l14 0000105 0000982e 00009830
+l14 0000106 00009830 00009844
+l14 0000107 00009844 00009858
+l14 0000109 00009858 00009874
+l14 0000110 0000987a 00009882
+l54 0000221 00009882 000098a8
+l54 0000222 000098a8 000098b6
+l54 0000223 000098dc 000098de
+l54 0000224 00009905 0000990d
+l54 0000293 0000990d 0000991d
+l54 0000294 0000991d 0000992d
+l54 0000296 00009954 00009962
+l54 0000297 00009968 00009978
+l54 0000298 0000999d 0000999f
+l54 0000299 000099da 000099dc
+l54 0000300 00009a32 00009a4e
+l54 0000301 00009a54 00009a56
+l54 0000306 00009a6e 00009a7c
+l54 0000308 00009a82 00009ab2
+l54 0000310 00009ab8 00009ac8
+l54 0000311 00009af3 00009af5
+l54 0000312 00009b2a 00009b2c
+l54 0000317 00009b48 00009b82
+l54 0000319 00009b88 00009bd8
+l54 0000321 00009bde 00009bee
+l54 0000322 00009c12 00009c14
+l54 0000326 00009c30 00009c48
+l54 0000328 00009c48 00009c58
+l54 0000329 00009c5e 00009c6e
+l54 0000330 00009c74 00009c84
+l54 0000331 00009cac 00009cae
+l54 0000332 00009ccc 00009cce
+l54 0000333 00009ce4 00009cf6
+l54 0000334 00009d1b 00009d1d
+l54 0000335 00009d3b 00009d3d
+l54 0000336 00009d53 00009d63
+l54 0000337 00009d87 00009d89
+l54 0000338 00009dab 00009dad
+l54 0000339 00009dc3 00009dd5
+l54 0000340 00009df9 00009dfb
+l54 0000341 00009e1d 00009e1f
+l54 0000342 00009e35 00009e45
+l54 0000343 00009e7e 00009e80
+l54 0000344 00009eb3 00009eb5
+l54 0000345 00009ecb 00009edb
+l54 0000346 00009f03 00009f05
+l54 0000347 00009f27 00009f29
+l54 0000348 00009f3f 00009f51
+l54 0000349 00009f76 00009f78
+l54 0000351 00009f97 00009f99
+l54 0000353 00009f99 00009f9f
+l54 0000354 00009f9f 00009fa7
+l54 0000355 00009fa7 00009fb4
+l54 0000356 00009fb4 00009fb8
+l54 0000360 00009fb8 00009fd2
+l54 0000362 00009fd8 0000a028
+l54 0000363 0000a02e 0000a040
+l54 0000367 0000a040 0000a056
+l54 0000368 0000a06c 0000a09f
+l54 0000367 0000a09f 0000a0b3
+l54 0000372 0000a0b9 0000a0df
+l54 0000374 0000a0df 0000a114
+l54 0000376 0000a114 0000a137
+l54 0000379 0000a137 0000a147
+l54 0000380 0000a16f 0000a171
+l54 0000381 0000a1a9 0000a1ab
+l54 0000382 0000a1c1 0000a1ff
+l54 0000383 0000a205 0000a207
+l54 0000384 0000a21d 0000a24a
+l54 0000392 0000a24a 0000a250
+l54 0000393 0000a250 0000a254
+l54 0000394 0000a254 0000a274
+l54 0000395 0000a274 0000a288
+l54 0000396 0000a288 0000a2ae
+l54 0000397 0000a2ae 0000a2be
+l54 0000398 0000a2c4 0000a2e7
+l54 0000399 0000a2e7 0000a302
+l54 0000400 0000a302 0000a337
+l54 0000401 0000a33d 0000a33f
+l54 0000402 0000a33f 0000a355
+l54 0000403 0000a355 0000a367
+l54 0000406 0000a367 0000a379
+l54 0000407 0000a37f 0000a38f
+l54 0000408 0000a3b7 0000a3b9
+l54 0000409 0000a3cf 0000a3ff
+l54 0000410 0000a405 0000a407
+l54 0000411 0000a41d 0000a462
+l54 0000412 0000a468 0000a46a
+l54 0000413 0000a480 0000a4b4
+l54 0000416 0000a4b4 0000a524
+l54 0000418 0000a52a 0000a53a
+l54 0000419 0000a567 0000a569
+l54 0000420 0000a57f 0000a5af
+l54 0000421 0000a5b5 0000a5b7
+l54 0000423 0000a5e1 0000a5ef
+l54 0000424 0000a611 0000a613
+l54 0000427 0000a640 0000a650
+l54 0000429 0000a67d 0000a695
+l54 0000430 0000a69b 0000a6a3
+l54 0000561 0000a6a3 0000a6b1
+l54 0000563 0000a6d1 0000a6e9
+l54 0000564 0000a6e9 0000a6f9
+l54 0000566 0000a719 0000a72d
+l54 0000567 0000a72d 0000a73a
+l54 0000568 0000a73a 0000a73c
+l54 0000569 0000a73c 0000a73e
+l54 0000570 0000a73e 0000a752
+l54 0000571 0000a76a 0000a793
+l54 0000572 0000a793 0000a7a2
+l54 0000570 0000a7bc 0000a7d0
+l54 0000574 0000a7d6 0000a7fa
+l54 0000575 0000a800 0000a808
+l54 0000434 0000a808 0000a816
+l54 0000435 0000a81c 0000a848
+l54 0000436 0000a86c 0000a86e
+l54 0000437 0000a8a4 0000a8a6
+l54 0000438 0000a8dc 0000a8de
+l54 0000440 0000a90b 0000a919
+l54 0000441 0000a91f 0000a92d
+l54 0000442 0000a955 0000a957
+l54 0000444 0000a984 0000a992
+l54 0000445 0000a9cb 0000a9cd
+l54 0000446 0000aa0b 0000aa13
+l54 0000252 0000aa13 0000aa4f
+l54 0000253 0000aa4f 0000aa57
+l25 0000503 0000aa57 0000aa69
+l25 0000504 0000aa69 0000aa85
+l25 0000505 0000aa8b 0000aa93
+l25 0000636 0000aa93 0000aabe
+l25 0000637 0000aabe 0000aac6
+l25 0000678 0000aac6 0000aaf2
+l25 0000679 0000aaf2 0000ab09
+l25 0000680 0000ab09 0000ab0f
+l25 0000682 0000ab0f 0000ab37
+l25 0000684 0000ab3d 0000ab54
+l25 0000686 0000ab5a 0000ab7d
+l25 0000688 0000ab7d 0000ab9d
+l25 0000690 0000ab9d 0000abb9
+l25 0000691 0000abbf 0000abc7
+l25 0000642 0000abc7 0000abcb
+l25 0000643 0000abcb 0000abd3
+l25 0000645 0000abd3 0000ac7b
+l25 0000647 0000ac7b 0000ac7b
+l25 0000648 0000ac7b 0000ac90
+l25 0000649 0000ac90 0000ac96
+l25 0000650 0000ac96 0000ac96
+l25 0000651 0000ac96 0000acab
+l25 0000652 0000acab 0000acb1
+l25 0000653 0000acb1 0000acb1
+l25 0000654 0000acb1 0000acc6
+l25 0000655 0000acc6 0000accc
+l25 0000656 0000accc 0000accc
+l25 0000657 0000accc 0000ace1
+l25 0000658 0000ace1 0000ace7
+l25 0000659 0000ace7 0000ace7
+l25 0000660 0000ace7 0000acfc
+l25 0000661 0000acfc 0000ad02
+l25 0000662 0000ad02 0000ad02
+l25 0000663 0000ad02 0000ad17
+l25 0000664 0000ad17 0000ad1d
+l25 0000665 0000ad1d 0000ad1d
+l25 0000666 0000ad1d 0000ad32
+l25 0000667 0000ad32 0000ad38
+l25 0000669 0000ad3e 0000ad5a
+l25 0000670 0000ad60 0000ad62
+l25 0000621 0000ad62 0000ad99
+l25 0000622 0000ad99 0000ad9b
+l06 0000359 0000ad9b 0000ada8
+l06 0000360 0000ada8 0000adcb
+l06 0000361 0000adcb 0000ae11
+l06 0000362 0000ae17 0000ae31
+l06 0000364 0000ae31 0000ae81
+l06 0000365 0000ae87 0000aea1
+l06 0000367 0000aea1 0000aebb
+l06 0000368 0000aec1 0000aec9
+l06 0000316 0000aec9 0000aed6
+l06 0000317 0000aed6 0000aee6
+l06 0000318 0000aeec 0000af06
+l06 0000321 0000af06 0000af13
+l06 0000322 0000af13 0000afab
+l06 0000324 0000afb1 0000afcb
+l06 0000326 0000afcb 0000aff1
+l06 0000327 0000aff7 0000b011
+l06 0000329 0000b011 0000b02b
+l06 0000330 0000b031 0000b039
+l06 0000336 0000b039 0000b046
+l06 0000337 0000b046 0000b056
+l06 0000338 0000b05c 0000b076
+l06 0000341 0000b076 0000b083
+l06 0000342 0000b083 0000b11c
+l06 0000344 0000b122 0000b13c
+l06 0000346 0000b13c 0000b15f
+l06 0000347 0000b165 0000b17f
+l06 0000349 0000b17f 0000b199
+l06 0000350 0000b19f 0000b1a7
+l06 0000297 0000b1a7 0000b1b4
+l06 0000298 0000b1b4 0000b1c4
+l06 0000299 0000b1ca 0000b1e4
+l06 0000302 0000b1e4 0000b1f1
+l06 0000303 0000b1f1 0000b28a
+l06 0000305 0000b290 0000b2aa
+l06 0000307 0000b2aa 0000b2cd
+l06 0000308 0000b2d3 0000b2ed
+l06 0000310 0000b2ed 0000b307
+l06 0000311 0000b30d 0000b315
+l55 0000509 0000b315 0000b325
+l55 0000511 0000b325 0000b355
+l55 0000513 0000b375 0000b37a
+l55 0000514 0000b37a 0000b37f
+l55 0000516 0000b37f 0000b38c
+l55 0000517 0000b392 0000b3a4
+l55 0000518 0000b3ca 0000b3cc
+l55 0000519 0000b3cc 0000b3de
+l55 0000520 0000b3e4 0000b406
+l55 0000521 0000b40c 0000b426
+l55 0000522 0000b42c 0000b42e
+l55 0000525 0000b448 0000b453
+l55 0000528 0000b453 0000b48e
+l55 0000530 0000b4ad 0000b4bf
+l55 0000531 0000b4c5 0000b505
+l55 0000532 0000b505 0000b51f
+l55 0000534 0000b51f 0000b539
+l55 0000535 0000b53f 0000b547
+l55 0000485 0000b547 0000b560
+l55 0000487 0000b580 0000b586
+l55 0000488 0000b586 0000b58c
+l55 0000489 0000b58c 0000b599
+l55 0000490 0000b599 0000b5ac
+l55 0000491 0000b5ac 0000b5c0
+l55 0000492 0000b5c0 0000b5d5
+l55 0000493 0000b5db 0000b5fc
+l55 0000494 0000b602 0000b604
+l55 0000495 0000b61f 0000b633
+l55 0000497 0000b633 0000b645
+l55 0000498 0000b661 0000b67c
+l55 0000500 0000b682 0000b69e
+l55 0000501 0000b6a4 0000b6ac

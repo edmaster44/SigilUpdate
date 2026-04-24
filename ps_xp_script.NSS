@@ -74,9 +74,8 @@ void main(){
 	string sXPbanking = "You have surpassed the required XP to level up.";
 	sXPbanking += "\nYour XP is being calculated as though you were level ";
 	
-	int bDMAdjust = FALSE;
 	float fDMadjust = GetLocalFloat(GetModule(), "DM_XP_MOD");
-	if (fDMadjust != 1.0 && fDMadjust != 0.0) bDMAdjust = TRUE;
+	if (fDMadjust <= 0.0) fDMadjust = 1.0;
 	
 	object oArea = GetArea(oKiller);
 	object oMember = GetFirstFactionMember(oKiller, TRUE);
@@ -147,8 +146,7 @@ void main(){
 				} else rp_bonus = 0;
 			}
 			// apply DM adjustments last
-			if (bDMAdjust)
-				nFinalXP = PS_RoundToInt(nFinalXP * fDMadjust);
+			nFinalXP = PS_RoundToInt(nFinalXP * fDMadjust);
 			// if player is using #KillInfo chat command, which is not meant to show quest or rp xp
 			if (GetLocalInt(oMember, "xpdebug")){
 				sDebug = "Max level in party: " + IntToString(data.nMax);
@@ -162,8 +160,8 @@ void main(){
 				if (fPartyBonus > 0.0) sDebug += PS_PrettyFloatString(fPartyBonus * 100.0, 2) + "%";
 				else sDebug += "none";
 				sDebug += "\nRP Pool Bonus: " + IntToString(rp_bonus);
-				if (bDMAdjust){
-					sDebug = "DM multiplier: " + PS_PrettyFloatString(fDMadjust);
+				if (fDMadjust != 1.0){
+					sDebug = "DM multiplier: " + PS_PrettyFloatString(fDMadjust * 100.0, 2) + "%";
 				}
 				sDebug += "\nEnemy Data:\n";
 				sDebug += GetCreatureInfo(oDead, oMember);

@@ -343,7 +343,7 @@ string GetCustomItemValue(object oItem, string sCost){
 		return IntToString(nRoundedCost);
 	}
 	int nFixedCost = GetFixedItemValue(oItem);
-	if (nFixedCost > 0) return IntToString(nFixedCost * GetItemStackSize(oItem));
+	if (nFixedCost > 0) return IntToString(nFixedCost);
 	return sCost;
 }
 

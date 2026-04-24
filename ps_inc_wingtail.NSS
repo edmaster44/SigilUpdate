@@ -73,7 +73,7 @@ int PS_GetRacialTailType(object oPC)
 int PS_GetRacialWingType(object oPC){
 	int nGender		= GetGender(oPC);
 	//int nSub		= GetSubRace(oPC);
-	int nSub = GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "OldSubrace");
+	int nSub = GetOriginalSubRace(oPC);
 	string sMWing	= Get2DAString("racialsubtypes", "MWING", nSub);
 	int nMWing		= StringToInt(sMWing);
 	string sFWing	= Get2DAString("racialsubtypes", "FWING", nSub);
@@ -89,8 +89,8 @@ int PS_GetRacialWingType(object oPC){
 int PS_Get_WingRace(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nRace		= GetLocalInt(oEssence, "OldRace");
-	int nSubrace	= GetLocalInt(oEssence, "OldSubrace");
+	int nRace		= GetOriginalRace(oPC);
+	int nSubrace	= GetOriginalSubRace(oPC);
 	switch (nRace)
 	{	
 		case 0: return WING_VARIATION_DWARF;
@@ -290,7 +290,7 @@ int PS_GetWing_HalfDragon(object oPC)
 int PS_GetWing_Template(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nWingRace = GetLocalInt(oEssence, "OldSubrace");
+	int nWingRace = GetOriginalSubRace(oPC);
 	
 	string sMWing	= Get2DAString("racialsubtypes", "MWING", nWingRace);
 	int nMWing		= StringToInt(sMWing);

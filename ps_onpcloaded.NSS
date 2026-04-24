@@ -199,9 +199,15 @@ void SetStartingVariables(object oPC, string sLegal){
 	// we can in future tell what class was just leveled up for purposes of 
 	// gui_extra_choices
 	StoreClasses(oPC);
-	// we need the original race stored at char creation, 
-	SetLocalInt(oEss, "OldRace", GetRacialType(oPC));
-	SetLocalInt(oEss, "OldSubrace", GetSubRace(oPC));			
+	// we need the original race stored at char creation, but 0 is valid entry for both race and subrace
+	// but could also mean that the data is not set. So instead turn 0 race (dwarf) and 0 subrace (gold dwarf)
+	// into -1. Make sure the that this is accounted for in data retrieval
+	int nRace = GetRacialType(oPC);
+	if (nRace == 0) nRace = -1;
+	int nSub = GetSubRace(oPC);
+	if (nSub = 0) nSub = -1;
+	SetLocalInt(oEss, "OldRace", nRace);
+	SetLocalInt(oEss, "OldSubrace", nSub);			
 	SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));
 }
 

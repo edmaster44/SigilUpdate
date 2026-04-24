@@ -170,20 +170,6 @@ void PS_HD_InTheBlood(object oPC, object oItem)
 		//SetLocalString(oPC, "ECL", sNewECL);
 		SetLocalString(oItem, "InBlood", "HD+1");	}
 		
-	// Remove one level if total ECL results in a value greater than 30
-	if (PS_GetLevel(oPC) > 30 && !ALLOW_ECL_LEVEL_30)
-	{	int nextlvl = 1000;
-		int totalxp = 0;
-		int whatlevel = PS_GetLevel(oPC) - 1; // decrease level by 1
-		// set your level
-		int i=0;
-		for (i = 1; i < whatlevel; i++) 
-		{	totalxp += nextlvl;
-			nextlvl += 1000;	}
-		SetXP(oPC, totalxp + nextlvl - 1);
-		//Template Class Fix
-		PS_HalfDragonRaceFix(oPC);
-		DelayCommand(1.0f, ForceRest(oPC));	}
 }
 
 void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)

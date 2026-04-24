@@ -281,7 +281,7 @@ int X2GetSpellCastOnSequencerItem(object oItem)
     {
 		// sequencer pots need coin to store the spell, 
 		// if they can't pay they can't play
-		if (PS_GetIsSequencerPot(oItem)){
+		if (PS_GetIsOldSequencerPot(oItem)){
 			if (!PS_PayForSequencerPot(oItem, OBJECT_SELF))
 				return TRUE;
 		}
@@ -296,7 +296,7 @@ int X2GetSpellCastOnSequencerItem(object oItem)
         FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
 		
 		// if it's a sequencer pot rename it to reflect spell(s) stored
-		if (PS_GetIsSequencerPot(oItem))
+		if (PS_GetIsOldSequencerPot(oItem))
 			PS_RenameSequencerPot(oItem, OBJECT_SELF);
     }
     else
@@ -574,24 +574,27 @@ void ff_ShowConsumableCraftCosts(){
 	object oPC = OBJECT_SELF;
 	int nId = GetSpellId();
 	int nLevel = CIGetSpellInnateLevel(nId, FALSE);
-	int nScroll = CIGetCraftGPCost(oPC, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
-	string sScroll = GetCurrencyFeedback(nScroll, FALSE, FALSE, TRUE);
+	int nCost = CIGetCraftGPCost(oPC, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);
+	string sCost = GetCurrencyFeedback(nCost, FALSE, FALSE, TRUE);
 	string sMessage = GetSpellName(nId) + ":\n";
-	sMessage += "Scroll cost: " + sScroll + "\n";
+	sMessage += "Scroll cost: " + sCost + "\n";
 	
-	int nPot, nWand;
-	string sPot, sWand;
 	int bHarmful = StringToInt(Get2DAString("spells", "HostileSetting", nId));
 	if (!bHarmful){
-		nPot = CIGetCraftGPCost(oPC, nLevel, X2_CI_BREWPOTION_COSTMODIFIER);
-		sPot = GetCurrencyFeedback(nPot, FALSE, FALSE, TRUE);
-		sMessage += "Potion/Sequencer cost: " + sPot + "\n";
+		if (nLevel <= 6){
+			nCost = CIGetCraftGPCost(oPC, nLevel, X2_CI_BREWPOTION_COSTMODIFIER);
+			sCost = GetCurrencyFeedback(nCost, FALSE, FALSE, TRUE);
+			sMessage += "Potion cost: " + sCost + "\n";
+		}
+		nCost = CIGetCraftGPCost(oPC, nLevel, X2_CI_SEQUENCER_COSTMODIFIER);
+		sCost = GetCurrencyFeedback(nCost, FALSE, FALSE, TRUE);
+		sMessage += "Sequencer Potion cost: " + sCost + "\n";
 	}
 	
 	if (nLevel <= 4){
-		nWand = CIGetCraftGPCost(oPC, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER);
-		sWand = GetCurrencyFeedback(nWand, FALSE, FALSE, TRUE);
-		sMessage += "Wand cost: " + sWand;
+		nCost = CIGetCraftGPCost(oPC, nLevel, X2_CI_CRAFTWAND_COSTMODIFIER);
+		sCost = GetCurrencyFeedback(nCost, FALSE, FALSE, TRUE);
+		sMessage += "Wand cost: " + sCost;
 	}
 	
 	SendMessageToPC(oPC, sMessage);

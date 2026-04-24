@@ -8,8 +8,10 @@
 #include "dmfi_inc_const"
 #include "ff_fix_item_sets"
 #include "ginc_crafting"
+#include "ff_sequencer"
 
 // function declarations
+void ReplaceSequencerPot(object oItem, object oPC);
 void SetNewSeqRecipeDesc(object oItem, string sRef);
 void FF_UpdateLegacyItems(object oPC, int bSetsOnly = FALSE);
 void FF_ModifyItemProperty(object oItem, itemproperty ipProperty, int bAdd = FALSE);
@@ -27,6 +29,11 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 			SetNewSeqRecipeDesc(oItem, sRef);
 			return;
 	}
+	
+	if (PS_GetIsOldSequencerPot(oItem))
+		ReplaceSequencerPot(oItem, oPC);
+	
+	
 	
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);
@@ -379,4 +386,18 @@ void SetNewSeqRecipeDesc(object oItem, string sRef){
 	string sOldDesc =  GetDescription(oItem);
 	if (sOldDesc == sNewDesc) return;
 	else SetDescription(oItem, sNewDesc);
+}
+
+void ReplaceSequencerPot(object oItem, object oPC){
+	// dont replace old sequencer pots that have any spells stored
+	if (GetLocalInt(oItem, "X2_L_SPELLTRIGGER1") != 0)
+		return;
+		
+	int nStack = GetItemStackSize(oItem);
+	string sRef = GetResRef(oItem) + "new";
+	object oNew = CreateItemOnObject(sRef, oPC);
+	if (GetIsObjectValid(oNew)){
+		SetItemStackSize(oNew, nStack, FALSE);
+		DestroyObject(oItem, 0.1, FALSE);
+	}
 }

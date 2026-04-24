@@ -113,6 +113,9 @@ const int FIRST_WAND_ICON                           = 2300;
 
 const string  X2_CI_CRAFTSKILL_CONV ="x2_p_craftskills";
 
+//Sequencer cost constant
+const int     X2_CI_SEQUENCER_COSTMODIFIER   = 30; 
+
 // Brew Potion related Constants
 const int     X2_CI_BREWPOTION_FEAT_ID        = 944;                    // Brew Potion feat simulation
 const int     X2_CI_BREWPOTION_MAXLEVEL       = 3;                      // Max Level for potions
@@ -517,61 +520,61 @@ void AppendSpellToName(object oObject, int nSpellId)
 	PrettyDebug ("sNewName = "  + sName);
 }
 
-// -----------------------------------------------------------------------------
+
 // Wrapper for the crafting cost calculation, returns GP required
-// -----------------------------------------------------------------------------
+// Note that this will base the cost on the caster level of the spell the
+// object will wind up casting, as set in des_crft_spells. However, 
+// Sequencers will use a CL based upon the USER, not the caster.
+// Specifically it will use the highest of 10, User CL, or  ((spell innate level * 2) - 1)
+// Since we don't know the end result CL, then we shouldn't include it in the
+// match for getting cost of sequencers
 int CIGetCraftGPCost(object oCaster, int nLevel, int nMod){
 
-	int nCasterLvl = PS_GetCasterLevel(oCaster);
+	int nCL = GetCasterLevel(oCaster);
 	if (nMod == X2_CI_SCRIBESCROLL_COSTMODIFIER){
-		if (GetLocalInt(oCaster, "bScribeAtMinLvl")) nCasterLvl = 1;
+		if (GetLocalInt(oCaster, "bScribeAtMinLvl")) nCL = 1;
 	}
 	int nId = GetSpellId();
-    int nLvlRow =   IPGetIPConstCastSpellFromSpellID(nId, nCasterLvl);
+    int nLvlRow =   IPGetIPConstCastSpellFromSpellID(nId, nCL);
     int nCLevel = StringToInt(Get2DAString("iprp_spells","CasterLvl",nLvlRow));
 
-	if (nLevel == 0) nLevel = 1;
-		
-    // -------------------------------------------------------------------------
+	if (nLevel == 0) nLevel = 1;	
     // in case we don't get a valid CLevel, use CasterLvl level instead
-    // -------------------------------------------------------------------------
-    if (nCLevel == 0) nCLevel = nCasterLvl;
+    if (nCLevel == 0) nCLevel = nCL;
     
-	float fHealScrollMod = GetLocalFloat(GetModule(), "HEAL_SCROLL_COST_MOD");
-	if (fHealScrollMod <= 0.0) fHealScrollMod = HEAL_SCROLL_COST_MOD;
-	if (fHealScrollMod <= 0.0) fHealScrollMod = 1.0;
+	//Get price adjustment mod
 	
-	float fScrollMod = GetLocalFloat(GetModule(), "SCROLL_COST_MOD");
-	if (fScrollMod <= 0.0) fScrollMod = SCROLL_COST_MOD;
-	if (fScrollMod <= 0.0) fScrollMod = 1.0;
-	
-	float fHealPotMod = GetLocalFloat(GetModule(), "HEAL_POT_COST_MOD");
-	if (fHealPotMod <= 0.0) fHealPotMod = HEAL_POT_COST_MOD;
-	if (fHealPotMod <= 0.0) fHealPotMod = 1.0;
-	
-	float fPotMod = GetLocalFloat(GetModule(), "POT_COST_MOD");
-	if (fPotMod <= 0.0) fPotMod = POT_COST_MOD;
-	if (fPotMod <= 0.0) fPotMod = 1.0;
-	
-	float fHealWandMod = GetLocalFloat(GetModule(), "HEAL_WAND_COST_MOD");
-	if (fHealWandMod <= 0.0) fHealWandMod = HEAL_WAND_COST_MOD;
-	if (fHealWandMod <= 0.0) fHealWandMod = 1.0;
-	
-	float fWandMod = GetLocalFloat(GetModule(), "WAND_COST_MOD");
-	if (fWandMod <= 0.0) fWandMod = WAND_COST_MOD;
-	if (fWandMod <= 0.0) fWandMod = 1.0;
 	
 	int bIsHealing = GetIsHealingSpell(nId);
-	float fEconomyMod;
-	if (nMod == X2_CI_SCRIBESCROLL_COSTMODIFIER)
-		fEconomyMod = (bIsHealing) ? fHealScrollMod : fScrollMod; 
-	else if (nMod == X2_CI_BREWPOTION_COSTMODIFIER)
-		fEconomyMod = (bIsHealing) ? fHealPotMod : fPotMod;
-	else
-		fEconomyMod = (bIsHealing) ? fHealWandMod : fWandMod;
-	int nRet = PS_RoundToInt(((IntToFloat(nCLevel)/10.0) + IntToFloat(nLevel)) * nMod);
-    return PS_RoundToInt(nRet * fEconomyMod);
-
+	float fAddCostMod, fVar;
+	string sVar;
+	int nRet;
+	if (nMod == X2_CI_SCRIBESCROLL_COSTMODIFIER){
+		sVar = (bIsHealing) ? "HEAL_SCROLL_COST_MOD" : "SCROLL_COST_MOD";
+		fVar = (bIsHealing) ? HEAL_SCROLL_COST_MOD : SCROLL_COST_MOD;
+	}
+	else if (nMod == X2_CI_BREWPOTION_COSTMODIFIER){
+		sVar = (bIsHealing) ? "HEAL_POT_COST_MOD" : "POT_COST_MOD";
+		fVar = (bIsHealing) ? HEAL_POT_COST_MOD : POT_COST_MOD;
+	}
+	else if (nMod == X2_CI_CRAFTWAND_COSTMODIFIER){
+		sVar = (bIsHealing) ? "HEAL_WAND_COST_MOD" : "WAND_COST_MOD";
+		fVar = (bIsHealing) ? HEAL_WAND_COST_MOD : WAND_COST_MOD;
+	}
+	else if (nMod == X2_CI_SEQUENCER_COSTMODIFIER){
+		sVar = (bIsHealing) ? "HEAL_SEQ_COST_MOD" : "SEQ_COST_MOD";
+		fVar = (bIsHealing) ? HEAL_SEQ_COST_MOD : SEQ_COST_MOD;
+	}
+	
+	fAddCostMod = GetLocalFloat(GetModule(), sVar); // get the current module var for cost mod
+	if (fAddCostMod <= 0.0) fAddCostMod = fVar; // if not set, get from aaa_constants
+	if (fAddCostMod <= 0.0) fAddCostMod = 1.0; // if that's not set either, multiply by 1
+	
+	if (nMod == X2_CI_SEQUENCER_COSTMODIFIER)
+		nRet = PS_RoundToInt(IntToFloat(nLevel) * nMod) + 100;
+	else nRet = PS_RoundToInt(((IntToFloat(nCLevel)/10.0) + IntToFloat(nLevel)) * nMod);
+    
+	return PS_RoundToInt(nRet * fAddCostMod);
 }
 
 
@@ -918,76 +921,39 @@ object CICraftScribeScroll(object oCreator, int nSpellId)
 // -----------------------------------------------------------------------------
 // Returns TRUE if the player used the last spell to brew a potion
 // -----------------------------------------------------------------------------
-int CICraftCheckBrewPotion(object oSpellTarget, object oCaster)
-{
-	// the below two are arguments we're getting, why did the oc declare them again?
-    //object oSpellTarget = GetSpellTargetObject();
-   // object oCaster      = OBJECT_SELF;
-    int    nId          = GetSpellId();
-    int    nLevel       = CIGetSpellInnateLevel(nId,TRUE);
+int CICraftCheckBrewPotion(object oSpellTarget, object oCaster){
+    int nId = GetSpellId();
+    int nLevel = CIGetSpellInnateLevel(nId,TRUE);
 	int nStack = GetItemStackSize(oSpellTarget);
-
-    // -------------------------------------------------------------------------
     // check if brew potion feat is there
-    // -------------------------------------------------------------------------
-    if (GetHasFeat(X2_CI_BREWPOTION_FEAT_ID, oCaster) != TRUE)
-    {
-      FloatingTextStrRefOnCreature(STR_REF_IC_MISSING_REQUIRED_FEAT, oCaster); // Item Creation Failed - Don't know how to create that type of item
+    if (GetHasFeat(X2_CI_BREWPOTION_FEAT_ID, oCaster) != TRUE){
+      FloatingTextStrRefOnCreature(STR_REF_IC_MISSING_REQUIRED_FEAT, oCaster); 
       return TRUE;
     }
 
-    // -------------------------------------------------------------------------
     // check if spell is below maxlevel for brew potions, but allow cure and inflict crit
 	// if that boolean or the heal one is set to true and allow heal and harm if that boolean is set to true.
 	// Also allow restoration and greater restoration if those booleans are set to true.
-    // -------------------------------------------------------------------------
 	int nMax = X2_CI_BREWPOTION_MAXLEVEL;
 	if (B_RAISE_POTION_LVL_BY_ALCH) nMax += (GetSkillRank(SKILL_CRAFT_ALCHEMY, oCaster, TRUE)/ 10);
-	
-	if (nLevel > nMax)
-		{
-			FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_TO_HIGH_FOR_POTION, oCaster);
-			return TRUE;
-		}
-	
-
-
-    // -------------------------------------------------------------------------
+	if (nLevel > nMax){
+		FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_TO_HIGH_FOR_POTION, oCaster);
+		return TRUE;
+	}
     // Check if the spell is allowed to be used with Brew Potions
-    // -------------------------------------------------------------------------
-	
 	if (CIGetIsSpellRestrictedFromCraftFeat(nId, X2_CI_BREWPOTION_FEAT_ID)){
         FloatingTextStrRefOnCreature(STR_REF_IC_SPELL_RESTRICTED_FOR_POTION, oCaster);
         return TRUE;
     }
 
-    // -------------------------------------------------------------------------
     // XP/GP Cost Calculation
-    // -------------------------------------------------------------------------
     int nGoldCost = CIGetCraftGPCost(oCaster, nLevel, X2_CI_BREWPOTION_COSTMODIFIER);
-
-    // -------------------------------------------------------------------------
     // Does Player have enough gold?
-    // -------------------------------------------------------------------------
     if (GetGold(oCaster) < nGoldCost * nStack)
     {
         FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_GOLD, oCaster); // Item Creation Failed - not enough gold!
         return TRUE;
     }
-
-//    int nHD = PS_GetLevel(oCaster);
-//    int nMinXPForLevel = ((nHD * (nHD - 1)) / 2) * 1000;
-//    int nNewXP = FloatToInt(GetXP(oCaster) - nExperienceCost);
-
-
-    // -------------------------------------------------------------------------
-    // check for sufficient XP to cast spell
-    // -------------------------------------------------------------------------
-//    if (nMinXPForLevel > nNewXP || nNewXP == 0 )
-//    {
-//        FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_XP, oCaster); // Item Creation Failed - Not enough XP
-//        return TRUE;
-//    }
 
     // -------------------------------------------------------------------------
     // Here we brew the new potion
@@ -2035,4 +2001,3 @@ int CIGetWeaponModificationCost(object oOldItem, object oNewItem)
    }
    return nTotal;
 }
-

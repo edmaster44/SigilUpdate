@@ -14,12 +14,9 @@ void main()
 	object oItem	= GetSpellTargetObject();
 	int nSpell 		= GetSpellId();
 	
-	int nItem = GetBaseItemType(oItem);
-	string sRef = GetResRef(oItem);
-	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
-		sRef == "ps_potion_greatersequencer" || nItem == 101 || nItem == 49 || nItem == 104){
-			SendMessageToPC(oPC, "You cannot use this item on potions");
-			return;
+	if (GetBaseItemType(oItem) == BASE_ITEM_POTIONS){
+		SendMessageToPC(oPC, "Due to numerous exploits and bugs, potions can no longer be edited by users");
+		return;
 	}
 	
 	if (GetObjectType(oItem) != OBJECT_TYPE_ITEM)

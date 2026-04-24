@@ -13,15 +13,15 @@
 
 void main()
 {
-    object oPC;
-    object oTarget;
-    object oTool;
-    string sResRef;
-
-    oPC = GetItemActivator();
-    oTarget = GetItemActivatedTarget();
-    oTool = GetItemActivated();
-    sResRef = GetResRef(oTool);
+    object oPC = GetItemActivator();
+    object oTarget = GetItemActivatedTarget();
+    object oTool = GetItemActivated();
+    string sResRef = GetResRef(oTool);
+	
+	if (GetBaseItemType(oTarget) == BASE_ITEM_POTIONS){
+		SendMessageToPC(oPC, "Due to numerous exploits and bugs, potions can no longer be edited by users");
+		return;
+	}
 	
 	if ((!DMFI_GetIsDM(oPC)) && (sResRef==DMFI_TOOL_RESREF))
 	{  // Make sure Players can't use a DM Tool

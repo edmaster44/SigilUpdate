@@ -6,12 +6,37 @@
 #include "x2_inc_itemprop"
 #include "ps_inc_advscript"
 
+
 int GetNewECL(object oPC);
 void PS_CalculateECL(object oPC);
 int PS_CalculateRacialECL(object oPC);
 int PS_CalculateOriginalECL(object oPC, object oEssence);
 int PS_CalculateTemplateECL(object oPC);
 void PS_EnforceMaxLevel(object oPC);
+
+int GetOriginalRace(object oPC){
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	if (!GetIsObjectValid(oEss)){
+		SendMessageToPC(oPC, "Warning!!! Essence item missing! Contact administrator!");
+		return GetRacialType(oPC);
+	}
+	int nRace = GetLocalInt(oEss, "OldRace");
+	if (nRace == 0) nRace = GetRacialType(oPC);
+	else if (nRace == -1) nRace = 0;
+	return nRace;
+}
+
+int GetOriginalSubRace(object oPC){
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	if (!GetIsObjectValid(oEss)){
+		SendMessageToPC(oPC, "Warning!!! Essence item missing! Contact administrator!");
+		return GetSubRace(oPC);
+	}
+	int nSub = GetLocalInt(oEss, "OldSubrace");
+	if (nSub == 0) nSub = GetSubRace(oPC);
+	else if (nSub == -1) nSub = 0;
+	return nSub;
+}
 
 
 //THIS is ECL, it's getting how much xp to tax based on the ecl, called from 
@@ -22,8 +47,7 @@ void PS_EnforceMaxLevel(object oPC);
 // now due to the backups and checking involved in doing so safely. -Flatted Fifth
 int GetNewECL(object oPC){
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	int nRace = GetLocalInt(oEss, "OldSubrace");
-	if (nRace == 0) nRace = GetSubRace(oPC);
+	int nRace = GetOriginalSubRace(oPC);
 	
 	int nEcl = StringToInt(Get2DAString("racialsubtypes", "PS_ECL", nRace));
 	int i;
@@ -98,7 +122,7 @@ int PS_CalculateOriginalECL(object oPC, object oEssence)
 {
 	if (ALLOW_ECL_LEVEL_30) return 0;
 	
-	int nOldSub			= GetLocalInt(oEssence, "OldSubrace");
+	int nOldSub			= GetOriginalSubRace(oPC);
 	string s2da			= "racialsubtypes";
 	string sColumn		= "LA";
 	

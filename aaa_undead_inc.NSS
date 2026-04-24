@@ -81,7 +81,7 @@ void PS_UndeadRacialType(object oPC)
 		GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0 &&
 		GetLocalInt(oEssence, "TempChange") == 0){
 		
-		switch (GetLocalInt(oEssence, VAR_OLD_RACE)){
+		switch (GetOriginalRace(oPC)){
 			case RACIAL_TYPE_DWARF:
 				nAppVar = 991; break;
 			case RACIAL_TYPE_ELF:
@@ -226,7 +226,7 @@ void PS_UndeadProperties(object oPC, int nSpell)
 int GetIsShortRace(object oPC)
 {
 	object oEssence	= PS_GetEssence(oPC);
-	switch(GetLocalInt(oEssence, VAR_OLD_RACE))
+	switch(GetOriginalRace(oPC))
 	{	case RACIAL_TYPE_DWARF:
 		case RACIAL_TYPE_GNOME:
 		case RACIAL_TYPE_HALFLING:

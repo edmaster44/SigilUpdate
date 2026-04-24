@@ -67,7 +67,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 4);
 			int nPercent = StringToInt(sRight);
 			if (sRight == "off" || nPercent == 100){
-				DeleteLocalFloat(GetModule(), "XPBOOST");
+				DeleteLocalFloat(GetModule(), "DM_XP_MOD");
 				sFeedback = "Turning off XP%";
 			} else if (nPercent < 1 || nPercent > 500){
 				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive.\n";
@@ -75,7 +75,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 				sFeedback += "only 80% of normal XP.\n";
 				sFeedback += "If you are trying to turn XP% off, type #XP% OFF or #XP% 100.";
 			} else {
-				SetLocalFloat(GetModule(), "XPBOOST", IntToFloat(nPercent) / 100.0);
+				SetLocalFloat(GetModule(), "DM_XP_MOD", IntToFloat(nPercent) / 100.0);
 				sFeedback = "Setting XP gains to " + IntToString(nPercent) + "% of normal.\n";
 				sFeedback = "This will last until you type #XP% OFF, #XP% 100, or until server reset";
 			}
@@ -211,12 +211,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback += "\nResRef: " + GetResRef(oItem);
 			sFeedback += "\nBase item: " + IntToString(GetBaseItemType(oItem));
 			sFeedback += "\nValue: " + IntToString(GetGoldPieceValue(oItem));
-			if (PS_GetIsSequencerPot(oItem)){
-				sFeedback += "\nSpell 1:  " +  IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER1")); 
-				sFeedback += "\nSpell 2:  " + IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER2")); 
-				sFeedback += "\nSpell 3:  " + IntToString(GetLocalInt(oItem, "X2_L_SPELLTRIGGER3"));
-				sFeedback += "\nNum: " + IntToString(GetLocalInt(oItem, "X2_L_NUMTRIGGERS"));
-			}
 		}
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
@@ -444,15 +438,20 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 	}
 	//end trusted player only debug commands
-	//testers and test server only
+	//testers and test server only commands to adjust crafting consumable costs.
+	// LOT of copy-paste bs here but I'm just going to remove these once we have 
+	// some good numbers. -FlattedFifth
 	if (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
 		if (GetStringLeft(sInput, 12) == "#healwandmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 12);
+			int nMessage = StringToInt(sMessage);
 			if (sMessage == ""){
 				sFeedback = "Heal wand costs set to ";
 				float fHealwandMod = GetLocalFloat(GetModule(), "HEAL_WAND_COST_MOD");
 				if (fHealwandMod == 0.0) sFeedback += "100%";
 				else sFeedback += PS_PrettyFloatString(fHealwandMod * 100.0) +"%";
+			} else if (nMessage < 1 || nMessage > 500){
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive";
 			} else {
 				SetLocalFloat(GetModule(), "HEAL_WAND_COST_MOD", StringToFloat(sMessage) / 100.0);
 				sFeedback = "Setting heal wand costs to " + sMessage + "%";
@@ -462,11 +461,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		else if (GetStringLeft(sInput, 8) == "#wandmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 8);
+			int nMessage = StringToInt(sMessage);
 			if (sMessage == ""){
 				sFeedback = "Non-heal wand costs set to ";
 				float fwandMod = GetLocalFloat(GetModule(), "WAND_COST_MOD");
 				if (fwandMod == 0.0) sFeedback += "100%";
 				else sFeedback += PS_PrettyFloatString(fwandMod * 100.0) +"%";
+			} else if (nMessage < 1 || nMessage > 500){
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive";
 			} else {
 				SetLocalFloat(GetModule(), "WAND_COST_MOD", StringToFloat(sMessage) / 100.0);
 				sFeedback = "Setting non-heal wand costs to " + sMessage + "%";
@@ -476,11 +478,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		else if (GetStringLeft(sInput, 11) == "#healpotmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 11);
+			int nMessage = StringToInt(sMessage);
 			if (sMessage == ""){
 				sFeedback = "Heal pot costs set to ";
 				float fHealpotMod = GetLocalFloat(GetModule(), "HEAL_POT_COST_MOD");
 				if (fHealpotMod == 0.0) sFeedback += "100%";
 				else sFeedback += PS_PrettyFloatString(fHealpotMod * 100.0) +"%";
+			} else if (nMessage < 1 || nMessage > 500){
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive";
 			} else {
 				SetLocalFloat(GetModule(), "HEAL_POT_COST_MOD", StringToFloat(sMessage) / 100.0);
 				sFeedback = "Setting heal pot costs to " + sMessage + "%";
@@ -490,11 +495,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		else if (GetStringLeft(sInput, 7) == "#potmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 7);
+			int nMessage = StringToInt(sMessage);
 			if (sMessage == ""){
 				sFeedback = "Non-heal pot costs set to ";
 				float fpotMod = GetLocalFloat(GetModule(), "POT_COST_MOD");
 				if (fpotMod == 0.0) sFeedback += "100%";
 				else sFeedback += PS_PrettyFloatString(fpotMod * 100.0) +"%";
+			} else if (nMessage < 1 || nMessage > 500){
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive";
 			} else {
 				SetLocalFloat(GetModule(), "POT_COST_MOD", StringToFloat(sMessage) / 100.0);
 				sFeedback = "Setting non-heal pot costs to " + sMessage + "%";
@@ -504,11 +512,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		else if (GetStringLeft(sInput, 14) == "#healscrollmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 14);
+			int nMessage = StringToInt(sMessage);
 			if (sMessage == ""){
 				sFeedback = "Heal scroll costs set to ";
 				float fHealScrollMod = GetLocalFloat(GetModule(), "HEAL_SCROLL_COST_MOD");
 				if (fHealScrollMod == 0.0) sFeedback += "100%";
 				else sFeedback += PS_PrettyFloatString(fHealScrollMod * 100.0) +"%";
+			} else if (nMessage < 1 || nMessage > 500){
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive";
 			} else {
 				SetLocalFloat(GetModule(), "HEAL_SCROLL_COST_MOD", StringToFloat(sMessage) / 100.0);
 				sFeedback = "Setting heal scroll costs to " + sMessage + "%";
@@ -518,14 +529,51 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		else if (GetStringLeft(sInput, 10) == "#scrollmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 10);
+			int nMessage = StringToInt(sMessage);
 			if (sMessage == ""){
 				sFeedback = "Non-heal scroll costs set to ";
 				float fScrollMod = GetLocalFloat(GetModule(), "SCROLL_COST_MOD");
 				if (fScrollMod == 0.0) sFeedback += "100%";
 				else sFeedback += PS_PrettyFloatString(fScrollMod * 100.0) +"%";
+			} else if (nMessage < 1 || nMessage > 500){
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive";
 			} else {
 				SetLocalFloat(GetModule(), "SCROLL_COST_MOD", StringToFloat(sMessage) / 100.0);
 				sFeedback = "Setting non-heal scroll costs to " + sMessage + "%";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 11) == "#healseqmod"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 11);
+			int nMessage = StringToInt(sMessage);
+			if (sMessage == ""){
+				sFeedback = "Heal scroll costs set to ";
+				float fHealScrollMod = GetLocalFloat(GetModule(), "HEAL_SEQ_COST_MOD");
+				if (fHealScrollMod == 0.0) sFeedback += "100%";
+				else sFeedback += PS_PrettyFloatString(fHealScrollMod * 100.0) +"%";
+			} else if (nMessage < 1 || nMessage > 500){
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive";
+			} else {
+				SetLocalFloat(GetModule(), "HEAL_SEQ_COST_MOD", StringToFloat(sMessage) / 100.0);
+				sFeedback = "Setting heal sequencer costs to " + sMessage + "%";
+			}
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 7) == "#seqmod"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 7);
+			int nMessage = StringToInt(sMessage);
+			if (sMessage == ""){
+				sFeedback = "Non-heal scroll costs set to ";
+				float fScrollMod = GetLocalFloat(GetModule(), "SEQ_COST_MOD");
+				if (fScrollMod == 0.0) sFeedback += "100%";
+				else sFeedback += PS_PrettyFloatString(fScrollMod * 100.0) +"%";
+			} else if (nMessage < 1 || nMessage > 500){
+				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive";
+			} else {
+				SetLocalFloat(GetModule(), "SEQ_COST_MOD", StringToFloat(sMessage) / 100.0);
+				sFeedback = "Setting non-heal sequencer costs to " + sMessage + "%";
 			}
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;

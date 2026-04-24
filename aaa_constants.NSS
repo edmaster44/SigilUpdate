@@ -24,7 +24,8 @@ const float HEAL_WAND_COST_MOD = 0.0;
 const float SCROLL_COST_MOD = 0.0;
 const float POT_COST_MOD = 0.0;
 const float WAND_COST_MOD = 0.0;
-
+const float HEAL_SEQ_COST_MOD = 0.0;
+const float SEQ_COST_MOD = 0.0;
 
 
 // makes sure that non-partied summons, such as call of the beast, give xp to summoner when they make
@@ -35,7 +36,10 @@ const string abilityCaster = "abilityCaster";
 // Usually to be used as a default arg in a function that indicates no value was passed so
 // ignore this check. Especially useful for spell ids, as my usual practice of using -1 may
 // be problematic, the constant "ALL_SPELLS" is defined as -1 in nwscript.nss
+// ADDED NOTE: Do we really need this? We only have TauSoldier's word for it that using -1
+// is problematic to the engine and they proved to be unreliable
 const int NULL = 50000;
+
 
 // module control booleans
 // if TRUE causes checking that your xp pool is lined up with the mimic to give the whole pool
