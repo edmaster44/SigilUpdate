@@ -311,9 +311,9 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 int GetFixedItemValue(object oItem){
 	int nCost;
 	string sRef = GetResRef(oItem);
-	if (sRef == "ps_potion_lessersequencer") nCost = 700;
-	else if (sRef == "ps_potion_sequencer") nCost =  1400;
-	else if	(sRef == "ps_potion_greatersequncer") nCost = 2100; 
+	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_lessersequencernew") nCost = 700;
+	else if (sRef == "ps_potion_sequencer" || sRef == "ps_potion_sequencernew") nCost =  1400;
+	else if	(sRef == "ps_potion_greatersequncer" || sRef == "ps_potion_greatersequncernew") nCost = 2100; 
 	else if	(sRef == "sigisparchment") nCost = 2;
 	else if	(sRef == "ps_parchment") nCost = 1;
 	else if	(sRef == "i_ps_itemeditor_pc") nCost = 1; 
