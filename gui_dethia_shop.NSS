@@ -143,11 +143,11 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	{//First we update the gui text field, then the price fields
 		sStackSize	= IntToString(FloatToInt((StringToInt(sStackSize))*(StringToInt(sExtra)/100.0f)));
 		// you cannot select 0 of something.
-		int nStack = StringToInt(sStackSize);
+		int nStack = GetItemStackSize(oItem);
 		if (nStack < 1){
 			sStackSize = "1";
 			nStack = 1;
-		}
+		} else if (StringToInt(sStackSize) > nStack) sStackSize = IntToString(nStack);
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
 		

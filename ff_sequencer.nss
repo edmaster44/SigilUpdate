@@ -13,7 +13,7 @@ struct dSequencerData {
 void PS_DoSpellCastCheatMode(object oPC, int nID);
 void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster);
 struct dSequencerData PS_GetSequencerData(object oSequencer);
-int PS_StoreSpellOnNewSquencerPot(object oSequencer, object oCaster);
+int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster);
 int PS_GetIsNewSequencerPot(object oSequencer);
 int PS_GetIsOldSequencerPot(object oSequencer);
 string PS_GetNameForNewSequencerPot(object oSequencer);
@@ -21,9 +21,15 @@ string PS_GetNameForOldSequencerPot(object oSequencer);
 void PS_RenameSequencerPot(object oSequencer, object oCaster);
 int PS_PayForSequencerPot(object oSequencer, object oCaster);
 string GetSpellName(int nId);
+int PS_GetQualifiesForSequencer(int nId = -1);
 
 void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster){
+	if (!PS_GetIsNewSequencerPot(oSequencer)) return;
 	struct dSequencerData data = PS_GetSequencerData(oSequencer);
+	if (data.nNumSpells == 0){
+		FloatingTextStringOnCreature("No spells stored!", oCaster);
+		return;
+	}
 	if (data.nSpell1 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell1);
 	if (data.nSpell2 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell2);
 	if (data.nSpell3 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell3);
@@ -33,18 +39,14 @@ void PS_DoSpellCastCheatMode(object oPC, int nId){
 	AssignCommand(oPC, ActionCastSpellAtObject(nId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 }
 
-int PS_StoreSpellOnNewSquencerPot(object oSequencer, object oCaster){
-	if (!PS_GetIsNewSequencerPot(oSequencer))
-		return TRUE; // returns true because nothing here is relevant to the 
-		// spell being cast
-	
-	struct dSequencerData data = PS_GetSequencerData(oSequencer);
-	if (data.nMaxSpells <= data.nNumSpells){
-		FloatingTextStrRefOnCreature(83859, oCaster);
+int PS_GetQualifiesForSequencer(int nId = -1){
+	if (nId == -1) nId = GetSpellId();
+	if (StringToInt(Get2DAString("spells", "Innate", nId)) >= 10){
+		FloatingTextStringOnCreature("You cannot store epic spells", OBJECT_SELF);
 		return FALSE;
 	}
-	if (StringToInt(Get2DAString("spells", "HostileSetting", GetSpellId()))){
-		FloatingTextStrRefOnCreature(83885, oCaster);
+	if (StringToInt(Get2DAString("spells", "HostileSetting", nId))){
+		FloatingTextStrRefOnCreature(83885, OBJECT_SELF);
 		return FALSE;
 	}
 	object oItem = GetSpellCastItem();
@@ -56,8 +58,25 @@ int PS_StoreSpellOnNewSquencerPot(object oSequencer, object oCaster){
             return FALSE;
         }
     }
+	return FALSE;
+}
+
+int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster){
+	if (!PS_GetIsNewSequencerPot(oSequencer))
+		return FALSE; 
+	
+	struct dSequencerData data = PS_GetSequencerData(oSequencer);
+	if (data.nMaxSpells <= data.nNumSpells){
+		FloatingTextStrRefOnCreature(83859, oCaster);
+		return TRUE;
+	}
+		
+	if (!PS_GetQualifiesForSequencer())
+		return TRUE; 
+
 	if (!PS_PayForSequencerPot(oSequencer, oCaster))
-		return FALSE;
+		return TRUE;
+		
 	int nId = GetSpellId();
 	string sList;
 	if (data.nSpell1 == -1) 
@@ -76,7 +95,6 @@ int PS_StoreSpellOnNewSquencerPot(object oSequencer, object oCaster){
 }
 
 struct dSequencerData PS_GetSequencerData(object oSequencer){
-	string sList = GetTag(oSequencer);
 	struct dSequencerData data;
 	string sRef = GetResRef(oSequencer);
 	if (sRef == "ps_potion_lessersequencernew") 
@@ -89,6 +107,7 @@ struct dSequencerData PS_GetSequencerData(object oSequencer){
 		data.nMaxSpells = -1;
 		return data;
 	}
+	string sList = GetTag(oSequencer);
 	data.nNumSpells = GetNumberIndices(sList);
 	if (data.nNumSpells == 0){
 		data.nSpell1 = -1;

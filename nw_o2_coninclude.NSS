@@ -1519,7 +1519,7 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
 				sPotion = "ps_potion_jhuild";
 			else if (98<-nRandom)
 				sPotion = "ps_potions6_01";
-			else sPotion = "ps_potion_lessersequencer";
+			else sPotion = "ps_potion_lessersequencernew";
 		}
 		else if (nTreasureType == TREASURE_HIGH)
 		{
@@ -1563,13 +1563,13 @@ void CreateArcaneScroll(object oTarget, object oAdventurer, int nModifier = 0)
 				sPotion = "ps_potions4_0" + IntToString(nRandpot);						
 			}
 			else if(85<=nRandom)
-			{sPotion = "ps_potion_sequencer";}		
+			{sPotion = "ps_potion_sequencernew";}		
 			else if(92<=nRandom)
 			{sPotion = "ps_potions6_01";}
 			else if(95<=nRandom)
 			{sPotion = "ps_potion_jhuild";}
 			else
-			{sPotion = "ps_potion_greatersequencer";}
+			{sPotion = "ps_potion_greatersequencernew";}
 		}
 		
         dbCreateItemOnObject(sPotion, oTarget, 1);

@@ -71,15 +71,6 @@ void DebugSpells();
 int X2PreSpellCastCode()
 {
 	object oTarget = GetSpellTargetObject();
-	//casting a spell on the enchant focus or mortar and pestle shows the costs for making
-	// scrolls, potions, and wands of that spell
-	if (GetObjectType(oTarget) == OBJECT_TYPE_ITEM){
-		string sRef = GetResRef(oTarget);
-		if (FindSubString(sRef, "ps_enchantmentf") != -1 || sRef == "mortar"){
-			ff_ShowConsumableCraftCosts(); 
-			return FALSE;
-		}
-	}
 	
 	// send spell debugging info to caster if they've used the #SpellInfo chat command
 	DebugSpells();
@@ -196,7 +187,20 @@ int X2PreSpellCastCode()
 		}
 	}
 	if (GetSpellFailedBecauseMissChance(OBJECT_SELF)) nContinue = FALSE;
-
+	
+	
+	if (GetObjectType(oTarget) == OBJECT_TYPE_ITEM){
+		string sRef = GetResRef(oTarget);
+		//casting a spell on the enchant focus or mortar and pestle shows the costs for making
+		// scrolls, potions, and wands of that spell
+		if (FindSubString(sRef, "ps_enchantmentf") != -1 || sRef == "mortar"){
+			ff_ShowConsumableCraftCosts(); 
+			return FALSE;
+		} else {
+			//are we casting on a new sequencer pot?
+			nContinue = !PS_GetIsStoreSpellOnNewSquencerPot(oTarget, OBJECT_SELF);
+		}
+	}
 	
    return nContinue;
 }
@@ -255,25 +259,10 @@ int X2GetSpellCastOnSequencerItem(object oItem)
     {
         return FALSE;
     }
+	
+	if (!PS_GetQualifiesForSequencer())
+		return FALSE; 
 
-    if (GetIsObjectValid(GetSpellCastItem())) // spell cast from item?
-    {
-        // we allow scrolls
-        int nBt = GetBaseItemType(GetSpellCastItem());
-        if ( nBt !=BASE_ITEM_SPELLSCROLL && nBt != 105)
-        {
-            FloatingTextStrRefOnCreature(83373, OBJECT_SELF);
-            return TRUE; // wasted!
-        }
-    }
-
-    // Check if the spell is marked as hostile in spells.2da
-    int nHostile = StringToInt(Get2DAString("spells","HostileSetting",GetSpellId()));
-    if(nHostile ==1)
-    {
-        FloatingTextStrRefOnCreature(83885,OBJECT_SELF);
-        return TRUE; // no hostile spells on sequencers, sorry ya munchkins :)
-    }
 
     int nNumberOfTriggers = GetLocalInt(oItem, "X2_L_NUMTRIGGERS");
     // is there still space left on the sequencer?
