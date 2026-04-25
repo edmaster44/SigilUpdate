@@ -76,11 +76,13 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	object	oPC		= OBJECT_SELF;	//The player interacting with the gui
 	object	oItem	= IntToObject(StringToInt(sItemID));	//The item in question
 	object	oStore	= StringToObject(sStoreID);
-	
+	int nMaxBuy = GetStoreMaxBuyPrice(oStore);
+	if (nMaxBuy < 0) nMaxBuy = 999999;
 	// If we're on the sell pane then get the price the player sells for, otherwise, price store buys at
-	if (GetLocalInt(oPC, "CURRENT_STORE_PANEL") == 8) 
+	if (GetLocalInt(oPC, "CURRENT_STORE_PANEL") == 8){
 		sItemCost = IntToString(DS_GetItemSellValue(oItem, oPC, oStore, sItemCost));
-	else sItemCost = GetCustomItemValue(oItem, sItemCost);
+		if (StringToInt(sItemCost) > nMaxBuy) sItemCost = IntToString(nMaxBuy);
+	} else sItemCost = GetCustomItemValue(oItem, sItemCost);
 
 	//Before we perform specified actions we check what action it is
 	if(iEvent != 13 && iEvent != 14 && iEvent != 15)	//13 and 14 are not store related actions
@@ -121,6 +123,11 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 
 	else if(iEvent == 5)	//Item selected within the shop
 	{//First set the max stack value to quantity and update local:7 (quant-selected)
+		int nStack = GetItemStackSize(oItem);
+		if (nStack < 1) nStack = 1;
+		else if (nStack > 99) nStack = 99;
+		sStackSize = IntToString(nStack);
+		/*
 		int nStack = StringToInt(sStackSize);
 		if(DS_GetIsProjectile(oItem)) {
 			if (nStack >= 99)
@@ -131,10 +138,10 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		} else {
 			sStackSize = "1";
 		}
+		*/
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
-
-		//Next set the item's cost (ammunition is not affected by stack size)
+		
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		//if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
 		//{	iCost	/= StringToInt(sStackSize);	}
@@ -146,20 +153,16 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	else if(iEvent == 6)	//Update quantity field as the slider is moved
 	{//First we update the gui text field, then the price fields
 		sStackSize	= IntToString(FloatToInt((StringToInt(sStackSize))*(StringToInt(sExtra)/100.0f)));
-		// you cannot select 0 of something.
-		int nStack = GetItemStackSize(oItem);
 		
+		int nStack = GetItemStackSize(oItem);
+		// you cannot select 0 of something.
 		if (nStack < 1 || StringToInt(sStackSize) < 1){
 			sStackSize = "1";
 			nStack = 1;
 		} else if (StringToInt(sStackSize) > nStack) sStackSize = IntToString(nStack);
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
-		if (GetLocalInt(oPC, "CURRENT_STORE_PANEL") == 8){
-			int nMaxBuy = GetStoreMaxBuyPrice(oStore);
-			if (nMaxBuy < 0) nMaxBuy = 999999;
-			if (StringToInt(sItemCost) > nMaxBuy) sItemCost = IntToString(nMaxBuy);
-		}
+		
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));
@@ -193,10 +196,6 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "steal_item_button", TRUE);
-		
-		int nMaxBuy = GetStoreMaxBuyPrice(oStore);
-		if (nMaxBuy < 0)
-			nMaxBuy = 999999;
 		
 		//pagination variables	
 		int nPageLength = 143;

@@ -29,6 +29,16 @@ struct dSequencerData {
 	int nSpell3;
 };
 
+void ShowDebugData(object oSequencer, struct dSequencerData data, int i){
+	object oPC = OBJECT_SELF;
+	string sMessage = "Cycle " + IntToString(i) +"\nTag: " + GetTag(oSequencer);
+	sMessage += "\nMax: " + IntToString(data.nMaxSpells) + "\nNumSpells: ";
+	sMessage += IntToString(data.nNumSpells) + "\nSpell1: " + IntToString(data.nSpell1);
+	sMessage += "\nSpell2: " + IntToString(data.nSpell2);
+	sMessage += "\nSpell3: " + IntToString(data.nSpell3);
+	SendMessageToPC(OBJECT_SELF, sMessage);
+}
+
 void RenameOldSequencerPot(object oSequencer, object oCaster = OBJECT_SELF);
 int GetStringHasLetters(string sString);
 int PS_PayForSequencerPot(object oSequencer, object oCaster = OBJECT_SELF);
@@ -42,6 +52,9 @@ string PS_GetNewSequencerPotName(object oSequencer, struct dSequencerData data);
 void PS_ShowSeqRenameMessage(object oCaster);
 void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF);
 int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJECT_SELF);
+void PS_SetOldSeqRecoveryTag(object oSequencer);
+void PS_RecoverOldSequencer(object oSequencer);
+void RepairAllOldSeq(object oPC);
 
 // main function to "store" spells on new sequencer pots by setting the tag
 // to a list of spell ids
@@ -50,6 +63,7 @@ int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJEC
 		return FALSE; 
 		
 	struct dSequencerData data = PS_GetSequencerData(oSequencer);
+	ShowDebugData(oSequencer, data, 1);
 	if (data.nMaxSpells <= data.nNumSpells){
 		FloatingTextStrRefOnCreature(83859, oCaster);
 		return TRUE;
@@ -70,6 +84,7 @@ int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJEC
 	sList += sDelim + IntToString(data.nSpell3);
 	// bad things happen if you have an empty tag, but shouldn't be possible here
 	if (sList != "") SetTag(oSequencer, sList);
+	ShowDebugData(oSequencer, data, 1);
 	effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oCaster);
     FloatingTextStrRefOnCreature(83884, oCaster);
@@ -294,4 +309,65 @@ void RenameOldSequencerPot(object oSequencer, object oCaster = OBJECT_SELF){
 	sName += "</c>";
 	SetFirstName(oSequencer, sName);
 	PS_ShowSeqRenameMessage(oCaster);
+	PS_SetOldSeqRecoveryTag(oSequencer);
+}
+
+// since tags are preserved when a stack is split but local variables are NOT
+// copy the data from a seq pot's local ints to the tag as a string delimited by 
+// underscore.
+void PS_SetOldSeqRecoveryTag(object oSequencer){
+	// in order to get here there must be at least 1 spell stored
+	string sTag = IntToString(GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1"));
+	int nSp = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2");
+	if (nSp > 0) sTag += sDelim + IntToString(nSp);
+	nSp = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3");
+	if (nSp > 0) sTag += sDelim + IntToString(nSp);
+	if (sTag != "") SetTag(oSequencer, sTag);
+}
+
+//retrieve the local int date from the tag
+void PS_RecoverOldSequencer(object oSequencer){
+	// only needed on old seq pots
+	if (!PS_GetIsOldSequencerPot(oSequencer))
+		return;
+	string sTag = GetTag(oSequencer);
+	//if tag has letters its not a tag set by above function
+	// as that tag would be numbers and underscore only
+	if (GetStringHasLetters(sTag))
+		return;
+	// if the numbertriggers local int is intact then prob we don't need
+	// to repair it and would screw it up if we tried
+	if (GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS") > 1)
+		return;
+		
+	string s1 = "";
+	string s2 = "";
+	string s3 = "";
+	int i;
+	string c;
+	int nDelimCount = 0;
+	int nLength = GetStringLength(sTag);
+	for (i = 0; i < nLength; i++){
+		c = GetSubString(sTag, i, 1);
+		if (c != sDelim){
+			if (nDelimCount == 0) s1 += c;
+			else if (nDelimCount == 1) s2 += c;
+			else if (nDelimCount == 2) s3 += c;
+		} else nDelimCount++;
+	}
+	SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nDelimCount + 1); 
+	if (s1 != "") SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", StringToInt(s1));
+	if (s2 != "") SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", StringToInt(s2));
+	if (s3 != "") SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", StringToInt(s3));
+}
+
+void RepairAllOldSeq(object oPC){
+	int i = 0;
+	object oItem = GetFirstItemInInventory(oPC);
+	//27072 = num of items a pc could have if inv full of full bags, including the bags
+    while (GetIsObjectValid(oItem) && i <= 27072){
+		i++;
+		PS_RecoverOldSequencer(oItem);
+        oItem = GetNextItemInInventory(oPC);
+    }
 }

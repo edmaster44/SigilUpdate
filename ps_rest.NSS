@@ -1,6 +1,7 @@
 #include "ps_inc_functions"
 #include "ps_rage_func"
 #include "ps_inc_wingtail"
+#include "ff_sequencer"
 
 
 const int cSaveWait = 300;
@@ -184,11 +185,13 @@ void GiveDruidMonkPenaltyFeat (object oPC)
 
 void RestStart(object oPC)
 {
+	
 	IncrementalDebug(oPC, "start: top");
 	RemoveBuffs(oPC);
 	object oRIGHT = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);	
 	if (GetTag(oRIGHT) == "barbancestoraxe") DestroyAncestralWeapon(oRIGHT);
 	DismissSpellHenchmen(oPC);
+	RepairAllOldSeq(oPC); // attempt to repair local ints on split seq pots. see ff_sequencer
 	IncrementalDebug(oPC, "start: bottom");
 }
 
