@@ -155,8 +155,11 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		} else if (StringToInt(sStackSize) > nStack) sStackSize = IntToString(nStack);
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
-		
-		//SpeakString("Stack size: "+sStackSize, TALKVOLUME_SHOUT);
+		if (GetLocalInt(oPC, "CURRENT_STORE_PANEL") == 8){
+			int nMaxBuy = GetStoreMaxBuyPrice(oStore);
+			if (nMaxBuy < 0) nMaxBuy = 999999;
+			if (StringToInt(sItemCost) > nMaxBuy) sItemCost = IntToString(nMaxBuy);
+		}
 		int	iCost	= StringToInt(sStackSize)*StringToInt(sItemCost);
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_cc", -1, DS_ConvertCoinsToCopper(iCost));
 		SetGUIObjectText(oPC, "dethia_shop", "sb_cost_sc", -1, DS_ConvertCoinsToSilver(iCost));

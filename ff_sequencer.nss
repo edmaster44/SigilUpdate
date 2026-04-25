@@ -17,12 +17,9 @@
 // See x2_inc_spellhook for storing spells on these new sequencers and x2_mod_def_act for casting
 // the spell on them.
 
-//NOTE: TODO, if using the tag to re-up local ints fixes the bug with old sequencers, then redo
-// new ones to be "spell bombs" that are not self-only. If so, then make their tags
-// be same format as old sequence, ie, [number of spells stored, spell 1, spell 2, spell 3]
 #include "x2_inc_craft"
-#include "ff_arrays"
 
+const string sDelim = "|";
 
 struct dSequencerData {
 	int nMaxSpells;
@@ -32,26 +29,26 @@ struct dSequencerData {
 	int nSpell3;
 };
 
-void PS_DoSpellCastCheatMode(object oPC, int nID);
-void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF);
-struct dSequencerData PS_GetSequencerData(object oSequencer);
-int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJECT_SELF);
-int PS_GetIsNewSequencerPot(object oSequencer);
-int PS_GetIsOldSequencerPot(object oSequencer);
-string PS_GetNameForNewSequencerPot(object oSequencer);
-string PS_GetNameForOldSequencerPot(object oSequencer);
-void PS_RenameSequencerPot(object oSequencer, object oCaster = OBJECT_SELF);
-int PS_PayForSequencerPot(object oSequencer, object oCaster = OBJECT_SELF);
-string GetSpellName(int nId);
-int PS_GetQualifiesForSequencer(int nId = -1);
+void RenameOldSequencerPot(object oSequencer, object oCaster = OBJECT_SELF);
 int GetStringHasLetters(string sString);
+int PS_PayForSequencerPot(object oSequencer, object oCaster = OBJECT_SELF);
+int PS_GetQualifiesForSequencer(int nId = -1);
+int PS_GetIsOldSequencerPot(object oSequencer);
+int PS_GetIsNewSequencerPot(object oSequencer);
+struct dSequencerData PS_GetSequencerData(object oSequencer);
+void PS_DoSpellCastCheatMode(object oPC, int nId);
+string GetSpellName(int nId);
+string PS_GetNewSequencerPotName(object oSequencer, struct dSequencerData data);
+void PS_ShowSeqRenameMessage(object oCaster);
+void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF);
+int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJECT_SELF);
 
 // main function to "store" spells on new sequencer pots by setting the tag
 // to a list of spell ids
 int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJECT_SELF){
 	if (!PS_GetIsNewSequencerPot(oSequencer))
 		return FALSE; 
-	
+		
 	struct dSequencerData data = PS_GetSequencerData(oSequencer);
 	if (data.nMaxSpells <= data.nNumSpells){
 		FloatingTextStrRefOnCreature(83859, oCaster);
@@ -63,22 +60,25 @@ int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJEC
 
 	if (!PS_PayForSequencerPot(oSequencer, oCaster))
 		return TRUE;
-		
-	int nId = GetSpellId();
-	string sList;
-	if (data.nSpell1 == -1) 
-		sList = NewListOf(IntToString(nId));
-	else if (data.nSpell2 == -1 && data.nMaxSpells > 1)
-		sList =  NewListOf(IntToString(data.nSpell1), IntToString(nId));
-	else if (data.nSpell3 == -1 && data.nMaxSpells > 2)
-		sList =  NewListOf(IntToString(data.nSpell1), IntToString(data.nSpell2), IntToString(nId));
-	if (sList != "") SetTag(oSequencer, sList); // bad things happen if you have an empty tag
-	PS_RenameSequencerPot(oSequencer, oCaster);
+	
+	// we store the spell ids as 1 higher than they are to avoid negative numbers
+	int nId = GetSpellId() + 1;
+	if (data.nSpell1 == 0) data.nSpell1 = nId;
+	else if (data.nSpell2 == 0) data.nSpell2 = nId;
+	else if (data.nSpell3 == 0) data.nSpell3 = nId;
+	string sList = IntToString(data.nSpell1) + sDelim + IntToString(data.nSpell2);
+	sList += sDelim + IntToString(data.nSpell3);
+	// bad things happen if you have an empty tag, but shouldn't be possible here
+	if (sList != "") SetTag(oSequencer, sList);
 	effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oCaster);
     FloatingTextStrRefOnCreature(83884, oCaster);
+	string sName = PS_GetNewSequencerPotName(oSequencer, data);
+	SetFirstName(oSequencer, "<c=cyan>" + sName + "</c>");
+	PS_ShowSeqRenameMessage(oCaster);
 	return TRUE;
 }
+
 
 void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF){
 	if (!PS_GetIsNewSequencerPot(oSequencer)) return;
@@ -90,10 +90,124 @@ void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SEL
 		FloatingTextStringOnCreature("No spells stored!", oCaster);
 		return;
 	}
-	if (data.nSpell1 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell1);
-	if (data.nSpell2 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell2);
-	if (data.nSpell3 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell3);
+	if (data.nSpell1 != 0) PS_DoSpellCastCheatMode(oCaster, data.nSpell1 -1);
+	if (data.nSpell2 != 0) PS_DoSpellCastCheatMode(oCaster, data.nSpell2 -1);
+	if (data.nSpell3 != 0) PS_DoSpellCastCheatMode(oCaster, data.nSpell3 -1);
 }
+
+
+void PS_ShowSeqRenameMessage(object oCaster){
+	string sMessage = "<c=cyan>Your Sequencer Potion has been renamed.\nThe new name will become ";
+	sMessage += "visible after an area transition or after you move the potion from one square to ";
+	sMessage += "another in your inventory.</c>";
+	SendMessageToPC(oCaster, sMessage);
+}
+
+
+string PS_GetNewSequencerPotName(object oSequencer, struct dSequencerData data){
+	string sName = "";
+	if (data.nMaxSpells == 3) sName += "Greater ";
+	else if (data.nMaxSpells == 1) sName += "Lesser ";
+	sName += "Sequencer: ";
+	if (data.nSpell1 == 0) return sName;
+	if (data.nSpell1 != 0) 
+		sName += GetSpellName(data.nSpell1 - 1);
+	if (data.nSpell2 == 0) return sName;
+	if (data.nSpell2 != 0 && data.nSpell3 == 0)
+		return sName + " and " + GetSpellName(data.nSpell2 - 1);
+	if (data.nSpell3 != 0){
+		sName += ", " + GetSpellName(data.nSpell2 - 1) + ", and ";
+		sName += GetSpellName(data.nSpell3 - 1);
+	}
+	return sName;
+}
+
+
+string GetSpellName(int nId){
+	int nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
+	return GetStringByStrRef(nNameRef);
+}
+
+
+void PS_DoSpellCastCheatMode(object oPC, int nId){
+	// to avoid converting negative numbers to and from strings we've stored the 
+	// spell ids as 1 higher than they really are, so we cast them as one lower
+	AssignCommand(oPC, ActionCastSpellAtObject(nId -1, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+}
+
+
+struct dSequencerData PS_GetSequencerData(object oSequencer){
+	struct dSequencerData data;
+	string sRef = GetResRef(oSequencer);
+	if (sRef == "ps_potion_lessersequencernew") 
+		data.nMaxSpells = 1;
+	else if (sRef == "ps_potion_sequencernew")
+		data.nMaxSpells = 2;
+	else if (sRef == "ps_potion_greatersequncernew")
+		data.nMaxSpells = 3;
+	
+	string sList = GetTag(oSequencer);
+	// if it still has the original tag, it hasnt had any spells stored.
+	if (sList == sRef) data.nNumSpells = 0;
+	// if it has any letters in the tag, then it's not a tag full of only 
+	// spell ids and delimiters, so it's "empty"
+	else if (GetStringHasLetters(sList)) data.nNumSpells = 0;
+	if (data.nNumSpells == 0 ){
+		data.nSpell1 = 0;
+		data.nSpell2 = 0;
+		data.nSpell3 = 0;
+		return data;
+	}
+	int nLength = GetStringLength(sList);
+	int i;
+	int nDelimCount = 0;
+	string sSpell1 = "";
+	string sSpell2 = "";
+	string sSpell3 = "";
+	string c;
+	for (i = 0; i < nLength; i++){
+		c = GetSubString(sList, i, 1);
+		if (c != sDelim){
+			if (nDelimCount == 0) sSpell1 += c;
+			else if (nDelimCount == 1) sSpell2 += c;
+			else sSpell3 += c;
+		} else {
+			nDelimCount++;
+		}
+	}
+	data.nNumSpells = nDelimCount + 1;
+	if (sSpell1 == "") data.nSpell1 = 0; //unlikely at this point
+	else data.nSpell1 = StringToInt(sSpell1);
+	if (sSpell2 == "") data.nSpell2 = 0;
+	else data.nSpell2 = StringToInt(sSpell2);
+	if (sSpell3 == "") data.nSpell3 = 0;
+	else data.nSpell3 = StringToInt(sSpell3);
+	
+	return data;
+}
+
+
+int PS_GetIsNewSequencerPot(object oSequencer){
+	string sRef = GetResRef(oSequencer);
+	//check to make sure this is a sequencer pot
+	if (sRef == "ps_potion_lessersequencernew" || sRef == "ps_potion_sequencernew" ||
+		sRef == "ps_potion_greatersequncernew"){
+			return TRUE;
+	}	
+	return FALSE;
+}
+
+
+int PS_GetIsOldSequencerPot(object oSequencer){
+	string sRef = GetResRef(oSequencer);
+	//check to make sure this is a sequencer pot
+	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
+		sRef == "ps_potion_greatersequncer"){
+			return TRUE;
+	}	
+	return FALSE;
+}
+
 
 int PS_GetQualifiesForSequencer(int nId = -1){
 	if (nId == -1) nId = GetSpellId();
@@ -117,138 +231,6 @@ int PS_GetQualifiesForSequencer(int nId = -1){
 	return TRUE;
 }
 
-void PS_DoSpellCastCheatMode(object oPC, int nId){
-	AssignCommand(oPC, ActionCastSpellAtObject(nId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-}
-
-struct dSequencerData PS_GetSequencerData(object oSequencer){
-	struct dSequencerData data;
-	string sRef = GetResRef(oSequencer);
-	if (sRef == "ps_potion_lessersequencernew") 
-		data.nMaxSpells = 1;
-	else if (sRef == "ps_potion_sequencernew")
-		data.nMaxSpells = 2;
-	else if (sRef == "ps_potion_greatersequncernew")
-		data.nMaxSpells = 3;
-	else {
-		data.nMaxSpells = 0;
-		return data;
-	}
-	string sList = GetTag(oSequencer);
-	// if it still has the original tag, it hasnt had any spells stored.
-	if (sList == sRef) data.nNumSpells = 0;
-	// if it has any letters in the tag, then it's not a tag full of only 
-	// spell ids and delimiters, so it's "empty"
-	else if (GetStringHasLetters(sList)) data.nNumSpells = 0;
-	else data.nNumSpells = GetNumberIndices(sList);
-	if (data.nNumSpells == 0 ){
-		data.nSpell1 = -1;
-		data.nSpell2 = -1;
-		data.nSpell3 = -1;
-		return data;
-	}
-	// if we got here then the new seq pot is not empty
-	data.nSpell1 = StringToInt(GetValueAtIndex(sList, 0));
-	if (data.nNumSpells >= 2){
-		data.nSpell2 = StringToInt(GetValueAtIndex(sList, 1));
-		if (data.nNumSpells == 3)
-			data.nSpell3 = StringToInt(GetValueAtIndex(sList, 2));
-		else data.nSpell3 = -1;
-	} else {
-		data.nSpell3 = -1;
-		data.nSpell2 = -1;
-	}
-	return data;
-}
-
-int PS_GetIsNewSequencerPot(object oSequencer){
-	string sRef = GetResRef(oSequencer);
-	//check to make sure this is a sequencer pot
-	if (sRef == "ps_potion_lessersequencernew" || sRef == "ps_potion_sequencernew" ||
-		sRef == "ps_potion_greatersequncernew"){
-			return TRUE;
-		}
-			
-	return FALSE;
-}
-
-int PS_GetIsOldSequencerPot(object oSequencer){
-	string sRef = GetResRef(oSequencer);
-	//check to make sure this is a sequencer pot
-	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
-		sRef == "ps_potion_greatersequncer"){
-			return TRUE;
-		}
-			
-	return FALSE;
-}
-
-string GetSpellName(int nId){
-	int nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
-	return GetStringByStrRef(nNameRef);
-}
-
-string PS_GetNameForNewSequencerPot(object oSequencer){
-	struct dSequencerData data = PS_GetSequencerData(oSequencer);
-	string sName = "<c=cyan>";
-	if (data.nMaxSpells == 1) sName += "Lesser ";
-	else if (data.nMaxSpells == 3) sName += "Greater ";
-	sName += "Sequencer: " + GetSpellName(data.nSpell1);
-	if (data.nSpell2 == -1 && data.nSpell3 == -1){
-		return sName + "</c>";
-	} else if (data.nSpell2 != -1 && data.nSpell3 == -1){
-		sName += " and " + GetSpellName(data.nSpell2);
-		return sName + "</c>";
-	} else {
-		sName += ", " + GetSpellName(data.nSpell2) + ", and ";
-		sName += GetSpellName(data.nSpell3)  + "</c>";
-	}
-	return sName;
-}
-
-string PS_GetNameForOldSequencerPot(object oSequencer){
-	int nSpell1 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1"); 
-	int nSpell2 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2"); 
-	int nSpell3 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3");
-	// if no spells stored something has gone wrong
-	if (nSpell1 + nSpell2 + nSpell3 < 1) return "";
-	int nNumTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
-	string sSpell1 = GetSpellName(nSpell1 - 1);
-	string sSpell2, sSpell3;
-	if (nSpell2 > 0) sSpell2 = GetSpellName(nSpell2 - 1);
-	if (nSpell3 > 0) sSpell3 = GetSpellName(nSpell3 - 1);
-	
-	string sName = "<c=cyan>";
-	string sRef = GetResRef(oSequencer);
-	if (sRef == "ps_potion_lessersequencer") sName += "Lesser ";
-	else if (sRef == "ps_potion_greatersequncer") sName += "Greater ";
-	sName += "Sequencer: ";
-	
-	if (nSpell2 == 0 && nSpell3 == 0){
-		sName += sSpell1;
-	} else if (nSpell3 == 0){
-		sName += sSpell1 + " and " + sSpell2;
-	} else {
-		sName += sSpell1 + ", " + sSpell2 + ", and " + sSpell3;
-	}
-	sName += "</c>";
-	return sName;
-}
-// used sequencer pots MUST be given specific names to prevent an exploit
-// wherein an empty sequencer pot is dropped onto a full one to get all
-// the spells added to it for free forever.
-void PS_RenameSequencerPot(object oSequencer, object oCaster = OBJECT_SELF){
-	string sName;
-	if (PS_GetIsOldSequencerPot(oSequencer)) sName = PS_GetNameForOldSequencerPot(oSequencer);
-	else if (PS_GetIsNewSequencerPot(oSequencer)) sName = PS_GetNameForNewSequencerPot(oSequencer);
-	
-	if (sName == "") return;
-	SetFirstName(oSequencer, sName);
-	string sMessage = "<c=cyan>Your Sequencer Potion has been renamed.\nThe new name will become ";
-	sMessage += "visible after an area transition or after you move the potion from one square to ";
-	sMessage += "another in your inventory.</c>";
-	SendMessageToPC(oCaster, sMessage);
-}
 
 //making sequencers have a cost based on the power of the spells stored instead of
 //costing a fortume to make and then being free to store.
@@ -268,6 +250,7 @@ int PS_PayForSequencerPot(object oSequencer, object oCaster = OBJECT_SELF){
 	return TRUE;
 }
 
+
 int GetStringHasLetters(string sString){
 	sString = GetStringLowerCase(sString);
 	string sLetters = "abcdefghijklmnopqrstuvwxyz";
@@ -280,4 +263,33 @@ int GetStringHasLetters(string sString){
 			return TRUE;
 	}
 	return FALSE;
+}
+
+
+void RenameOldSequencerPot(object oSequencer, object oCaster = OBJECT_SELF){
+	int nSpell1 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1"); 
+	int nSpell2 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2"); 
+	int nSpell3 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3");
+	int nNumTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
+	string sSpell1 = GetSpellName(nSpell1 - 1);
+	string sSpell2, sSpell3;
+	if (nSpell2 > 0) sSpell2 = GetSpellName(nSpell2 - 1);
+	if (nSpell3 > 0) sSpell3 = GetSpellName(nSpell3 - 1);
+	
+	string sName;
+	string sRef = GetResRef(oSequencer);
+	if (sRef == "ps_potion_lessersequencer") sName = "Lesser Sequencer: ";
+	else if (sRef == "ps_potion_greatersequncer") sName = "Greater Sequencer: ";
+	else sName = "Sequencer: ";
+	
+	if (nSpell2 == 0 && nSpell3 == 0){
+		sName += sSpell1;
+	} else if (nSpell3 == 0){
+		sName += sSpell1 + " and " + sSpell2;
+	} else {
+		sName += sSpell1 + ", " + sSpell2 + ", and " + sSpell3;
+	}
+	sName += "</c>";
+	SetFirstName(oSequencer, sName);
+	PS_ShowSeqRenameMessage(oCaster);
 }

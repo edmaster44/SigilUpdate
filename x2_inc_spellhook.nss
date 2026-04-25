@@ -286,7 +286,7 @@ int X2GetSpellCastOnSequencerItem(object oItem)
 		
 		// if it's a sequencer pot rename it to reflect spell(s) stored
 		if (PS_GetIsOldSequencerPot(oItem))
-			PS_RenameSequencerPot(oItem, OBJECT_SELF);
+			RenameOldSequencerPot(oItem, OBJECT_SELF);
     }
     else
     {
