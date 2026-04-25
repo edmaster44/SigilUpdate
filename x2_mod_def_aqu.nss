@@ -41,11 +41,15 @@ void HandleSigilAcquisition(object oBY, object oFROM, object oITEM);
 
 void main()
 {
-	
 	object oBY = GetModuleItemAcquiredBy();
 	if (GetIsPC(oBY) == FALSE) return;
 	object oFROM = GetModuleItemAcquiredFrom();
 	object oITEM = GetModuleItemAcquired();
+	
+	//attempr to repair an old sequencer that has lost its local integers
+	//by extracting that data from tag. Only works on sequencer pots activated
+	//after april 25, 2026
+	PS_RecoverOldSequencerFromTag(oITEM);
 
 	HandleSigilAcquisition(oBY, oFROM, oITEM);
 	

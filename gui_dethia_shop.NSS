@@ -9,7 +9,7 @@ which an appropriate action will be taken.  The events and their corresponding
 behaviour are listed below.  There are also numerous local variables in the gui
 file that store information which are also listed below.
 
-Loval GUI vars:
+Local GUI vars:
 local:0		The store ID in the form of a string
 local:1		The store's mark-up value
 local:2		The store's mark-down value
@@ -77,9 +77,10 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	object	oItem	= IntToObject(StringToInt(sItemID));	//The item in question
 	object	oStore	= StringToObject(sStoreID);
 	
-	// will return a custom value for player profit on crafted items, returns original value
-	// if not crafted or if this value is turned off in dethia_shop_sys
-	sItemCost = GetCustomItemValue(oItem, sItemCost);
+	// If we're on the sell pane then get the price the player sells for, otherwise, price store buys at
+	if (GetLocalInt(oPC, "CURRENT_STORE_PANEL") == 8) 
+		sItemCost = IntToString(DS_GetItemSellValue(oItem, oPC, oStore, sItemCost));
+	else sItemCost = GetCustomItemValue(oItem, sItemCost);
 
 	//Before we perform specified actions we check what action it is
 	if(iEvent != 13 && iEvent != 14 && iEvent != 15)	//13 and 14 are not store related actions
@@ -93,7 +94,10 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 
 	//Now perform the action associated with the event
 	if(iEvent >= 0 && iEvent <= 4)	//populate shop with corresponding category
-	{//First disable/enable the sell/buy buttons (since we are buying)
+	{ //First set a local int on the player to keep track of which store window.
+		//This effects price. We only need this for the events that change panel
+		SetLocalInt(oPC, "CURRENT_STORE_PANEL", iEvent);
+	//Then disable/enable the sell/buy buttons (since we are buying)
 		SetGUIObjectDisabled(oPC, "dethia_shop", "buy_item_button", FALSE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", TRUE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "identify_item_button", TRUE);
@@ -144,7 +148,8 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		sStackSize	= IntToString(FloatToInt((StringToInt(sStackSize))*(StringToInt(sExtra)/100.0f)));
 		// you cannot select 0 of something.
 		int nStack = GetItemStackSize(oItem);
-		if (nStack < 1){
+		
+		if (nStack < 1 || StringToInt(sStackSize) < 1){
 			sStackSize = "1";
 			nStack = 1;
 		} else if (StringToInt(sStackSize) > nStack) sStackSize = IntToString(nStack);
@@ -175,7 +180,11 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	}
 
 	else if(iEvent == 8)	//The player chose "sell" category
-	{//First disable/enable the buy, steal/sell buttons (since we are selling)
+	{	//First set the store panel to local int so we can keep track of what price
+		// function to use. We only need this for the events that change the store panel
+		SetLocalInt(oPC, "CURRENT_STORE_PANEL", iEvent);
+	
+		//First disable/enable the buy, steal/sell buttons (since we are selling)
 		//SendMessageToPC(oPC, "selling tab generation");
 		SetGUIObjectDisabled(oPC, "dethia_shop", "buy_item_button", TRUE);
 		SetGUIObjectDisabled(oPC, "dethia_shop", "sell_item_button", FALSE);
@@ -192,7 +201,6 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		
 		//We will populate the shop gui with all non-cursed items and allowed items
 		object	oItem		= GetFirstItemInInventory(oPC);
-		int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket buy rate
 		int		iRowID		= 0;	//The listbox row ID for a particular item
 		//Before we populate the listbox we must first clear it
 		ClearListBox(oPC, "dethia_shop", "store_items");
@@ -214,8 +222,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 					string	sStackSize	= IntToString(GetItemStackSize(oItem));
 					string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
 					string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIconSafe(oItem)) + ".tga";
-					int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
-											GetLocalInt(oStore, "DS_BLACKMARKET"), GetLocalFloat(oStore, "DS_BUY_MOD"));
+					int		iItemCost	= DS_GetItemSellValue(oItem, oPC, oStore, sItemCost);
 											
 					if (iItemCost > nMaxBuy)
 						iItemCost = nMaxBuy;			
@@ -277,8 +284,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		DS_TakeCoinsFromCreature(oPC, iCost);
 		DS_UpdateStoreCurrency(oStore, oPC, iCost);
 		SetIdentified(oItem, TRUE);
-		int		iBlkMark	= GetLocalInt(oStore, "DS_BLACKMARKET");	//Blackmarket
-		int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown), iBlkMark);
+		int		iItemCost	= DS_GetItemSellValue(oItem, oPC, oStore, sItemCost);
 		SetLocalGUIVariable(oPC, "dethia_shop", 4, IntToString(iItemCost));	//Update price
 		ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
 								"item_cost_cc=" + DS_ConvertCoinsToCopper(iItemCost) + ";"	+

@@ -1,3 +1,25 @@
+// there is a bug in the default sequencer potions we've been using. The sequencer item property
+// relies on local integers stored on the item with the property. If you have a stack of such items
+// then if you split them what really happens is part of your stack is destroyed and a new copy is
+// made for the split-off stack. When this happens, the local integers are NOT copied, so the new
+// "child" stack cannot cast spells and reads as empty. Just as bad, if you have one of the original
+// sequencer pots with a spell stored you can drop 9 empty ones on top of it (assuming they're all the
+// same type, lesser, greater, etc) and the ones you dropped on will inherit the local integers of the
+// original. Infinite spell reuse. Forever.
+
+// There's nothing I can do about the bug in old pots where a split stack gets emptied, but I can
+// prevent the exploit by renaming them after the spells they get and making both the item editor
+// and the dmfi tool unable to target potions. You can't combine stacks when they have different
+// names even if they have the same res ref.
+
+//Going forward, we will use the NEW potions I made that store the spell data in a tag (tags are
+// copied in a split) and use Unique Power, Self Only, Single Use instead of the sequencer property.
+// See x2_inc_spellhook for storing spells on these new sequencers and x2_mod_def_act for casting
+// the spell on them.
+
+//NOTE: TODO, if using the tag to re-up local ints fixes the bug with old sequencers, then redo
+// new ones to be "spell bombs" that are not self-only. If so, then make their tags
+// be same format as old sequence, ie, [number of spells stored, spell 1, spell 2, spell 3]
 #include "x2_inc_craft"
 #include "ff_arrays"
 
@@ -9,59 +31,25 @@ struct dSequencerData {
 	int nSpell2;
 	int nSpell3;
 };
-
+void PS_SetOldSequencerRecoveryTag(object oSequencer);
+void PS_RecoverOldSequencerFromTag(object oSequencer);
 void PS_DoSpellCastCheatMode(object oPC, int nID);
-void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster);
+void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF);
 struct dSequencerData PS_GetSequencerData(object oSequencer);
-int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster);
+int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJECT_SELF);
 int PS_GetIsNewSequencerPot(object oSequencer);
 int PS_GetIsOldSequencerPot(object oSequencer);
 string PS_GetNameForNewSequencerPot(object oSequencer);
 string PS_GetNameForOldSequencerPot(object oSequencer);
-void PS_RenameSequencerPot(object oSequencer, object oCaster);
-int PS_PayForSequencerPot(object oSequencer, object oCaster);
+void PS_RenameSequencerPot(object oSequencer, object oCaster = OBJECT_SELF);
+int PS_PayForSequencerPot(object oSequencer, object oCaster = OBJECT_SELF);
 string GetSpellName(int nId);
 int PS_GetQualifiesForSequencer(int nId = -1);
+int GetStringHasLetters(string sString);
 
-void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster){
-	if (!PS_GetIsNewSequencerPot(oSequencer)) return;
-	struct dSequencerData data = PS_GetSequencerData(oSequencer);
-	if (data.nNumSpells == 0){
-		FloatingTextStringOnCreature("No spells stored!", oCaster);
-		return;
-	}
-	if (data.nSpell1 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell1);
-	if (data.nSpell2 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell2);
-	if (data.nSpell3 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell3);
-}
-
-void PS_DoSpellCastCheatMode(object oPC, int nId){
-	AssignCommand(oPC, ActionCastSpellAtObject(nId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
-}
-
-int PS_GetQualifiesForSequencer(int nId = -1){
-	if (nId == -1) nId = GetSpellId();
-	if (StringToInt(Get2DAString("spells", "Innate", nId)) >= 10){
-		FloatingTextStringOnCreature("You cannot store epic spells", OBJECT_SELF);
-		return FALSE;
-	}
-	if (StringToInt(Get2DAString("spells", "HostileSetting", nId))){
-		FloatingTextStrRefOnCreature(83885, OBJECT_SELF);
-		return FALSE;
-	}
-	object oItem = GetSpellCastItem();
-	if (GetIsObjectValid(oItem)){
-        // we allow scrolls
-        int nItem = GetBaseItemType(oItem);
-        if (nItem !=BASE_ITEM_SPELLSCROLL && nItem != 105){
-            FloatingTextStrRefOnCreature(83373, OBJECT_SELF);
-            return FALSE;
-        }
-    }
-	return FALSE;
-}
-
-int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster){
+// main function to "store" spells on new sequencer pots by setting the tag
+// to a list of spell ids
+int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster = OBJECT_SELF){
 	if (!PS_GetIsNewSequencerPot(oSequencer))
 		return FALSE; 
 	
@@ -85,13 +73,53 @@ int PS_GetIsStoreSpellOnNewSquencerPot(object oSequencer, object oCaster){
 		sList =  NewListOf(IntToString(data.nSpell1), IntToString(nId));
 	else if (data.nSpell3 == -1 && data.nMaxSpells > 2)
 		sList =  NewListOf(IntToString(data.nSpell1), IntToString(data.nSpell2), IntToString(nId));
-		
-	SetTag(oSequencer, sList);
+	if (sList != "") SetTag(oSequencer, sList); // bad things happen if you have an empty tag
 	PS_RenameSequencerPot(oSequencer, oCaster);
 	effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oCaster);
     FloatingTextStrRefOnCreature(83884, oCaster);
 	return TRUE;
+}
+
+void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF){
+	if (!PS_GetIsNewSequencerPot(oSequencer)) return;
+	struct dSequencerData data = PS_GetSequencerData(oSequencer);
+	// if the tag was set up correctly it should contain ONLY numbers and whatever
+	// we're currently using as a delimiter in ff_arrays. Therefore there shouldn't
+	// be any letters.
+	if (data.nNumSpells == 0 || GetStringHasLetters(GetTag(oSequencer))){
+		FloatingTextStringOnCreature("No spells stored!", oCaster);
+		return;
+	}
+	if (data.nSpell1 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell1);
+	if (data.nSpell2 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell2);
+	if (data.nSpell3 != -1) PS_DoSpellCastCheatMode(oCaster, data.nSpell3);
+}
+
+int PS_GetQualifiesForSequencer(int nId = -1){
+	if (nId == -1) nId = GetSpellId();
+	if (StringToInt(Get2DAString("spells", "Innate", nId)) >= 10){
+		FloatingTextStringOnCreature("You cannot store epic spells", OBJECT_SELF);
+		return FALSE;
+	}
+	if (StringToInt(Get2DAString("spells", "HostileSetting", nId))){
+		FloatingTextStrRefOnCreature(83885, OBJECT_SELF);
+		return FALSE;
+	}
+	object oItem = GetSpellCastItem();
+	if (GetIsObjectValid(oItem)){
+        // we allow scrolls
+        int nItem = GetBaseItemType(oItem);
+        if (nItem !=BASE_ITEM_SPELLSCROLL && nItem != 105){
+            FloatingTextStrRefOnCreature(83373, OBJECT_SELF);
+            return FALSE;
+        }
+    }
+	return TRUE;
+}
+
+void PS_DoSpellCastCheatMode(object oPC, int nId){
+	AssignCommand(oPC, ActionCastSpellAtObject(nId, oPC, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 }
 
 struct dSequencerData PS_GetSequencerData(object oSequencer){
@@ -108,13 +136,19 @@ struct dSequencerData PS_GetSequencerData(object oSequencer){
 		return data;
 	}
 	string sList = GetTag(oSequencer);
-	data.nNumSpells = GetNumberIndices(sList);
-	if (data.nNumSpells == 0){
+	// if it still has the original tag, it hasnt had any spells stored.
+	if (sList == sRef) data.nNumSpells = 0;
+	// if it has any letters in the tag, then it's not a tag full of only 
+	// spell ids and delimiters, so it's "empty"
+	else if (GetStringHasLetters(sList)) data.nNumSpells = 0;
+	else data.nNumSpells = GetNumberIndices(sList);
+	if (data.nNumSpells == 0 ){
 		data.nSpell1 = -1;
 		data.nSpell2 = -1;
 		data.nSpell3 = -1;
 		return data;
 	}
+	// if we got here then the new seq pot is not empty
 	data.nSpell1 = StringToInt(GetValueAtIndex(sList, 0));
 	if (data.nNumSpells >= 2){
 		data.nSpell2 = StringToInt(GetValueAtIndex(sList, 1));
@@ -179,8 +213,7 @@ string PS_GetNameForOldSequencerPot(object oSequencer){
 	int nSpell3 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3");
 	// if no spells stored something has gone wrong
 	if (nSpell1 + nSpell2 + nSpell3 < 1) return "";
-	int nNumberOfTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
-	int nStack = GetItemStackSize(oSequencer);
+	int nNumTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
 	string sSpell1 = GetSpellName(nSpell1 - 1);
 	string sSpell2, sSpell3;
 	if (nSpell2 > 0) sSpell2 = GetSpellName(nSpell2 - 1);
@@ -200,23 +233,29 @@ string PS_GetNameForOldSequencerPot(object oSequencer){
 		sName += sSpell1 + ", " + sSpell2 + ", and " + sSpell3;
 	}
 	sName += "</c>";
+	PS_SetOldSequencerRecoveryTag(oSequencer);
 	return sName;
 }
 // used sequencer pots MUST be given specific names to prevent an exploit
 // wherein an empty sequencer pot is dropped onto a full one to get all
-// the spells added to it for free.
-void PS_RenameSequencerPot(object oSequencer, object oCaster){
+// the spells added to it for free forever.
+void PS_RenameSequencerPot(object oSequencer, object oCaster = OBJECT_SELF){
 	string sName;
 	if (PS_GetIsOldSequencerPot(oSequencer)) sName = PS_GetNameForOldSequencerPot(oSequencer);
 	else if (PS_GetIsNewSequencerPot(oSequencer)) sName = PS_GetNameForNewSequencerPot(oSequencer);
+	
 	if (sName == "") return;
 	SetFirstName(oSequencer, sName);
-	string sMessage = "Your Sequencer Potion has been renamed.\nThe new name will become visible ";
-	sMessage += "after an area transition.";
+	string sMessage = "<c=cyan>Your Sequencer Potion has been renamed.\nThe new name will become ";
+	sMessage += "visible after an area transition or after you move the potion from one square to ";
+	sMessage += "another in your inventory.</c>";
 	SendMessageToPC(oCaster, sMessage);
 }
 
-int PS_PayForSequencerPot(object oSequencer, object oCaster){
+//making sequencers have a cost based on the power of the spells stored instead of
+//costing a fortume to make and then being free to store.
+// this is the same for both old and new
+int PS_PayForSequencerPot(object oSequencer, object oCaster = OBJECT_SELF){
 	
 	int nId = GetSpellId();
 	int nLevel = CIGetSpellInnateLevel(nId, FALSE);
@@ -229,4 +268,51 @@ int PS_PayForSequencerPot(object oSequencer, object oCaster){
 	}
 	PS_TakeGoldFromCreature(nGold, oCaster);
 	return TRUE;
+}
+
+// attempt to set a tag that we can use to repair a split sequencer stack's local integers
+// unlike local vars, tags are copied when a stack is split
+void PS_SetOldSequencerRecoveryTag(object oSequencer){
+	if (!PS_GetIsOldSequencerPot(oSequencer)) return;
+	int nNumTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
+	if (nNumTriggers > 0) return;
+	string sTriggers = IntToString(nNumTriggers);
+	string sSpell1 = IntToString(GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1"));
+	string sSpell2 = IntToString(GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2"));
+	string sSpell3 = IntToString(GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3"));
+	string sList = NewListOf(sTriggers, sSpell1, sSpell2);
+	sList = AddToList(sList, sSpell3);
+	if (sList != "") SetTag(oSequencer, sList);
+}
+
+void PS_RecoverOldSequencerFromTag(object oSequencer){
+	if (!PS_GetIsOldSequencerPot(oSequencer)) return;
+	string sTag = GetTag(oSequencer);
+	if (GetStringHasLetters(sTag)) return;
+	int nNumTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
+	if (nNumTriggers > 0) return;
+	nNumTriggers = StringToInt(GetValueAtIndex(sTag, 0));
+	if (nNumTriggers <= 0) return;
+	SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nNumTriggers);
+	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", StringToInt(GetValueAtIndex(sTag, 1)));
+	if (nNumTriggers >= 2)
+		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", StringToInt(GetValueAtIndex(sTag, 2)));
+	if (nNumTriggers == 3)
+		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", StringToInt(GetValueAtIndex(sTag, 3)));
+}
+
+
+
+int GetStringHasLetters(string sString){
+	sString = GetStringLowerCase(sString);
+	string sLetters = "abcdefghijklmnopqrstuvwxyz";
+	int nLength = GetStringLength(sString);
+	int i;
+	string c;
+	for (i = 0; i < nLength; i++){
+		c = GetSubString(sString, i, 1);
+		if (FindSubString(sLetters, c) != -1)
+			return TRUE;
+	}
+	return FALSE;
 }

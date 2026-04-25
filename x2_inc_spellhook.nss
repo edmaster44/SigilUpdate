@@ -272,7 +272,7 @@ int X2GetSpellCastOnSequencerItem(object oItem)
 		// if they can't pay they can't play
 		if (PS_GetIsOldSequencerPot(oItem)){
 			if (!PS_PayForSequencerPot(oItem, OBJECT_SELF))
-				return TRUE;
+				return FALSE;
 		}
         // success visual and store spell-id on item.
         effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);

@@ -567,9 +567,9 @@ int GetNumIndices(string sCol){
 	int nLength = GetStringLength(sCol);
 	int i;
 	string c;
-	for (i = 1; i <= nLength; i++){
+	for (i = 0; i < nLength; i++){
 		c = GetSubString(sCol, i, 1);
-		if (c == sDelimiter) nDelim += 1;
+		if (c == sDelimiter) nDelim ++;
 	}
 	return nDelim + 1;
 }
