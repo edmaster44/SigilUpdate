@@ -21,7 +21,6 @@
 #include "ps_inc_functions"
 #include "class_mageslayer_utils"
 #include "ff_update_legacy_items"
-#include "ff_sequencer"
 
 
 // since muling is allowed there's no reason to make unnecessary writes to disk to log it.
@@ -45,11 +44,6 @@ void main()
 	if (GetIsPC(oBY) == FALSE) return;
 	object oFROM = GetModuleItemAcquiredFrom();
 	object oITEM = GetModuleItemAcquired();
-	
-	//attempr to repair an old sequencer that has lost its local integers
-	//by extracting that data from tag. Only works on sequencer pots activated
-	//after april 25, 2026
-	PS_RecoverOldSequencerFromTag(oITEM);
 
 	HandleSigilAcquisition(oBY, oFROM, oITEM);
 	

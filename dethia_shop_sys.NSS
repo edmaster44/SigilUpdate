@@ -639,8 +639,8 @@ int DS_GetItemSellValue(object oItem, object oCustomer, object oStore, string sI
 	{	iItemCost	= FloatToInt(fCostMod*PS_GetItemValue(oItem)/GetItemStackSize(oItem));	} 
 	if (DS_GetIsProjectile(oItem) && iItemCost > 100) iItemCost = 100;
 	
-	// when player sells, compare cost passed by gui to computed cost and use the lower
-	if (nGUICost < iItemCost) iItemCost = nGUICost;
+	
+	if (nGUICost > iItemCost) iItemCost = nGUICost;
 	
 	//If the cost is less than or equal to 0, set it to 1
 	if(iItemCost <= 0)	{	iItemCost	= 1;	}

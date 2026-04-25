@@ -99,7 +99,7 @@ void main()
 			TestStringAgainstPattern("**_son**", sTag) ||
 			TestStringAgainstPattern("**_spi**", sTag) ||
 			TestStringAgainstPattern("**_tan**", sTag) ||
-			TestStringAgainstPattern("ps_recipe_aqua_vitae", sTag)){
+			TestStringAgainstPattern("ps_recipe_aqua_vit**", sTag)){
 		
 			SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
 			int nRecipeIndex = Search2DA(NX2_CRAFTING_2DA, "RECIPE_TAG", sTag, 1);

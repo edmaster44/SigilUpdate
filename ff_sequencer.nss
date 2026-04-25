@@ -31,8 +31,7 @@ struct dSequencerData {
 	int nSpell2;
 	int nSpell3;
 };
-void PS_SetOldSequencerRecoveryTag(object oSequencer);
-void PS_RecoverOldSequencerFromTag(object oSequencer);
+
 void PS_DoSpellCastCheatMode(object oPC, int nID);
 void PS_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF);
 struct dSequencerData PS_GetSequencerData(object oSequencer);
@@ -130,9 +129,9 @@ struct dSequencerData PS_GetSequencerData(object oSequencer){
 	else if (sRef == "ps_potion_sequencernew")
 		data.nMaxSpells = 2;
 	else if (sRef == "ps_potion_greatersequncernew")
-		data.nNumSpells = 3;
+		data.nMaxSpells = 3;
 	else {
-		data.nMaxSpells = -1;
+		data.nMaxSpells = 0;
 		return data;
 	}
 	string sList = GetTag(oSequencer);
@@ -185,8 +184,8 @@ int PS_GetIsOldSequencerPot(object oSequencer){
 }
 
 string GetSpellName(int nId){
-	string sNameRef = Get2DAString("spells", "Name", nId);
-	return GetStringByStrRef(StringToInt(sNameRef));
+	int nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
+	return GetStringByStrRef(nNameRef);
 }
 
 string PS_GetNameForNewSequencerPot(object oSequencer){
@@ -197,7 +196,7 @@ string PS_GetNameForNewSequencerPot(object oSequencer){
 	sName += "Sequencer: " + GetSpellName(data.nSpell1);
 	if (data.nSpell2 == -1 && data.nSpell3 == -1){
 		return sName + "</c>";
-	} else if (data.nSpell3 == -1){
+	} else if (data.nSpell2 != -1 && data.nSpell3 == -1){
 		sName += " and " + GetSpellName(data.nSpell2);
 		return sName + "</c>";
 	} else {
@@ -233,7 +232,6 @@ string PS_GetNameForOldSequencerPot(object oSequencer){
 		sName += sSpell1 + ", " + sSpell2 + ", and " + sSpell3;
 	}
 	sName += "</c>";
-	PS_SetOldSequencerRecoveryTag(oSequencer);
 	return sName;
 }
 // used sequencer pots MUST be given specific names to prevent an exploit
@@ -269,39 +267,6 @@ int PS_PayForSequencerPot(object oSequencer, object oCaster = OBJECT_SELF){
 	PS_TakeGoldFromCreature(nGold, oCaster);
 	return TRUE;
 }
-
-// attempt to set a tag that we can use to repair a split sequencer stack's local integers
-// unlike local vars, tags are copied when a stack is split
-void PS_SetOldSequencerRecoveryTag(object oSequencer){
-	if (!PS_GetIsOldSequencerPot(oSequencer)) return;
-	int nNumTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
-	if (nNumTriggers > 0) return;
-	string sTriggers = IntToString(nNumTriggers);
-	string sSpell1 = IntToString(GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1"));
-	string sSpell2 = IntToString(GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2"));
-	string sSpell3 = IntToString(GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3"));
-	string sList = NewListOf(sTriggers, sSpell1, sSpell2);
-	sList = AddToList(sList, sSpell3);
-	if (sList != "") SetTag(oSequencer, sList);
-}
-
-void PS_RecoverOldSequencerFromTag(object oSequencer){
-	if (!PS_GetIsOldSequencerPot(oSequencer)) return;
-	string sTag = GetTag(oSequencer);
-	if (GetStringHasLetters(sTag)) return;
-	int nNumTriggers = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
-	if (nNumTriggers > 0) return;
-	nNumTriggers = StringToInt(GetValueAtIndex(sTag, 0));
-	if (nNumTriggers <= 0) return;
-	SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nNumTriggers);
-	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", StringToInt(GetValueAtIndex(sTag, 1)));
-	if (nNumTriggers >= 2)
-		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", StringToInt(GetValueAtIndex(sTag, 2)));
-	if (nNumTriggers == 3)
-		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", StringToInt(GetValueAtIndex(sTag, 3)));
-}
-
-
 
 int GetStringHasLetters(string sString){
 	sString = GetStringLowerCase(sString);

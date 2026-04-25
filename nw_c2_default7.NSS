@@ -34,36 +34,35 @@ void SpawnSpecificItem(object oKiller){
 	if (FindSubString(GetTag(OBJECT_SELF), "ps_creature_ascended") != -1){//niflheim boss The Ascended
 		sRef = "ps_key_mystery"; //always drops key to antechamber
 	} else if (nRace == 40){ // incorporeal
-		switch (d6()){
+		switch (d3()){
 			case 1: sRef = "n2_crft_dist028"; break;//ghostly essence 
 			case 2: sRef = "n2_crft_dist017"; break;//ghost residue
 			case 3: sRef = "n2_crft_dist027"; break;//shadow residue
-			default: return;
 		}
 	} else if (nRace == 137){ //ghoul
-		int nRandom = d12();
-		if (nRandom <= 3) sRef = "n2_crft_dist015";//ghoul claws
-		else if (nRandom <= 6) sRef = "n2_crft_dist016";//ghast claws
-		else return;
+		switch(d2()){
+			case 1: sRef = "n2_crft_dist015"; break; //ghoul claws
+			case 2: sRef = "n2_crft_dist016"; break;//ghast claws
+		}
 	} else if (nRace == 159){ //vampire
-		if (d20() <= 10) sRef = "n2_crft_dist035"; //vamp tooth
-		else return;
+		sRef = "n2_crft_dist035"; //vamp tooth
 	}
-	oItem = CreateObject(OBJECT_TYPE_ITEM, sRef, lLoc);
-	FloatingTextStringOnCreature("The slain has dropped something!", oPC); 
-	//try dropping on ground
-	/*
-		string sTag = GetTag(OBJECT_SELF);
-	if (FindSubString(sTag, "ps_creature_ascended") != -1){//niflheim boss The Ascended
-		SpawnSpecificItem("ps_key_mystery", oKiller, GetLocation(OBJECT_SELF), 
-			"A key drops to the ground!", "You found a key!");//drops key to antechamber
-	if (!GetIsPC(oPC)){
-		oItem = CreateObject(OBJECT_TYPE_ITEM, sRes, lCrimeScene);
-		AssignCommand(oItem, SpeakString(sDrop));
-	} else {
-		oItem = CreateItemOnObject(sRes, oPC);
-		SendMessageToPC(oPC, sFind);
-	}*/
+	if (sRef == "ps_key_mystery"){
+		oItem = CreateItemOnObject(sRef, oPC);
+		FloatingTextStringOnCreature("You found a key!", oPC, FALSE); 
+		return;
+	}
+	object oArea = GetArea(oPC);
+	object oMember = GetFirstFactionMember(oPC, TRUE);
+	while(GetIsObjectValid(oMember)){ 
+		if (GetArea(oMember) == oArea && !GetIsDM(oMember)){
+			if (d2() == 1){
+				oItem = CreateItemOnObject(sRef, oPC);
+				FloatingTextStringOnCreature("You salvaged something from your kill!", oMember, FALSE); 
+			}
+		}
+		oMember = GetNextFactionMember(oPC, TRUE);  
+	}
 }
 
 void main()
