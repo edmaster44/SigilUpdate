@@ -19,7 +19,7 @@
 
 #include "x2_inc_craft"
 
-const string sDelim = "|";
+const string sDelim = "_";
 
 struct dSequencerData {
 	int nMaxSpells;
@@ -175,14 +175,16 @@ struct dSequencerData PS_GetSequencerData(object oSequencer){
 			nDelimCount++;
 		}
 	}
-	data.nNumSpells = nDelimCount + 1;
-	if (sSpell1 == "") data.nSpell1 = 0; //unlikely at this point
-	else data.nSpell1 = StringToInt(sSpell1);
-	if (sSpell2 == "") data.nSpell2 = 0;
-	else data.nSpell2 = StringToInt(sSpell2);
-	if (sSpell3 == "") data.nSpell3 = 0;
-	else data.nSpell3 = StringToInt(sSpell3);
-	
+	data.nNumSpells = 0;
+	int nTempId = StringToInt(sSpell1);
+	data.nSpell1 = nTempId;
+	if (nTempId > 0) data.nNumSpells++;
+	nTempId = StringToInt(sSpell2);
+	data.nSpell2 = nTempId;
+	if (nTempId > 0) data.nNumSpells++;
+	nTempId = StringToInt(sSpell3);
+	data.nSpell3 = nTempId;
+	if (nTempId > 0) data.nNumSpells++;
 	return data;
 }
 
