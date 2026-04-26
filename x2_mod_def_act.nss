@@ -103,7 +103,17 @@ void main()
 		
 			SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
 			int nRecipeIndex = Search2DA(NX2_CRAFTING_2DA, "RECIPE_TAG", sTag, 1);
-		
+			
+			int bHasBench = FALSE;
+			string sBenchTag = GetStringLowerCase(GetTag(GetSpellTargetObject()));
+			if (FindSubString(sBenchTag, "awbench") != -1) bHasBench = TRUE;
+			else if (GetTag(GetArea(oPC)) == "ps_area_lowerward_laboratory") bHasBench = TRUE;
+			if (!bHasBench){
+				string sNoBench = "To use a recipe you must target an alchemy crafting bench or ";
+				sNoBench += "be in the Laboratory in the Lower Ward.";
+				SendMessageToPC(oPC, sNoBench);
+				return;
+			}
 			if(CheckCanCraft(nRecipeIndex, oPC, NX2_CRAFTING_2DA) )
 				CraftItem(nRecipeIndex, oPC, NX2_CRAFTING_2DA);
 	

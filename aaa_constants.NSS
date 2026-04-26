@@ -18,14 +18,14 @@ const float GOLD_MULTIPLIER = 1.03;
 // placeholder values for when we settle on some sensible changes to costs of consumable crafts
 // see ff_chat_commands for chat commands to adjust these crafting costs and x2_inc_craft to 
 // see implementation
-const float HEAL_SCROLL_COST_MOD = 0.0;
-const float HEAL_POT_COST_MOD = 0.0;
-const float HEAL_WAND_COST_MOD = 0.0;
-const float SCROLL_COST_MOD = 0.0;
-const float POT_COST_MOD = 0.0;
-const float WAND_COST_MOD = 0.0;
-const float HEAL_SEQ_COST_MOD = 0.0;
-const float SEQ_COST_MOD = 0.0;
+const float HEAL_SCROLL_COST_MOD = 0.9;
+const float HEAL_POT_COST_MOD = 0.9;
+const float HEAL_WAND_COST_MOD = 0.9;
+const float HEAL_SEQ_COST_MOD = 0.9;
+const float SCROLL_COST_MOD = 1.1;
+const float POT_COST_MOD = 1.1;
+const float WAND_COST_MOD = 1.1;
+const float SEQ_COST_MOD = 1.1;
 
 
 // makes sure that non-partied summons, such as call of the beast, give xp to summoner when they make

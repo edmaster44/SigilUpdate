@@ -92,7 +92,11 @@ void ReCutGem(object oPC, object oGem){
 void DoMeltDownItem(object oPC, object oTarget){	
 	object oBench = GetNearestSmithingWorkbench(oPC);
 	
-	if (!GetWorkbenchInRange(oPC, oBench)){
+	// all of the workbenches in the foundry were converted to environment objects instead
+	// of placeables. This means that they don't register in the check for workbenches, 
+	// so I've made the smith hammer work anywhere in the Foundry.
+	int bIsInFoundry = (GetTag(GetArea(oPC)) == "ps_area_s_lo_greatfoundry");
+	if (!GetWorkbenchInRange(oPC, oBench) && !bIsInFoundry){
 		SendMessageToPC(oPC, "You must be near a crafting workstation to melt down items.");
 		return;
 	} else if (GetItemCursedFlag(oTarget) || !IPGetIsForgedItem(oTarget)){

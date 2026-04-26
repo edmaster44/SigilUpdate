@@ -194,6 +194,8 @@ int FF_GetQualifiesForSequencer(object oSequencer){
 	// things like that as being very powerful magic that bypasses the sacrifice
 	// Returns true if we cannot pay. Doesn't return if we pay, it just continues
 	if (FF_GetIsSeqPot(oSequencer)){
+		//debug
+		SendMessageToPC(OBJECT_SELF, "RECOGNIZED AS SEQ POT IN GET QUALIFIES");
 		if (!FF_PayForSequencerPot(oSequencer)) return FALSE;
 	}
 	return TRUE;
@@ -201,8 +203,9 @@ int FF_GetQualifiesForSequencer(object oSequencer){
 
 int FF_PayForSequencerPot(object oSequencer){
 	object oCaster = OBJECT_SELF;
+	SendMessageToPC(oCaster, "CHECKING GOLD");
 	int nId = GetSpellId();
-	int nLevel = CIGetSpellInnateLevel(nId, FALSE);
+	int nLevel = StringToInt(Get2DAString("spells", "Innate", nId));
 	int nGold = CIGetCraftGPCost(oCaster, nLevel, X2_CI_SEQUENCER_COSTMODIFIER);
 	nGold *= GetItemStackSize(oSequencer);
 
@@ -299,13 +302,14 @@ struct dSequencerData FF_GetSeqDataFromVars(object oSequencer, struct dSequencer
 }
 
 struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerData data){
+	// if we're looking for the data from the tag then reset all except nMaxSpells
 	data.nNumSpells = 0;
 	data.nSpell1 = 0;
 	data.nSpell2 = 0;
 	data.nSpell3 = 0;
-	string sTag = GetTag(oSequencer);
-	if (sTag ==  GetResRef(oSequencer)) return data;
-	if (FF_GetStringHasLetters(sTag)) return data;
+	string sTag = GetTag(oSequencer); 
+	if (sTag ==  GetResRef(oSequencer)) return data; // if the tag and ref are same, no data
+	if (FF_GetStringHasLetters(sTag)) return data; //if tag isn't just numbers and underscore, no data
 	
 	int nLength = GetStringLength(sTag);
 	int i;
@@ -322,17 +326,19 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 			else s3 += c;
 		} else nDelimCount++;
 	}
+	//todo: I'm nearly 100% sure that converting an empty string to in makes 0 so I could simplify
+	// this by removing the if and else, but not entirely sure so I should test at some point
 	if (s1 != ""){
-		data.nNumSpells++;
 		data.nSpell1 = StringToInt(s1);
+		if (data.nSpell1 > 0) data.nNumSpells++;
 	} else data.nSpell1 = 0;
 	if (s2 != ""){
-		data.nNumSpells++;
 		data.nSpell2 = StringToInt(s2);
+		if (data.nSpell1 > 0) data.nNumSpells++;
 	} else data.nSpell2 = 0;
 	if (s3 != ""){
-		data.nNumSpells++;
 		data.nSpell3 = StringToInt(s3);
+		if (data.nSpell1 > 0) data.nNumSpells++;
 	} else data.nSpell3 = 0;
 	return data;
 }
