@@ -20,10 +20,11 @@
 //:://////////////////////////////////////////////
 //:: RPGplayer1 12/22/2008: Increased duration by 1 round, since activating this feat makes you unable to attack for 1 round
 
-#include "x0_i0_spells"
+#include "x2_inc_spellhook"
 #include "x2_inc_itemprop"
 #include "nwn2_inc_spells"
-#include "ps_inc_functions"
+
+
 
 void main()
 {
@@ -66,7 +67,8 @@ void main()
 		eLink = SupernaturalEffect(eLink);
 
 		// * Do not allow this to stack
-		RemoveEffectsFromSpell(OBJECT_SELF, GetSpellId());
+		int nId = GetSpellId();
+		RemoveEffectsFromSpell(OBJECT_SELF, nId);
 
 		//Fire cast spell at event for the specified target
 		SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_DIVINE_MIGHT, FALSE));
@@ -74,11 +76,7 @@ void main()
 		//Apply Link and VFX effects to the target
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDur);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
-		DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD);
-		
-		//let the player know when divine might ends
-		DelayCommand(fDur, FloatingTextStringOnCreature("Divine Might fades", OBJECT_SELF, FALSE));
-			
-        
+		DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD); 
+		ReportEffectFade(OBJECT_SELF, fDur, nId);
    // }
 }

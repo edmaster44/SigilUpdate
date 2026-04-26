@@ -41,6 +41,7 @@
 #include "class_mageslayer_utils"
 #include "ff_sequencer"
 
+
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
@@ -61,6 +62,8 @@ void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
 void DebugSpells();
+void ShowEffectFadeReport(object oCaster, int nId, object oTarget = OBJECT_SELF, int nIteration = 0);
+void ReportEffectFade(object oCaster, float fDur, int nId = -1, object oTarget = OBJECT_SELF);
 
 //------------------------------------------------------------------------------
 // PRIMARY FUNCTION
@@ -495,6 +498,26 @@ void ff_ShowConsumableCraftCosts(){
 	}
 	
 	SendMessageToPC(oPC, sMessage);
+}
+
+
+void ShowEffectFadeReport(object oCaster, int nId, object oTarget = OBJECT_SELF, int nIteration = 0){
+	if (nIteration > 10) return;
+	
+	if (PS_GetHasEffectById(oTarget, nId)){
+		DelayCommand(0.5, ShowEffectFadeReport(oCaster, nId, oTarget, nIteration + 1));
+	} else {
+		string sNameRef = Get2DAString("spells", "Name", nId);
+		if (sNameRef == "" || sNameRef == "****") return;
+		string sName = GetStringByStrRef(StringToInt(sNameRef));
+		sName += " Fades";
+		FloatingTextStringOnCreature(sName, oCaster, FALSE);
+	}
+}
+
+void ReportEffectFade(object oCaster, float fDur, int nId = -1, object oTarget = OBJECT_SELF){
+	if (nId == -1) nId = GetSpellId();
+	DelayCommand(fDur, ShowEffectFadeReport(oCaster, nId, oTarget));
 }
 
 /*
