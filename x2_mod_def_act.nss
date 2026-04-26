@@ -37,8 +37,8 @@ void main()
 	// also this is new sequencer potion that uses tag because old sequencer potions break when you split a stack
 	// due to reliance on local integers that are not preserved when a stack is split
 	if (nItemID == idCraftedPotion){
-		if (PS_GetIsNewSequencerPot(oItem))
-			PS_CastSpellFromNewSequencer(oItem, oPC);
+		if (FF_GetIsNewSequencerPot(oItem))
+			FF_CastSpellFromNewSequencer(oItem);
 		else {
 			// new custom materials in iprp_materials.2da are just identifiers for the spells, as explained above
 			// specifically, they are inflict minor = 13, infl light = 14, infl mod = 15, infl serious = 16, 

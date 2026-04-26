@@ -191,7 +191,7 @@ void RestStart(object oPC)
 	object oRIGHT = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);	
 	if (GetTag(oRIGHT) == "barbancestoraxe") DestroyAncestralWeapon(oRIGHT);
 	DismissSpellHenchmen(oPC);
-	RepairAllOldSeq(oPC); // attempt to repair local ints on split seq pots. see ff_sequencer
+	FF_RepairAllOldSeq(oPC); // attempt to repair local ints on split seq pots. see ff_sequencer
 	IncrementalDebug(oPC, "start: bottom");
 }
 

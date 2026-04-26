@@ -53,7 +53,7 @@ int GetSpellFailedBecauseMissChance(object oCaster);
 void PS_RemoveEffects(object oTarget, int nId = NULL, int nType = NULL, object oCreator = OBJECT_INVALID);
 int PS_GetHasEffectById(object oTarget, int nId);
 int X2UseMagicDeviceCheck();
-int X2GetSpellCastOnSequencerItem(object oItem);
+//int X2GetSpellCastOnSequencerItem(object oItem);
 int X2RunUserDefinedSpellScript();
 int GetSkipByRestoration(int nSpellId);
 int X2CastOnItemWasAllowed(object oItem);
@@ -125,48 +125,33 @@ int X2PreSpellCastCode()
    //---------------------------------------------------------------------------
    // The following code is only of interest if an item was targeted
    //---------------------------------------------------------------------------
-   if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_ITEM)
-   {
-
-       //-----------------------------------------------------------------------
+   if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_ITEM){
        // Check if spell was used to trigger item creation feat
-       //-----------------------------------------------------------------------
        if (nContinue) {
            nContinue = !ExecuteScriptAndReturnInt("x2_pc_craft",OBJECT_SELF);
-       }
-
-       //-----------------------------------------------------------------------
+	   }	
+		string sRef = GetResRef(oTarget);
+		//casting a spell on the enchant focus or mortar and pestle shows the costs for making
+		// scrolls, potions, and wands of that spell
+		if (FindSubString(sRef, "ps_enchantmentf") != -1 || sRef == "mortar"){
+			ff_ShowConsumableCraftCosts(); 
+			return FALSE;
+		}
        // Check if spell was used for on a sequencer item
-       //-----------------------------------------------------------------------
-       if (nContinue)
-       {
-            nContinue = (!X2GetSpellCastOnSequencerItem(oTarget));
+       if (nContinue){
+            //nContinue = (!X2GetSpellCastOnSequencerItem(oTarget));
+			nContinue = !FF_GetIsSeqAndStoreSpell(oTarget);
        }
 
-       //-----------------------------------------------------------------------
        // * Execute item OnSpellCast At routing script if activated
-       //-----------------------------------------------------------------------
-       if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_TAGBASED_SCRIPTS) == TRUE)
-       {
+       if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_TAGBASED_SCRIPTS) == TRUE){
              SetUserDefinedItemEventNumber(X2_ITEM_EVENT_SPELLCAST_AT);
              int nRet =   ExecuteScriptAndReturnInt(GetUserDefinedItemEventScriptName(oTarget),OBJECT_SELF);
-             if (nRet == X2_EXECUTE_SCRIPT_END)
-             {
+             if (nRet == X2_EXECUTE_SCRIPT_END){
                 return FALSE;
              }
        }
 
-	   /* Brock H. - OEI 07/05/06 - Removed for NWN2
-	   
-       //-----------------------------------------------------------------------
-       // Prevent any spell that has no special coding to handle targetting of items
-       // from being cast on items. We do this because we can not predict how
-       // all the hundreds spells in NWN will react when cast on items
-       //-----------------------------------------------------------------------
-       if (nContinue) {
-           nContinue = X2CastOnItemWasAllowed(oTarget);
-       }
-	   */
    }
 
 	//---------------------------------------------------------------------------
@@ -187,20 +172,6 @@ int X2PreSpellCastCode()
 		}
 	}
 	if (GetSpellFailedBecauseMissChance(OBJECT_SELF)) nContinue = FALSE;
-	
-	
-	if (GetObjectType(oTarget) == OBJECT_TYPE_ITEM){
-		string sRef = GetResRef(oTarget);
-		//casting a spell on the enchant focus or mortar and pestle shows the costs for making
-		// scrolls, potions, and wands of that spell
-		if (FindSubString(sRef, "ps_enchantmentf") != -1 || sRef == "mortar"){
-			ff_ShowConsumableCraftCosts(); 
-			return FALSE;
-		} else {
-			//are we casting on a new sequencer pot?
-			nContinue = !PS_GetIsStoreSpellOnNewSquencerPot(oTarget, OBJECT_SELF);
-		}
-	}
 	
    return nContinue;
 }
@@ -234,69 +205,6 @@ int X2RunUserDefinedSpellScript()
     }
     return TRUE;
 }
-
-
-//------------------------------------------------------------------------------
-// Created Brent Knowles, Georg Zoeller 2003-07-31
-// Returns TRUE (and charges the sequencer item) if the spell
-// ... was cast on an item AND
-// ... the item has the sequencer property
-// ... the spell was non hostile
-// ... the spell was not cast from an item
-// in any other case, FALSE is returned an the normal spellscript will be run
-//------------------------------------------------------------------------------
-int X2GetSpellCastOnSequencerItem(object oItem)
-{
-	
-	// not a valid item
-    if (!GetIsObjectValid(oItem))
-    {
-        return FALSE;
-    }
-	// not a sequencer
-    int nMaxSeqSpells = IPGetItemSequencerProperty(oItem); // get number of maximum spells that can be stored
-    if (nMaxSeqSpells <1)
-    {
-        return FALSE;
-    }
-	
-	if (!PS_GetQualifiesForSequencer())
-		return FALSE; 
-
-
-    int nNumberOfTriggers = GetLocalInt(oItem, "X2_L_NUMTRIGGERS");
-    // is there still space left on the sequencer?
-    if (nNumberOfTriggers < nMaxSeqSpells)
-    {
-		// sequencer pots need coin to store the spell, 
-		// if they can't pay they can't play
-		if (PS_GetIsOldSequencerPot(oItem)){
-			if (!PS_PayForSequencerPot(oItem, OBJECT_SELF))
-				return FALSE;
-		}
-        // success visual and store spell-id on item.
-        effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
-        nNumberOfTriggers++;
-        //NOTE: I add +1 to the SpellId to spell 0 can be used to trap failure
-        int nSID = GetSpellId()+1;
-        SetLocalInt(oItem, "X2_L_SPELLTRIGGER" + IntToString(nNumberOfTriggers), nSID);
-        SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
-        FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
-		
-		// if it's a sequencer pot rename it to reflect spell(s) stored
-		if (PS_GetIsOldSequencerPot(oItem))
-			RenameOldSequencerPot(oItem, OBJECT_SELF);
-    }
-    else
-    {
-        FloatingTextStrRefOnCreature(83859,OBJECT_SELF);
-    }
-	
-    return TRUE; // in any case, spell is used up from here, so do not fire regular spellscript
-}
-
-
 
 
 //------------------------------------------------------------------------------
@@ -588,3 +496,66 @@ void ff_ShowConsumableCraftCosts(){
 	
 	SendMessageToPC(oPC, sMessage);
 }
+
+/*
+
+//------------------------------------------------------------------------------
+// Created Brent Knowles, Georg Zoeller 2003-07-31
+// Returns TRUE (and charges the sequencer item) if the spell
+// ... was cast on an item AND
+// ... the item has the sequencer property
+// ... the spell was non hostile
+// ... the spell was not cast from an item
+// in any other case, FALSE is returned an the normal spellscript will be run
+//------------------------------------------------------------------------------
+int X2GetSpellCastOnSequencerItem(object oItem)
+{
+	
+	// not a valid item
+    if (!GetIsObjectValid(oItem))
+    {
+        return FALSE;
+    }
+	// not a sequencer
+    int nMaxSeqSpells = IPGetItemSequencerProperty(oItem); // get number of maximum spells that can be stored
+    if (nMaxSeqSpells <1)
+    {
+        return FALSE;
+    }
+	
+
+
+
+    int nNumberOfTriggers = GetLocalInt(oItem, "X2_L_NUMTRIGGERS");
+    // is there still space left on the sequencer?
+    if (nNumberOfTriggers < nMaxSeqSpells)
+    {
+		// sequencer pots need coin to store the spell, 
+		// if they can't pay they can't play
+		if (FF_GetIsOldSequencerPot(oItem)){
+			if (!FF_PayForSequencerPot(oItem, OBJECT_SELF))
+				return FALSE;
+		}
+        // success visual and store spell-id on item.
+        effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
+        nNumberOfTriggers++;
+        //NOTE: I add +1 to the SpellId to spell 0 can be used to trap failure
+        int nSID = GetSpellId()+1;
+        SetLocalInt(oItem, "X2_L_SPELLTRIGGER" + IntToString(nNumberOfTriggers), nSID);
+        SetLocalInt(oItem, "X2_L_NUMTRIGGERS", nNumberOfTriggers);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
+        FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
+		
+		// if it's a sequencer pot rename it to reflect spell(s) stored
+		if (FF_GetIsOldSequencerPot(oItem))
+			RenameOldSequencerPot(oItem, OBJECT_SELF);
+    }
+    else
+    {
+        FloatingTextStrRefOnCreature(83859,OBJECT_SELF);
+    }
+	
+    return TRUE; // in any case, spell is used up from here, so do not fire regular spellscript
+	
+}
+*/
