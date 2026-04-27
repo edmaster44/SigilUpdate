@@ -52,13 +52,14 @@ string GetSpellName(int nId){
 	return GetStringByStrRef(StringToInt(sNameRef));
 }
 
-void ShowDebugData(object oSequencer, struct dSequencerData data, string sSource){
+void ShowDebugData(object oSequencer, struct dSequencerData data, string sSource, string sAdd = ""){
 	object oPC = OBJECT_SELF;
 	string sMessage = "From " + sSource +"\nTag: " + GetTag(oSequencer);
 	sMessage += "\nMax: " + IntToString(data.nMaxSpells) + "\nNumSpells: ";
 	sMessage += IntToString(data.nNumSpells) + "\nSpell1: " + IntToString(data.nSpell1);
 	sMessage += "\nSpell2: " + IntToString(data.nSpell2);
 	sMessage += "\nSpell3: " + IntToString(data.nSpell3);
+	if (sAdd != "") sMessage += "\n" + sAdd;
 	SendMessageToPC(OBJECT_SELF, sMessage);
 }
 
@@ -147,6 +148,10 @@ int FF_GetQualifiesForSequencer(object oSequencer){
 	// things like that as being very powerful magic that bypasses the sacrifice
 	// Returns true if we cannot pay. Doesn't return if we pay, it just continues
 	if (FF_GetIsSeqPot(oSequencer)){
+		//debug
+		SendMessageToPC(OBJECT_SELF, "Pay recognizes OBJECT_SELF");
+		ShowDebugData(oSequencer, data, "Pay");
+		
 		int nLevel = StringToInt(Get2DAString("spells", "Innate", nId));
 		int nGold = CIGetCraftGPCost(OBJECT_SELF, nLevel, X2_CI_SEQUENCER_COSTMODIFIER);
 		nGold *= GetItemStackSize(oSequencer);
@@ -155,6 +160,7 @@ int FF_GetQualifiesForSequencer(object oSequencer){
 			FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_GOLD, OBJECT_SELF); // not enough gold!
 			return FALSE;
 		}
+		ShowDebugData(oSequencer, data, "Pay", IntToString(nGold));
 		PS_TakeGoldFromCreature(nGold, OBJECT_SELF);
 		return TRUE;
 	}
@@ -197,9 +203,9 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 	data.nSpell1 = StringToInt(s1);
 	if (data.nSpell1 > 0) data.nNumSpells = 1;
 	data.nSpell2 = StringToInt(s2);
-	if (data.nSpell1 > 0) data.nNumSpells = 2;
+	if (data.nSpell2 > 0) data.nNumSpells = 2;
 	data.nSpell3 = StringToInt(s3);
-	if (data.nSpell1 > 0) data.nNumSpells = 3;
+	if (data.nSpell3 > 0) data.nNumSpells = 3;
 	//DEBUG
 	ShowDebugData(oSequencer, data, "FF_GetSeqDataFromTag");
 	return data;
@@ -225,28 +231,17 @@ struct dSequencerData FF_GetSeqData(object oSequencer){
 
 int FF_GetIsNewSequencerPot(object oSequencer){
 	string sRef = GetStringLowerCase(GetResRef(oSequencer));
-	//check to make sure this is a sequencer pot
-	if (sRef == "ps_potion_lessersequencernew" || sRef == "ps_potion_sequencernew" ||
-		sRef == "ps_potion_greatersequncernew"){
-			return TRUE;
-	}	
-	return FALSE;
+	return TestStringAgainstPattern("ps_potion_**sequ**ncernew", sRef);
 }
 
 int FF_GetIsOldSequencerPot(object oSequencer){
 	string sRef = GetStringLowerCase(GetResRef(oSequencer));
-	//check to make sure this is a sequencer pot
-	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
-		sRef == "ps_potion_greatersequncer"){
-			return TRUE;
-	}	
-	return FALSE;
+	return TestStringAgainstPattern("ps_potion_**sequ**ncer", sRef);
 }
 
 int FF_GetIsSeqPot(object oSequencer){
-	if (FF_GetIsNewSequencerPot(oSequencer)) return TRUE;
-	if (FF_GetIsOldSequencerPot(oSequencer)) return TRUE;
-	return FALSE;
+	string sRef = GetStringLowerCase(GetResRef(oSequencer));
+	return TestStringAgainstPattern("ps_potion_**sequ**ncer**", sRef);;
 }
 
 void FF_RenameSeqPotAndSetTag(object oSequencer, struct dSequencerData data){
