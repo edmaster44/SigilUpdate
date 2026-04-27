@@ -72,6 +72,8 @@ int FF_GetIsSeqAndStoreSpell(object oSequencer){
 	// the new seq pots dont use the sequencer item property
 	if (FF_GetIsSeqPot(oSequencer)){
 		struct dSequencerData data = FF_GetSeqData(oSequencer);
+		//DEBUG
+		ShowDebugData(oSequencer, data, "apply spell portion");
 		if (data.nSpell1 == 0) data.nSpell1 = nId;
 		else if (data.nSpell2 == 0) data.nSpell2 = nId;
 		else if (data.nSpell3 == 0) data.nSpell3 = nId;
@@ -165,8 +167,6 @@ int FF_GetIsSeqPot(object oSequencer){
 	return FALSE;
 }
 
-// CHANGE THIS SECTION, PUT CHECK FOR ITEM PROPERTY FIRST, THEN IF NO ITEM PROP GET
-// data. Maybe put in auro recovery if old pot?
 int FF_GetQualifiesForSequencer(object oSequencer){
 	int nMaxSpells, nNumSpells;
 	if (FF_GetIsSeqPot(oSequencer)){
@@ -192,8 +192,8 @@ int FF_GetQualifiesForSequencer(object oSequencer){
 		FloatingTextStrRefOnCreature(83885, OBJECT_SELF);
 		return FALSE;
 	}
-	object oSequencer = GetSpellCastItem();
-	if (GetIsObjectValid(oSequencer)){
+	object oItem = GetSpellCastItem();
+	if (GetIsObjectValid(oItem)){
         // we allow scrolls
         int nItem = GetBaseItemType(oSequencer);
         if (nItem !=BASE_ITEM_SPELLSCROLL && nItem != 105){
@@ -341,20 +341,13 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 			else s3 += c;
 		} else nDelimCount++;
 	}
-	//todo: I'm nearly 100% sure that converting an empty string to in makes 0 so I could simplify
-	// this by removing the if and else, but not entirely sure so I should test at some point
-	if (s1 != ""){
-		data.nSpell1 = StringToInt(s1);
-		if (data.nSpell1 > 0) data.nNumSpells++;
-	} else data.nSpell1 = 0;
-	if (s2 != ""){
-		data.nSpell2 = StringToInt(s2);
-		if (data.nSpell1 > 0) data.nNumSpells++;
-	} else data.nSpell2 = 0;
-	if (s3 != ""){
-		data.nSpell3 = StringToInt(s3);
-		if (data.nSpell1 > 0) data.nNumSpells++;
-	} else data.nSpell3 = 0;
+	data.nSpell1 = StringToInt(s1);
+	if (data.nSpell1 > 0) data.nNumSpells = 1;
+	data.nSpell2 = StringToInt(s2);
+	if (data.nSpell1 > 0) data.nNumSpells = 2;
+	data.nSpell3 = StringToInt(s3);
+	if (data.nSpell1 > 0) data.nNumSpells = 3;
+	//DEBUG
 	ShowDebugData(oSequencer, data, "FF_GetSeqDataFromTag");
 	return data;
 }
@@ -362,7 +355,7 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 struct dSequencerData FF_GetSeqData(object oSequencer){
 	struct dSequencerData data;
 	string sRef = GetResRef(oSequencer);
-	if (sRef == "ps_potion_greatersequncer" || sRef == "ps_potion_greatersequncer")
+	if (sRef == "ps_potion_greatersequncer" || sRef == "ps_potion_greatersequncernew")
 		data.nMaxSpells = 3;
 	else if (sRef == "ps_potion_sequencer" || sRef == "ps_potion_sequencernew")
 		data.nMaxSpells = 2;
