@@ -195,7 +195,7 @@ int FF_GetQualifiesForSequencer(object oSequencer){
 	object oItem = GetSpellCastItem();
 	if (GetIsObjectValid(oItem)){
         // we allow scrolls
-        int nItem = GetBaseItemType(oSequencer);
+        int nItem = GetBaseItemType(oItem);
         if (nItem !=BASE_ITEM_SPELLSCROLL && nItem != 105){
             FloatingTextStrRefOnCreature(83373, OBJECT_SELF);
             return FALSE;
@@ -281,18 +281,13 @@ void FF_RecoverOldSequencer(object oSequencer){
 		} else nDelimCount++;
 	}
 	int nNumSpells = 0;
-	if (s1 != ""){
-		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", StringToInt(s1));
-		nNumSpells++;
-	}
-	if (s2 != ""){
-		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", StringToInt(s2));
-		nNumSpells++;
-	}
-	if (s3 != ""){
-		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", StringToInt(s3));
-		nNumSpells++;
-	}
+	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", StringToInt(s1));
+	if (StringToInt(s1) > 0) nNumSpells = 1;
+	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", StringToInt(s2));
+	if (StringToInt(s2) > 0) nNumSpells = 2;
+	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", StringToInt(s3));
+	if (StringToInt(s3) > 0) nNumSpells = 3;
+	
 	SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nNumSpells); 
 }
 
