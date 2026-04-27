@@ -23,6 +23,16 @@ void main () {
 		return;
 	}
 	
+	// make sure the item being targeted is not the member of an itemset that receives the set bonuses
+	// because the item sets strip all enchants off of one item to replace it with the set enchants
+	string sRef = GetResRef(oTarget);
+	if (sRef == "ps_itemset_swordsaint1" || sRef == "ps_itemset_celglory1" || sRef == "ps_itemset_aarcher3"
+		 || sRef == "ps_itemset_fallshad4" || sRef == "ps_itemset_slaadskin2" || sRef == "ps_itemset_iggwilv1"
+		 || sRef == "ps_itemset_brazen1" || sRef == "ps_itemset_fighter1"){
+			SendMessageToPC(oPC, "This item cannot be enchanted.");
+			return; 
+	}
+	
 	CloseGUIScreen(oPC, sEnchantingScreen);
 	
 	//Clear enchanting focus before we start the GUI

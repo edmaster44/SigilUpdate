@@ -77,6 +77,7 @@ void main()
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, OBJECT_SELF, fDur);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
 		DecrementRemainingFeatUses(OBJECT_SELF, FEAT_TURN_UNDEAD); 
-		ReportEffectFade(OBJECT_SELF, fDur, nId);
+		ReportEffectFade(fDur);
+
    // }
 }

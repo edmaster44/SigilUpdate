@@ -103,9 +103,9 @@ void main()
 		
 			SetLocalInt(oPC, sTag, TRUE); // ADDED FROM ACQUIRED
 			int nRecipeIndex = Search2DA(NX2_CRAFTING_2DA, "RECIPE_TAG", sTag, 1);
-			/* not working, come back to this later
+			
 			int bHasBench = FALSE;
-			string sBenchTag = GetStringLowerCase(GetTag(GetSpellTargetObject()));
+			string sBenchTag = GetStringLowerCase(GetTag(GetItemActivatedTarget()));
 			if (FindSubString(sBenchTag, "awbench") != -1) bHasBench = TRUE;
 			else if (GetTag(GetArea(oPC)) == "ps_area_lowerward_laboratory") bHasBench = TRUE;
 			if (!bHasBench){
@@ -114,7 +114,7 @@ void main()
 				SendMessageToPC(oPC, sNoBench);
 				return;
 			}
-			*/
+	
 			if(CheckCanCraft(nRecipeIndex, oPC, NX2_CRAFTING_2DA) )
 				CraftItem(nRecipeIndex, oPC, NX2_CRAFTING_2DA);
 	

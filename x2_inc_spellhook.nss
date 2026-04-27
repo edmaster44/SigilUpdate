@@ -62,8 +62,14 @@ void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
 void DebugSpells();
-void ShowEffectFadeReport(object oCaster, int nId, object oTarget = OBJECT_SELF, int nIteration = 0);
-void ReportEffectFade(object oCaster, float fDur, int nId = -1, object oTarget = OBJECT_SELF);
+// for use in spells. notifies the caster after fDur seconds if an effect is no longer upon oTarget, 
+// fDur = duration of spell for which you want a notification of expiration
+// oTarget = the target of the spell of which you want a notification
+// bShowParty = boolean. TRUE if you want the notification to be broadcast to entire party
+// nId = the spell effect id. Calls GetSpellId() if you leave as -1
+// oAddReceiver = additional person to whom you want to send the notification
+void ReportEffectFade(float fDur, object oTarget = OBJECT_SELF, int bShowParty = FALSE, int nId = -1, object oAddReceiver = OBJECT_INVALID);
+void ShowEffectFadeReport(object oCaller, object oTarget, object oAddReceiver, int nId, int bShowParty, int nTries = 0);
 
 //------------------------------------------------------------------------------
 // PRIMARY FUNCTION
@@ -500,24 +506,29 @@ void ff_ShowConsumableCraftCosts(){
 	SendMessageToPC(oPC, sMessage);
 }
 
-
-void ShowEffectFadeReport(object oCaster, int nId, object oTarget = OBJECT_SELF, int nIteration = 0){
-	if (nIteration > 10) return;
+void ShowEffectFadeReport(object oCaller, object oTarget, object oAddReceiver, int nId, int bShowParty, int nTries = 0){
+	if (nTries >= 5) return; // bail if we checked 5x for the effect and it's still there
+	//bail if either the object that had the effect or if both possible message receivers are gone
+	if (!GetIsObjectValid(oTarget) || (!GetIsObjectValid(oCaller) && !GetIsObjectValid(oAddReceiver))) return;
 	
+	// if the effect we're looking for to notify absence of is still present, try again in 1/2 second
 	if (PS_GetHasEffectById(oTarget, nId)){
-		DelayCommand(0.5, ShowEffectFadeReport(oCaster, nId, oTarget, nIteration + 1));
+		DelayCommand(0.5, ShowEffectFadeReport(oCaller, oTarget, oAddReceiver, nId, bShowParty, nTries = 0));
 	} else {
 		string sNameRef = Get2DAString("spells", "Name", nId);
 		if (sNameRef == "" || sNameRef == "****") return;
 		string sName = GetStringByStrRef(StringToInt(sNameRef));
 		sName += " Fades";
-		FloatingTextStringOnCreature(sName, oCaster, FALSE);
+		if (GetIsObjectValid(oCaller))
+			FloatingTextStringOnCreature(sName, oCaller, bShowParty);
+		if (GetIsObjectValid(oAddReceiver))
+			FloatingTextStringOnCreature(sName, oAddReceiver, bShowParty);
 	}
 }
 
-void ReportEffectFade(object oCaster, float fDur, int nId = -1, object oTarget = OBJECT_SELF){
+void ReportEffectFade(float fDur, object oTarget = OBJECT_SELF, int bShowParty = FALSE, int nId = -1, object oAddReceiver = OBJECT_INVALID){
 	if (nId == -1) nId = GetSpellId();
-	DelayCommand(fDur, ShowEffectFadeReport(oCaster, nId, oTarget));
+	DelayCommand(fDur + 0.1, ShowEffectFadeReport(OBJECT_SELF, oTarget, oAddReceiver, nId, bShowParty));
 }
 
 /*

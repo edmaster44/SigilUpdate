@@ -49,6 +49,16 @@ void FF_RenameSeqPot(object oSequencer, struct dSequencerData data);
 void FF_DoSpellCastCheatMode(object oPC, int nId, object oTarget);
 void FF_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF);
 
+void ShowDebugData(object oSequencer, struct dSequencerData data, string sSource){
+	object oPC = OBJECT_SELF;
+	string sMessage = "From " + sSource +"\nTag: " + GetTag(oSequencer);
+	sMessage += "\nMax: " + IntToString(data.nMaxSpells) + "\nNumSpells: ";
+	sMessage += IntToString(data.nNumSpells) + "\nSpell1: " + IntToString(data.nSpell1);
+	sMessage += "\nSpell2: " + IntToString(data.nSpell2);
+	sMessage += "\nSpell3: " + IntToString(data.nSpell3);
+	SendMessageToPC(OBJECT_SELF, sMessage);
+}
+
 
 int FF_GetIsSeqAndStoreSpell(object oSequencer){
 	// if it's not a sequncer at all, return false and let them carry on
@@ -155,17 +165,21 @@ int FF_GetIsSeqPot(object oSequencer){
 	return FALSE;
 }
 
+// CHANGE THIS SECTION, PUT CHECK FOR ITEM PROPERTY FIRST, THEN IF NO ITEM PROP GET
+// data. Maybe put in auro recovery if old pot?
 int FF_GetQualifiesForSequencer(object oSequencer){
-	int bHasRoom = TRUE;
-	if (!FF_GetIsSeqPot(oSequencer)){
-		int nMaxSpells = IPGetItemSequencerProperty(oSequencer);
-		int nNumSpells = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
-		if (nNumSpells >= nMaxSpells) bHasRoom = FALSE;
-	} else {
+	int nMaxSpells, nNumSpells;
+	if (FF_GetIsSeqPot(oSequencer)){
+		//DEBUG
+		SendMessageToPC(OBJECT_SELF, "RECOGNIZED as seq at FF_GetQualifiesForSequencer");
 		struct dSequencerData data = FF_GetSeqData(oSequencer);
-		if (data.nNumSpells >= data.nMaxSpells) bHasRoom = FALSE;
+		nMaxSpells = data.nMaxSpells;
+		nNumSpells = data.nNumSpells;
+	} else { 
+		nMaxSpells = IPGetItemSequencerProperty(oSequencer);
+		nNumSpells = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
 	}
-	if (!bHasRoom){
+	if (nNumSpells >= nMaxSpells){
 		FloatingTextStrRefOnCreature(83859, OBJECT_SELF);
 		return FALSE;
 	}
@@ -298,6 +312,7 @@ struct dSequencerData FF_GetSeqDataFromVars(object oSequencer, struct dSequencer
 	data.nSpell1 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1");
 	data.nSpell2 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2"); 
 	data.nSpell3 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3");
+	ShowDebugData(oSequencer, data, "FF_GetSeqDataFromVars");
 	return data;
 }
 
@@ -340,13 +355,14 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 		data.nSpell3 = StringToInt(s3);
 		if (data.nSpell1 > 0) data.nNumSpells++;
 	} else data.nSpell3 = 0;
+	ShowDebugData(oSequencer, data, "FF_GetSeqDataFromTag");
 	return data;
 }
 
 struct dSequencerData FF_GetSeqData(object oSequencer){
 	struct dSequencerData data;
 	string sRef = GetResRef(oSequencer);
-	if (sRef == "ps_potion_greatersequncer" || sRef == "ps_potion_greatersequncernew")
+	if (sRef == "ps_potion_greatersequncer" || sRef == "ps_potion_greatersequncer")
 		data.nMaxSpells = 3;
 	else if (sRef == "ps_potion_sequencer" || sRef == "ps_potion_sequencernew")
 		data.nMaxSpells = 2;
@@ -357,5 +373,6 @@ struct dSequencerData FF_GetSeqData(object oSequencer){
 	if (GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS") > 0)
 		data = FF_GetSeqDataFromVars(oSequencer, data);
 	else data = FF_GetSeqDataFromTag(oSequencer, data);
+	ShowDebugData(oSequencer, data, "FF_GetSeqData");
 	return data;
 }
