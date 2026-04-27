@@ -30,24 +30,27 @@ struct dSequencerData {
 	int nSpell3;
 };
 
-int FF_GetIsSeqAndStoreSpell(object oSequencer);
-void FF_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF);
-struct dSequencerData FF_GetSeqData(object oSequencer);
-struct dSequencerData FF_GetSeqDataFromVars(object oSequencer, struct dSequencerData data);
-struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerData data);
 void FF_RepairAllOldSeq(object oPC);
+void FF_ApplySeqVars(object oSequencer, struct dSequencerData data);
 void FF_RecoverOldSequencer(object oSequencer);
-int FF_GetStringHasLetters(string sString);
-string GetSpellName(int nId);
-int FF_PayForSequencerPot(object oSequencer);
-int FF_GetQualifiesForSequencer(object oSequencer);
+int FF_GetIsSeqTag(string sTag);
+void FF_RenameSeqPotAndSetTag(object oSequencer, struct dSequencerData data);
 int FF_GetIsSeqPot(object oSequencer);
-int FF_GetIsSeq(object oSequencer);
 int FF_GetIsOldSequencerPot(object oSequencer);
 int FF_GetIsNewSequencerPot(object oSequencer);
-void FF_RenameSeqPot(object oSequencer, struct dSequencerData data);
+struct dSequencerData FF_GetSeqData(object oSequencer);
+struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerData data);
+struct dSequencerData FF_GetSeqDataFromVars(object oSequencer, struct dSequencerData data);
+int FF_GetQualifiesForSequencer(object oSequencer);
 void FF_DoSpellCastCheatMode(object oPC, int nId, object oTarget);
 void FF_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SELF);
+int FF_GetIsSeqAndStoreSpell(object oSequencer);
+string GetSpellName(int nId);
+
+string GetSpellName(int nId){
+	string sNameRef = Get2DAString("spells", "Name", nId);
+	return GetStringByStrRef(StringToInt(sNameRef));
+}
 
 void ShowDebugData(object oSequencer, struct dSequencerData data, string sSource){
 	object oPC = OBJECT_SELF;
@@ -62,33 +65,28 @@ void ShowDebugData(object oSequencer, struct dSequencerData data, string sSource
 
 int FF_GetIsSeqAndStoreSpell(object oSequencer){
 	// if it's not a sequncer at all, return false and let them carry on
-	if (!FF_GetIsSeq(oSequencer)) return FALSE;
+	if (IPGetItemSequencerProperty(oSequencer) < 1 && 
+		FF_GetIsNewSequencerPot(oSequencer) == FALSE) 
+			return FALSE;
 	
 	// a return value of true means only that this was an attempt
 	// to store a spell on a sequencer, not that the attempt succeeded
 	if (!FF_GetQualifiesForSequencer(oSequencer)) return TRUE;
 	
+	struct dSequencerData data = FF_GetSeqData(oSequencer);
 	int nId = GetSpellId() + 1;
-	// the new seq pots dont use the sequencer item property
-	if (FF_GetIsSeqPot(oSequencer)){
-		struct dSequencerData data = FF_GetSeqData(oSequencer);
-		//DEBUG
-		ShowDebugData(oSequencer, data, "apply spell portion");
-		if (data.nSpell1 == 0) data.nSpell1 = nId;
-		else if (data.nSpell2 == 0) data.nSpell2 = nId;
-		else if (data.nSpell3 == 0) data.nSpell3 = nId;
-		FF_RenameSeqPot(oSequencer, data);
-	}
-	if (!FF_GetIsNewSequencerPot(oSequencer)){
-		int nNumSpells = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
-		nNumSpells++;
-		SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nNumSpells);
-		SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER" + IntToString(nNumSpells), nId);
-	}
+	if (data.nSpell1 == 0) data.nSpell1 = nId;
+	else if (data.nSpell2 == 0) data.nSpell2 = nId;
+	else if (data.nSpell3 == 0) data.nSpell3 = nId;
+	
+	if (IPGetItemSequencerProperty(oSequencer) > 0)
+		FF_ApplySeqVars(oSequencer, data);
+	
 	effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, OBJECT_SELF);
     FloatingTextStrRefOnCreature(83884, OBJECT_SELF);
 	if (FF_GetIsSeqPot(oSequencer)){
+		FF_RenameSeqPotAndSetTag(oSequencer, data);
 		string sMessage = "<c=cyan>Your Sequencer Potion has been renamed.\nThe new name will ";
 		sMessage += "become visible after an area transition or after you move the potion from ";
 		sMessage += "one square to another in your inventory.</c>";
@@ -103,7 +101,7 @@ void FF_CastSpellFromNewSequencer(object oSequencer, object oCaster = OBJECT_SEL
 	// if the tag was set up correctly it should contain ONLY numbers and whatever
 	// we're currently using as a delimiter in ff_arrays. Therefore there shouldn't
 	// be any letters.
-	if (data.nNumSpells == 0 || FF_GetStringHasLetters(GetTag(oSequencer))){
+	if (data.nNumSpells == 0 || !FF_GetIsSeqTag(GetTag(oSequencer))){
 		FloatingTextStringOnCreature("No spells stored!", oCaster);
 		return;
 	}
@@ -118,68 +116,9 @@ void FF_DoSpellCastCheatMode(object oPC, int nId, object oTarget){
 	AssignCommand(oPC, ActionCastSpellAtObject(nId -1, oTarget, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 }
 
-void FF_RenameSeqPot(object oSequencer, struct dSequencerData data){
-	string sName = "<c=cyan>";
-	if (data.nMaxSpells == 1) sName += "Lesser ";
-	else if (data.nMaxSpells == 3) sName += "Greater ";
-	sName += "Sequencer: " + GetSpellName(data.nSpell1 - 1); 
-	if (data.nSpell2 > 0){
-		if (data.nSpell3 > 0)
-			sName += ", " + GetSpellName(data.nSpell2 - 1) + ", and " + GetSpellName(data.nSpell3 - 1);
-		else sName += " and " + GetSpellName(data.nSpell2 - 1);
-	}
-	sName += "</c>";
-	SetFirstName(oSequencer, sName);
-	string sTag = IntToString(data.nSpell1) + sDelim + IntToString(data.nSpell2);
-	sTag += sDelim + IntToString(data.nSpell3);
-	SetTag(oSequencer, sTag);
-}
-
-int FF_GetIsNewSequencerPot(object oSequencer){
-	string sRef = GetResRef(oSequencer);
-	//check to make sure this is a sequencer pot
-	if (sRef == "ps_potion_lessersequencernew" || sRef == "ps_potion_sequencernew" ||
-		sRef == "ps_potion_greatersequncernew"){
-			return TRUE;
-	}	
-	return FALSE;
-}
-
-int FF_GetIsOldSequencerPot(object oSequencer){
-	string sRef = GetResRef(oSequencer);
-	//check to make sure this is a sequencer pot
-	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
-		sRef == "ps_potion_greatersequncer"){
-			return TRUE;
-	}	
-	return FALSE;
-}
-
-int FF_GetIsSeq(object oSequencer){
-	if (IPGetItemSequencerProperty(oSequencer) > 0) return TRUE;
-	if (FF_GetIsNewSequencerPot(oSequencer)) return TRUE;
-	return FALSE;
-}
-
-int FF_GetIsSeqPot(object oSequencer){
-	if (FF_GetIsNewSequencerPot(oSequencer)) return TRUE;
-	if (FF_GetIsOldSequencerPot(oSequencer)) return TRUE;
-	return FALSE;
-}
-
 int FF_GetQualifiesForSequencer(object oSequencer){
-	int nMaxSpells, nNumSpells;
-	if (FF_GetIsSeqPot(oSequencer)){
-		//DEBUG
-		SendMessageToPC(OBJECT_SELF, "RECOGNIZED as seq at FF_GetQualifiesForSequencer");
-		struct dSequencerData data = FF_GetSeqData(oSequencer);
-		nMaxSpells = data.nMaxSpells;
-		nNumSpells = data.nNumSpells;
-	} else { 
-		nMaxSpells = IPGetItemSequencerProperty(oSequencer);
-		nNumSpells = GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS");
-	}
-	if (nNumSpells >= nMaxSpells){
+	struct dSequencerData data = FF_GetSeqData(oSequencer);
+	if (data.nNumSpells >= data.nMaxSpells){
 		FloatingTextStrRefOnCreature(83859, OBJECT_SELF);
 		return FALSE;
 	}
@@ -208,98 +147,18 @@ int FF_GetQualifiesForSequencer(object oSequencer){
 	// things like that as being very powerful magic that bypasses the sacrifice
 	// Returns true if we cannot pay. Doesn't return if we pay, it just continues
 	if (FF_GetIsSeqPot(oSequencer)){
-		//debug
-		SendMessageToPC(OBJECT_SELF, "RECOGNIZED AS SEQ POT IN GET QUALIFIES");
-		if (!FF_PayForSequencerPot(oSequencer)) return FALSE;
+		int nLevel = StringToInt(Get2DAString("spells", "Innate", nId));
+		int nGold = CIGetCraftGPCost(OBJECT_SELF, nLevel, X2_CI_SEQUENCER_COSTMODIFIER);
+		nGold *= GetItemStackSize(oSequencer);
+
+		if (GetGold(OBJECT_SELF) < nGold){
+			FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_GOLD, OBJECT_SELF); // not enough gold!
+			return FALSE;
+		}
+		PS_TakeGoldFromCreature(nGold, OBJECT_SELF);
+		return TRUE;
 	}
 	return TRUE;
-}
-
-int FF_PayForSequencerPot(object oSequencer){
-	object oCaster = OBJECT_SELF;
-	SendMessageToPC(oCaster, "CHECKING GOLD");
-	int nId = GetSpellId();
-	int nLevel = StringToInt(Get2DAString("spells", "Innate", nId));
-	int nGold = CIGetCraftGPCost(oCaster, nLevel, X2_CI_SEQUENCER_COSTMODIFIER);
-	nGold *= GetItemStackSize(oSequencer);
-
-	if (GetGold(oCaster) < nGold){
-		FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_GOLD, oCaster); // not enough gold!
-        return FALSE;
-	}
-	PS_TakeGoldFromCreature(nGold, oCaster);
-	return TRUE;
-}
-
-string GetSpellName(int nId){
-	int nNameRef = StringToInt(Get2DAString("spells", "Name", nId));
-	return GetStringByStrRef(nNameRef);
-}
-
-
-int FF_GetStringHasLetters(string sString){
-	sString = GetStringLowerCase(sString);
-	string sLetters = "abcdefghijklmnopqrstuvwxyz";
-	int nLength = GetStringLength(sString);
-	int i;
-	string c;
-	for (i = 0; i < nLength; i++){
-		c = GetSubString(sString, i, 1);
-		if (FindSubString(sLetters, c) != -1)
-			return TRUE;
-	}
-	return FALSE;
-}
-
-void FF_RecoverOldSequencer(object oSequencer){
-	// only needed on old seq pots
-	if (!FF_GetIsOldSequencerPot(oSequencer))
-		return;
-	string sTag = GetTag(oSequencer);
-	//if tag has letters its not a tag set by above function
-	// as that tag would be numbers and underscore only
-	if (FF_GetStringHasLetters(sTag))
-		return;
-	// if the numbertriggers local int is intact then prob we don't need
-	// to repair it and would screw it up if we tried
-	if (GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS") > 1)
-		return;
-		
-	string s1 = "";
-	string s2 = "";
-	string s3 = "";
-	int i;
-	string c;
-	int nDelimCount = 0;
-	int nLength = GetStringLength(sTag);
-	for (i = 0; i < nLength; i++){
-		c = GetSubString(sTag, i, 1);
-		if (c != sDelim){
-			if (nDelimCount == 0) s1 += c;
-			else if (nDelimCount == 1) s2 += c;
-			else if (nDelimCount == 2) s3 += c;
-		} else nDelimCount++;
-	}
-	int nNumSpells = 0;
-	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", StringToInt(s1));
-	if (StringToInt(s1) > 0) nNumSpells = 1;
-	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", StringToInt(s2));
-	if (StringToInt(s2) > 0) nNumSpells = 2;
-	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", StringToInt(s3));
-	if (StringToInt(s3) > 0) nNumSpells = 3;
-	
-	SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", nNumSpells); 
-}
-
-void FF_RepairAllOldSeq(object oPC){
-	int i = 0;
-	object oSequencer = GetFirstItemInInventory(oPC);
-	//27072 = num of items a pc could have if inv full of full bags, including the bags
-    while (GetIsObjectValid(oSequencer) && i <= 27072){
-		i++;
-		FF_RecoverOldSequencer(oSequencer);
-        oSequencer = GetNextItemInInventory(oPC);
-    }
 }
 
 struct dSequencerData FF_GetSeqDataFromVars(object oSequencer, struct dSequencerData data){
@@ -318,8 +177,7 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 	data.nSpell2 = 0;
 	data.nSpell3 = 0;
 	string sTag = GetTag(oSequencer); 
-	if (sTag ==  GetResRef(oSequencer)) return data; // if the tag and ref are same, no data
-	if (FF_GetStringHasLetters(sTag)) return data; //if tag isn't just numbers and underscore, no data
+	if (!FF_GetIsSeqTag(sTag)) return data; //if tag isn't just numbers and underscore, no data
 	
 	int nLength = GetStringLength(sTag);
 	int i;
@@ -349,18 +207,92 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 
 struct dSequencerData FF_GetSeqData(object oSequencer){
 	struct dSequencerData data;
-	string sRef = GetResRef(oSequencer);
-	if (sRef == "ps_potion_greatersequncer" || sRef == "ps_potion_greatersequncernew")
-		data.nMaxSpells = 3;
-	else if (sRef == "ps_potion_sequencer" || sRef == "ps_potion_sequencernew")
-		data.nMaxSpells = 2;
-	else data.nMaxSpells = 1;
-	
-	// if it still has the number of triggers local int set in spellhook then
-	// we can probably get all we need from local ints. Otherwise the hard way
-	if (GetLocalInt(oSequencer, "X2_L_NUMTRIGGERS") > 0)
-		data = FF_GetSeqDataFromVars(oSequencer, data);
-	else data = FF_GetSeqDataFromTag(oSequencer, data);
-	ShowDebugData(oSequencer, data, "FF_GetSeqData");
+	data.nMaxSpells = IPGetItemSequencerProperty(oSequencer);
+	if (data.nMaxSpells < 1){
+		string sRef = GetStringLowerCase(GetResRef(oSequencer));
+		if (TestStringAgainstPattern("ps_**_greatersequncer**", sRef))
+			data.nMaxSpells = 3;
+		else if (TestStringAgainstPattern("ps_**_sequencer**", sRef))
+			data.nMaxSpells = 2;
+		else data.nMaxSpells = 1;
+	}
+	// if the tag is correct format..
+	if (FF_GetIsSeqTag(GetTag(oSequencer))){
+		data = FF_GetSeqDataFromTag(oSequencer, data);
+	} else data = FF_GetSeqDataFromVars(oSequencer, data);
 	return data;
+}
+
+int FF_GetIsNewSequencerPot(object oSequencer){
+	string sRef = GetStringLowerCase(GetResRef(oSequencer));
+	//check to make sure this is a sequencer pot
+	if (sRef == "ps_potion_lessersequencernew" || sRef == "ps_potion_sequencernew" ||
+		sRef == "ps_potion_greatersequncernew"){
+			return TRUE;
+	}	
+	return FALSE;
+}
+
+int FF_GetIsOldSequencerPot(object oSequencer){
+	string sRef = GetStringLowerCase(GetResRef(oSequencer));
+	//check to make sure this is a sequencer pot
+	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_sequencer" ||
+		sRef == "ps_potion_greatersequncer"){
+			return TRUE;
+	}	
+	return FALSE;
+}
+
+int FF_GetIsSeqPot(object oSequencer){
+	if (FF_GetIsNewSequencerPot(oSequencer)) return TRUE;
+	if (FF_GetIsOldSequencerPot(oSequencer)) return TRUE;
+	return FALSE;
+}
+
+void FF_RenameSeqPotAndSetTag(object oSequencer, struct dSequencerData data){
+	string sName = "<c=cyan>";
+	if (data.nMaxSpells == 1) sName += "Lesser ";
+	else if (data.nMaxSpells == 3) sName += "Greater ";
+	sName += "Sequencer: " + GetSpellName(data.nSpell1 - 1); 
+	if (data.nSpell2 > 0){
+		if (data.nSpell3 > 0)
+			sName += ", " + GetSpellName(data.nSpell2 - 1) + ", and " + GetSpellName(data.nSpell3 - 1);
+		else sName += " and " + GetSpellName(data.nSpell2 - 1);
+	}
+	sName += "</c>";
+	SetFirstName(oSequencer, sName);
+	string sTag = IntToString(data.nSpell1) + sDelim + IntToString(data.nSpell2);
+	sTag += sDelim + IntToString(data.nSpell3);
+	SetTag(oSequencer, sTag);
+}
+
+int FF_GetIsSeqTag(string sTag){
+	return TestStringAgainstPattern("*n_*n_*n", sTag);
+}
+
+void FF_RecoverOldSequencer(object oSequencer){
+	if (!FF_GetIsSeqTag(GetTag(oSequencer))) return;
+	struct dSequencerData data;
+	data.nMaxSpells = IPGetItemSequencerProperty(oSequencer);
+	if (data.nMaxSpells < 1) return;
+	data = FF_GetSeqDataFromTag(oSequencer, data);
+	FF_ApplySeqVars(oSequencer, data);
+}
+
+void FF_ApplySeqVars(object oSequencer, struct dSequencerData data){
+	SetLocalInt(oSequencer, "X2_L_NUMTRIGGERS", data.nNumSpells);
+	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1", data.nSpell1);
+	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2", data.nSpell2);
+	SetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3", data.nSpell3);
+}
+
+void FF_RepairAllOldSeq(object oPC){
+	int i = 0;
+	object oSequencer = GetFirstItemInInventory(oPC);
+	//27072 = num of items a pc could have if inv full of full bags, including the bags
+    while (GetIsObjectValid(oSequencer) && i <= 27072){
+		i++;
+		FF_RecoverOldSequencer(oSequencer);
+        oSequencer = GetNextItemInInventory(oPC);
+    }
 }
