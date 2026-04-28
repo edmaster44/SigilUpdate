@@ -178,8 +178,9 @@ int X2PreSpellCastCode()
 
 
 void FF_SaySpellChat(object oPC){
-	int nId = GetSpellId();
 	object oEss = PS_GetEssence(oPC);
+	if (GetLocalInt(oEss, "spellchatoff"))return;
+	int nId = GetSpellId();
 	string sSpellChat = GetLocalString(oEss, "spellchat" + IntToString(nId));
 	if (sSpellChat == "") return;
 	
@@ -188,9 +189,10 @@ void FF_SaySpellChat(object oPC){
 		sSpellChat = GetStringRight(sSpellChat, GetStringLength(sSpellChat) - 2);
 		nChannel = CHAT_MODE_WHISPER;
 	}
-	float fDelay = StringToFloat(Get2DAString("spells", "ConjTime", nId));
-	fDelay /= 1000;
-	DelayCommand(fDelay + 0.3, SendChatMessage(oPC, OBJECT_INVALID, nChannel, sSpellChat, FALSE));
+	//float fDelay = StringToFloat(Get2DAString("spells", "ConjTime", nId));
+	//fDelay /= 1000.0;
+	//DelayCommand(fDelay -1.0, SendChatMessage(oPC, OBJECT_INVALID, nChannel, sSpellChat, FALSE));
+	SendChatMessage(oPC, OBJECT_INVALID, nChannel, sSpellChat, FALSE);
 }
 
 // Use Magic Device Check.

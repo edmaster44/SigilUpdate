@@ -53,8 +53,11 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 	}
 	string sFeedback = "";
-	string sInput = GetStringLowerCase(sMessage);
+	sMessage = TrimLeadingSpaces(sMessage);
+	string sInput = sMessage;
 	sInput = PS_RemoveSpaces(sInput);
+	sInput = GetStringLowerCase(sInput);
+	
 	object oItem;
 	int nCommandLength = -1;
 	
