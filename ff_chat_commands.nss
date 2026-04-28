@@ -53,10 +53,10 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 	}
 	string sFeedback = "";
-	sMessage = TrimLeadingSpaces(sMessage);
 	string sInput = sMessage;
 	sInput = PS_RemoveSpaces(sInput);
 	sInput = GetStringLowerCase(sInput);
+	sMessage = TrimLeadingSpaces(sMessage);
 	
 	object oItem;
 	int nCommandLength = -1;
@@ -72,18 +72,18 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	// Did not enable shout channel directly for these users because if I did then I'm sure I would shout
 	// accidentally at some point.
 	else if (GetStringLeft(sInput, 6) == "#shout" && GetHasAllAccess(oSender)){
-		sMessage = GetStringRight(sInput, GetStringLength(sMessage) - 6);
+		sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - 6);
 		sMessage = TrimLeadingSpaces(sMessage);
 		if (sMessage != ""){
 			object oPlayer = GetFirstPC();
 			while (GetIsObjectValid(oPlayer)){
-				if (oPlayer != oSender)
-					SendMessageToPC(oPlayer, sMessage);
+				SendMessageToPC(oPlayer, sMessage);
 				oPlayer = GetNextPC();
 			}
-			sFeedback = "You sent the server message '" + sMessage + "' to all players";
+			sFeedback = "";
 		} else sFeedback = "Invalid message";
-		SendMessageToPC(oSender, sFeedback);
+		if (sFeedback != "")
+			SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
 	else if (GetStringLeft(sInput, 4) == "#xp%"){
