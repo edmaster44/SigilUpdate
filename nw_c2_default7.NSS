@@ -22,53 +22,9 @@
 #include "x0_i0_spawncond"
 #include "ps_inc_scriptcall"
 
-void SpawnSpecificItem(object oKiller){
-	object oPC = oKiller;
-	object oItem;
-	if (!GetIsPC(oPC)) oPC = GetMaster(oPC);
-	if (!GetIsPC(oPC)) oPC = GetFirstFactionMember(oPC);
-	if (!GetIsPC(oPC)) return;
-	location lLoc = GetLocation(OBJECT_SELF);
-	string sRef = "";
-	int nRace = GetSubRace(OBJECT_SELF);
-	if (FindSubString(GetTag(OBJECT_SELF), "ps_creature_ascended") != -1){//niflheim boss The Ascended
-		sRef = "ps_key_mystery"; //always drops key to antechamber
-	} else if (nRace == 40){ // incorporeal
-		switch (d3()){
-			case 1: sRef = "n2_crft_dist028"; break;//ghostly essence 
-			case 2: sRef = "n2_crft_dist017"; break;//ghost residue
-			case 3: sRef = "n2_crft_dist027"; break;//shadow residue
-		}
-	} else if (nRace == 137){ //ghoul
-		switch(d2()){
-			case 1: sRef = "n2_crft_dist015"; break; //ghoul claws
-			case 2: sRef = "n2_crft_dist016"; break;//ghast claws
-		}
-	} else if (nRace == 159){ //vampire
-		sRef = "n2_crft_dist035"; //vamp tooth
-	}
-	if (sRef == "ps_key_mystery"){
-		oItem = CreateItemOnObject(sRef, oPC);
-		FloatingTextStringOnCreature("You found a key!", oPC, FALSE); 
-		return;
-	}
-	object oArea = GetArea(oPC);
-	object oMember = GetFirstFactionMember(oPC, TRUE);
-	while(GetIsObjectValid(oMember)){ 
-		if (GetArea(oMember) == oArea && !GetIsDM(oMember)){
-			if (d2() == 1){
-				oItem = CreateItemOnObject(sRef, oPC);
-				FloatingTextStringOnCreature("You salvaged something from your kill!", oMember, FALSE); 
-			}
-		}
-		oMember = GetNextFactionMember(oPC, TRUE);  
-	}
-}
-
 void main()
 {
 	object oKiller = GetLastKiller();
-	SpawnSpecificItem(oKiller);
 	ExecuteScript("ps_xp_script",OBJECT_SELF);
 
 	string sDeathScript = GetLocalString(OBJECT_SELF, "DeathScript");

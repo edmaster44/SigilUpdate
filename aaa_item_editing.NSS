@@ -18,6 +18,12 @@ void main()
 		SendMessageToPC(oPC, "Due to numerous exploits and bugs, potions can no longer be edited by users");
 		return;
 	}
+	string sRef = GetResRef(oItem);
+	string sTag = GetTag(oItem);
+	if (GetStringLeft(sRef, 10) == "ps_itemset" || GetStringLeft(sTag, 10) == "ps_itemset"){
+		SendMessageToPC(oPC, "You cannot edit set items.");
+		return;
+	}
 	
 	if (GetObjectType(oItem) != OBJECT_TYPE_ITEM)
 	{	SendMessageToPC(oPC, "This feature will only work on items.");

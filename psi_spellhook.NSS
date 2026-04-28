@@ -34,9 +34,10 @@ int PsiPrePowerCastCode();
 int PsiPrePowerCastCode()
 {
 	// send spell debugging info to caster if they've used the #SpellInfo chat command
-	DebugSpells();
+
 	
 	object oManifester = OBJECT_SELF;
+	DebugSpells(oManifester);
     object oTarget = GetSpellTargetObject();
 	int nPP = GetLocalInt(oManifester, "PSI_PP");
     int nContinue = TRUE;

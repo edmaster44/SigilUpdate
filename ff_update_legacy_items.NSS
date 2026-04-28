@@ -8,7 +8,7 @@
 #include "dmfi_inc_const"
 #include "ff_fix_item_sets"
 #include "ginc_crafting"
-
+#include "ff_sequencer"
 
 // function declarations
 void SetNewSeqRecipeDesc(object oItem, string sRef);
@@ -28,6 +28,9 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 			SetNewSeqRecipeDesc(oItem, sRef);
 			return;
 	}
+	
+	// attempt to fix broken sequencer pots
+	FF_RecoverOldSequencer(oItem);
 	
 	//ditto base item type
 	int nType = GetBaseItemType(oItem);

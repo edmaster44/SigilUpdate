@@ -1,5 +1,5 @@
 NDB V1.0
-0000063 0000019 0003388 0000049 0000217
+0000064 0000019 0003390 0000049 0000218
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -14,7 +14,7 @@ n10 nwn2_inc_talent
 n11 nw_i0_generic
 n12 x0_i0_spells
 n13 class_mageslayer_utils
-n14 ff_sequencer
+n14 ff_sequencer_inc
 n15 ps_inc_time
 n16 x2_inc_itemprop
 n17 x2_inc_switches
@@ -55,14 +55,15 @@ n51 ps_adjust_barbarian
 n52 ps_rage_func
 n53 x2_i0_spells
 n54 ps_inc_epicsave
-n55 x2_inc_spellhook
-n56 nwn2_inc_spells
-n57 nwnx_srvadmin
-n58 ps_inc_placeable_signs
-n59 ps_inc_faction
-n60 x2_inc_toollib
-n61 ps0_newspells_inc
-N62 scod_s_glamer_hrt
+n55 ff_sequencer
+n56 x2_inc_spellhook
+n57 nwn2_inc_spells
+n58 nwnx_srvadmin
+n59 ps_inc_placeable_signs
+n60 ps_inc_faction
+n61 x2_inc_toollib
+n62 ps0_newspells_inc
+N63 scod_s_glamer_hrt
 s 03 vector
 sf f x
 sf f y
@@ -168,12 +169,13 @@ sf i nTrinketUse
 sf i nScrollUse
 sf i nWandUse
 sf i nBuffs
-s 05 dSequencerData
+s 06 dSequencerData
 sf i nMaxSpells
 sf i nNumSpells
 sf i nSpell1
 sf i nSpell2
 sf i nSpell3
+sf s sTag
 s 07 TimeFields
 sf i Year
 sf i Month
@@ -5821,52 +5823,59 @@ f ffffffff ffffffff 002 i GetIsActivated
 fp o
 fp i
 f ffffffff ffffffff 000 s sDelim
-f ffffffff ffffffff 001 v FF_RepairAllOldSeq
-fp o
-f ffffffff ffffffff 002 v FF_ApplySeqVars
+f ffffffff ffffffff 004 v ShowDebugData
 fp o
 fp t0017
-f ffffffff ffffffff 001 v FF_RecoverOldSequencer
-fp o
+fp s
+fp s
 f ffffffff ffffffff 001 i FF_GetIsSeqTag
 fp s
-f ffffffff ffffffff 002 v FF_RenameSeqPotAndSetTag
-fp o
-fp t0017
-f ffffffff ffffffff 001 i FF_GetIsSeqPot
-fp o
-f ffffffff ffffffff 001 i FF_GetIsOldSequencerPot
-fp o
-f ffffffff ffffffff 001 i FF_GetIsNewSequencerPot
-fp o
-f ffffffff ffffffff 001 t0017 FF_GetSeqData
-fp o
 f ffffffff ffffffff 002 t0017 FF_GetSeqDataFromTag
 fp o
 fp t0017
 f ffffffff ffffffff 002 t0017 FF_GetSeqDataFromVars
 fp o
 fp t0017
-f ffffffff ffffffff 001 i FF_GetQualifiesForSequencer
+f ffffffff ffffffff 001 t0017 FF_GetSeqData
+fp o
+f ffffffff ffffffff 001 i FF_GetIsNewSequencerPot
+fp o
+f ffffffff ffffffff 001 i FF_GetIsOldSequencerPot
+fp o
+f ffffffff ffffffff 001 i FF_GetIsSeqPot
+fp o
+f ffffffff ffffffff 003 i FF_GetQualifiesForSequencer
+fp o
+fp o
+fp t0017
+f ffffffff ffffffff 001 s GetSpellName
+fp i
+f ffffffff ffffffff 002 v FF_SetSeqTag
+fp o
+fp t0017
+f ffffffff ffffffff 002 v FF_RenameSeqPotAndSetTag
+fp o
+fp t0017
+f ffffffff ffffffff 002 v FF_ApplySeqVars
+fp o
+fp t0017
+f ffffffff ffffffff 001 v FF_RecoverOldSequencer
 fp o
 f ffffffff ffffffff 003 v FF_DoSpellCastCheatMode
 fp o
 fp i
 fp o
+f ffffffff ffffffff 002 i FF_GetIsSeqAndStoreSpell
+fp o
+fp o
 f ffffffff ffffffff 002 v FF_CastSpellFromNewSequencer
 fp o
 fp o
-f ffffffff ffffffff 001 i FF_GetIsSeqAndStoreSpell
+f ffffffff ffffffff 001 v FF_RepairAllOldSeq
 fp o
-f ffffffff ffffffff 001 s GetSpellName
-fp i
-f ffffffff ffffffff 004 v ShowDebugData
-fp o
-fp t0017
-fp s
-fp s
 f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
-f ffffffff ffffffff 000 v ff_ShowConsumableCraftCosts
+f ffffffff ffffffff 001 v ff_ShowConsumableCraftCosts
+fp o
 f ffffffff ffffffff 007 v ED_ApplyEffectToObject
 fp o
 fp i
@@ -5897,7 +5906,10 @@ f ffffffff ffffffff 000 v X2BreakConcentrationSpells
 f ffffffff ffffffff 001 i X2GetBreakConcentrationCondition
 fp o
 f ffffffff ffffffff 000 v X2DoBreakConcentrationCheck
-f ffffffff ffffffff 000 v DebugSpells
+f ffffffff ffffffff 001 v DebugSpells
+fp o
+f ffffffff ffffffff 001 v FF_SaySpellChat
+fp o
 f ffffffff ffffffff 005 v ReportEffectFade
 fp f
 fp o
@@ -6533,11 +6545,12 @@ l13 0000070 00000078 00000078
 l13 0000071 00000078 00000078
 l13 0000072 00000078 00000078
 l13 0000073 00000078 00000078
-l14 0000026 00000078 00000078
-l14 0000027 00000078 00000078
-l14 0000028 00000078 00000078
-l14 0000029 00000078 00000078
-l14 0000030 00000078 00000078
+l14 0000007 00000078 00000078
+l14 0000008 00000078 00000078
+l14 0000009 00000078 00000078
+l14 0000010 00000078 00000078
+l14 0000011 00000078 00000078
+l14 0000012 00000078 00000078
 l15 0000188 00000078 00000078
 l15 0000189 00000078 00000078
 l15 0000190 00000078 00000078
@@ -6545,19 +6558,19 @@ l15 0000191 00000078 00000078
 l15 0000192 00000078 00000078
 l15 0000193 00000078 00000078
 l15 0000194 00000078 00000078
-l62 0000018 0000008a 0000009f
-l62 0000019 0000009f 000000ae
-l62 0000020 000000b4 000000cb
-l62 0000024 000000cb 000000e2
-l62 0000025 000000e2 00000113
-l62 0000026 00000119 00000130
-l62 0000029 00000130 0000013b
-l62 0000030 0000013b 00000161
-l62 0000031 00000161 000001a0
-l62 0000032 000001a0 000001be
-l62 0000033 000001be 000001d5
-l62 0000035 000001d5 000001f7
-l62 0000036 000001fd 000001ff
+l63 0000018 0000008a 0000009f
+l63 0000019 0000009f 000000ae
+l63 0000020 000000b4 000000cb
+l63 0000024 000000cb 000000e2
+l63 0000025 000000e2 00000113
+l63 0000026 00000119 00000130
+l63 0000029 00000130 0000013b
+l63 0000030 0000013b 00000161
+l63 0000031 00000161 000001a0
+l63 0000032 000001a0 000001be
+l63 0000033 000001be 000001d5
+l63 0000035 000001d5 000001f7
+l63 0000036 000001fd 000001ff
 l15 0000031 000001ff 00000214
 l15 0000032 00000214 00000224
 l15 0000033 0000022a 00000244
@@ -6578,25 +6591,25 @@ l01 0000686 0000033c 00000349
 l01 0000687 00000349 00000356
 l01 0000688 00000356 00000391
 l01 0000689 00000391 00000399
-l61 0000220 00000399 000003a6
-l61 0000223 000003a6 000003d2
-l61 0000224 000003d2 000003e2
-l61 0000225 000003e8 00000403
-l61 0000228 00000403 0000043c
-l61 0000229 0000043c 0000044f
-l61 0000232 0000044f 0000045e
-l61 0000234 00000464 00000482
-l61 0000236 00000488 0000049f
-l61 0000238 000004a5 000004e0
-l61 0000239 000004e6 00000517
-l61 0000240 00000517 00000549
-l61 0000241 00000549 00000559
-l61 0000242 0000055f 00000580
-l61 0000245 00000586 00000588
-l61 0000246 00000588 00000598
-l61 0000247 0000059e 000005bf
-l61 0000253 000005bf 00000606
-l61 0000255 00000612 0000061a
+l62 0000220 00000399 000003a6
+l62 0000223 000003a6 000003d2
+l62 0000224 000003d2 000003e2
+l62 0000225 000003e8 00000403
+l62 0000228 00000403 0000043c
+l62 0000229 0000043c 0000044f
+l62 0000232 0000044f 0000045e
+l62 0000234 00000464 00000482
+l62 0000236 00000488 0000049f
+l62 0000238 000004a5 000004e0
+l62 0000239 000004e6 00000517
+l62 0000240 00000517 00000549
+l62 0000241 00000549 00000559
+l62 0000242 0000055f 00000580
+l62 0000245 00000586 00000588
+l62 0000246 00000588 00000598
+l62 0000247 0000059e 000005bf
+l62 0000253 000005bf 00000606
+l62 0000255 00000612 0000061a
 l33 0000340 0000061a 0000062f
 l33 0000343 0000064f 00000667
 l33 0000344 00000667 00000677

@@ -42,11 +42,12 @@
 #include "ff_sequencer"
 
 
+
 const int X2_EVENT_CONCENTRATION_BROKEN = 12400;
 
 
 // function declarations
-void ff_ShowConsumableCraftCosts();
+void ff_ShowConsumableCraftCosts(object oPC);
 void ED_ApplyEffectToObject(object oCaster, int nSpellId, int bHostile, int nDurationType, effect eEffect, 
 	object oTarget, float fDuration=0.0f);
 int GetMissChance(object oCaster);
@@ -61,7 +62,8 @@ int X2CastOnItemWasAllowed(object oItem);
 void X2BreakConcentrationSpells();
 int X2GetBreakConcentrationCondition(object oPlayer);
 void X2DoBreakConcentrationCheck();
-void DebugSpells();
+void DebugSpells(object oCaster);
+void FF_SaySpellChat(object oPC);
 // for use in spells. notifies the caster after fDur seconds if an effect is no longer upon oTarget, 
 // fDur = duration of spell for which you want a notification of expiration
 // oTarget = the target of the spell of which you want a notification
@@ -79,10 +81,13 @@ void ShowEffectFadeReport(object oCaller, object oTarget, object oAddReceiver, i
 //------------------------------------------------------------------------------
 int X2PreSpellCastCode()
 {
+	object oCaster = OBJECT_SELF;
 	object oTarget = GetSpellTargetObject();
-	
+	object oItem = GetSpellCastItem();
+	int nSpellId = GetSpellId();
+	int nFeatId = GetSpellFeatId();
 	// send spell debugging info to caster if they've used the #SpellInfo chat command
-	DebugSpells();
+	DebugSpells(oCaster);
    
    int nContinue;
 
@@ -93,9 +98,9 @@ int X2PreSpellCastCode()
    // with TRUE (unless they are DM possessed or in the Wild Magic Area in
    // Chapter 2 of Hordes of the Underdark.
    //---------------------------------------------------------------------------
-   if (!GetIsPC(OBJECT_SELF))
+   if (!GetIsPC(oCaster))
    {
-       if( !GetIsDMPossessed(OBJECT_SELF) && !GetLocalInt(GetArea(OBJECT_SELF), "X2_L_WILD_MAGIC"))
+       if( !GetIsDMPossessed(oCaster) && !GetLocalInt(GetArea(oCaster), "X2_L_WILD_MAGIC"))
        {
             return TRUE;
        }
@@ -104,58 +109,43 @@ int X2PreSpellCastCode()
    // MAGE SLAYER CHECK, call to class_mageslayer_utils
    // Let's just skip this if neither the caster nor the target is a mage slayer and move logic out to its own 
    // file so as not to clutter this for devs trying to read something else
-   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF) ||
+   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oCaster) ||
    		GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oTarget))
    {
-		object oItem = GetSpellCastItem();
-		int nSpellId = GetSpellId();
-		int nFeatId = GetSpellFeatId();
 		// note that we don't return true if the spell/item is allowed because there are other checks as well.
-		if (GetBypassMageSlayerRestriction(oTarget, OBJECT_SELF, oItem, nSpellId, nFeatId) == FALSE) return FALSE;
+		if (GetBypassMageSlayerRestriction(oTarget, oCaster, oItem, nSpellId, nFeatId) == FALSE) return FALSE;
    }
    
-   //---------------------------------------------------------------------------
+  
    // Run use magic device skill check, except Mage Slayer. They had their item use check in 
    // the previous conditional so there'd be no point in just calling those same functions again.
-   //---------------------------------------------------------------------------
-   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, OBJECT_SELF) && 
+   if (GetHasFeat(FEAT_MAGE_SLAYER_MAGICAL_ABSTINENCE, oCaster) && 
 		MAGE_SLAYER_SKIPS_UMD_FOR_ALLOWED_SCROLLS) nContinue = TRUE;
    else nContinue = X2UseMagicDeviceCheck();
    
-
-   if (nContinue)
-   {
-       //-----------------------------------------------------------------------
-       // run any user defined spellscript here
-       //-----------------------------------------------------------------------
-       nContinue = X2RunUserDefinedSpellScript();
-   }
-
-   //---------------------------------------------------------------------------
+	// run any user defined spellscript here
+   if (nContinue)  nContinue = X2RunUserDefinedSpellScript();
+      
    // The following code is only of interest if an item was targeted
-   //---------------------------------------------------------------------------
    if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_ITEM){
        // Check if spell was used to trigger item creation feat
        if (nContinue) {
-           nContinue = !ExecuteScriptAndReturnInt("x2_pc_craft",OBJECT_SELF);
+           nContinue = !ExecuteScriptAndReturnInt("x2_pc_craft", oCaster);
 	   }	
 		string sRef = GetResRef(oTarget);
 		//casting a spell on the enchant focus or mortar and pestle shows the costs for making
 		// scrolls, potions, and wands of that spell
 		if (FindSubString(sRef, "ps_enchantmentf") != -1 || sRef == "mortar"){
-			ff_ShowConsumableCraftCosts(); 
+			ff_ShowConsumableCraftCosts(oCaster); 
 			return FALSE;
 		}
        // Check if spell was used for on a sequencer item
-       if (nContinue){
-            //nContinue = (!X2GetSpellCastOnSequencerItem(oTarget));
-			nContinue = !FF_GetIsSeqAndStoreSpell(oTarget);
-       }
-
+       if (nContinue) nContinue = !FF_GetIsSeqAndStoreSpell(oCaster, oTarget);
+       
        // * Execute item OnSpellCast At routing script if activated
        if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_TAGBASED_SCRIPTS) == TRUE){
              SetUserDefinedItemEventNumber(X2_ITEM_EVENT_SPELLCAST_AT);
-             int nRet =   ExecuteScriptAndReturnInt(GetUserDefinedItemEventScriptName(oTarget),OBJECT_SELF);
+             int nRet =   ExecuteScriptAndReturnInt(GetUserDefinedItemEventScriptName(oTarget),oCaster);
              if (nRet == X2_EXECUTE_SCRIPT_END){
                 return FALSE;
              }
@@ -176,13 +166,31 @@ int X2PreSpellCastCode()
 		{
 			nContinue = FALSE;
 		    //Fire "cast spell at" event on a workbench. (only needed for magical workbenches currently)
-		    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+		    SignalEvent(oTarget, EventSpellCastAt(oCaster, GetSpellId(), FALSE));
 			
 		}
 	}
-	if (GetSpellFailedBecauseMissChance(OBJECT_SELF)) nContinue = FALSE;
+	if (GetSpellFailedBecauseMissChance(oCaster)) nContinue = FALSE;
 	
+	if (nContinue) FF_SaySpellChat(oCaster);
    return nContinue;
+}
+
+
+void FF_SaySpellChat(object oPC){
+	int nId = GetSpellId();
+	object oEss = PS_GetEssence(oPC);
+	string sSpellChat = GetLocalString(oEss, "spellchat" + IntToString(nId));
+	if (sSpellChat == "") return;
+	
+	int nChannel = CHAT_MODE_TALK;
+	if (GetStringLowerCase(GetSubString(sSpellChat, 0, 2)) == "\w"){
+		sSpellChat = GetStringRight(sSpellChat, GetStringLength(sSpellChat) - 2);
+		nChannel = CHAT_MODE_WHISPER;
+	}
+	float fDelay = StringToFloat(Get2DAString("spells", "ConjTime", nId));
+	fDelay /= 1000;
+	DelayCommand(fDelay + 0.3, SendChatMessage(oPC, OBJECT_INVALID, nChannel, sSpellChat, FALSE));
 }
 
 // Use Magic Device Check.
@@ -441,25 +449,26 @@ int GetSpellFailedBecauseMissChance(object oCaster){
 }
 
 
-void DebugSpells(){
-	if (!GetLocalInt(OBJECT_SELF, "spelldebug")) return;
+void DebugSpells(object oCaster){
+	if (!GetLocalInt(oCaster, "spelldebug")) return;
 	
 	int nId = GetSpellId();
 	int nNameRef = StringToInt(Get2DAString("spells", "NAME", nId));
 	string sDebug = GetStringByStrRef(nNameRef);
-	sDebug += " (" + IntToString(nId) + ", " + Get2DAString("spells", "ImpactScript", nId) + ")";
+	sDebug += "\nID: " + IntToString(nId);
+	sDebug += "\n Script: " + Get2DAString("spells", "ImpactScript", nId) + ")";
 	sDebug += "\nClass: ";
 	int nClass = GetLastSpellCastClass();
 	if (nClass == CLASS_TYPE_INVALID){
 		sDebug += "Undefined";
-		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(OBJECT_SELF));
+		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(oCaster));
 	} else {
 		nNameRef = StringToInt(Get2DAString("classes", "Name", nClass));
 		sDebug += GetStringByStrRef(nNameRef);
-		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(OBJECT_SELF, nClass));
+		sDebug += "\nCL: " + IntToString(PS_GetCasterLevel(oCaster, nClass));
 	}
-	if (GetLocalInt(OBJECT_SELF, "IsTester"))
-		sDebug += "\nCL for Engine: " + IntToString(GetCasterLevel(OBJECT_SELF));
+	if (GetLocalInt(oCaster, "IsTester"))
+		sDebug += "\nCL for Engine: " + IntToString(GetCasterLevel(oCaster));
 	int nDC;
 	int nInnate = StringToInt(Get2DAString("spells", "Innate", nId));
 	if (nInnate >= 10) nDC =  PS_GetEpicSpellSaveDC();
@@ -472,12 +481,11 @@ void DebugSpells(){
 		nNameRef = StringToInt(Get2DAString("feat", "FEAT", nId));
 		sDebug += "\nSpell Feat Name: " + GetStringByStrRef(nNameRef);
 	}
-	SendMessageToPC(OBJECT_SELF, sDebug);
+	SendMessageToPC(oCaster, sDebug);
 }
 
 
-void ff_ShowConsumableCraftCosts(){
-	object oPC = OBJECT_SELF;
+void ff_ShowConsumableCraftCosts(object oPC){
 	int nId = GetSpellId();
 	int nLevel = CIGetSpellInnateLevel(nId, FALSE);
 	int nCost = CIGetCraftGPCost(oPC, nLevel, X2_CI_SCRIBESCROLL_COSTMODIFIER);

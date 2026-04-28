@@ -1,5 +1,5 @@
 NDB V1.0
-0000057 0000018 0003175 0000213 0000636
+0000058 0000018 0003177 0000213 0000637
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -14,7 +14,7 @@ n10 x0_i0_stringlib
 n11 ginc_param_const
 n12 ginc_crafting
 n13 class_mageslayer_utils
-n14 ff_sequencer
+n14 ff_sequencer_inc
 n15 x0_i0_match
 n16 x2_inc_switches
 n17 x2_inc_itemprop
@@ -54,9 +54,10 @@ n50 ps_adjust_barbarian
 n51 ps_rage_func
 n52 x2_i0_spells
 n53 ps_inc_epicsave
-n54 x2_inc_spellhook
-n55 nw_s0_wallfire_inc
-N56 nw_s0_wallfirea
+n54 ff_sequencer
+n55 x2_inc_spellhook
+n56 nw_s0_wallfire_inc
+N57 nw_s0_wallfirea
 s 03 vector
 sf f x
 sf f y
@@ -162,12 +163,13 @@ sf i nTrinketUse
 sf i nScrollUse
 sf i nWandUse
 sf i nBuffs
-s 05 dSequencerData
+s 06 dSequencerData
 sf i nMaxSpells
 sf i nNumSpells
 sf i nSpell1
 sf i nSpell2
 sf i nSpell3
+sf s sTag
 f ffffffff ffffffff 000 i POST_COLOR_RED
 f ffffffff ffffffff 000 i POST_COLOR_GREEN
 f ffffffff ffffffff 000 i POST_COLOR_BLUE
@@ -5807,52 +5809,59 @@ f ffffffff ffffffff 002 i GetIsActivated
 fp o
 fp i
 f ffffffff ffffffff 000 s sDelim
-f ffffffff ffffffff 001 v FF_RepairAllOldSeq
-fp o
-f ffffffff ffffffff 002 v FF_ApplySeqVars
+f ffffffff ffffffff 004 v ShowDebugData
 fp o
 fp t0017
-f ffffffff ffffffff 001 v FF_RecoverOldSequencer
-fp o
+fp s
+fp s
 f ffffffff ffffffff 001 i FF_GetIsSeqTag
 fp s
-f ffffffff ffffffff 002 v FF_RenameSeqPotAndSetTag
-fp o
-fp t0017
-f ffffffff ffffffff 001 i FF_GetIsSeqPot
-fp o
-f ffffffff ffffffff 001 i FF_GetIsOldSequencerPot
-fp o
-f ffffffff ffffffff 001 i FF_GetIsNewSequencerPot
-fp o
-f ffffffff ffffffff 001 t0017 FF_GetSeqData
-fp o
 f ffffffff ffffffff 002 t0017 FF_GetSeqDataFromTag
 fp o
 fp t0017
 f ffffffff ffffffff 002 t0017 FF_GetSeqDataFromVars
 fp o
 fp t0017
-f ffffffff ffffffff 001 i FF_GetQualifiesForSequencer
+f ffffffff ffffffff 001 t0017 FF_GetSeqData
+fp o
+f ffffffff ffffffff 001 i FF_GetIsNewSequencerPot
+fp o
+f ffffffff ffffffff 001 i FF_GetIsOldSequencerPot
+fp o
+f ffffffff ffffffff 001 i FF_GetIsSeqPot
+fp o
+f ffffffff ffffffff 003 i FF_GetQualifiesForSequencer
+fp o
+fp o
+fp t0017
+f ffffffff ffffffff 001 s GetSpellName
+fp i
+f ffffffff ffffffff 002 v FF_SetSeqTag
+fp o
+fp t0017
+f ffffffff ffffffff 002 v FF_RenameSeqPotAndSetTag
+fp o
+fp t0017
+f ffffffff ffffffff 002 v FF_ApplySeqVars
+fp o
+fp t0017
+f ffffffff ffffffff 001 v FF_RecoverOldSequencer
 fp o
 f ffffffff ffffffff 003 v FF_DoSpellCastCheatMode
 fp o
 fp i
 fp o
+f ffffffff ffffffff 002 i FF_GetIsSeqAndStoreSpell
+fp o
+fp o
 f ffffffff ffffffff 002 v FF_CastSpellFromNewSequencer
 fp o
 fp o
-f ffffffff ffffffff 001 i FF_GetIsSeqAndStoreSpell
+f ffffffff ffffffff 001 v FF_RepairAllOldSeq
 fp o
-f ffffffff ffffffff 001 s GetSpellName
-fp i
-f ffffffff ffffffff 004 v ShowDebugData
-fp o
-fp t0017
-fp s
-fp s
 f ffffffff ffffffff 000 i X2_EVENT_CONCENTRATION_BROKEN
-f ffffffff ffffffff 000 v ff_ShowConsumableCraftCosts
+f ffffffff ffffffff 001 v ff_ShowConsumableCraftCosts
+fp o
 f ffffffff ffffffff 007 v ED_ApplyEffectToObject
 fp o
 fp i
@@ -5883,7 +5892,10 @@ f ffffffff ffffffff 000 v X2BreakConcentrationSpells
 f ffffffff ffffffff 001 i X2GetBreakConcentrationCondition
 fp o
 f ffffffff ffffffff 000 v X2DoBreakConcentrationCheck
-f ffffffff ffffffff 000 v DebugSpells
+f ffffffff ffffffff 001 v DebugSpells
+fp o
+f ffffffff ffffffff 001 v FF_SaySpellChat
+fp o
 f ffffffff ffffffff 005 v ReportEffectFade
 fp f
 fp o
@@ -6209,31 +6221,32 @@ l13 0000070 00000078 00000078
 l13 0000071 00000078 00000078
 l13 0000072 00000078 00000078
 l13 0000073 00000078 00000078
-l14 0000026 00000078 00000078
-l14 0000027 00000078 00000078
-l14 0000028 00000078 00000078
-l14 0000029 00000078 00000078
-l14 0000030 00000078 00000078
-l56 0000022 0000008a 00000095
-l56 0000023 00000095 000000a4
-l56 0000024 000000aa 000000c1
-l56 0000025 000000c1 000000cd
-l56 0000028 000000cd 000000d2
-l56 0000029 000000d2 000000fe
-l56 0000030 000000fe 0000010e
-l56 0000031 0000010e 00000113
-l56 0000033 00000113 00000124
-l56 0000034 00000124 00000126
-l56 0000036 00000126 00000147
-l56 0000039 0000014d 00000171
-l56 0000041 00000171 00000191
-l56 0000043 00000197 000001c7
-l56 0000045 000001c7 000001fe
-l56 0000046 000001fe 0000020e
-l56 0000048 00000214 00000241
-l56 0000049 00000241 00000262
-l56 0000050 00000262 00000283
-l56 0000054 0000028f 00000291
+l14 0000007 00000078 00000078
+l14 0000008 00000078 00000078
+l14 0000009 00000078 00000078
+l14 0000010 00000078 00000078
+l14 0000011 00000078 00000078
+l14 0000012 00000078 00000078
+l57 0000022 0000008a 00000095
+l57 0000023 00000095 000000a4
+l57 0000024 000000aa 000000c1
+l57 0000025 000000c1 000000cd
+l57 0000028 000000cd 000000d2
+l57 0000029 000000d2 000000fe
+l57 0000030 000000fe 0000010e
+l57 0000031 0000010e 00000113
+l57 0000033 00000113 00000124
+l57 0000034 00000124 00000126
+l57 0000036 00000126 00000147
+l57 0000039 0000014d 00000171
+l57 0000041 00000171 00000191
+l57 0000043 00000197 000001c7
+l57 0000045 000001c7 000001fe
+l57 0000046 000001fe 0000020e
+l57 0000048 00000214 00000241
+l57 0000049 00000241 00000262
+l57 0000050 00000262 00000283
+l57 0000054 0000028f 00000291
 l08 0000200 00000291 0000029b
 l08 0000203 0000029b 000002c0
 l08 0000204 000002c6 000002f2
@@ -6749,10 +6762,10 @@ l27 0000921 000050a1 000050bf
 l27 0000923 000050bf 000050ff
 l27 0000925 000050ff 0000511b
 l27 0000926 00005121 00005129
-l55 0000024 00005129 00005146
-l55 0000027 00005146 00005156
-l55 0000028 00005188 0000518a
-l55 0000030 000051c8 000051e8
-l55 0000032 000051e8 000051fd
-l55 0000034 00005221 0000523d
-l55 0000035 00005243 0000524b
+l56 0000024 00005129 00005146
+l56 0000027 00005146 00005156
+l56 0000028 00005188 0000518a
+l56 0000030 000051c8 000051e8
+l56 0000032 000051e8 000051fd
+l56 0000034 00005221 0000523d
+l56 0000035 00005243 0000524b

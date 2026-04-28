@@ -29,6 +29,8 @@ string GetCasterInfo(object oPC);
 
 string GetEffectInfo(object oPC);
 
+string TrimLeadingSpaces(string sMessage);
+
 //gets full pc information for bug reports
 string GetDebugInfo(object oPC);
 
@@ -62,6 +64,16 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
+	// #shout command to send a message to everyone in case server needs to come down and you're not logged
+	// in as dm. Only myself and admin staff, as only ppl who have the ability to update server need this.
+	// Did not enable shout channel directly for these users because if I did then I'm sure I would shout
+	// accidentally at some point.
+	else if (GetStringLeft(sInput, 6) == "#shout" && GetHasAllAccess(oSender)){
+		sMessage = GetStringRight(sInput, GetStringLength(sMessage) - 6);
+		sMessage = TrimLeadingSpaces(sMessage);
+		SendChatMessage(oSender, OBJECT_INVALID, CHAT_MODE_SHOUT, sMessage, FALSE);
+		return TRUE;
+	}
 	else if (GetStringLeft(sInput, 4) == "#xp%"){
 		if (GetIsDM(oSender) || (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE"))){
 			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 4);
@@ -85,6 +97,29 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
+	}
+	else if (GetStringLeft(sInput, 10)  == "#spellchat"){
+		object oEss = PS_GetEssence(oSender);
+		sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - 10);
+		sMessage = TrimLeadingSpaces(sMessage);
+		string sId = "";
+		int nLength = GetStringLength(sMessage);
+		string sNumbers = "0123456789";
+		string c;
+		int i;
+		for (i = 0; i < nLength; i++){
+			c = GetSubString(sMessage, i, 1);
+			if (FindSubString(sNumbers, c) != -1)
+				sId += c;
+			else break;
+		}
+		if (sId != ""){
+			nLength = GetStringLength(sId);
+			sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - nLength);
+			sMessage = TrimLeadingSpaces(sMessage);
+			if (sMessage == "") DeleteLocalString(oEss, "spellchat" + sId);
+			else SetLocalString(oEss, "spellchat" + sId, sMessage);
+		}
 	}
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
 	else if (sInput == "#scribemin"){
@@ -813,12 +848,7 @@ void RollSocialCheck(object oPC, int nChannel,  int nCommandLength = -1, string 
 	
 	if (nAction == -1) return;
 	
-	//strip leading spaces off of sMessage
-	if (sMessage != ""){
-		while (sMessage != "" && GetStringLeft(sMessage, 1) == " "){
-			sMessage = GetSubString(sMessage, 1, GetStringLength(sMessage) - 1);
-		}
-	}
+	sMessage = TrimLeadingSpaces(sMessage);
 	
 	// if the dm uses this while targeting a player or npc, then roll everything as if that player or npc
 	// used the command
@@ -1074,6 +1104,15 @@ void SixSecondTick(object oPC, int nRound = 1){
 		// Schedule the next tick after 6 seconds
 		DelayCommand(6.0f, SixSecondTick(oPC, nRound));
 	}
+}
+//strip leading spaces off of sMessage
+string TrimLeadingSpaces(string sMessage){
+	if (sMessage != ""){
+		while (sMessage != "" && GetStringLeft(sMessage, 1) == " "){
+			sMessage = GetSubString(sMessage, 1, GetStringLength(sMessage) - 1);
+		}
+	}
+	return sMessage;
 }
 
 //certain debugging chat commands give information that we don't want widely known, 

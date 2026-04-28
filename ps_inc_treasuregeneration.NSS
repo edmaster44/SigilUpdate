@@ -152,14 +152,12 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	} else 	if (TestStringAgainstPattern("**outland**", sAREA)){
 		if (bGetPercentage) return 3;
 		else {
-			switch (Random(7)){
+			switch (Random(5)){
 				case 0: sSpecial = WOOD_DUSKWOOD; break;
 				case 1: sSpecial = WOOD_SHEDERRAN; break;
 				case 2: sSpecial = WOOD_ZALANTAR; break;
-				case 3: sSpecial = WOOD_ARBOREAL_OAK; break;
-				case 4: sSpecial = WOOD_TWELVETREES; break;
-				case 5: sSpecial = WOOD_IRONWOOD; break;
-				case 6: sSpecial = WOOD_ROWANWOOD; break;
+				case 3: sSpecial = WOOD_IRONWOOD; break;
+				case 4: sSpecial = WOOD_ROWANWOOD; break;
 			}
 		}
 	}
@@ -246,14 +244,18 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	} else 	if (TestStringAgainstPattern("**maldomini**", sAREA) || 
 		TestStringAgainstPattern("**minauros**", sAREA)){
 		if (bGetPercentage) return 4;
+		string sAltMat = INGOT_GOLD;
+		if (TestStringAgainstPattern("**minauros**", sAREA))
+			sAltMat = WOOD_TWELVETREES;
 		else {
-			switch (Random(6)){
+			switch (Random(7)){
 				case 0: sSpecial = WOOD_DEVIL_HORN; break; 
 				case 1: sSpecial = HIDE_DEVIL; break; 
 				case 2: sSpecial = INGOT_METEORIC_IRON; break;
 				case 3: sSpecial = MISC_FIENDIVORY; break;
 				case 4: sSpecial = INGOT_TANTULHOR; break; 
 				case 5: sSpecial = INGOT_MORGUTH_IRON; break; 
+				case 6: sSpecial = sAltMat; break;
 			}
 		}
 	} else 	if (TestStringAgainstPattern("**mercuria**", sAREA)){
@@ -287,13 +289,12 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	else if (TestStringAgainstPattern("**plateau**", sAREA)){
 		if (bGetPercentage) return 5;
 		else {
-			switch (Random(7)){
+			switch (Random(5)){
 				case 0: sSpecial = HIDE_DRAG_GREEN; break;
 				case 1: sSpecial = INGOT_AURORUM; break; 
-				case 2: sSpecial = WOOD_TWELVETREES; break; 
-				case 4: sSpecial = WOOD_DRAG_BONE; break;
-				case 5: sSpecial = WOOD_IRONWOOD; break;
-				case 6:{
+				case 2: sSpecial = WOOD_DRAG_BONE; break;
+				case 3: sSpecial = WOOD_IRONWOOD; break;
+				case 4:{
 					if (d10() <= 5) sSpecial = WOOD_ARBOREAL_OAK; 
 					else sSpecial = "ps_whip_razorvine";
 					break; 
@@ -303,13 +304,17 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	} else if (TestStringAgainstPattern("**phlegethon**", sAREA) ||
 		TestStringAgainstPattern("**abyss**", sAREA)){
 		if (bGetPercentage) return 5;
+		string sAltMat = WOOD_TWELVETREES;
+		if (TestStringAgainstPattern("**phlegethon**", sAREA))
+			sAltMat = INGOT_MORGUTH_IRON;
 		else {
-			switch (Random(5)){
+			switch (Random(6)){
 				case 0: sSpecial = HIDE_DEMON; break; 
 				case 1: sSpecial = WOOD_DEMON_HORN; break;
 				case 2: sSpecial = INGOT_PANDEMONIC_SILVER; break;			
 				case 3: sSpecial = MISC_FIENDIVORY; break; 
 				case 4: sSpecial = INGOT_ABYSSAL_BLOODIRON; break; 
+				case 5: sSpecial = sAltMat; break;
 			}
 		}
 	} else if (TestStringAgainstPattern("**carceri**", sAREA)){
@@ -359,7 +364,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	} else if (TestStringAgainstPattern("**gehenna**", sAREA)){
 		if (bGetPercentage) return 6;
 		else {
-			switch (Random(7)){
+			switch (Random(8)){
 				case 0: sSpecial = WOOD_DEVIL_HORN; break;
 				case 1: sSpecial = HIDE_DEVIL; break; 
 				case 2: sSpecial = HIDE_DEMON; break; 
@@ -367,6 +372,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 				case 4: sSpecial = INGOT_OERTHBLOOD; break; 
 				case 5: sSpecial = INGOT_MORGUTH_IRON; break;
 				case 6: sSpecial = MISC_FIENDIVORY; break; 
+				case 7: sSpecial = WOOD_TWELVETREES; break;
 			}
 		}
 	}

@@ -8,91 +8,72 @@ const int cMidnight = 86400;
 // CSpawnWait is the default respawn timer if the trigger does not have a RESPAWN value. (5 minutes)
 const int cSpawnWait = 300;
 
-/*
-int GetTime()
-{
-    return GetTimeSecond()+60*GetTimeMinute()+3600*GetTimeHour();
-}
-
-//returns an int in secs of time passed
-// checking for the passage of midnight
-int GetTimePassed(int iBegin, int iEnd)
-{
-   // if begin is smaller simple subtraction
-   if(iBegin < iEnd)
-   {
-       return (iEnd - iBegin);
-   }
-   //only happens when midnight has passed
-   if (iBegin > iEnd)
-   {
-       return ( (cMidnight - iBegin) + iEnd);
-       //trust me it works
-   }
-   else
-   {
-       return 0;//begin == end time is zero
-   }
-}
-
-//TimeStamp(object)  self explanatory no?
-//the variable will be called <objecttag>_timestamp
-void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
-{
-  if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
-   SetLocalInt(oObject, sTimeStampVariable, GetTime());
-}
-
-//CheckTimeStamp(object)  self explanatory no?
-//returns the difference in time between NOW and the last timestamp
-//the variable will be called <objecttag>_timestamp
-int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
-{
-  if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
-  int iOld = GetLocalInt(oObject, sTimeStampVariable);
-  int iNew = GetTime();
-  return GetTimePassed(iOld, iNew);
-}
-*/
-
-/*
-float PS_GetAvgLevel(object oPC) //Gets "pure" average level
-{                
-float fMembers=0.0;
-int iMemberlevel=0;
-
-object oPartyMember = GetFirstFactionMember(oPC, TRUE);
-
-   while(GetIsObjectValid(oPartyMember) == TRUE)
-   {
- iMemberlevel += PS_GetLevel(oPartyMember);
- fMembers += 1.0;
-       oPartyMember = GetNextFactionMember(oPC, TRUE);
-   }
-
-return iMemberlevel / fMembers;
-}
-
-int PS_GetNumPC(object oPC) //find the total number of PCs in party
-{
-int iCount = 0;
-object oPartyMember = GetFirstFactionMember(oPC, TRUE);
-
-   while(GetIsObjectValid(oPartyMember) == TRUE)
-   {
- iCount++;
-
-       oPartyMember = GetNextFactionMember(oPC, TRUE);
-   }
-
-return iCount;
-}
-*/
-
 const int DIFFLOW = 1;
 const int DIFFNORM = 2;
 const int DIFFHIGH = 3;
 const int DIFFVERY = 4;
+
+int FF_GetIsSpawnOfKeyword(object oSpawn, string sKey){
+	string sRef = GetStringLowerCase(GetResRef(oSpawn));
+	string sTag = GetStringLowerCase(GetTag(oSpawn));
+	string sName = GetStringLowerCase(GetName(oSpawn));
+	sKey = "**" + GetStringLowerCase(sKey) + "**";
+	if (TestStringAgainstPattern(sKey, sRef)) return TRUE;
+	if (TestStringAgainstPattern(sKey, sTag)) return TRUE;
+	if (TestStringAgainstPattern(sKey, sName)) return TRUE;
+	return FALSE;
+}
+
+void FF_GiveSpecialDrop(string sRef, object oSpawn, int nChance = 30){
+	int bGiveDrop = FALSE;
+	if (nChance >= 100) bGiveDrop = TRUE;
+	else if (d100() <= nChance) bGiveDrop = TRUE;
+	if (!bGiveDrop) return;
+	object oLoot = CreateItemOnObject(sRef, oSpawn, 1, "", FALSE);
+	SetDroppableFlag(oLoot, TRUE);
+}
+
+
+
+void FF_GiveSpecificLoot(object oSpawn){
+	string sRef = "";
+	int nChance = 30;
+	if (FF_GetIsSpawnOfKeyword(oSpawn, "ps_creature_ascended")){
+		sRef = "ps_key_mystery";
+		nChance = 100;
+	}
+	else if (FF_GetIsSpawnOfKeyword(oSpawn, "wraith") ||
+		FF_GetIsSpawnOfKeyword(oSpawn, "ghost")){
+		switch (d2()){
+			case 1: sRef = "n2_crft_dist028b"; nChance = 25; break;//ghostly essence 
+			case 2: sRef = "n2_crft_dist017"; nChance = 35;break;//ghost residue
+		}
+	}
+	else if (FF_GetIsSpawnOfKeyword(oSpawn, "shadow")){
+		sRef = "n2_crft_dist027";	//shadow residue
+	}
+	else if (FF_GetIsSpawnOfKeyword(oSpawn, "ghoul")){
+		sRef = "n2_crft_dist015";	//ghoul claws
+	}
+	else if (FF_GetIsSpawnOfKeyword(oSpawn, "ghast")){
+		sRef = "n2_crft_dist016";	//ghast claws
+	}
+	else if (FF_GetIsSpawnOfKeyword(oSpawn, "devil")){
+		sRef = "n2_crft_dist058";	//devil beard
+		nChance = 35;
+	}
+	else if (FF_GetIsSpawnOfKeyword(oSpawn, "lich")){
+		sRef = "n2_crft_dist023";	//lich dust
+		nChance = 50;
+	}
+	else if (FF_GetIsSpawnOfKeyword(oSpawn, "vamp")){
+		sRef = "n2_crft_dist035";	//lich dust
+		nChance = 50;
+	}
+	if (sRef != "")
+		FF_GiveSpecialDrop(sRef, oSpawn, nChance);
+}
+
 
 int PS_GetDifficulty(object oPC)
 {
@@ -348,6 +329,7 @@ void DoMainSpawnActions(object oTrigger, object oPC, string sWP, int bCheckTime 
 		}
 		//elitetest end										
 	}
+	FF_GiveSpecificLoot(oSpawn);
 	//  SpeakString("7",TALKVOLUME_SHOUT);
 }
 
@@ -370,6 +352,88 @@ void main(){
 		DoMainSpawnActions(oTrigger, oPC, sWP, TRUE);
 	}
 }
+
+
+/*
+int GetTime()
+{
+    return GetTimeSecond()+60*GetTimeMinute()+3600*GetTimeHour();
+}
+
+//returns an int in secs of time passed
+// checking for the passage of midnight
+int GetTimePassed(int iBegin, int iEnd)
+{
+   // if begin is smaller simple subtraction
+   if(iBegin < iEnd)
+   {
+       return (iEnd - iBegin);
+   }
+   //only happens when midnight has passed
+   if (iBegin > iEnd)
+   {
+       return ( (cMidnight - iBegin) + iEnd);
+       //trust me it works
+   }
+   else
+   {
+       return 0;//begin == end time is zero
+   }
+}
+
+//TimeStamp(object)  self explanatory no?
+//the variable will be called <objecttag>_timestamp
+void TimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
+{
+  if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
+   SetLocalInt(oObject, sTimeStampVariable, GetTime());
+}
+
+//CheckTimeStamp(object)  self explanatory no?
+//returns the difference in time between NOW and the last timestamp
+//the variable will be called <objecttag>_timestamp
+int CheckTimeStamp(object oObject=OBJECT_SELF, string sTimeStampVariable = "")
+{
+  if (sTimeStampVariable == "") sTimeStampVariable = GetTag(oObject)+"_s";
+  int iOld = GetLocalInt(oObject, sTimeStampVariable);
+  int iNew = GetTime();
+  return GetTimePassed(iOld, iNew);
+}
+*/
+
+/*
+float PS_GetAvgLevel(object oPC) //Gets "pure" average level
+{                
+float fMembers=0.0;
+int iMemberlevel=0;
+
+object oPartyMember = GetFirstFactionMember(oPC, TRUE);
+
+   while(GetIsObjectValid(oPartyMember) == TRUE)
+   {
+ iMemberlevel += PS_GetLevel(oPartyMember);
+ fMembers += 1.0;
+       oPartyMember = GetNextFactionMember(oPC, TRUE);
+   }
+
+return iMemberlevel / fMembers;
+}
+
+int PS_GetNumPC(object oPC) //find the total number of PCs in party
+{
+int iCount = 0;
+object oPartyMember = GetFirstFactionMember(oPC, TRUE);
+
+   while(GetIsObjectValid(oPartyMember) == TRUE)
+   {
+ iCount++;
+
+       oPartyMember = GetNextFactionMember(oPC, TRUE);
+   }
+
+return iCount;
+}
+*/
 
 /* Original
 void main()
