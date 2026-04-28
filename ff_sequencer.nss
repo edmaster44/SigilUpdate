@@ -39,15 +39,15 @@ int FF_GetIsSeqAndStoreSpell(object oPC, object oSequencer){
 	else if (data.nSpell3 == 0) data.nSpell3 = nId;
 	else SendMessageToPC(oPC, "All spell slots full!");
 	
-	if (IPGetItemSequencerProperty(oSequencer) > 0)
-		FF_ApplySeqVars(oSequencer, data);
+	// this is only necessary on the item property style sequencers but it doesn't hurt
+	// to put the local ints on the new seq pots too
+	FF_ApplySeqVars(oSequencer, data);
 	
 	effect eVisual = EffectVisualEffect(VFX_IMP_BREACH);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisual, oPC);
     FloatingTextStrRefOnCreature(83884, oPC);
 	if (FF_GetIsSeqPot(oSequencer)){
 		FF_RenameSeqPotAndSetTag(oSequencer, data);
-		FF_ApplySeqVars(oSequencer, data);
 		string sMessage = "<c=cyan>Your Sequencer Potion has been renamed.\nThe new name will ";
 		sMessage += "become visible after an area transition or after you move the potion from ";
 		sMessage += "one square to another in your inventory.</c>";

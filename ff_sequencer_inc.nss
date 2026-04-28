@@ -181,16 +181,23 @@ void FF_SetSeqTag(object oSequencer, struct dSequencerData data){
 }
 
 void FF_RenameSeqPotAndSetTag(object oSequencer, struct dSequencerData data){
-	string sName = "<c=cyan>";
-	if (data.nMaxSpells == 1) sName += "Lesser ";
-	else if (data.nMaxSpells == 3) sName += "Greater ";
-	sName += "Sequencer: " + GetSpellName(data.nSpell1 - 1); 
-	if (data.nSpell2 > 0){
-		if (data.nSpell3 > 0)
-			sName += ", " + GetSpellName(data.nSpell2 - 1) + ", and " + GetSpellName(data.nSpell3 - 1);
-		else sName += " and " + GetSpellName(data.nSpell2 - 1);
+	string sName = "";
+	if (data.nNumSpells < 1){
+		if (data.nMaxSpells == 3) sName = "Greater ";
+		else if (data.nMaxSpells == 1) sName = "Lesser ";
+		sName += "Sequencer Potion";
+	} else {
+		sName = "<c=cyan>";
+		if (data.nMaxSpells == 1) sName += "Lesser ";
+		else if (data.nMaxSpells == 3) sName += "Greater ";
+		sName += "Sequencer: " + GetSpellName(data.nSpell1 - 1); 
+		if (data.nSpell2 > 0){
+			if (data.nSpell3 > 0)
+				sName += ", " + GetSpellName(data.nSpell2 - 1) + ", and " + GetSpellName(data.nSpell3 - 1);
+			else sName += " and " + GetSpellName(data.nSpell2 - 1);
+		}
+		sName += "</c>";
 	}
-	sName += "</c>";
 	SetFirstName(oSequencer, sName);
 	FF_SetSeqTag(oSequencer, data);
 }
