@@ -100,8 +100,18 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	}
 	else if (GetStringLeft(sInput, 10)  == "#spellchat"){
 		object oEss = PS_GetEssence(oSender);
+		if (GetStringLeft(sInput, 13) == "#spellchatoff"){
+			SetLocalInt(oEss, "spellchatoff", TRUE);
+			SendMessageToPC(oSender, "Turning Spell Cast Chat messages off");
+			return TRUE;
+		} else if (GetStringLeft(sInput, 12) == "#spellchaton"){
+			SetLocalInt(oEss, "spellchatoff", FALSE);
+			SendMessageToPC(oSender, "Turning Spell Cast Chat messages on");
+			return TRUE;
+		}
 		sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - 10);
 		sMessage = TrimLeadingSpaces(sMessage);
+
 		string sId = "";
 		int nLength = GetStringLength(sMessage);
 		string sNumbers = "0123456789";
@@ -117,9 +127,16 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			nLength = GetStringLength(sId);
 			sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - nLength);
 			sMessage = TrimLeadingSpaces(sMessage);
-			if (sMessage == "") DeleteLocalString(oEss, "spellchat" + sId);
-			else SetLocalString(oEss, "spellchat" + sId, sMessage);
-		}
+			if (sMessage == ""){
+				DeleteLocalString(oEss, "spellchat" + sId);
+				sFeedback = "Removing spell cast chat message for spell id: " + sId;
+			} else {
+				SetLocalString(oEss, "spellchat" + sId, sMessage);
+				sFeedback = "Message for spell id " + sId + " set to: " + sMessage;
+			}
+		} else sFeedback = "Invalid input. Format is #SpellChat SpellId Message";
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
 	}
 	// toggle on and off local int to scribe scrolls at min caster level, see x2_inc_craft
 	else if (sInput == "#scribemin"){

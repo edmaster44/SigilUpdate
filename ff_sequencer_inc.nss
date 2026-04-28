@@ -12,7 +12,7 @@ struct dSequencerData {
 	string sTag;
 };
 
-
+/*
 void ShowDebugData(object oSequencer, struct dSequencerData data, string sSource, string sAdd = ""){
 	object oPC = OBJECT_SELF;
 	string sMessage = "From " + sSource +"\nTag: " + GetTag(oSequencer);
@@ -24,6 +24,7 @@ void ShowDebugData(object oSequencer, struct dSequencerData data, string sSource
 	if (sAdd != "") sMessage += "\n" + sAdd;
 	SendMessageToPC(OBJECT_SELF, sMessage);
 }
+*/
 
 int FF_GetIsSeqTag(string sTag){
 	return TestStringAgainstPattern("*n_*n_*n", sTag);
@@ -38,7 +39,7 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 	string sTag = GetTag(oSequencer); 
 	if (!FF_GetIsSeqTag(sTag)) return data; //if tag isn't just numbers and underscore, no data
 	//debug
-	SendMessageToPC(OBJECT_SELF, "Raw tag: " + sTag);
+	//SendMessageToPC(OBJECT_SELF, "Raw tag: " + sTag);
 	int nLength = GetStringLength(sTag);
 	int i;
 	int nDelimCount = 0;
@@ -62,7 +63,7 @@ struct dSequencerData FF_GetSeqDataFromTag(object oSequencer, struct dSequencerD
 	else if (data.nSpell1 > 0) data.nNumSpells = 1;
 	else data.nNumSpells = 0;
 	//DEBUG
-	ShowDebugData(oSequencer, data, "FF_GetSeqDataFromTag");
+	//ShowDebugData(oSequencer, data, "FF_GetSeqDataFromTag");
 	return data;
 }
 
@@ -71,7 +72,7 @@ struct dSequencerData FF_GetSeqDataFromVars(object oSequencer, struct dSequencer
 	data.nSpell1 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER1");
 	data.nSpell2 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER2"); 
 	data.nSpell3 = GetLocalInt(oSequencer, "X2_L_SPELLTRIGGER3");
-	ShowDebugData(oSequencer, data, "FF_GetSeqDataFromVars");
+	//ShowDebugData(oSequencer, data, "FF_GetSeqDataFromVars");
 	return data;
 }
 
@@ -149,8 +150,8 @@ int FF_GetQualifiesForSequencer(object oPC, object oSequencer, struct dSequencer
 	// Returns true if we cannot pay. Doesn't return if we pay, it just continues
 	if (FF_GetIsSeqPot(oSequencer)){
 		//debug
-		SendMessageToPC(oPC, "Pay recognizes oPC");
-		ShowDebugData(oSequencer, data, "Pay");
+		//SendMessageToPC(oPC, "Pay recognizes oPC");
+		//ShowDebugData(oSequencer, data, "Pay");
 		
 		int nLevel = StringToInt(Get2DAString("spells", "Innate", nId));
 		int nGold = CIGetCraftGPCost(oPC, nLevel, X2_CI_SEQUENCER_COSTMODIFIER);
@@ -160,7 +161,7 @@ int FF_GetQualifiesForSequencer(object oPC, object oSequencer, struct dSequencer
 			FloatingTextStrRefOnCreature(STR_REF_IC_INSUFFICIENT_GOLD, oPC, FALSE); // not enough gold!
 			return FALSE;
 		}
-		ShowDebugData(oSequencer, data, "Pay", IntToString(nGold));
+		//ShowDebugData(oSequencer, data, "Pay", IntToString(nGold));
 		PS_TakeGoldFromCreature(nGold, oPC);
 		return TRUE;
 	}
@@ -211,5 +212,5 @@ void FF_RecoverOldSequencer(object oSequencer){
 void FF_DoSpellCastCheatMode(object oPC, int nId, object oTarget){
 	// to avoid converting negative numbers to and from strings we've stored the 
 	// spell ids as 1 higher than they really are, so we cast them as one lower
-	AssignCommand(oPC, ActionCastSpellAtObject(nId -1, oTarget, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
+	AssignCommand(oPC, ActionCastSpellAtObject(nId, oTarget, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE));
 }
