@@ -71,7 +71,16 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	else if (GetStringLeft(sInput, 6) == "#shout" && GetHasAllAccess(oSender)){
 		sMessage = GetStringRight(sInput, GetStringLength(sMessage) - 6);
 		sMessage = TrimLeadingSpaces(sMessage);
-		SendChatMessage(oSender, OBJECT_INVALID, CHAT_MODE_SHOUT, sMessage, FALSE);
+		if (sMessage != ""){
+			object oPlayer = GetFirstPC();
+			while (GetIsObjectValid(oPlayer)){
+				if (oPlayer != oSender)
+					SendMessageToPC(oPlayer, sMessage);
+				oPlayer = GetNextPC();
+			}
+			sFeedback = "You sent the server message '" + sMessage + "' to all players";
+		} else sFeedback = "Invalid message";
+		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
 	else if (GetStringLeft(sInput, 4) == "#xp%"){

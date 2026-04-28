@@ -381,13 +381,14 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		if (bGetPercentage) return 2;
 		else sSpecial = GetCampaignItemString();
 	}
-	
-	if (!bGetPercentage){
+	if (TestStringAgainstPattern("ps_creature_ascended**", GetStringLowerCase(GetResRef(oSPAWN))))
+		CreateTreasureItemOnTarget("ps_key_mystery", oSPAWN);
+	if (!bGetPercentage && !GetLocalInt(oSPAWN, "X2_L_IS_INCORPOREAL")){
 		if (sSpecial == "") sSpecial = INGOT_IRON;
 		CreateTreasureItemOnTarget(sSpecial, oSPAWN);
 	}
 	return 0;
-
+	
 }
 
 //Handles things like essence / distillable items drops
@@ -809,6 +810,7 @@ void CreateRandomBootsOnTarget(object oTarget) {
 //The main treasure generation script. It creates one item on the target.
 //Use this function anywhere you want treasure.
 void GenerateTreasureItemOnTarget(object oTarget, int nTreasureLevel) {
+	if (GetLocalInt(oTarget, "X2_L_IS_INCORPOREAL")) return;
 	string sResref = "";
 	if (d100() <= EQUIPPABLE_CHANCE) {
 		int nRandom = Random(10)+1;
