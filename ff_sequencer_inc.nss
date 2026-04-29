@@ -181,11 +181,12 @@ void FF_SetSeqTag(object oSequencer, struct dSequencerData data){
 }
 
 void FF_RenameSeqPotAndSetTag(object oSequencer, struct dSequencerData data){
-	string sName = "";
+	string sName;
 	if (data.nNumSpells < 1){
-		if (data.nMaxSpells == 3) sName = "Greater ";
-		else if (data.nMaxSpells == 1) sName = "Lesser ";
-		sName += "Sequencer Potion";
+		sName = "Potion of ";
+		if (data.nMaxSpells == 3) sName += "Greater ";
+		else if (data.nMaxSpells == 1) sName += "Lesser ";
+		sName += "Sequences";
 	} else {
 		sName = "<c=cyan>";
 		if (data.nMaxSpells == 1) sName += "Lesser ";
