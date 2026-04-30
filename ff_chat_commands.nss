@@ -703,7 +703,7 @@ string GetDebugInfo(object oPC){
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSub));
 	sDebug += "\nOriginal Subrace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSub) + ")";
 	sDebug += "\nSaved Wings: " + IntToString(GetLocalInt(oEss, "PC_Wing"));
-	sDebug += "\nSaved Tail: " + IntToString(GetLocalInt(oEss, "PC_Wing"));
+	sDebug += "\nSaved Tail: " + IntToString(GetLocalInt(oEss, "PC_Tail"));
 	sDebug += "\nSize: ";
 	nVar = GetCreatureSize(oPC);
 	switch (nVar){
