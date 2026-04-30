@@ -33,14 +33,14 @@ int PS_OutsiderLevels(object oPC)
 void PS_SetWingNumber(object oPC, int nVar)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	SetLocalInt(oEssence, "PC_Wing", nVar);
+	SetLocalInt(oEssence, "New_PC_Wing", nVar);
 }
 
 // Returns the value from the essence variable PC_Wing
 int PS_GetWingNumber(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nWing		= GetLocalInt(oEssence, "PC_Wing");
+	int nWing		= GetLocalInt(oEssence, "New_PC_Wing");
 	return nWing;
 }
 
@@ -49,7 +49,7 @@ int PS_GetWingNumber(object oPC)
 void PS_SetTailNumber(object oPC, int nVar)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	SetLocalInt(oEssence, "PC_Tail", nVar);
+	SetLocalInt(oEssence, "New_PC_Tail", nVar);
 }
 
 
@@ -57,7 +57,7 @@ void PS_SetTailNumber(object oPC, int nVar)
 int PS_GetTailNumber(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nTail		= GetLocalInt(oEssence, "PC_Tail");
+	int nTail		= GetLocalInt(oEssence, "New_PC_Tail");
 	return nTail;
 }
 

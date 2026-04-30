@@ -31,7 +31,7 @@ void main(){
 	object oEss	= GetItemPossessedBy(oPC,"ps_essence");	
 	if (GetLocalInt(oEss, "TempChange")) return;
 	//Debug
-	SendMessageToPC(oPC, "Intitating wings persist");
+	SendMessageToPC(oPC, "Initiating wings persist");
 
 	if (GetHasFeat(288, oPC, TRUE)) PS_HD_Dragonflight(oPC, oEss);
 	else if (GetHasFeat(2179, oPC, TRUE) || GetHasFeat(3023, oPC, TRUE) ||
