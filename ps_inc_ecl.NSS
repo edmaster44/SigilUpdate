@@ -20,7 +20,7 @@ int GetOriginalRace(object oPC){
 		SendMessageToPC(oPC, "Warning!!! Essence item missing! Contact administrator!");
 		return GetRacialType(oPC);
 	}
-	int nRace = GetLocalInt(oEss, "OldRace");
+	int nRace = GetLocalInt(oEss, "OriginalRace");
 	if (nRace == 0) nRace = GetRacialType(oPC);
 	else if (nRace == -1) nRace = 0;
 	return nRace;
@@ -32,7 +32,7 @@ int GetOriginalSubRace(object oPC){
 		SendMessageToPC(oPC, "Warning!!! Essence item missing! Contact administrator!");
 		return GetSubRace(oPC);
 	}
-	int nSub = GetLocalInt(oEss, "OldSubrace");
+	int nSub = GetLocalInt(oEss, "OriginalSubRace");
 	if (nSub == 0) nSub = GetSubRace(oPC);
 	else if (nSub == -1) nSub = 0; // gold dwarf is subrace 0, which is ofc also nothing set, so gold dwarf stored as -1
 	return nSub;

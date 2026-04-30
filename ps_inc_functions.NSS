@@ -56,7 +56,7 @@ void PS_lose_one_level(object oPC);
 const string ECL_CRAFT_BONUS_PREFIX = "ecl_craft_bonus_";
 
 // String name of local variable on essence for storing the original race of the oPC.
-const string VAR_OLD_RACE = "OldRace";
+const string VAR_OLD_RACE = "OriginalRace";
 // String name of local variable on essence for storing ECL.
 const string VAR_ECL = "ECL";
 
@@ -4151,7 +4151,7 @@ void PS_UndeadRaceFix(object oPC)
         {
             //int iOldECL   = GetLocalInt(oItem, "OldECL");
             //string sOldECL = IntToString(iOldECL);
-            int iOldRace = GetOriginalRace(oPC);
+            int iOriginalRace = GetOriginalRace(oPC);
             int iOldSub = GetOriginalSubRace(oPC);
             int iOldGoodEvil = GetLocalInt(oItem, "OldGoodEvil");
             
@@ -4174,7 +4174,7 @@ void PS_UndeadRaceFix(object oPC)
                 if (iUndeadLevel == 0)
                 {   //SetLocalString(oItem, "ECL", sOldECL);
                     //SetLocalString(oPC, "ECL", sOldECL);
-                    PS_SetRacialType(oPC, iOldRace);
+                    PS_SetRacialType(oPC, iOriginalRace);
                     PS_SetSubRacialType(oPC, iOldSub);
                     if(iOldGoodEvil >= 31)
                     {
@@ -4198,7 +4198,7 @@ void PS_UndeadRaceFix(object oPC)
                 if (iUndeadLevel == 0)                  
                 {   //SetLocalString(oItem, "ECL", sOldECL);
                     //SetLocalString(oPC, "ECL", sOldECL);
-                    PS_SetRacialType(oPC, iOldRace);
+                    PS_SetRacialType(oPC, iOriginalRace);
                     PS_SetSubRacialType(oPC, iOldSub);
                     if(iOldGoodEvil >= 31)
                     {
@@ -4347,7 +4347,7 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
     {
         if (nVAR == TRUE) return;
         nSUBRACE = GetSubRace(oPC);
-        //SetLocalInt(oESSENCE, "OldSubrace", nSUBRACE);
+        //SetLocalInt(oESSENCE, "OriginalSubRace", nSUBRACE);
         SetLocalInt(oESSENCE, "TemplateFix", TRUE);
     }
     string s2DA = "racialsubtypes";
@@ -4498,7 +4498,7 @@ void PS_HalfDragonRaceFix(object oPC)
         {   //string sECL           = GetLocalString(oItem, "ECL");
             //int iECL          = StringToInt(sECL);
             string sRaceChg     = GetLocalString(oItem, "RaceChange");
-            int iOldRace        = GetOriginalRace(oPC);
+            int iOriginalRace        = GetOriginalRace(oPC);
             int iOldSub         = GetOriginalSubRace(oPC);
             int iOldGoodEvil    = GetLocalInt(oItem, "OldGoodEvil");
             string sInBlood     = GetLocalString(oItem, "InBlood");
@@ -4512,11 +4512,11 @@ void PS_HalfDragonRaceFix(object oPC)
             int iMagic          = GetLocalInt(oItem, "Draconic Magic");
             
             if (iHDLevel != 6 && sRaceChg != "")
-            {   PS_SetRacialType(oPC, iOldRace);
+            {   PS_SetRacialType(oPC, iOriginalRace);
                 PS_SetSubRacialType(oPC, iOldSub);
                 DeleteLocalString(oItem, "RaceChange");
                 //DeleteLocalInt(oItem, VAR_OLD_RACE);
-                //DeleteLocalInt(oItem, "OldSubrace");
+                //DeleteLocalInt(oItem, "OriginalSubRace");
                 SendMessageToPC(oPC, "Racial type and subtype reverting to original.");
             }
             
@@ -4601,18 +4601,18 @@ void PS_HalfOutsiderRaceFix(object oPC)
             //int iOldECL           = GetLocalInt(oItem, "OldECL");
             //string sOldECL        = IntToString(iOldECL);
             string sRaceChg     = GetLocalString(oItem, "RaceChange");
-            int iOldRace        = GetOriginalRace(oPC);
+            int iOriginalRace        = GetOriginalRace(oPC);
             int iOldSub         = GetOriginalSubRace(oPC);
             int iHDLevel        = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
             int iFlight         = GetLocalInt(oItem, "DarkFlight");
             int iSight          = GetLocalInt(oItem, "SupSight");
             
             if (iHDLevel != 6 && sRaceChg != "")
-            {   PS_SetRacialType(oPC, iOldRace);
+            {   PS_SetRacialType(oPC, iOriginalRace);
                 PS_SetSubRacialType(oPC, iOldSub);
                 DeleteLocalString(oItem, "RaceChange");
                // DeleteLocalInt(oItem, VAR_OLD_RACE);
-               // DeleteLocalInt(oItem, "OldSubrace");
+               // DeleteLocalInt(oItem, "OriginalSubRace");
                 SendMessageToPC(oPC, "Racial type and subtype reverting to original");  }
             
             if (iHDLevel != 6 && iFlight == 1)

@@ -123,7 +123,8 @@ void main()
 		string sArea = GetTag(GetArea(oSPAWN));
 		int nChance = (SpecialDrop(sArea, oSPAWN, TRUE) * 5);
 		if (Random(1000) < nChance) SpecialDrop(sArea, oSPAWN); 
-		
+		if (TestStringAgainstPattern("ps_creature_ascended**", GetStringLowerCase(GetResRef(oSPAWN))))
+			CreateTreasureItemOnTarget("ps_key_mystery", oSPAWN); //make sure ascended drops key
 		//Generate general loot!
 		if (d100() <= nLOOTCHANCE){
 			GenerateTreasureItemOnTarget(oSPAWN, nLOOT);

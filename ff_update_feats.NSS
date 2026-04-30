@@ -164,7 +164,7 @@ void fUpdateOtherFeats(object oPC){
 			GetHasFeat(3021, oPC) || GetHasFeat(3022, oPC) || GetHasFeat(3023, oPC) || GetHasFeat(3008, oPC)) //..and we're adding wings..
 				FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //..then give the default wing feat
 	}
-
+	ManageAppearance(oPC);
 	// update any ongoing effects for methdef, constrike, and staff
 	UpdateCombatMods(oPC);
 }

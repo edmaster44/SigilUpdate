@@ -679,6 +679,7 @@ string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID, int bF
 }
 
 string GetDebugInfo(object oPC){
+	object oEss	= GetItemPossessedBy(oPC,"ps_essence");
     object oArea = GetArea(oPC);
 	int nVar;
     string sDebug = "PLEASE SCREENSHOT THIS INFO & INCLUDE IN BUG REPORTS";
@@ -687,6 +688,10 @@ string GetDebugInfo(object oPC){
 	sDebug += "\nRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", GetSubRace(oPC)));
 	sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nVar) + ")";
+	sDebug += "\nOriginal Race: " +IntToString(GetOriginalRace(oPC));
+	sDebug += "\nOriginal Subrace: " +IntToString(GetOriginalSubRace(oPC));
+	sDebug += "\Saved Wings: " + IntToString(GetLocalInt(oEss, "PC_Wing"));
+	sDebug += "\nSaved Tail: " + IntToString(GetLocalInt(oEss, "PC_Tail"));
 	sDebug += "\nSize: ";
 	nVar = GetCreatureSize(oPC);
 	switch (nVar){

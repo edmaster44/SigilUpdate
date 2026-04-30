@@ -178,6 +178,7 @@ void main()
 
 	// Template classes - apply fix to racial ability bonuses
 	// Add new templates to this list when created
+	/*
 	string sTemplate	= GetLocalString(oItem, "Template");
 	int iStop			= GetLocalInt(oItem, "TemplateFix");
 	int iOldSub			= GetOriginalSubRace(oPC);
@@ -192,7 +193,7 @@ void main()
 			PS_ApplyTemplateClassAbilityFix(oPC, oItem);
 		}
 	}
-	
+	*/
 	if (GetLocalInt(oItem, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);

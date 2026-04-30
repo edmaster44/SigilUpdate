@@ -353,12 +353,19 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	} else if (TestStringAgainstPattern("**niflheim**", sAREA)){
 		if (bGetPercentage) return 6;
 		else {
-			switch (Random(5)){
-				case 0: sSpecial = WOOD_TWELVETREES; break;
-				case 1: sSpecial = INGOT_MORGUTH_IRON; break;
-				case 2: sSpecial = HIDE_FLESHGOLEM; break;
-				case 3: sSpecial = WOOD_GIANT_BONE; break;
-				case 4: sSpecial = "ps_questobject_interestingskull"; break;
+			if (GetLocalInt(oSPAWN, "X2_L_IS_INCORPOREAL")){
+				switch (d2()){
+					case 1: sSpecial = "n2_crft_dist028b"; break;//ghostly essence 
+					case 2:sSpecial = "n2_crft_dist017"; break;//ghost residue
+				}
+			} else {
+				switch (Random(5)){
+					case 0: sSpecial = WOOD_TWELVETREES; break;
+					case 1: sSpecial = INGOT_MORGUTH_IRON; break;
+					case 2: sSpecial = HIDE_FLESHGOLEM; break;
+					case 3: sSpecial = WOOD_GIANT_BONE; break;
+					case 4: sSpecial = "ps_questobject_interestingskull"; break;
+				}
 			}
 		}
 	} else if (TestStringAgainstPattern("**gehenna**", sAREA)){
@@ -381,9 +388,7 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		if (bGetPercentage) return 2;
 		else sSpecial = GetCampaignItemString();
 	}
-	if (TestStringAgainstPattern("ps_creature_ascended**", GetStringLowerCase(GetResRef(oSPAWN))))
-		CreateTreasureItemOnTarget("ps_key_mystery", oSPAWN);
-	if (!bGetPercentage && !GetLocalInt(oSPAWN, "X2_L_IS_INCORPOREAL")){
+	if (!bGetPercentage){
 		if (sSpecial == "") sSpecial = INGOT_IRON;
 		CreateTreasureItemOnTarget(sSpecial, oSPAWN);
 	}

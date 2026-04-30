@@ -106,30 +106,15 @@ void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
 void PS_ManageImbueItem(object oPC);
 void LevelUpGuiChoices(object oPC);
 
-/* WIP: Do we want to change epic spells so that they require a custom
- prereq feat since the engine recognizing favored soul having 9th lvl spells
- is a known issue? Have not got the go ahead on this but it would be this 
- easy -FlattedFifth
-void ApplyEpicSpellPrereq(object oPC){
-	// we want to give the prereq feat at lvl 20
-	// because the engine fires this script AFTER level up,
-	// so in order for the character to be able to choose
-	// an epic spell at lvl 21, they need to have it before then.
-	// However, if we give it too soon then ppl will think they
-	// can start picking epic spells b4 lvl 21 and report in discord
-	if (PS_GetLevel(oPC) < 20) return;
-	if (PS_GetCasterLevel(oPC, CLASS_TYPE_CLERIC) >= 18 ||
-		PS_GetCasterLevel(oPC, CLASS_TYPE_DRUID) >= 18 ||
-		PS_GetCasterLevel(oPC, CLASS_TYPE_SPIRIT_SHAMAN) >= 18 ||
-		PS_GetCasterLevel(oPC, CLASS_TYPE_FAVORED_SOUL) >= 18)
-			FeatAdd(oPC, FEAT_EPIC_SPELL_REQ_DIVINE, FALSE);
-			
-	if (PS_GetCasterLevel(oPC, CLASS_TYPE_SORCERER) >= 18 ||
-		PS_GetCasterLevel(oPC, CLASS_TYPE_WARLOCK) >= 18 ||
-		PS_GetCasterLevel(oPC, CLASS_TYPE_WIZARD) >= 18)
-			FeatAdd(oPC, FEAT_EPIC_SPELL_REQ_ARCANE, FALSE);
+void ManageAppearance(object oPC){
+	object oEss	= GetItemPossessedBy(oPC,"ps_essence");	
+	if (GetLocalInt(oEss, "TempChange")) return;
+	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+	if (app.TailVariation != 0 || GetHasFeat(2120, oPC, TRUE)){
+		FeatAdd(oPC, 21905, FALSE, FALSE, TRUE); // appearance persistance
+	}
+
 }
-*/
 
 void LevelUpGuiChoices(object oPC){
 
@@ -198,7 +183,11 @@ void LevelUpGuiChoices(object oPC){
 		if (GetHasFeat(288, oPC) || GetHasFeat(2179, oPC) || GetHasFeat(3024, oPC) || GetHasFeat(2781, oPC) || 
 			GetHasFeat(3021, oPC) || GetHasFeat(3022, oPC) || GetHasFeat(3023, oPC) || GetHasFeat(3008, oPC)) //..and we're adding wings..
 				FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //..then give the default wing feat
+				FeatAdd(oPC, 21905, FALSE, FALSE, TRUE); // and appearance persistor
 	}
+	//if we DO have the wings feat but don't have my new appearance persistor, give it
+	if (GetHasFeat(2120, oPC, TRUE) && !GetHasFeat(21905, oPC, TRUE))
+		FeatAdd(oPC, 21905, FALSE, FALSE, TRUE);
 }
 
 //manually give creature weapon proficiency to any race or class that is meant to have it
