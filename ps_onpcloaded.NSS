@@ -206,8 +206,10 @@ void SetStartingVariables(object oPC, string sLegal){
 	if (nRace == 0) nRace = -1;
 	int nSub = GetSubRace(oPC);
 	if (nSub = 0) nSub = -1;
+	SetLocalInt(oEss, "OldRace", nRace);
+	SetLocalInt(oEss, "OldSubrace", nSub);	
 	SetLocalInt(oEss, "OriginalRace", nRace);
-	SetLocalInt(oEss, "OriginalSubRace", nSub);			
+	SetLocalInt(oEss, "OriginalSubRace", nSub);	
 	SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));
 }
 
@@ -572,11 +574,11 @@ void main()
 	
 	object oCheck =  GetItemPossessedBy(oPC, "ps_essence");
 	
-	//this was just changing the old subrace to new for templates. OriginalRace and OriginalSubRace should be set ONCE
+	//this was just changing the old subrace to new for templates. OriginalRace and "OldSubrace" should be set ONCE
 	// for new characters and then never changed again
-	// If OriginalSubRace is not already set, set it!
-	//if (GetLocalInt(oCheck, "OriginalSubRace") == 0 && GetLocalString(oCheck, "Template") == "")
-	//{	SetLocalInt(oCheck, "OriginalSubRace", GetSubRace(oPC));	}
+	// If "OldSubrace" is not already set, set it!
+	//if (GetLocalInt(oCheck, "OldSubrace") == 0 && GetLocalString(oCheck, "Template") == "")
+	//{	SetLocalInt(oCheck, "OldSubrace", GetSubRace(oPC));	}
 	
 	/*	Victim of crash during Word of Peace imprisonment effect is sent back to where they came from.	*/
 	location lExdim = GetLocalLocation(oCheck, "ExtraDim");

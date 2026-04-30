@@ -56,7 +56,7 @@ void PS_lose_one_level(object oPC);
 const string ECL_CRAFT_BONUS_PREFIX = "ecl_craft_bonus_";
 
 // String name of local variable on essence for storing the original race of the oPC.
-const string VAR_OLD_RACE = "OriginalRace";
+const string VAR_OLD_RACE = "OldRace";
 // String name of local variable on essence for storing ECL.
 const string VAR_ECL = "ECL";
 
@@ -4152,7 +4152,7 @@ void PS_UndeadRaceFix(object oPC)
             //int iOldECL   = GetLocalInt(oItem, "OldECL");
             //string sOldECL = IntToString(iOldECL);
             int iOriginalRace = GetOriginalRace(oPC);
-            int iOldSub = GetOriginalSubRace(oPC);
+            int iOldSub = GetOriginalSubrace(oPC);
             int iOldGoodEvil = GetLocalInt(oItem, "OldGoodEvil");
             
             // Fix for Liches and Vampires
@@ -4340,14 +4340,14 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
     if (nREVERSE == TRUE)
     {
         if (nVAR != TRUE) return;
-        nSUBRACE = GetOriginalSubRace(oPC);
+        nSUBRACE = GetOriginalSubrace(oPC);
         DelayCommand(0.0f, DeleteLocalInt(oESSENCE, "TemplateFix"));
     }
     else
     {
         if (nVAR == TRUE) return;
         nSUBRACE = GetSubRace(oPC);
-        //SetLocalInt(oESSENCE, "OriginalSubRace", nSUBRACE);
+        //SetLocalInt(oESSENCE, "OldSubrace", nSUBRACE);
         SetLocalInt(oESSENCE, "TemplateFix", TRUE);
     }
     string s2DA = "racialsubtypes";
@@ -4499,7 +4499,7 @@ void PS_HalfDragonRaceFix(object oPC)
             //int iECL          = StringToInt(sECL);
             string sRaceChg     = GetLocalString(oItem, "RaceChange");
             int iOriginalRace        = GetOriginalRace(oPC);
-            int iOldSub         = GetOriginalSubRace(oPC);
+            int iOldSub         = GetOriginalSubrace(oPC);
             int iOldGoodEvil    = GetLocalInt(oItem, "OldGoodEvil");
             string sInBlood     = GetLocalString(oItem, "InBlood");
             int iHeritage       = GetLocalInt(oItem, "Draconic_Heritage");
@@ -4516,7 +4516,7 @@ void PS_HalfDragonRaceFix(object oPC)
                 PS_SetSubRacialType(oPC, iOldSub);
                 DeleteLocalString(oItem, "RaceChange");
                 //DeleteLocalInt(oItem, VAR_OLD_RACE);
-                //DeleteLocalInt(oItem, "OriginalSubRace");
+                //DeleteLocalInt(oItem, "OldSubrace");
                 SendMessageToPC(oPC, "Racial type and subtype reverting to original.");
             }
             
@@ -4602,7 +4602,7 @@ void PS_HalfOutsiderRaceFix(object oPC)
             //string sOldECL        = IntToString(iOldECL);
             string sRaceChg     = GetLocalString(oItem, "RaceChange");
             int iOriginalRace        = GetOriginalRace(oPC);
-            int iOldSub         = GetOriginalSubRace(oPC);
+            int iOldSub         = GetOriginalSubrace(oPC);
             int iHDLevel        = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
             int iFlight         = GetLocalInt(oItem, "DarkFlight");
             int iSight          = GetLocalInt(oItem, "SupSight");
@@ -4612,7 +4612,7 @@ void PS_HalfOutsiderRaceFix(object oPC)
                 PS_SetSubRacialType(oPC, iOldSub);
                 DeleteLocalString(oItem, "RaceChange");
                // DeleteLocalInt(oItem, VAR_OLD_RACE);
-               // DeleteLocalInt(oItem, "OriginalSubRace");
+               // DeleteLocalInt(oItem, "OldSubrace");
                 SendMessageToPC(oPC, "Racial type and subtype reverting to original");  }
             
             if (iHDLevel != 6 && iFlight == 1)

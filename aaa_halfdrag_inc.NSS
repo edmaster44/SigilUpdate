@@ -995,8 +995,8 @@ void PS_HD_Dragonflight(object oPC, object oItem)
 	int iTemp		= GetLocalInt(oItem, "TempChange");
 	if (iTemp == 1) return;
 	int iWing, iWingF, iWingM;
-	int iRace		= GetLocalInt(oItem, "OriginalRace");
-	int iSub		= GetLocalInt(oItem, "OriginalSubRace");
+	int iRace		= GetLocalInt(oItem, "OldRace");
+	int iSub		= GetLocalInt(oItem, "OldSubrace");
 	
 	if (iRace == RACIAL_TYPE_INVALID)
 	{	SendMessageToPC(oPC, "Debug: Error, no racial type found."); return;	}

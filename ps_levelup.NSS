@@ -181,7 +181,7 @@ void main()
 	/*
 	string sTemplate	= GetLocalString(oItem, "Template");
 	int iStop			= GetLocalInt(oItem, "TemplateFix");
-	int iOldSub			= GetOriginalSubRace(oPC);
+	int iOldSub			= GetOriginalSubrace(oPC);
 	if (PS_NeedsTemplateClassAbilityFix(oPC))
 	{	
 		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);

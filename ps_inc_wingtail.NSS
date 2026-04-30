@@ -33,14 +33,14 @@ int PS_OutsiderLevels(object oPC)
 void PS_SetWingNumber(object oPC, int nVar)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	SetLocalInt(oEssence, "New_PC_Wing", nVar);
+	SetLocalInt(oEssence, "PC_Wing", nVar);
 }
 
 // Returns the value from the essence variable PC_Wing
 int PS_GetWingNumber(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nWing		= GetLocalInt(oEssence, "New_PC_Wing");
+	int nWing		= GetLocalInt(oEssence, "PC_Wing");
 	return nWing;
 }
 
@@ -49,7 +49,7 @@ int PS_GetWingNumber(object oPC)
 void PS_SetTailNumber(object oPC, int nVar)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	SetLocalInt(oEssence, "New_PC_Tail", nVar);
+	SetLocalInt(oEssence, "PC_Wing", nVar);
 }
 
 
@@ -57,7 +57,7 @@ void PS_SetTailNumber(object oPC, int nVar)
 int PS_GetTailNumber(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nTail		= GetLocalInt(oEssence, "New_PC_Tail");
+	int nTail		= GetLocalInt(oEssence, "PC_Wing");
 	return nTail;
 }
 
@@ -73,7 +73,7 @@ int PS_GetRacialTailType(object oPC)
 int PS_GetRacialWingType(object oPC){
 	int nGender		= GetGender(oPC);
 	//int nSub		= GetSubRace(oPC);
-	int nSub = GetOriginalSubRace(oPC);
+	int nSub = GetOriginalSubrace(oPC);
 	string sMWing	= Get2DAString("racialsubtypes", "MWING", nSub);
 	int nMWing		= StringToInt(sMWing);
 	string sFWing	= Get2DAString("racialsubtypes", "FWING", nSub);
@@ -90,7 +90,7 @@ int PS_Get_WingRace(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
 	int nRace		= GetOriginalRace(oPC);
-	int nSubrace	= GetOriginalSubRace(oPC);
+	int nSubrace	= GetOriginalSubrace(oPC);
 	switch (nRace)
 	{	
 		case 0: return WING_VARIATION_DWARF;
@@ -290,7 +290,7 @@ int PS_GetWing_HalfDragon(object oPC)
 int PS_GetWing_Template(object oPC)
 {
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nWingRace = GetOriginalSubRace(oPC);
+	int nWingRace = GetOriginalSubrace(oPC);
 	
 	string sMWing	= Get2DAString("racialsubtypes", "MWING", nWingRace);
 	int nMWing		= StringToInt(sMWing);
@@ -392,7 +392,7 @@ int PS_GetFeatWingType(object oPC)
 void PS_WingTailSetup(object oPC)
 {
 	int nWing;
-	
+	//TODO MAKE THIS CHECK TO SEE IF WINGS AND TAILS ARE ALREADY SET UP BEFORE SETTING THEM UP
 	object oEssence		= GetItemPossessedBy(oPC,"ps_essence");
 	int nOverride		= GetLocalInt(oEssence, "WingOverride");
 	int nRacialWing		= PS_GetRacialWingType(oPC);

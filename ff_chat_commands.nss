@@ -691,13 +691,19 @@ string GetDebugInfo(object oPC){
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSub));
 	sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSub) + ")";
 	nRace = GetOriginalRace(oPC);
-	nSub = GetOriginalSubRace(oPC);
+	nSub = GetOriginalSubrace(oPC);
+	nVar = StringToInt(Get2DAString("racialtypes", "Name", nRace));
+	sDebug += "\nOld Race: "  + GetStringByStrRef(nVar) + " (ID: " + IntToString(nRace) + ")";
+	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSub));
+	sDebug += "\nOld Subrace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSub) + ")";
+	nRace = GetLocalInt(oEss, "OriginalRace");
+	nSub = GetLocalInt(oEss, "OriginalSubRace");
 	nVar = StringToInt(Get2DAString("racialtypes", "Name", nRace));
 	sDebug += "\nOriginal Race: "  + GetStringByStrRef(nVar) + " (ID: " + IntToString(nRace) + ")";
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSub));
 	sDebug += "\nOriginal Subrace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSub) + ")";
-	sDebug += "\nSaved Wings: " + IntToString(GetLocalInt(oEss, "New_PC_Wing"));
-	sDebug += "\nSaved Tail: " + IntToString(GetLocalInt(oEss, "New_PC_Tail"));
+	sDebug += "\nSaved Wings: " + IntToString(GetLocalInt(oEss, "PC_Wing"));
+	sDebug += "\nSaved Tail: " + IntToString(GetLocalInt(oEss, "PC_Wing"));
 	sDebug += "\nSize: ";
 	nVar = GetCreatureSize(oPC);
 	switch (nVar){

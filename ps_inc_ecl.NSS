@@ -20,19 +20,19 @@ int GetOriginalRace(object oPC){
 		SendMessageToPC(oPC, "Warning!!! Essence item missing! Contact administrator!");
 		return GetRacialType(oPC);
 	}
-	int nRace = GetLocalInt(oEss, "OriginalRace");
+	int nRace = GetLocalInt(oEss, "OldRace");
 	if (nRace == 0) nRace = GetRacialType(oPC);
 	else if (nRace == -1) nRace = 0;
 	return nRace;
 }
 
-int GetOriginalSubRace(object oPC){
+int GetOriginalSubrace(object oPC){
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
 	if (!GetIsObjectValid(oEss)){
 		SendMessageToPC(oPC, "Warning!!! Essence item missing! Contact administrator!");
 		return GetSubRace(oPC);
 	}
-	int nSub = GetLocalInt(oEss, "OriginalSubRace");
+	int nSub = GetLocalInt(oEss, "OldSubrace");
 	if (nSub == 0) nSub = GetSubRace(oPC);
 	else if (nSub == -1) nSub = 0; // gold dwarf is subrace 0, which is ofc also nothing set, so gold dwarf stored as -1
 	return nSub;
@@ -47,7 +47,7 @@ int GetOriginalSubRace(object oPC){
 // now due to the backups and checking involved in doing so safely. -Flatted Fifth
 int GetNewECL(object oPC){
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	int nRace = GetOriginalSubRace(oPC);
+	int nRace = GetOriginalSubrace(oPC);
 	
 	int nEcl = StringToInt(Get2DAString("racialsubtypes", "PS_ECL", nRace));
 	int i;
@@ -122,7 +122,7 @@ int PS_CalculateOriginalECL(object oPC, object oEssence)
 {
 	if (ALLOW_ECL_LEVEL_30) return 0;
 	
-	int nOldSub			= GetOriginalSubRace(oPC);
+	int nOldSub			= GetOriginalSubrace(oPC);
 	string s2da			= "racialsubtypes";
 	string sColumn		= "LA";
 	
