@@ -702,6 +702,12 @@ string GetDebugInfo(object oPC){
 	sDebug += "\nOriginal Race: "  + GetStringByStrRef(nVar) + " (ID: " + IntToString(nRace) + ")";
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSub));
 	sDebug += "\nOriginal Subrace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSub) + ")";
+	nRace = GetLocalInt(oEss, "NewOldRace");
+	nSub = GetLocalInt(oEss, "NewOldSubrace");	
+	nVar = StringToInt(Get2DAString("racialtypes", "Name", nRace));
+	sDebug += "\nNew Old Race: "  + GetStringByStrRef(nVar) + " (ID: " + IntToString(nRace) + ")";
+	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSub));
+	sDebug += "\nNew Old Subrace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSub) + ")";
 	sDebug += "\nSaved Wings: " + IntToString(GetLocalInt(oEss, "PC_Wing"));
 	sDebug += "\nSaved Tail: " + IntToString(GetLocalInt(oEss, "PC_Tail"));
 	sDebug += "\nSize: ";
