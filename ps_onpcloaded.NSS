@@ -208,10 +208,6 @@ void SetStartingVariables(object oPC, string sLegal){
 	if (nSub == 0) nSub = -1;
 	SetLocalInt(oEss, "OldRace", nRace);
 	SetLocalInt(oEss, "OldSubrace", nSub);	
-	SetLocalInt(oEss, "OriginalRace", nRace);
-	SetLocalInt(oEss, "OriginalSubRace", nSub);	
-	SetLocalInt(oEss, "NewOldRace", nRace);
-	SetLocalInt(oEss, "NewOldSubrace", nSub);	
 	SendMessageToPC(oPC, "Original subrace information stored: " + IntToString(GetSubRace(oPC)));
 }
 

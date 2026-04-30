@@ -37,28 +37,23 @@ void PS_SetWingNumber(object oPC, int nVar)
 }
 
 // Returns the value from the essence variable PC_Wing
-int PS_GetWingNumber(object oPC)
-{
+int PS_GetWingNumber(object oPC){
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nWing		= GetLocalInt(oEssence, "PC_Wing");
-	return nWing;
+	return GetLocalInt(oEssence, "PC_Wing");
 }
 
 // Sets the essence variable PC_Tail
 // nVar = numeric wing variation, or WING_TYPE_*
-void PS_SetTailNumber(object oPC, int nVar)
-{
+void PS_SetTailNumber(object oPC, int nVar){
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	SetLocalInt(oEssence, "PC_Wing", nVar);
+	SetLocalInt(oEssence, "PC_Tail", nVar);
 }
 
 
 // Returns the value from the essence variable PC_Tail
-int PS_GetTailNumber(object oPC)
-{
+int PS_GetTailNumber(object oPC){
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	int nTail		= GetLocalInt(oEssence, "PC_Wing");
-	return nTail;
+	return GetLocalInt(oEssence, "PC_Tail");
 }
 
 int PS_GetRacialTailType(object oPC)

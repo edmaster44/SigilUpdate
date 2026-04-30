@@ -31,7 +31,7 @@ void main(){
 	object oEss	= GetItemPossessedBy(oPC,"ps_essence");	
 	if (GetLocalInt(oEss, "TempChange")) return;
 	//Debug
-	SendMessageToPC(oPC, "Initiating wings persist");
+	//SendMessageToPC(oPC, "Initiating wings persist");
 
 	if (GetHasFeat(288, oPC, TRUE)) PS_HD_Dragonflight(oPC, oEss);
 	else if (GetHasFeat(2179, oPC, TRUE) || GetHasFeat(3023, oPC, TRUE) ||
@@ -46,14 +46,14 @@ void main(){
 	if (nWing == 0 && nTail == 0) return;
 	
 		//Debug
-	SendMessageToPC(oPC, "Wing Set to " + IntToString(nWing));
+	//SendMessageToPC(oPC, "Wing Set to " + IntToString(nWing));
 	
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	if (nWing != app.WingVariation || nTail != app.TailVariation){
 		app.WingVariation = nWing;
 		app.TailVariation = nTail;
 		PS_SetCreatureCoreAppearance(oPC, app);
-		//PS_RefreshAppearance(oPC);
+		PS_RefreshAppearance(oPC);
 		PS_SetCreatureCoreAppearance(oPC, app);
 	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 	}
@@ -61,7 +61,7 @@ void main(){
 
 void SetRacialWing(object oPC, object oEss){
 	//Debug
-	SendMessageToPC(oPC, "Entering Set Racial Wing");
+	//SendMessageToPC(oPC, "Entering Set Racial Wing");
 	int nGender	= GetGender(oPC);
 	string sWing = (nGender == GENDER_MALE) ? "MWING" : "FWING";
 	int nSub = GetLocalInt(oEss, "NewOldSubrace");	
@@ -75,7 +75,7 @@ void SetRacialWing(object oPC, object oEss){
 
 void PS_FeyWings(object oPC, object oEss){
 	//Debug
-	SendMessageToPC(oPC, "Entering Fey Wing");
+	//SendMessageToPC(oPC, "Entering Fey Wing");
 	if (GetGender(oPC) == GENDER_MALE) PS_SetWingNumber(oPC, 79);
 	else  PS_SetWingNumber(oPC, 78);
 	PS_ApplyPCWings(oPC);
@@ -84,7 +84,7 @@ void PS_FeyWings(object oPC, object oEss){
 
 void PS_HD_Dragonflight(object oPC, object oEss){
 		//Debug
-	SendMessageToPC(oPC, "Entering Set Dragon Wing");
+	//SendMessageToPC(oPC, "Entering Set Dragon Wing");
 	int iCheck		= GetLocalInt(oEss, "DragonFlight");
 	int iTemp		= GetLocalInt(oEss, "TempChange");
 	if (iTemp == 1) return;
@@ -132,7 +132,7 @@ void PS_HD_Dragonflight(object oPC, object oEss){
 
 void PS_Ability_DarkFlight(object oPC, object oEss){
 	//Debug
-	SendMessageToPC(oPC, "Entering DarkFlight");
+	//SendMessageToPC(oPC, "Entering DarkFlight");
 	//int iCheck		= GetLocalInt(oEss, "DarkFlight"); // not used in this function
 	if (GetLocalInt(oEss, "TempChange") == 1)	return;
 	
