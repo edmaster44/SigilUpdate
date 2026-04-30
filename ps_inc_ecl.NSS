@@ -34,7 +34,7 @@ int GetOriginalSubRace(object oPC){
 	}
 	int nSub = GetLocalInt(oEss, "OldSubrace");
 	if (nSub == 0) nSub = GetSubRace(oPC);
-	else if (nSub == -1) nSub = 0;
+	else if (nSub == -1) nSub = 0; // gold dwarf is subrace 0, which is ofc also nothing set, so gold dwarf stored as -1
 	return nSub;
 }
 

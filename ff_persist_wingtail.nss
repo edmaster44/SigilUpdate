@@ -21,38 +21,47 @@ FEAT		SPELL		TYPE			ADDITIONAL NOTE
 #include "ps_inc_wingtail"
 #include "x2_inc_spellhook"
 
-void SetRacialWing(object oPC, object oEssence);
-void PS_Ability_DarkFlight(object oPC);
-void PS_HD_Dragonflight(object oPC, object oItem);
-void PS_FeyWings(object oPC);
+void SetRacialWing(object oPC, object oEss);
+void PS_Ability_DarkFlight(object oPC, object oEss);
+void PS_HD_Dragonflight(object oPC, object oEss);
+void PS_FeyWings(object oPC, object oEss);
 
 void main(){
 	object oPC = OBJECT_SELF;
-	object oEssence	= GetItemPossessedBy(oPC,"ps_essence");	
-	if (GetLocalInt(oEssence, "TempChange")) return;
+	object oEss	= GetItemPossessedBy(oPC,"ps_essence");	
+	if (GetLocalInt(oEss, "TempChange")) return;
+	//Debug
+	SendMessageToPC(oPC, "Intitating wings persist");
 
-	if (GetHasFeat(288, oPC, TRUE)) PS_HD_Dragonflight(oPC, oEssence);
+	if (GetHasFeat(288, oPC, TRUE)) PS_HD_Dragonflight(oPC, oEss);
 	else if (GetHasFeat(2179, oPC, TRUE) || GetHasFeat(3023, oPC, TRUE) ||
 		GetHasFeat(3024, oPC, TRUE) || GetHasFeat(2781, oPC, TRUE) || 
 		GetHasFeat(3021, oPC, TRUE) || GetHasFeat(022, oPC, TRUE))
-			PS_Ability_DarkFlight(oPC);
-	else if (GetHasFeat(3008, oPC, TRUE)) PS_FeyWings(oPC);
-	else SetRacialWing(oPC, oEssence);
+			PS_Ability_DarkFlight(oPC, oEss);
+	else if (GetHasFeat(3008, oPC, TRUE)) PS_FeyWings(oPC, oEss);
+	else SetRacialWing(oPC, oEss);
 	
 	int nWing = PS_GetWingNumber(oPC);
 	int nTail = PS_GetTailNumber(oPC);
 	if (nWing == 0 && nTail == 0) return;
+	
+		//Debug
+	SendMessageToPC(oPC, "Wing Set to " + IntToString(nWing));
 	
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 	if (nWing != app.WingVariation || nTail != app.TailVariation){
 		app.WingVariation = nWing;
 		app.TailVariation = nTail;
 		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_RefreshAppearance(oPC);
+		//PS_RefreshAppearance(oPC);
+		PS_SetCreatureCoreAppearance(oPC, app);
+	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 	}
 }
 
-void SetRacialWing(object oPC, object oEssence){
+void SetRacialWing(object oPC, object oEss){
+	//Debug
+	SendMessageToPC(oPC, "Entering Set Racial Wing");
 	int nGender	= GetGender(oPC);
 	string sWing = (nGender == GENDER_MALE) ? "MWING" : "FWING";
 	int nSub = GetOriginalSubRace(oPC);
@@ -63,20 +72,24 @@ void SetRacialWing(object oPC, object oEssence){
 	}	
 }
 
-void PS_FeyWings(object oPC){
+void PS_FeyWings(object oPC, object oEss){
+	//Debug
+	SendMessageToPC(oPC, "Entering Fey Wing");
 	if (GetGender(oPC) == GENDER_MALE) PS_SetWingNumber(oPC, 79);
 	else  PS_SetWingNumber(oPC, 78);
 	PS_ApplyPCWings(oPC);
 }
 
 
-void PS_HD_Dragonflight(object oPC, object oItem){
-	int iCheck		= GetLocalInt(oItem, "DragonFlight");
-	int iTemp		= GetLocalInt(oItem, "TempChange");
+void PS_HD_Dragonflight(object oPC, object oEss){
+		//Debug
+	SendMessageToPC(oPC, "Entering Set Dragon Wing");
+	int iCheck		= GetLocalInt(oEss, "DragonFlight");
+	int iTemp		= GetLocalInt(oEss, "TempChange");
 	if (iTemp == 1) return;
 	int iWing, iWingF, iWingM;
 	int iRace = GetOriginalRace(oPC);
-	int iSub		= GetOriginalSubRace(oPC);
+	int iSub = GetOriginalSubRace(oPC);
 	
 	if (iRace == RACIAL_TYPE_INVALID)
 	{	SendMessageToPC(oPC, "Debug: Error, no racial type found."); return;	}
@@ -110,16 +123,17 @@ void PS_HD_Dragonflight(object oPC, object oItem){
 		app.WingVariation = iWing;
 	PS_SetCreatureCoreAppearance(oPC, app);
 	PS_RefreshAppearance(oPC);
-	SetLocalInt(oItem, "DragonFlight", 1);
+	SetLocalInt(oEss, "DragonFlight", 1);
 	DelayCommand(0.1f, PS_TintFixer(oPC));
 	DelayCommand(0.2f, PS_RefreshAppearance(oPC));
 	DelayCommand(0.3f, PS_SaveOriginalAppearance(oPC));
 }
 
-void PS_Ability_DarkFlight(object oPC){
-	object oItem	= GetItemPossessedBy(oPC,"ps_essence");	
-	//int iCheck		= GetLocalInt(oItem, "DarkFlight"); // not used in this function
-	if (GetLocalInt(oItem, "TempChange") == 1)	return;
+void PS_Ability_DarkFlight(object oPC, object oEss){
+	//Debug
+	SendMessageToPC(oPC, "Entering DarkFlight");
+	//int iCheck		= GetLocalInt(oEss, "DarkFlight"); // not used in this function
+	if (GetLocalInt(oEss, "TempChange") == 1)	return;
 	
 	int iWing;
 	int iWingRace;
@@ -164,7 +178,7 @@ void PS_Ability_DarkFlight(object oPC){
 			app.WingVariation = iWing;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
-		SetLocalInt(oItem, "DarkFlight", 1);
+		SetLocalInt(oEss, "DarkFlight", 1);
 		DelayCommand(0.1f, PS_TintFixer(oPC));
 		DelayCommand(0.2f, PS_RefreshAppearance(oPC));
 		DelayCommand(0.3f, PS_SaveOriginalAppearance(oPC));	}
