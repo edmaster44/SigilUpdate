@@ -64,8 +64,7 @@ void SetRacialWing(object oPC, object oEss){
 	//SendMessageToPC(oPC, "Entering Set Racial Wing");
 	int nGender	= GetGender(oPC);
 	string sWing = (nGender == GENDER_MALE) ? "MWING" : "FWING";
-	int nSub = GetLocalInt(oEss, "NewOldSubrace");	
-	if (nSub == -1) nSub = 0;
+	int nSub = GetOriginalSubrace(oPC);
 	int nWing = StringToInt(Get2DAString("racialsubtypes", sWing, nSub));
 	if (nWing != 0){
 		PS_SetWingNumber(oPC, nWing);
