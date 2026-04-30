@@ -633,7 +633,7 @@ void main()
 	// Save current ECL to essence
 	PS_CalculateECL(oPC);
 	PS_EnforceMaxLevel(oPC);
-	
+	/*
 	object oEssence	= GetItemPossessedBy(oPC,"ps_essence");
 	if (GetLocalInt(oEssence, "TempChange") != 1)
 	{	
@@ -641,7 +641,7 @@ void main()
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
 	}
-	
+	*/
 //	DelayCommand(6.0f, StackingEquipmentBugFix(oPC));
 
 		

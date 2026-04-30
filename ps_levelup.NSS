@@ -193,13 +193,14 @@ void main()
 			PS_ApplyTemplateClassAbilityFix(oPC, oItem);
 		}
 	}
-	*/
+	
 	if (GetLocalInt(oItem, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
 	}	
+	*/
 	// various class and race related checks
 	CountSpells(oPC,1);
 	GetWarlockCasterLevel(oPC);

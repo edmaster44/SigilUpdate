@@ -691,7 +691,7 @@ string GetDebugInfo(object oPC){
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSub));
 	sDebug += "\nSubRace: " + GetStringByStrRef(nVar) + " (ID: " + IntToString(nSub) + ")";
 	nRace = GetOriginalRace(oPC);
-	nSub = GetOriginalRace(oPC);
+	nSub = GetOriginalSubRace(oPC);
 	nVar = StringToInt(Get2DAString("racialtypes", "Name", nRace));
 	sDebug += "\nOriginal Race: "  + GetStringByStrRef(nVar) + " (ID: " + IntToString(nRace) + ")";
 	nVar = StringToInt(Get2DAString("racialsubtypes", "Name", nSub));

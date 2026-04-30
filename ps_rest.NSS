@@ -270,14 +270,14 @@ void RestFinish(object oPC)
 	 TemplateRacialAdjust(oPC, oESSENCE, TRUE);
 	 
 	 IncrementalDebug(oPC, "finish: middle");
-	
+	/*
 	if (GetLocalInt(oESSENCE, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
 	}
-	
+	*/
 	//AddEPForDeathDice(oPC); redundant, this is handled by ff_update_feats
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
