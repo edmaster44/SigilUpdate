@@ -205,7 +205,7 @@ void SetStartingVariables(object oPC, string sLegal){
 	int nRace = GetRacialType(oPC);
 	if (nRace == 0) nRace = -1;
 	int nSub = GetSubRace(oPC);
-	if (nSub = 0) nSub = -1;
+	if (nSub == 0) nSub = -1;
 	SetLocalInt(oEss, "OldRace", nRace);
 	SetLocalInt(oEss, "OldSubrace", nSub);	
 	SetLocalInt(oEss, "OriginalRace", nRace);
