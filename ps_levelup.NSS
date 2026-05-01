@@ -178,29 +178,17 @@ void main()
 
 	// Template classes - apply fix to racial ability bonuses
 	// Add new templates to this list when created
-	/*
-	string sTemplate	= GetLocalString(oItem, "Template");
-	int iStop			= GetLocalInt(oItem, "TemplateFix");
-	int iOldSub			= GetOriginalSubrace(oPC);
-	if (PS_NeedsTemplateClassAbilityFix(oPC))
-	{	
-		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);
-		SendMessageToPC(oPC, "Your character has levels in a template class.");
-		if (iStop == 0)
-		{	
-			SendMessageToPC(oPC, "Your original subrace is " + IntToString(iOldSub) + " : " + Get2DAString("racialsubtypes", "Label", iOldSub));
-			SendMessageToPC(oPC, "Applying Template Class Ability Fix");
-			PS_ApplyTemplateClassAbilityFix(oPC, oItem);
-		}
-	}
+
 	
+	
+	/*
 	if (GetLocalInt(oItem, "TempChange") != 1)
 	{	
 		PS_WingTailSetup(oPC);
 		PS_ApplyPCTail(oPC);
 		PS_ApplyPCWings(oPC);
-	}	
-	*/
+	}	*/
+	
 	// various class and race related checks
 	CountSpells(oPC,1);
 	GetWarlockCasterLevel(oPC);
@@ -243,7 +231,22 @@ void main()
 	// Sept 12, 2024, ff_update_feats also handling some other feat grants that need to
 	// happen at both login and level up. Should prob change name -FlattedFifth. 
 	ff_update_feats(oPC, TRUE); // used to be ff_sneak_fix, now single source of all general feat updates
-	//last item
+	//2nd to last item
+	//last item, fix racial adjustments from template race change
+	string sTemplate	= GetLocalString(oItem, "Template");
+	int iStop			= GetLocalInt(oItem, "TemplateFix");
+	int iOldSub			= GetOriginalSubrace(oPC);
+	if (PS_NeedsTemplateClassAbilityFix(oPC))
+	{	
+		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);
+		SendMessageToPC(oPC, "Your character has levels in a template class.");
+		if (iStop == 0)
+		{	
+			SendMessageToPC(oPC, "Your original subrace is " + IntToString(iOldSub) + " : " + Get2DAString("racialsubtypes", "Label", iOldSub));
+			SendMessageToPC(oPC, "Applying Template Class Ability Fix");
+			PS_ApplyTemplateClassAbilityFix(oPC, oItem);
+		}
+	}
 	DelayCommand(1.0, StoreClasses(oPC));
 }
 
