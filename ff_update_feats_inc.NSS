@@ -142,12 +142,11 @@ void LevelUpGuiChoices(object oPC){
 			int nType;
 			if (sHeritage == "HalfFiend") nType = 1;	
 			else if (sHeritage == "HalfCelestial") nType = 2;	
-			int nOrigin = GetRacialType(oPC);
-			int nOriSub = GetSubRace(oPC);
 			int iWings = GetLocalInt(oEss, "DarkFlight");
 			int iHasBonus = GetLocalInt(oEss, "HO1");
 	
-			if (GetRacialType(oPC) != RACIAL_TYPE_OUTSIDER){	
+			if (GetOriginalRace(oPC) != RACIAL_TYPE_OUTSIDER ||
+				GetOriginalSubrace(oPC) != RACIAL_SUBTYPE_OUTSIDER){	
 				SetLocalString(oEss, "Template", "HalfOutsider");
 				SetLocalString(oEss, "RaceChange", "Outsider");
 				SetLocalInt(oEss, "TemplateFix", 0);

@@ -233,11 +233,11 @@ void main()
 	ff_update_feats(oPC, TRUE); // used to be ff_sneak_fix, now single source of all general feat updates
 	//2nd to last item
 	//last item, fix racial adjustments from template race change
-	string sTemplate	= GetLocalString(oItem, "Template");
-	int iStop			= GetLocalInt(oItem, "TemplateFix");
-	int iOldSub			= GetOriginalSubrace(oPC);
 	if (PS_NeedsTemplateClassAbilityFix(oPC))
 	{	
+		string sTemplate	= GetLocalString(oItem, "Template");
+		int iStop			= GetLocalInt(oItem, "TemplateFix");
+		int iOldSub			= GetOriginalSubrace(oPC);
 		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);
 		SendMessageToPC(oPC, "Your character has levels in a template class.");
 		if (iStop == 0)

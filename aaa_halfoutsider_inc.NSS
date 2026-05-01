@@ -150,8 +150,8 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
     string sHeritage; 
 	int nType;
 	int nLevel = PS_OutsiderLevels(oPC);
-	int nOrigin = GetRacialType(oPC);
-	int nOriSub = GetSubRace(oPC);
+	//int nOrigin = GetRacialType(oPC);
+	//int nOriSub = GetSubRace(oPC);
 	int iWings = GetLocalInt(oItem, "DarkFlight");
 	int iHasBonus = GetLocalInt(oItem, "HO1");
 	
