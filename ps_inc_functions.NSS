@@ -4330,7 +4330,43 @@ int PS_NeedsTemplateClassAbilityFix(object oPC)
     if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0) return TRUE;
     return FALSE;
 }
+//new by FlattedFifth, May 1, 2026
+void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE){
+   
+    int bTemplateFixedAlready = GetLocalInt(oESSENCE, "TemplateFix");
 
+    if (nREVERSE == TRUE){
+        if (!bTemplateFixedAlready) return;
+        DelayCommand(0.0f, DeleteLocalInt(oESSENCE, "TemplateFix"));
+    } else {
+        if (bTemplateFixedAlready) return;
+        SetLocalInt(oESSENCE, "TemplateFix", TRUE);
+    }
+	int nSubrace = GetOriginalSubrace(oPC);
+    string sStat;
+    int nStat;
+    int nStat_AD;
+    int nAbility = ABILITY_STRENGTH;
+    while (nAbility <= ABILITY_CHARISMA){
+        switch (nAbility){
+            case ABILITY_STRENGTH:      sStat = "StrAdjust"; break;
+            case ABILITY_DEXTERITY:     sStat = "DexAdjust"; break;
+            case ABILITY_CONSTITUTION:  sStat = "ConAdjust"; break;
+            case ABILITY_INTELLIGENCE:  sStat = "IntAdjust"; break;
+            case ABILITY_WISDOM:        sStat = "WisAdjust"; break;
+            case ABILITY_CHARISMA:      sStat = "ChaAdjust"; break;
+        }
+        nStat_AD = StringToInt(Get2DAString("racialsubtypes", sStat, nSubrace));
+
+        if (nStat_AD != 0){
+            nStat = GetAbilityScore(oPC, nAbility, TRUE);
+            if (nREVERSE == TRUE) nStat_AD = 0 - nStat_AD;
+            SetBaseAbilityScore(oPC, nAbility, nStat + nStat_AD);
+        }
+        nAbility = nAbility + 1;
+    }
+}
+/* original
 //The new function used for template adjustment, replaces most of the old commands.
 void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
 {
@@ -4379,6 +4415,7 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE)
         nABILITY = nABILITY + 1;
     }
 }
+*/
 
 // Apply racial bonuses to template classes AFTER the class has been taken.
 // oPC is the creature (PC) for the fix to apply to; oItem should be the ps_essence item.
