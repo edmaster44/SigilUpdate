@@ -237,12 +237,14 @@ void main()
 	{	
 		string sTemplate	= GetLocalString(oItem, "Template");
 		int iStop			= GetLocalInt(oItem, "TemplateFix");
-		int iOldSub			= GetOriginalSubrace(oPC);
 		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);
-		SendMessageToPC(oPC, "Your character has levels in a template class.");
 		if (iStop == 0)
 		{	
-			SendMessageToPC(oPC, "Your original subrace is " + IntToString(iOldSub) + " : " + Get2DAString("racialsubtypes", "Label", iOldSub));
+			int iOldSub			= GetOriginalSubrace(oPC);
+			SendMessageToPC(oPC, "Your character has levels in a template class.");
+			int nNameRef = StringToInt(Get2DAString("racialsubtypes", "Name", iOldSub));
+			string sMessage = "Your original subrace is " + GetStringByStrRef(nNameRef);
+			SendMessageToPC(oPC, sMessage);
 			SendMessageToPC(oPC, "Applying Template Class Ability Fix");
 			PS_ApplyTemplateClassAbilityFix(oPC, oItem);
 		}

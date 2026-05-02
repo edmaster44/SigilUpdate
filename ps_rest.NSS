@@ -266,8 +266,8 @@ void RestFinish(object oPC)
 	//if (HasToWipeAbilities(oPC, oESSENCE) == TRUE) WipeSpecialAbilities(oPC);
 	
 	
-
-	 TemplateRacialAdjust(oPC, oESSENCE, TRUE);
+	//WHY IS THIS HERE?!?!?!?!?
+	 //TemplateRacialAdjust(oPC, oESSENCE, TRUE);
 	 
 	 IncrementalDebug(oPC, "finish: middle");
 	/*

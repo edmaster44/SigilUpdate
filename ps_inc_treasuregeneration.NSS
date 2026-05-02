@@ -611,6 +611,10 @@ void CreatePotionOnTarget(object oTarget, int nTreasureLevel) {
 		CreateExperimentalPotionOnTarget(oTarget, nTreasureLevel);
 	} else {
 		string sRes = PickItemFromDatabase("treasure_potions", nTreasureLevel, "", TRUE);
+		//replace old sequencers with new
+		if (sRes == "ps_potion_greatersequncer" || sRes == "ps_potion_sequencer" ||
+			sRes == "ps_potion_lessersequencer")
+				sRes += "new";
 		CreateTreasureItemOnTarget(sRes, oTarget, 1);
 	}
 }
