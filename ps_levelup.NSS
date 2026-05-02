@@ -233,20 +233,17 @@ void main()
 	ff_update_feats(oPC, TRUE); // used to be ff_sneak_fix, now single source of all general feat updates
 	//2nd to last item
 	//last item, fix racial adjustments from template race change
-	if (PS_NeedsTemplateClassAbilityFix(oPC))
-	{	
-		string sTemplate	= GetLocalString(oItem, "Template");
-		int iStop			= GetLocalInt(oItem, "TemplateFix");
-		if (iStop != 1)	SetLocalInt(oItem, "TemplateFix", 0);
-		if (iStop == 0)
-		{	
-			int iOldSub			= GetOriginalSubrace(oPC);
-			SendMessageToPC(oPC, "Your character has levels in a template class.");
-			int nNameRef = StringToInt(Get2DAString("racialsubtypes", "Name", iOldSub));
-			string sMessage = "Your original subrace is " + GetStringByStrRef(nNameRef);
-			SendMessageToPC(oPC, sMessage);
-			SendMessageToPC(oPC, "Applying Template Class Ability Fix");
-			PS_ApplyTemplateClassAbilityFix(oPC, oItem);
+	if (!GetLocalInt(oItem, "RacialAbilityAdjusted")){
+		if (PS_NeedsTemplateClassAbilityFix(oPC)){	
+			if (!GetLocalInt(oItem, "TemplateFix")){	
+				int iOldSub	= GetOriginalSubrace(oPC);
+				SendMessageToPC(oPC, "Your character has levels in a template class.");
+				int nNameRef = StringToInt(Get2DAString("racialsubtypes", "Name", iOldSub));
+				string sMessage = "Your original subrace is " + GetStringByStrRef(nNameRef);
+				SendMessageToPC(oPC, sMessage);
+				SendMessageToPC(oPC, "Applying Template Class Ability Fix");
+				PS_ApplyTemplateClassAbilityFix(oPC, oItem);
+			}
 		}
 	}
 	DelayCommand(1.0, StoreClasses(oPC));

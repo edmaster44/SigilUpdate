@@ -4334,15 +4334,15 @@ int PS_NeedsTemplateClassAbilityFix(object oPC)
 void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE){
    
    //debug
-   SendMessageToPC(oPC, "USING TEMPLATE RACIAL ADJUST FUNCTION");
+   //SendMessageToPC(oPC, "USING TEMPLATE RACIAL ADJUST FUNCTION");
     int bTemplateFixedAlready = GetLocalInt(oESSENCE, "TemplateFix");
-
-    if (nREVERSE == TRUE){
+	// we currently dont allow de-level on any templates so we may as well ditch this
+    if (nREVERSE){ 
         if (!bTemplateFixedAlready) return;
-        DelayCommand(0.0f, DeleteLocalInt(oESSENCE, "TemplateFix"));
-    } else {
+		else DelayCommand(0.0f, DeleteLocalInt(oESSENCE, "TemplateFix"));
+   } else {
         if (bTemplateFixedAlready) return;
-        SetLocalInt(oESSENCE, "TemplateFix", TRUE);
+        else SetLocalInt(oESSENCE, "TemplateFix", TRUE);
     }
 	int nSubrace = GetOriginalSubrace(oPC);
     string sStat;
@@ -4367,6 +4367,8 @@ void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE){
         }
         nAbility = nAbility + 1;
     }
+	// Will not enter this function from level up if this is TRUE
+	SetLocalInt(oESSENCE, "RacialAbilityAdjusted", TRUE);
 }
 /* original
 //The new function used for template adjustment, replaces most of the old commands.
@@ -4432,10 +4434,12 @@ void PS_ApplyTemplateClassAbilityFix(object oPC, object oItem)
 // oPC is the creature (PC) for the fix to apply to; oItem should be the ps_essence item.
 // Do not call this directly! Use   
 // - Ceremorph 4/12/16
+
 void PS_RemoveTemplateClassAbilityFix(object oPC, object oItem)
 {
     TemplateRacialAdjust(oPC, oItem, TRUE);
 }
+
 
 void PS_Template_DelevelFix(object oPC, object oItem)
 {
