@@ -4333,6 +4333,8 @@ int PS_NeedsTemplateClassAbilityFix(object oPC)
 //new by FlattedFifth, May 1, 2026
 void TemplateRacialAdjust(object oPC, object oESSENCE, int nREVERSE){
    
+   //debug
+   SendMessageToPC(oPC, "USING TEMPLATE RACIAL ADJUST FUNCTION");
     int bTemplateFixedAlready = GetLocalInt(oESSENCE, "TemplateFix");
 
     if (nREVERSE == TRUE){
