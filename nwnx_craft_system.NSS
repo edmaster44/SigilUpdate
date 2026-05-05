@@ -839,6 +839,7 @@ object XPCraft_ActionChangeModelPart(object oPC, object oItemToCraft, int iActio
 
 	//Get the newly crafted Item and equip it.
 	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, GetLocalInt(oPC,"XC_INVENT_SLOT"));
+	SendMessageToPC(oPC, sRoadMap + IntToString(iNewItemPartValue));
 }
 
 object XPCraft_ActionChangeColor(object oPC, int iNewColorValue)

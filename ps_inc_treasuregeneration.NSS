@@ -611,10 +611,24 @@ void CreatePotionOnTarget(object oTarget, int nTreasureLevel) {
 		CreateExperimentalPotionOnTarget(oTarget, nTreasureLevel);
 	} else {
 		string sRes = PickItemFromDatabase("treasure_potions", nTreasureLevel, "", TRUE);
-		//replace old sequencers with new
+		//sequencer pots should only drop on higher treasure levels and we should replace 
+		// old sequencers with new
 		if (sRes == "ps_potion_greatersequncer" || sRes == "ps_potion_sequencer" ||
-			sRes == "ps_potion_lessersequencer")
-				sRes += "new";
+			sRes == "ps_potion_lessersequencer"){
+				switch (nTreasureLevel){
+					case TREASURE_MEDIUM: case TREASURE_QUEST_LOW: sRes = "ps_potion_lessersequencernew"; break;
+					case TREASURE_HIGH: case TREASURE_QUEST_MED: sRes = "ps_potion_sequencernew"; break;
+					case TREASURE_EPIC: case TREASURE_QUEST_HIGH: sRes += "new"; break;
+					default: {
+						sRes = "ps_potion_aqua_vitae";
+						switch (d3()){
+							case 1: sRes += "_lssr"; break;
+							case 3: sRes += "_grtr"; break;
+						}
+						break;
+					}
+				}
+		}
 		CreateTreasureItemOnTarget(sRes, oTarget, 1);
 	}
 }
