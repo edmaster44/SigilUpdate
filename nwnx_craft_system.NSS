@@ -836,10 +836,10 @@ object XPCraft_ActionChangeModelPart(object oPC, object oItemToCraft, int iActio
 	}
 	XPCraft_ClearMemory();//always perform after all accesses to the plugin have been made
 	SetLocalInt(oPC,"XC_ITEM_PART_VALUE",iNewItemPartValue);	
-
+	SendMessageToPC(oPC, sRoadMap + IntToString(iNewItemPartValue));
 	//Get the newly crafted Item and equip it.
 	return XPCraft_RetrieveAndEquipCraftedItem(oPC, oItemToCraft, GetLocalInt(oPC,"XC_INVENT_SLOT"));
-	SendMessageToPC(oPC, sRoadMap + IntToString(iNewItemPartValue));
+	
 }
 
 object XPCraft_ActionChangeColor(object oPC, int iNewColorValue)
