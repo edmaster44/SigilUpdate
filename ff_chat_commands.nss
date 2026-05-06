@@ -377,51 +377,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			oItem = CreateItemOnObject("ps_arrow_mundane", oSender, d10(2));
 			return TRUE;
 		}
-		// add visual fx to a weapon. possible commands are #addvfxgood, #addvfxevil
-		// #addvfxacid, #addvfxcold, #addvfxelectric, #addvfxfire, #addvfxsonic, #removevfx
-		else if (GetStringLeft(sInput, 7) == "#addvfx" || sInput == "#removevfx"){
-			oItem = GetPlayerCurrentTarget(oSender);
-			if (!GetIsObjectValid(oItem)) oItem = oSender;
-			if (GetObjectType(oItem) == OBJECT_TYPE_CREATURE)
-				oItem = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oItem);
-			if (!IPGetIsWeapon(oItem)){
-				sFeedback = "You must target a weapon or a creature holding a weapon in its right hand";
-				SendMessageToPC(oSender, sFeedback);
-				return TRUE;
-			}
-			if (sInput == "#removevfx"){
-				itemproperty ip = GetFirstItemProperty(oItem);
-				while (GetIsItemPropertyValid(ip)){
-					if (GetItemPropertyType(ip) == 83)
-						RemoveItemProperty(oItem, ip);
-					ip = GetNextItemProperty(oItem);
-				}
-				sFeedback = "VFX removed. Note that it is not possible to remove vfx tied to damage ";
-				sFeedback += "properties of 1d6 or greater";
-				SendMessageToPC(oSender, sFeedback);
-				return TRUE;
-			}
-			int nVis = -1;
-			string sVis = GetStringRight(sInput, GetStringLength(sInput) - 7);
-			if (sVis == "evil") nVis = ITEM_VISUAL_EVIL;
-			else if (sVis == "good" ) nVis = ITEM_VISUAL_HOLY;
-			else if (sVis == "acid") nVis = ITEM_VISUAL_ACID;
-			else if (sVis == "cold") nVis = ITEM_VISUAL_COLD;
-			else if (sVis == "electric") nVis = ITEM_VISUAL_ELECTRICAL;
-			else if (sVis == "fire") nVis = ITEM_VISUAL_FIRE;
-			else if (sVis == "sonic") nVis = ITEM_VISUAL_SONIC;
-			else {	sFeedback = "Invalid command. Please use #AddVFXgood, #AddVFXevil, ";
-				sFeedback += "#AddVFXacid, #AddVFXcold, #AddVFXelectric, #AddVFXfire, #AddVFXsonic,";
-				sFeedback += " or #RemoveVFX";
-			}
-			if (nVis != -1){
-				itemproperty ipGlow = ItemPropertyVisualEffect(nVis);
-				AddItemProperty(DURATION_TYPE_PERMANENT, ipGlow, oItem);
-				sFeedback = sVis + " VFX applied";
-			}
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
 	}
 	//END DM OR TEST SERVER ONLY COMMANDS
 	

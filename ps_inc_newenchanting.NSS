@@ -11,6 +11,8 @@ struct enchantment LoadEnchantment(int index, object oPC = OBJECT_INVALID);
 struct enchantment LoadEnchantmentFrom2DA(int index, object oPC = OBJECT_INVALID, int bUseLegacy = FALSE);
 struct enchantment LoadEnchantmentFromSQL(int index, object oPC = OBJECT_INVALID);
 
+int GetHasVFXReq(object oItem, int nElement);
+
 //Enchant the chosen item
 void EnchantItem(object oItem, struct enchantment enchant);
 
@@ -128,7 +130,50 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID);
 string GetEnchantmentItemRestriction(object oItem, int isEnchantWindow = TRUE);
 
 
-
+int GetHasVFXReq(object oItem, int nElement){
+	itemproperty ip = GetFirstItemProperty(oItem);
+	int nType, nSub;
+	while (GetIsItemPropertyValid(ip)){
+		nType = GetItemPropertyType(ip);
+		nSub = GetItemPropertySubType(ip);
+		switch (nElement){
+			case ITEM_VISUAL_ACID:{
+				if (nType == 16 && nSub == 6) return TRUE;
+				break;
+			}
+			case ITEM_VISUAL_COLD:{
+				if (nType == 16 && nSub == 7) return TRUE;
+				break;
+			}
+			case ITEM_VISUAL_ELECTRICAL:{
+				if (nType == 16 && nSub == 9) return TRUE;
+				break;
+			}
+			case ITEM_VISUAL_FIRE:{
+				if (nType == 16 && nSub == 10) return TRUE;
+				break;
+			}
+			case ITEM_VISUAL_SONIC:{
+				if (nType == 16 && nSub == 13) return TRUE;
+				break;
+			}
+			case ITEM_VISUAL_HOLY:{
+				if (nType == 16 && nSub == 8) return TRUE;
+				else if (nType == 17 && nSub == 5) return TRUE;
+				else if (nType == 1) return TRUE;
+				break;
+			}
+			case ITEM_VISUAL_EVIL:{
+				if (nType == 16 && nSub == 11) return TRUE;
+				else if (nType == 17 && nSub == 4) return TRUE;
+				else if (nType == 67) return TRUE;
+				break;
+			}
+		}
+		ip = GetNextItemProperty(oItem);
+	}
+	return FALSE;
+}
 
 
 
@@ -912,6 +957,20 @@ string DisplaySpecialRequirement(string sReq) {
 			line = "This enchantment is redunant on slings.";
 	} else if (sReq == "CL_MANIFESTER"){
 			line = "Must be a Psion or Psychic Warrior, or have Spellcraft 15. Cannot cast on weapons other than staves or creature kicks. Cannot cast on shields.";
+	} else if (sReq == "VIS_ACID"){
+		line = "Must have an acid damage bonus enchantment.";
+	} else if (sReq == "VIS_COLD"){
+		line = "Must have a cold damage bonus enchantment.";
+	} else if (sReq == "VIS_ELEC"){
+		line = "Must have an electrical damage bonus enchantment.";
+	} else if (sReq == "VIS_FIRE"){
+		line = "Must have a fire damage bonus enchantment.";
+	} else if (sReq == "VIS_SONIC"){
+		line = "Must have a sonic damage bonus enchantment.";
+	} else if (sReq == "VIS_EVIL"){
+		line = "Must have a negative damage bonus enchantment, damage bonus vs good, or vampiric regeneration.";
+	} else if (sReq == "VIS_GOOD"){
+		line = "Must have a divine damage bonus enchantment, damage bonus vs evil, or Shield AC enchantment.";
 	}
 	return line;
 	
@@ -1018,8 +1077,21 @@ int GetFulfillsSpecialRequirement(object oPC, string sReq, object oItem = OBJECT
 				return FALSE;
 		}
 	} else if (sReq == "NO_SLINGS"){
-		if (nItem == BASE_ITEM_SLING) return FALSE;
-		
+		if (nItem == BASE_ITEM_SLING) return FALSE;	
+	} else if (sReq == "VIS_ACID"){
+		if (!GetHasVFXReq(oItem, ITEM_VISUAL_ACID)) return FALSE;
+	} else if (sReq == "VIS_COLD"){
+		if (!GetHasVFXReq(oItem, ITEM_VISUAL_COLD)) return FALSE;
+	} else if (sReq == "VIS_ELEC"){
+		if (!GetHasVFXReq(oItem, ITEM_VISUAL_ELECTRICAL)) return FALSE;
+	} else if (sReq == "VIS_FIRE"){
+		if (!GetHasVFXReq(oItem, ITEM_VISUAL_FIRE)) return FALSE;
+	} else if (sReq == "VIS_SONIC"){
+		if (!GetHasVFXReq(oItem, ITEM_VISUAL_SONIC)) return FALSE;
+	} else if (sReq == "VIS_EVIL"){
+		if (!GetHasVFXReq(oItem, ITEM_VISUAL_EVIL)) return FALSE;
+	} else if (sReq == "VIS_GOOD"){
+		if (!GetHasVFXReq(oItem, ITEM_VISUAL_HOLY)) return FALSE;
 	}
 	return TRUE; //no special req, return true
 }
