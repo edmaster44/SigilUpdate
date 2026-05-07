@@ -305,7 +305,7 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 				}
 			}
 			if ((nType == nLastType) &&
-				(nType == 12 || nType == 15 || nType == 99 || nSubType == nLastSub)){
+				(nType == 12 || nType == 15 || nType == 83 || nType == 99 || nSubType == nLastSub)){
 				RemoveListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(nLasti));
 			}
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(i), "EnchantTypeName="+sName+";", "", "5="+IntToString(i), "");
