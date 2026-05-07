@@ -308,6 +308,7 @@ void GenerateEnchantmentTypeListFrom2DA(object oPC, object oItem){
 				(nType == 12 || nType == 15 || nType == 83 || nType == 99 || nSubType == nLastSub)){
 				RemoveListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(nLasti));
 			}
+			if (nType == 83) sName = "Visual Effect";
 			AddListBoxRow(oPC, sEnchantingScreen, "SCOD_ENCHANTMENTTYPE_LIST", "ENCHANTTROW_"+IntToString(i), "EnchantTypeName="+sName+";", "", "5="+IntToString(i), "");
 			nLastType = nType;
 			nLastSub = nSubType;
@@ -344,7 +345,7 @@ void GenerateParamTypeListFrom2DA(object oPC, object oItem, struct enchantment e
 		bCanEnchant = (StringToInt(Get2DAString(s2da, "Can_Enchant", i)) == 1);
 		if ((nType == enchant.type && bItemOk && bCanEnchant) &&
 			(nType == 12 || nType == 15 || nType == 99 || nSub == enchant.subtype)){
-			if (nType == 12 || nType == 15 || nType == 99){
+			if (nType == 12 || nType == 15 || nType == 83 || nType == 99){
 				nSub = StringToInt(Get2DAString(s2da, "Subtype", i));
 				sCostTable = Get2DAString("itempropdef", "SubTypeResRef", nType);
 				nParam = StringToInt(Get2DAString(sCostTable, "Name", nSub));
