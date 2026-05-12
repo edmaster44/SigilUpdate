@@ -522,14 +522,16 @@ string InvokeCraftEmulator(string Function, string Param1, int Param2, string Va
 	ExecuteScriptEnhanced("Sigil.CraftEmulator", Module, TRUE);
 
 	ReturnValue = GetLocalString(Module, "CRAFT_EMULATOR_RET");
-	//DeleteLocalString(Module, "CRAFT_EMULATOR_RET");
+	DeleteLocalString(Module, "CRAFT_EMULATOR_RET");
 	//DEBUG
+	/*
 	string sDebug = Function + " " + Param1 + " " + IntToString(Param2) + " " + Value;
 	object oPC = GetFirstPC();
 	while (GetIsObjectValid(oPC)){
 		SendMessageToPC(oPC, "Plugin value = " + sDebug + ": " + ReturnValue);
 		oPC = GetNextPC();
 	}
+	*/
 	
 	return ReturnValue;
 }

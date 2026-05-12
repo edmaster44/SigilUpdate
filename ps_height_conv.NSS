@@ -49,6 +49,10 @@ void main()
 		sMessage = foot+"'"+inch+" ("+sCM+" cm)";
 		
 		SetCustomToken(30000+nCount, sMessage);
+		//set a local string to check for bugged height, this will be referenced
+		// in ps_heightadjust_cond
+		if (nCount == 0 && TestStringAgainstPattern("**(0.00**", sMessage))
+			SetLocalInt(oPC, "DISABLE_HEIGHT_ADJUST", TRUE);
 		nCount++;
 	}
 }
