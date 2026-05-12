@@ -1174,7 +1174,7 @@ void main() {
 	SetLocalString( oModule, "XC_AVT_P_HAF_HELM", "#0#7#" );
 	SetLocalString( oModule, "XC_AVT_P_HAM_HELM", "#0#7#" );
 	SetLocalString( oModule, "XC_AVT_P_HHF_BELT", "#0#1#2#8#17#20#" );
-	SetLocalString( oModule, "XC_AVT_P_HHF_BODY", "#0#1#2#4#5#8#9#10#15#16#17#18#20#21#" );
+	SetLocalString( oModule, "XC_AVT_P_HHF_BODY", "#0#1#2#4#5#8#9#10#15#16#17#18#20#21#24#" );
 	SetLocalString( oModule, "XC_AVT_P_HHF_BOOTS", "#0#2#3#4#5#6#7#8#9#10#15#16#17#18#20#21#" );
 	SetLocalString( oModule, "XC_AVT_P_HHF_CLOAK", "#0#15#16#18#" );
 	SetLocalString( oModule, "XC_AVT_P_HHF_GLOVES", "#0#2#3#4#5#7#8#10#15#16#17#18#20#21#" );
