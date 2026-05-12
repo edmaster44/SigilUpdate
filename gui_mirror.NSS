@@ -397,8 +397,11 @@ void main(string sCOMMAND, string sINPUT)
 			RewindUI(oPC, sSCREEN, 1, 1);
 			break;
 		case 4: //STYLE
-			if (StartingConditional(oPC, 4, 0, nINPUT) == FALSE) SendMessageToPC(oPC, "This item cannot be changed to that style.");
-			else CraftAction(oPC, 8, nINPUT);
+			if (StartingConditional(oPC, 4, 0, nINPUT) == FALSE){
+				SendMessageToPC(oPC, "This item cannot be changed to that style.");
+					//debug
+				SendMessageToPC(oPC, "Return from plugin = " + GetLocalString(GetModule(), "CRAFT_EMULATOR_RET"));
+			} else CraftAction(oPC, 8, nINPUT);
 			break;
 		case 5: //DEFAULT
 			if (StartingConditional(oPC, 6, nINPUT, 0) == FALSE) SendMessageToPC(oPC, "You cannot modify this default piece.");
