@@ -523,7 +523,13 @@ string InvokeCraftEmulator(string Function, string Param1, int Param2, string Va
 
 	ReturnValue = GetLocalString(Module, "CRAFT_EMULATOR_RET");
 	DeleteLocalString(Module, "CRAFT_EMULATOR_RET");
-
+	//DEBUG
+	object oPC = GetFirstPC();
+	while (GetIsObjectValid(oPC)){
+		SendMessageToPC(oPC, "Plugin value = " + ReturnValue);
+		oPC = GetNextPC();
+	}
+	
 	return ReturnValue;
 }
 
