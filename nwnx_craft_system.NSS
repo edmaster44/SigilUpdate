@@ -771,9 +771,6 @@ object XPCraft_ActionChangeArmorVisualType(object oPC, object oItemToCraft, int 
 		SetLocalInt(oPC,"XC_VARIATION_VALUE",iNewVariationValue);
 	//}	
 
-	//debug
-	SendMessageToPC(oPC, "Return from plugin = " + GetLocalString(GetModule(), "CRAFT_EMULATOR_RET"));
-
 	XPCraft_ClearMemory();//always perform after all accesses to the plugin have been made	
 	
 	//Get the newly crafted Item and equip it.
