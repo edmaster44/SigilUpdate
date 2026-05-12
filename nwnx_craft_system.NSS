@@ -1088,7 +1088,8 @@ void XPCraft_InitArmorVisualTypeValues(object oPC)
 	//Gets and stores the AVT listname for this item 
 	string sAVT_Listname = XPCraft_GetArmorVisualType_ListName(oPC, GetBaseItemType(GetLocalObject(oPC,"XC_ITEM_TO_CRAFT")));
 
-	
+	//debug
+	SendMessageToPC(oPC,"INIT : AVT_Listname = " + sAVT_Listname);
 //XPCraft_Debug(oPC,"INIT : AVT_Listname = " + sAVT_Listname);
 //XPCraft_Debug(oPC,"INIT : AVT_List = " + GetLocalString(GetModule(),sAVT_Listname));
 			
