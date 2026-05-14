@@ -17,7 +17,10 @@ void main()
 		return;
 	}
 	
-	int nCount = 1;
+	int nCount = 0;
+	// if there are still no non-zero height at end of loop, alert player that height adjustments
+	// cannot be done for their character
+	int bHasValidAdjustment = FALSE; 
 
 	int iLoop = GetCMDifference(oPC); nCount = 0;
 	float iMin = GetCMMin(oPC); string sMin = FloatToString(iMin);
@@ -48,12 +51,13 @@ void main()
 	
 		sMessage = foot+"'"+inch+" ("+sCM+" cm)";
 		
-		SetCustomToken(30000+nCount, sMessage);
-		//set a local string to check for bugged height, this will be referenced
-		// in ps_heightadjust_cond
-		if (TestStringAgainstPattern("**(0.00**", sMessage) ||
-			sMessage == "00'00 (0.00 cm)")
-			SetLocalInt(oPC, "DISABLE_HEIGHT_ADJUST", TRUE);
+		// only add the token if the height is greater than 0
+		if (StringToInt(sCM) > 0 && (StringToInt(foot) > 0 || StringToInt(inch) > 0)){
+			SetCustomToken(30000+nCount, sMessage);
+			bHasValidAdjustment = TRUE;
+		}
 		nCount++;
 	}
+	if (!bHasValidAdjustment)
+		SendMessageToPC(oPC, "Height adjustment is not enabled for this character");
 }
