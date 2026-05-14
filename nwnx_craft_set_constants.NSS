@@ -73,7 +73,7 @@ void main() {
 	SetLocalString( oModule, "XC_W_KAT_A", "#1#2#5#6#101#102#103#104#105#106#107#108#109#110#160#161#162#" );
 	SetLocalString( oModule, "XC_W_KAT_B", "#1#2#5#6#101#102#103#104#105#106#107#108#109#110#160#161#162#" );
 	SetLocalString( oModule, "XC_W_KAT_C", "#1#2#5#6#101#102#103#104#105#106#107#108#109#110#160#161#162#" );
-	SetLocalString( oModule, "XC_W_KUKRI_A", "#1#2#3#4#5#50#51#52#70#71#72#73#74#75#76#77#78#79#80#81#" );
+	SetLocalString( oModule, "XC_W_KUKRI_A", "#1#2#3#4#5#50#51#52#70#71#72#73#74#75#76#77#78#79#" );
 	SetLocalString( oModule, "XC_W_LBOW_A", "#1#2#3#4#5#6#20#50#70#80#101#102#103#121#122#123#160#161#" );
 	SetLocalString( oModule, "XC_W_LHAM_A", "#1#2#3#4#" );
 	SetLocalString( oModule, "XC_W_LHAM_B", "#1#2#3#4#" );
