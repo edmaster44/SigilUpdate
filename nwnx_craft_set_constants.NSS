@@ -826,7 +826,7 @@ void main() {
 	SetLocalString( oModule, "XC_c_reeBeholder_SC_HELM", "#1#" );
 	string sJudeBody = "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#";
 	sJudeBody += "21#22#23#24#25#26#27#28#29#30#31#32#33#34#36#37#38#39#40#41#";
-	string sJudeHelm1 = "#1#2#3#5#6#7#19#21#24#30#34#37#38#42#49#51#";
+	string sJudeHelm = "#1#2#3#5#6#7#49#51#";
 	SetLocalString( oModule, "XC_P_DDF_JUDE_BODY", sJudeBody);
 	SetLocalString( oModule, "XC_P_GGF_JUDE_BODY", sJudeBody);
 	SetLocalString( oModule, "XC_P_HHF_JUDE_BODY", sJudeBody);
@@ -837,19 +837,19 @@ void main() {
 	SetLocalString( oModule, "XC_P_HHM_JUDE_BODY", sJudeBody);
 	SetLocalString( oModule, "XC_P_OOM_JUDE_BODY", sJudeBody);
 	
-	SetLocalString( oModule, "XC_P_AAF_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_DDF_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_EEF_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_GGF_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_HHF_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_OOF_JUDE_HELM", sJudeHelm1);
+	SetLocalString( oModule, "XC_P_AAF_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_DDF_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_EEF_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_GGF_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_HHF_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_OOF_JUDE_HELM", sJudeHelm);
 
-	SetLocalString( oModule, "XC_P_AAM_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_EEM_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_DDM_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_HHM_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_GGM_JUDE_HELM", sJudeHelm1);
-	SetLocalString( oModule, "XC_P_OOM_JUDE_HELM", sJudeHelm1);
+	SetLocalString( oModule, "XC_P_AAM_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_EEM_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_DDM_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_HHM_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_GGM_JUDE_HELM", sJudeHelm);
+	SetLocalString( oModule, "XC_P_OOM_JUDE_HELM", sJudeHelm);
 	
 
   /*--------------------------------------------------------------------------*\

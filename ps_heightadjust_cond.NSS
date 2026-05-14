@@ -9,7 +9,10 @@
 	object oPC = GetPCSpeaker();
 	
 	if (GetLocalInt(oPC, "DisableHeightAdjust")){
-		SendMessageToPC(oPC, "Height adjustment is not enabled for this character");
+		if (!GetLocalInt(oPC, "HeightAdjustWarn")){
+			SendMessageToPC(oPC, "Height adjustment is disabled for this race due to a bug");
+			SetLocalInt(oPC, "HeightAdjustWarn", TRUE);
+		}
 		return FALSE;
 	}
 	
