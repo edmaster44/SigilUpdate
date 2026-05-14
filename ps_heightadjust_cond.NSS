@@ -8,6 +8,11 @@
 	{
 	object oPC = GetPCSpeaker();
 	
+	if (GetLocalInt(oPC, "DisableHeightAdjust")){
+		SendMessageToPC(oPC, "Height adjustment is not enabled for this character");
+		return FALSE;
+	}
+	
 	if(selection == 99 || selection == 98)
 	{
 		if(FirstTime(oPC)) return FALSE;

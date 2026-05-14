@@ -58,6 +58,8 @@ void main()
 		}
 		nCount++;
 	}
-	if (!bHasValidAdjustment)
-		SendMessageToPC(oPC, "Height adjustment is not enabled for this character");
+	if (!bHasValidAdjustment){
+		SetLocalInt(oPC, "DisableHeightAdjust", TRUE);
+		//SendMessageToPC(oPC, "Height adjustment is not enabled for this character");
+	}
 }
