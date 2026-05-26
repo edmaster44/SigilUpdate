@@ -29,6 +29,7 @@ void FF_GiveSpecialDrop(string sRef, object oSpawn, int nChance = 30){
 	if (nChance >= 100) bGiveDrop = TRUE;
 	else if (d100() <= nChance) bGiveDrop = TRUE;
 	if (!bGiveDrop) return;
+	if (GetItemPossessedBy(oSpawn, sRef) != OBJECT_INVALID) return;
 	object oLoot = CreateItemOnObject(sRef, oSpawn, 1, "", FALSE);
 	SetDroppableFlag(oLoot, TRUE);
 }
