@@ -475,7 +475,7 @@ void DebugSpells(object oCaster){
 	int nInnate = StringToInt(Get2DAString("spells", "Innate", nId));
 	if (nInnate >= 10) nDC =  PS_GetEpicSpellSaveDC();
 	else nDC = GetSpellSaveDC();
-	sDebug += "\nSave DC: " + IntToString(nDC);
+	sDebug += "\nBase Save DC: " + IntToString(nDC);
 
 	nId = GetSpellFeatId(); //reuse this variable since we're done with it
 	if (nId != 0){

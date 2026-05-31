@@ -357,6 +357,11 @@ void AdjustDragonPrC(object oPC){
 			AdjustAbilityScore(oPC, ABILITY_WISDOM, 2);
 		}
 	}
+	// rogue path gets skill focus hide and ms at lvl 6
+	if (nLvl >= 6 && GetHasFeat(3671, oPC)){
+		FeatAdd(oPC, 178, FALSE); // skill focus hide
+		FeatAdd(oPC, 181, FALSE);  // skill focus  ms
+	}
 }
 
 void AdjustAbilityScore(object oPC, int nAbility, int nAmount){

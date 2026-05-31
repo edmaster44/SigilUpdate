@@ -25,23 +25,31 @@ const int CLASS_TYPE_GOLEM_MASTER		= 77;
 const int CLASS_TYPE_CELESTIAL_ENVOY 	= 42;
 
 
-void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell)
-{
-    effect eMind 	= EffectVisualEffect( VFX_DUR_SPELL_DAZE );
-    effect eDaze 	= EffectDazed(); 
-    effect eLink 	= EffectLinkEffects(eMind, eDaze);
-    int nMetaMagic 	= GetMetaMagicFeat();
-    int nDuration 	= 5;
+void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell){
+	/* is this bit necessary? Probably not, but if we notice any of these being affected
+		we can uncomment this bit
     int nRacial 	= GetRacialType(oTarget);
-
+	if (nRacial == RACIAL_TYPE_CONSTRUCT || nRacial == RACIAL_TYPE_ELEMENTAL ||
+		nRacial == RACIAL_TYPE_UNDEAD || nRacial == RACIAL_TYPE_OOZE){
+			SendMessageToPC(oPC, "Shadow Daze has no effect on this type of target");
+			return;
+	}
+	*/
+	effect eMind = EffectVisualEffect( VFX_DUR_SPELL_DAZE );
+    effect eDaze = EffectDazed(); 
+    effect eLink = EffectLinkEffects(eMind, eDaze);
+    int nDC = GetSpellSaveDC()+10;
+			
     SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 
-    if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
-	{	if (!MyResistSpell(oPC, oTarget))
-		{	if (!MySavingThrow(SAVING_THROW_WILL, oTarget, GetSpellSaveDC()+10, SAVING_THROW_TYPE_MIND_SPELLS))
-            {	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));		}
+    if(spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC)){
+		if (!MyResistSpell(oPC, oTarget)){
+			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS)){
+				AssignCommand(oTarget, ClearAllActions(TRUE));
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(5));	
+			}
         }
-    }
+    } else SendMessageToPC(oPC, "Invalid Target");
 }
 
 void PS_Feat_SHD_SummonShadow(object oPC, int nSpell)

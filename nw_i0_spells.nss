@@ -922,6 +922,11 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
         }
         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eMantle, oTarget));
     }
+	if (nResist > 0){
+		string sMessage = "Spell Resisted!";
+		if (GetIsPC(oTarget)) SendMessageToPC(oTarget, sMessage);
+		if (GetIsPC(oCaster) && oCaster != oTarget) SendMessageToPC(oCaster, sMessage);
+	}
     return nResist;
 }
 
@@ -991,19 +996,32 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 
 void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType = SAVING_THROW_TYPE_NONE, float fDelay = 0.1f){
 
-	if (!GetIsPC(oTarget)) return;
+	// TODO: MAKE FEEDBACK MESSAGES SHOW FOR BOTH CASTER AND TARGET (but only if PC )
+	if (!GetIsPC(oTarget) && !GetIsPC(OBJECT_SELF)) return;
 	
 	int nSpell = StringToInt(Get2DAString("spells", "Name", nId));
 	string sSpell = "this effect";
 	if (nSpell != 0) sSpell = GetStringByStrRef(nSpell);
-	string sMessage;
+	string sMessage, sColour;
 
 	switch (nResult){
-		case SAVING_THROW_CHECK_IMMUNE: sMessage = "<c=cyan>Immune to"; break;
-		case SAVING_THROW_CHECK_SUCCEEDED: sMessage = "<c=gold>Succeeded save vs"; break;
-		default: sMessage = "<c=tomato>Failed save vs"; break;
+		case SAVING_THROW_CHECK_IMMUNE:{
+			sColour = "<c=cyan>";
+			sMessage = " immunity to "; 
+			break;
+		}
+		case SAVING_THROW_CHECK_SUCCEEDED:{
+			sColour = "<c=gold>";
+			sMessage = " succeeded save vs ";
+			break;
+		}
+		default:{
+			sColour = "<c=tomato>";
+			sMessage = " failed save vs ";
+			break;
+		}
 	}
-	sMessage += " " + sSpell + ".</c>";
+	sMessage += sSpell + ".</c>";
 	
 	if (nResult == SAVING_THROW_CHECK_IMMUNE){
 		effect eVis = EffectVisualEffect(VFX_IMP_MAGIC_PROTECTION);
@@ -1014,7 +1032,10 @@ void MySavingThrowFeedback(object oTarget, int nResult, int nId, int nSaveType =
             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
         }
 	}
-	SendMessageToPC(oTarget, sMessage);
+	if (GetIsPC(oTarget))
+		SendMessageToPC(oTarget, sColour + "You have " + sMessage);
+	if (GetIsPC(OBJECT_SELF) && oTarget != OBJECT_SELF)
+		SendMessageToPC(OBJECT_SELF, sColour + GetName(oTarget) + " has" + sMessage);
 }
 
 
