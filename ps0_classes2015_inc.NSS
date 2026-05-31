@@ -37,10 +37,11 @@ void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell){
 	*/
 	effect eMind = EffectVisualEffect( VFX_DUR_SPELL_DAZE );
     effect eDaze = EffectDazed();
-	 //daze is supposed to make target flat-footed but it isn't, adding blindness which does 
-	effect eBlind = EffectBlindness();
+	 // daze should logically make target flat-footed but in nwn2 it doesn't until a couple turns later,
+	 // adding stun which does make target flat-footed immediately
+	effect eStun = EffectStunned();
     effect eLink = EffectLinkEffects(eMind, eDaze);
-	eLink = EffectLinkEffects(eBlind, eLink);
+	eLink = EffectLinkEffects(eStun, eLink);
     int nDC = GetSpellSaveDC()+10;
 			
     SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
