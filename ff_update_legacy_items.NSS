@@ -73,14 +73,8 @@ void FF_UpdateSingleLegacyItem(object oPC, object oItem, int bSetsOnly = FALSE){
 		}
 	}
 	
-	// New version of alertness works when chosen via lvl or granted by 2da, 
-	// but not as an item property so just remove both versions from
-	// items until Dae can fix the alerness constitution AC bug
-	itemproperty ipOldAlert = ItemPropertyBonusFeat(0);
+	//Remove new version of alertness
 	itemproperty ipNewAlert = ItemPropertyBonusFeat(1324);
-	if (IPGetItemHasProperty(oItem, ipOldAlert, DURATION_TYPE_PERMANENT)){
-		FF_ModifyItemProperty(oItem, ipOldAlert);
-	}
 	if (IPGetItemHasProperty(oItem, ipNewAlert, DURATION_TYPE_PERMANENT)){
 		FF_ModifyItemProperty(oItem, ipNewAlert);
 	}

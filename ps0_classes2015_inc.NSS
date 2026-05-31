@@ -36,8 +36,11 @@ void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell){
 	}
 	*/
 	effect eMind = EffectVisualEffect( VFX_DUR_SPELL_DAZE );
-    effect eDaze = EffectDazed(); 
+    effect eDaze = EffectDazed();
+	 //daze is supposed to make target flat-footed but it isn't, adding blindness which does 
+	effect eBlind = EffectBlindness();
     effect eLink = EffectLinkEffects(eMind, eDaze);
+	eLink = EffectLinkEffects(eBlind, eLink);
     int nDC = GetSpellSaveDC()+10;
 			
     SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
@@ -46,7 +49,8 @@ void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell){
 		if (!MyResistSpell(oPC, oTarget)){
 			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS)){
 				AssignCommand(oTarget, ClearAllActions(TRUE));
-				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(5));	
+				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(5));
+				AssignCommand(oTarget, ClearAllActions(TRUE));	
 			}
         }
     } else SendMessageToPC(oPC, "Invalid Target");
