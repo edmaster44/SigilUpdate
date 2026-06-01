@@ -269,28 +269,30 @@ void IronHeart3(object oCaller) // Removes a debuff from the caller
 
 }
 
-void ShadowHand1(object oCaller, object oTarget) // on a touch attack, gives the target 50% miss chance for 2 rounds
-{		
-	if (PS_GetTargetInRange(oCaller, oTarget, 2919))
-	{
-		SendMessageToPC(oCaller, "Using <i>Clinging Shadows Strike.</i>");
-		int touchAttackResult = TouchAttackMelee(oTarget, TRUE, 0);
-	
-		if (touchAttackResult)
-		{
-			effect visualEffect = EffectVisualEffect(VFX_INVOCATION_BESHADOWED_HIT);
-			effect missChance = EffectMissChance(50, MISS_CHANCE_TYPE_NORMAL);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, visualEffect, oTarget, 0.0f);
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, missChance, oTarget, 18.0f);
-		}
+void ShadowHand1(object oCaller, object oTarget) {		
+	if (!PS_GetTargetInRange(oCaller, oTarget)){
+		SendMessageToPC(oCaller, "Target out of range!");
+		return;
 	}
-	
-		// Initiates an attack against current target
-	object currentTarget = oTarget;
-	if (GetObjectType(currentTarget) == OBJECT_TYPE_CREATURE && GetIsEnemy(currentTarget, oCaller))
-	{
-		ActionAttack(currentTarget);
+
+	int nStr = GetAbilityModifier(ABILITY_STRENGTH, oCaller);
+	int nDex = GetAbilityModifier(ABILITY_DEXTERITY, oCaller);
+	int nBonus = (nDex > nStr) ? nDex - nStr : 0;
+	int nAtt = TouchAttackMelee(oTarget, FALSE, nBonus);
+	if (nAtt == TOUCH_ATTACK_RESULT_MISS){
+		SendMessageToPC(oCaller, "<i>Clinging Shadows Strike MISSED!.</i>");
+		return;
+	} else {
+		SendMessageToPC(oCaller, "<i>Clinging Shadows Strike HIT!.</i>");
 	}
+	if (GetIsImmune(oTarget, IMMUNITY_TYPE_BLINDNESS, oCaller)){
+		SendMessageToPC(oCaller, "Target immune to blindness!");
+		return;
+	}
+	effect eVis = EffectVisualEffect(VFX_INVOCATION_BESHADOWED_HIT);
+	effect eBlind = EffectBlindness();
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, 6.0f);	
 }
 
 void ShadowHand2(object oCaller) // User becomes invisible for 4 round
