@@ -272,6 +272,7 @@ void IronHeart3(object oCaller) // Removes a debuff from the caller
 void ShadowHand1(object oCaller, object oTarget) {		
 	if (!PS_GetTargetInRange(oCaller, oTarget)){
 		SendMessageToPC(oCaller, "Target out of range!");
+		ResetFeatUses(oCaller, 2919, TRUE, TRUE);
 		return;
 	}
 
@@ -291,6 +292,7 @@ void ShadowHand1(object oCaller, object oTarget) {
 	}
 	effect eVis = EffectVisualEffect(VFX_INVOCATION_BESHADOWED_HIT);
 	effect eBlind = EffectBlindness();
+	AssignCommand(oTarget, ClearAllActions(TRUE));
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBlind, oTarget, 6.0f);	
 }

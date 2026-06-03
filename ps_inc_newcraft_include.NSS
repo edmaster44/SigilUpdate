@@ -346,6 +346,8 @@ string SearchValIn2da(string s2da, string sMatchColumn, string sMatchVal, string
 
 struct dMatProp GetMatPowerFromItem(object oItem){
 	int nItem = GetBaseItemType(oItem);
+	//ff debug
+	object oPC = GetItemPossessor(oItem);
 
 	// We'll set an intial item property of 50% weight reduction because in our system that 
 	// property costs 0 points.
@@ -354,7 +356,11 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	data.points = 0;
 	
 	// non=player-made items don't have material powers, so return default values
-	if (!GetIsPlayerMade(oItem)) return data;
+	if (!GetIsPlayerMade(oItem)){
+		//ff debug 
+		SendMessageToPC(oPC, "Data returned as non-player-made");
+		return data;
+	}
 	
 	string sLookupColumn = "ID";
 	int nLookupValue = nItem;
@@ -378,13 +384,21 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	}
 	
 	string sBaseItemsRow = SearchValIn2da("scod_craft_baseitems", sLookupColumn, IntToString(nLookupValue));
-	if (sBaseItemsRow == "****") return data;
+	if (sBaseItemsRow == "****"){
+		//ff debug 
+		SendMessageToPC(oPC, "Data returned as blank base item row");
+		return data;
+	}
 	
 	int nBaseItemsRow = StringToInt(sBaseItemsRow);
 	
 	string sType = Get2DAString("scod_craft_baseitems", "TYPE", nBaseItemsRow);
 	int bIsMeleeGlove = (nItem == BASE_ITEM_GLOVES && CRAFTED_GLOVES_GET_MAT_POWER);
-	if (sType == "M" && !bIsMeleeGlove) return data; // misc items don't have material powers unless they're gloves
+	if (sType == "M" && !bIsMeleeGlove){
+		//ff debug 
+		SendMessageToPC(oPC, "Data returned as not weapon or glove");
+		return data; // misc items don't have material powers unless they're gloves
+	}
 	
 	string sCat = "";
 	if (sType == "A") sCat = "armor";
@@ -395,7 +409,11 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 		else sCat = "melee";
 	} else sCat = "melee"; // thrown weapons and gloves get same material powers as melee
 	
-	if (sCat == "") return data;
+	if (sCat == ""){
+		//ff debug 
+		SendMessageToPC(oPC, "Data returned as no category");
+		return data;
+	}
 	
 	// get the 2da that corresponds to the base material from which the item is crafted
 	// so that we can look up the material power from that 2da
@@ -409,16 +427,26 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 		if (GetBaseMaterialOfType(oItem, "scod_craft_metal") == SPECIAL_MAT_METALLINE){
 			data.ip = IpArgsToItemProperty(15, 335, 13, 0);
 			data.points = 1;
+			//ff debug 
+			SendMessageToPC(oPC, "Data returned as melee metalline");
 			return data;
 		}
 	}
 	
 	nMat = GetBaseMaterialOfType(oItem, sMat2da);
 	
-	if (nMat == NULL) return data;
+	if (nMat == NULL){
+		//ff debug 
+		SendMessageToPC(oPC, "Data returned as no material");
+		return data;
+	}
 	
 	string sMatRow = SearchValIn2da(sMat2da, "IP_DESCRIPTION_ID", IntToString(nMat));
-	if (sMatRow == "****") return data;
+	if (sMatRow == "****"){
+		//ff debug 
+		SendMessageToPC(oPC, "Data returned as sMatRow == ****");
+		return data;
+	}
 	
 	int nMatRow = StringToInt(sMatRow);
 	
@@ -449,15 +477,25 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	// improved crit instead. If it's ammo whose mat power is keen, it gets nothing.
 	if (nType == 43){
 		// ammo cannot get keen so we return
-		if (IPGetIsProjectile(OBJECT_INVALID, nItem)) return data;
+		if (IPGetIsProjectile(OBJECT_INVALID, nItem)){
+			//ff debug 
+			SendMessageToPC(oPC, "Data returned as keen ammo");
+			return data;
+		}
 		
 		if (IPGetIsThrownWeapon(OBJECT_INVALID, nItem) ||
 			IPGetIsLauncher(OBJECT_INVALID, nItem)){
 				data.ip = GetImpCritItemPropertyForRanged(nItem);
 		} else if (nItem == BASE_ITEM_GLOVES){
-			if (!CRAFTED_GLOVES_GET_MAT_POWER) return data;
+			if (!CRAFTED_GLOVES_GET_MAT_POWER){
+				//ff debug 
+				SendMessageToPC(oPC, "Data returned as gloves get no mat power");
+				return data;
+			}
 			else data.ip = ItemPropertyBonusFeat(20); // imp crit unarmed
 		} else data.ip = ItemPropertyKeen();
+		//ff debug 
+		SendMessageToPC(oPC, "Data returned as keen");
 		return data;
 	}
 	
@@ -466,6 +504,10 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	int nSpecial = StringToInt(Get2DAString(sMat2da, sSpecColumn, nMatRow));
 	
 	data.ip = IpArgsToItemProperty(nType, nSub, nParam, nSpecial);
+	string sMessage = "Type = " + IntToString(nType) + ", Sub = " + IntToString(nSub);
+	sMessage += ", Param = " + IntToString(nParam) + ", Special = " + IntToString(nSpecial);
+	sMessage += ", Points = " + IntToString(data.points);
+	SendMessageToPC(oPC, "Data returned:\n" + sMessage);
 	
 	return data;
 }

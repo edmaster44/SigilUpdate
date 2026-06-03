@@ -206,5 +206,22 @@ void AdjustAbilityScores(object oPC){
 		AssignCommand(oPC, ClearAllActions(TRUE));
 		AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
 	}
+	
+	SendMessageToPC(oPC, "Checking for outdated versions of Impromptu Sneak Attack and Feint");
+		//replace og feint with new
+	if (GetHasFeat(1098, oPC, TRUE)){
+		FeatRemove(oPC, 1098);
+		FeatAdd(oPC, 3371, FALSE);
+	}
+		//replace og impromptu with new
+	if (GetHasFeat(1511, oPC, TRUE)){
+		FeatRemove(oPC, 1511);
+		FeatAdd(oPC, 3373, FALSE);
+	} else if (GetHasFeat(1510, oPC, TRUE)){
+		FeatRemove(oPC, 1510);
+		FeatAdd(oPC, 3372, FALSE);
+	}
+	
+	
 
 }

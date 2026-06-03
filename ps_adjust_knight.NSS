@@ -54,7 +54,7 @@ void PS_KnightLevels(object oPC){
 		}
 		if (iTotal >= 7){
 			FeatAdd(oPC,FEAT_CONTAGION,FALSE,FALSE,FALSE);//Contagion, BG Path
-			FeatAdd(oPC,FEAT_FEINT,FALSE,FALSE,FALSE);//Feint
+			FeatAdd(oPC,FEAT_NEW_FEINT,FALSE,FALSE,FALSE);//Feint
 			FeatAdd(oPC,FEAT_INFLICT_CRITICAL_WOUNDS,FALSE,FALSE,FALSE);//Inflict Critical Wounds, BG Path
 		}
 		if (iTotal >= 9){
