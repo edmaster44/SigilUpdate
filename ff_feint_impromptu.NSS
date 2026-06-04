@@ -131,8 +131,13 @@ void DoNewImpromptuOrFeint(object oPC, object oTarget, int bFeint = FALSE){
 	FeatAdd(oPC, 1510, FALSE); // give og impromptu
 	int nVis = (bFeint == TRUE) ? VFX_IMP_CONFUSION_S : VFX_IMP_NEGATIVE_ENERGY;
 	effect eVis = EffectVisualEffect(nVis);
+	ResetFeatUses(oPC, 1510, TRUE, TRUE);
+	AssignCommand(oPC, ClearAllActions(TRUE));
+	AssignCommand(oTarget, ClearAllActions(TRUE));
+	DelayCommand(0.5f, AssignCommand(oPC, ActionUseFeat(1510, oTarget))); // use it
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	DelayCommand(0.1f, AssignCommand(oPC, ActionUseFeat(1510, oTarget))); // use it
+	if (oPC != OBJECT_INVALID && oTarget != OBJECT_INVALID)
+		AssignCommand(oPC, ActionAttack(oTarget));
 	DelayCommand(3.0f,FeatRemove(oPC, 1510));// remove og impromptu
 }
 
