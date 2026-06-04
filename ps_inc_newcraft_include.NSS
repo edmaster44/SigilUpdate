@@ -347,7 +347,7 @@ string SearchValIn2da(string s2da, string sMatchColumn, string sMatchVal, string
 struct dMatProp GetMatPowerFromItem(object oItem){
 	int nItem = GetBaseItemType(oItem);
 	//ff debug
-	object oPC = GetItemPossessor(oItem);
+	//object oPC = GetItemPossessor(oItem);
 
 	// We'll set an intial item property of 50% weight reduction because in our system that 
 	// property costs 0 points.
@@ -358,7 +358,7 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	// non=player-made items don't have material powers, so return default values
 	if (!GetIsPlayerMade(oItem)){
 		//ff debug 
-		SendMessageToPC(oPC, "Data returned as non-player-made");
+		//SendMessageToPC(oPC, "Data returned as non-player-made");
 		return data;
 	}
 	
@@ -386,7 +386,7 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	string sBaseItemsRow = SearchValIn2da("scod_craft_baseitems", sLookupColumn, IntToString(nLookupValue));
 	if (sBaseItemsRow == "****"){
 		//ff debug 
-		SendMessageToPC(oPC, "Data returned as blank base item row");
+		//SendMessageToPC(oPC, "Data returned as blank base item row");
 		return data;
 	}
 	
@@ -396,7 +396,7 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	int bIsMeleeGlove = (nItem == BASE_ITEM_GLOVES && CRAFTED_GLOVES_GET_MAT_POWER);
 	if (sType == "M" && !bIsMeleeGlove){
 		//ff debug 
-		SendMessageToPC(oPC, "Data returned as not weapon or glove");
+		//SendMessageToPC(oPC, "Data returned as not weapon or glove");
 		return data; // misc items don't have material powers unless they're gloves
 	}
 	
@@ -411,7 +411,7 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	
 	if (sCat == ""){
 		//ff debug 
-		SendMessageToPC(oPC, "Data returned as no category");
+		//SendMessageToPC(oPC, "Data returned as no category");
 		return data;
 	}
 	
@@ -428,7 +428,7 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 			data.ip = IpArgsToItemProperty(15, 335, 13, 0);
 			data.points = 1;
 			//ff debug 
-			SendMessageToPC(oPC, "Data returned as melee metalline");
+			//SendMessageToPC(oPC, "Data returned as melee metalline");
 			return data;
 		}
 	}
@@ -437,14 +437,14 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	
 	if (nMat == NULL){
 		//ff debug 
-		SendMessageToPC(oPC, "Data returned as no material");
+		//SendMessageToPC(oPC, "Data returned as no material");
 		return data;
 	}
 	
 	string sMatRow = SearchValIn2da(sMat2da, "IP_DESCRIPTION_ID", IntToString(nMat));
 	if (sMatRow == "****"){
 		//ff debug 
-		SendMessageToPC(oPC, "Data returned as sMatRow == ****");
+		//SendMessageToPC(oPC, "Data returned as sMatRow == ****");
 		return data;
 	}
 	
@@ -479,7 +479,7 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 		// ammo cannot get keen so we return
 		if (IPGetIsProjectile(OBJECT_INVALID, nItem)){
 			//ff debug 
-			SendMessageToPC(oPC, "Data returned as keen ammo");
+		//	SendMessageToPC(oPC, "Data returned as keen ammo");
 			return data;
 		}
 		
@@ -489,13 +489,13 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 		} else if (nItem == BASE_ITEM_GLOVES){
 			if (!CRAFTED_GLOVES_GET_MAT_POWER){
 				//ff debug 
-				SendMessageToPC(oPC, "Data returned as gloves get no mat power");
+				//SendMessageToPC(oPC, "Data returned as gloves get no mat power");
 				return data;
 			}
 			else data.ip = ItemPropertyBonusFeat(20); // imp crit unarmed
 		} else data.ip = ItemPropertyKeen();
 		//ff debug 
-		SendMessageToPC(oPC, "Data returned as keen");
+		//SendMessageToPC(oPC, "Data returned as keen");
 		return data;
 	}
 	
@@ -504,11 +504,13 @@ struct dMatProp GetMatPowerFromItem(object oItem){
 	int nSpecial = StringToInt(Get2DAString(sMat2da, sSpecColumn, nMatRow));
 	
 	data.ip = IpArgsToItemProperty(nType, nSub, nParam, nSpecial);
+	// ff debug
+	/*
 	string sMessage = "Type = " + IntToString(nType) + ", Sub = " + IntToString(nSub);
 	sMessage += ", Param = " + IntToString(nParam) + ", Special = " + IntToString(nSpecial);
 	sMessage += ", Points = " + IntToString(data.points);
 	SendMessageToPC(oPC, "Data returned:\n" + sMessage);
-	
+	*/
 	return data;
 }
 

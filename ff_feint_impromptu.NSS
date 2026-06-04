@@ -27,8 +27,9 @@ const int NEW_FEINT_FEAT_ID = 3371;
 const int INVIS_BLADE_FEINT_MASTERY = 2051;
 const int FEINT_ATTEMPT_MULTIPLIER = 3; // defender gets this much bonus to roll per attacker's attempt beyond 1st
 
-void DoNewImpromptu(object oPC, object oTarget, int bFeint = FALSE);
-void DoNewFeint(object oPC, object oTarget);
+void RollNewFeint(object oPC, object oTarget);
+void RollNewImpromptu(object oPC, object oTarget);
+void DoNewImpromptuOrFeint(object oPC, object oTarget, int bFeint = FALSE);
 void RemoveFeintAttemptTracking(object oTarget, string sFeintId);
 
 void main(){
@@ -49,22 +50,26 @@ void main(){
 		return;
 	}
 	switch (nId){
-		case NEW_IMPROMPTU_SPELL_ID: DoNewImpromptu(oPC, oTarget); break;
-		case NEW_FEINT_SPELL_ID: DoNewFeint(oPC, oTarget); break;
+		case NEW_IMPROMPTU_SPELL_ID: RollNewImpromptu(oPC, oTarget); break;
+		case NEW_FEINT_SPELL_ID: RollNewFeint(oPC, oTarget); break;
 	}
 }
 
-void DoNewImpromptu(object oPC, object oTarget, int bFeint = FALSE){
-	
-	FeatAdd(oPC, 1510, FALSE); // give og impromptu
-	int nVis = (bFeint == TRUE) ? VFX_IMP_CONFUSION_S : VFX_IMP_NEGATIVE_ENERGY;
-	effect eVis = EffectVisualEffect(nVis);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-	DelayCommand(0.1f, AssignCommand(oPC, ActionUseFeat(1510, oTarget))); // use it
-	DelayCommand(3.0f,FeatRemove(oPC, 1510));// remove og impromptu
+void RollNewImpromptu(object oPC, object oTarget){
+	int nStr = GetAbilityModifier(ABILITY_STRENGTH, oPC);
+	int nDex = GetAbilityModifier(ABILITY_DEXTERITY, oPC);
+	int nBonus = (nDex > nStr) ? nDex - nStr : 0;
+	int nAtt = TouchAttackMelee(oTarget, FALSE, nBonus);
+	if (nAtt == TOUCH_ATTACK_RESULT_MISS){
+		SendMessageToPC(oPC, "<i>Impromptu Sneak Attack Failed!</i>");
+		return;
+	} else {
+		SendMessageToPC(oPC, "<i>Impromptu Sneak Attack Succeeds!</i>");
+		DoNewImpromptuOrFeint(oPC, oTarget);
+	}
 }
 
-void DoNewFeint(object oPC, object oTarget){
+void RollNewFeint(object oPC, object oTarget){
 	
 	//set up an identifying string to use to track # of feint attempts by this specific attacker
 	// vs this specific opponent
@@ -99,7 +104,7 @@ void DoNewFeint(object oPC, object oTarget){
 			SendMessageToPC(oPC, "Feint HIT!\n" + sAttackerMessage);
 		if (bDefenderPC)
 			SendMessageToPC(oTarget, GetName(oPC) + " Feints!\n" + sDefenderMessage);
-		DoNewImpromptu(oPC, oTarget, TRUE);
+		DoNewImpromptuOrFeint(oPC, oTarget, TRUE);
 	} else {
 		if (bAttackerPC) SendMessageToPC(oPC, "Feint MISSED!\n" + sAttackerMessage);
 		if (bDefenderPC) SendMessageToPC(oTarget, GetName(oPC) + " failed Feint attempt!\n" + sDefenderMessage);
@@ -120,9 +125,19 @@ void RemoveFeintAttemptTracking(object oTarget, string sFeintId){
 		DeleteLocalInt(oTarget, sFeintId);
 }
 
-	
-	
-	
-	
-	
 
+void DoNewImpromptuOrFeint(object oPC, object oTarget, int bFeint = FALSE){
+	
+	FeatAdd(oPC, 1510, FALSE); // give og impromptu
+	int nVis = (bFeint == TRUE) ? VFX_IMP_CONFUSION_S : VFX_IMP_NEGATIVE_ENERGY;
+	effect eVis = EffectVisualEffect(nVis);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+	DelayCommand(0.1f, AssignCommand(oPC, ActionUseFeat(1510, oTarget))); // use it
+	DelayCommand(3.0f,FeatRemove(oPC, 1510));// remove og impromptu
+}
+
+	
+	
+	
+	
+	

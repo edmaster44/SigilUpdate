@@ -1332,6 +1332,27 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 		nAddPoints = 0;
 		nIpType = GetItemPropertyType(ip);
 		nIpSub = GetItemPropertySubType(ip);
+		
+		// the special material power
+		if (GetIsItemPropertyValid(ipMatPower)){
+			if (IPGetItemPropertiesIdentical(ipMatPower, ip)){
+				bSkipIp = TRUE;
+			}
+			// the special mat power for the physical damage adamantines can
+			// change depending on base weapon damage and physical damage is
+			// not available with enchanting, just crafting, so if we find
+			// one physical damage, we skip all to avoid incorrect points
+			else if (GetItemPropertyType(ipMatPower) == 16 && nIpType == 16){
+				int nMatSub =  GetItemPropertySubType(ipMatPower);
+				if ((nMatSub == 0 || nMatSub == 1 || nMatSub == 2) &&
+					(nIpSub == 0 || nIpSub == 1 || nIpSub == 2)){
+						bSkipIp = TRUE;
+				}
+			} else if (ipMatPower == ItemPropertyKeen() &&
+				ip == ItemPropertyKeen()){
+				bSkipIp = TRUE;	
+			}
+		}
 			
 		//debug 
 		/*
@@ -1374,26 +1395,6 @@ int GetItemTotalPointsFrom2DA(object oItem, object oPC = OBJECT_INVALID){
 			|| nIpType == 65 //usage restriction
 			|| nIpType == 83)) //vfx
 			bSkipIp = TRUE; 
-		
-		// the special material power
-		if (!bSkipIp && GetIsItemPropertyValid(ipMatPower)){
-			// the special mat power for the physical damage adamantines can
-			// change depending on base weapon damage and physical damage is
-			// not available with enchanting, just crafting, so if we find
-			// one physical damage, we skip all to avoid incorrect points
-			if (GetItemPropertyType(ipMatPower) == 16 && nIpType == 16){
-				int nMatSub =  GetItemPropertySubType(ipMatPower);
-				if ((nMatSub == 0 || nMatSub == 1 || nMatSub == 2) &&
-					(nIpSub == 0 || nIpSub == 1 || nIpSub == 2)){
-						bSkipIp = TRUE;
-				}
-			} else if (IPGetItemPropertiesIdentical(ipMatPower, ip)){
-				bSkipIp = TRUE;
-			} else if (ipMatPower == ItemPropertyKeen() &&
-				ip == ItemPropertyKeen()){
-				bSkipIp = TRUE;	
-			}
-		}
 		
 		// skip the unique power self only on ammo and thrown quivers
 		if (!bSkipIp && IPGetIsQuiver(OBJECT_INVALID, nItem) && nIpType == 15)

@@ -348,7 +348,7 @@ int IPGetMaxStackSize(object oItem){
 int IPGetItemPropertiesIdentical(itemproperty ip1, itemproperty ip2, int bIgnoreDuration = FALSE){
 	int nType = GetItemPropertyType(ip1);
 	if (nType != GetItemPropertyType(ip2)) return FALSE;
-	if (GetItemPropertyCostTable(ip1) != GetItemPropertyCostTable(ip2)) return FALSE;
+	//if (GetItemPropertyCostTable(ip1) != GetItemPropertyCostTable(ip2)) return FALSE;
 	if (!bIgnoreDuration){
 		if (GetItemPropertyDurationType(ip1) != GetItemPropertyDurationType(ip2)) return FALSE;
 	}
