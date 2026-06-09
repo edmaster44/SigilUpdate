@@ -194,20 +194,19 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 	
 	} else if (TestStringAgainstPattern("**fire**", sAREA) || 
 		TestStringAgainstPattern("**magma**", sAREA)){
-		if (bGetPercentage) return 4;
+		if (bGetPercentage) return 5;
 		else {
-			nRoll = 6;
+			nRoll = 5;
 			if (TestStringAgainstPattern("**salamander**", sAREA) ||
 				TestStringAgainstPattern("**obsidian**", sAREA))
-					nRoll += 1;
+					nRoll += 2;
 			switch (Random(nRoll)){
 				case 0: sSpecial = MISC_PYRITE; break;
 				case 1: sSpecial = INGOT_GOLD; break;
-				case 2: sSpecial = INGOT_DARKSTEEL; break;
-				case 3: sSpecial = INGOT_OERTHBLOOD; break;
-				case 4: sSpecial = INGOT_BLOODGLASS; break;
-				case 5: sSpecial = INGOT_BYESHK; break;
-				case 6: sSpecial = HIDE_OPHIDIAN; break;
+				case 2: sSpecial = INGOT_OERTHBLOOD; break;
+				case 3: sSpecial = INGOT_BLOODGLASS; break;
+				case 4: sSpecial = INGOT_BYESHK; break;
+				case 5: case 6: sSpecial = HIDE_OPHIDIAN; break;
 			}
 		}
 	} else if (TestStringAgainstPattern("**water**", sAREA) || 
