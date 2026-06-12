@@ -246,7 +246,7 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 		nDex = 5;
 		nCon = 10;	}
 	else if (GetHasFeat(2656, oPC)) 
-	{	nAfflict = 1292;	//Weretiger original 1296
+	{	nAfflict = 1296;	//Weretiger
 		nStr = 10;
 		nDex = 7;
 		nCon = 5;	}
