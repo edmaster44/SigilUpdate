@@ -3860,7 +3860,7 @@ int GetBardicClassLevelForUses(object oPC){
         nBARD += (FloatToInt(IntToFloat(GetLevelByClass(CLASS_TYPE_BRACHINA, oPC))*0.8f));
         
     if (GetHasFeat(2678, oPC, TRUE))
-        nBARD += (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
+        nBARD += (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC));
         
     if (GetHasFeat(2841, oPC, TRUE))
         nBARD += (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));
@@ -3885,7 +3885,7 @@ int GetBardicClassLevelForSongs(object oPC)
     nBARD += GetLevelByClass(117, oPC); //warchanter
     
     if (GetHasFeat(2678, oPC, TRUE))
-        nBARD += (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC) / 2);
+        nBARD += (GetLevelByClass(CLASS_TYPE_MONADIC_DEVA_PRC, oPC));
 
     if (GetHasFeat(2841, oPC, TRUE)) 
         nBARD += (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC));

@@ -144,6 +144,7 @@ void main() {
   |                                                                            |
   | CL_BOOTS, CL_BODY, and CL_GLOVES variation 99 is an invisible model.       |
   \*--------------------------------------------------------------------------*/
+  
 	SetLocalString( oModule, "XC_P_AAF_ACME_HELM", "#1#2#3#4#5#6#7#8#9#10#11#12#15#52#53#" );
 	SetLocalString( oModule, "XC_P_AAF_AN_HELM", "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19#20#21#22#23#24#25#26#27#28#29#30#31#32#33#34#35#36#37#38#39#40#41#42#43#44#45#46#47#48#49#50#51#52#53#54#55#" );
 	SetLocalString( oModule, "XC_P_AAF_BA_HELM", "#1#2#3#4#5#6#50#51#52#53#54#55#60#84#" );
@@ -775,21 +776,38 @@ void main() {
 	SetLocalString( oModule, "XC_c_lizman_SCOD_HELM", "#1#18#26#" );
 	SetLocalString( oModule, "XC_c_lizman_HD_BODY", "#1#2#3#" );
 	SetLocalString( oModule, "XC_c_lizman_HD_HELM", "#1#2#3#4#5#6#7#" );
-	SetLocalString( oModule, "XC_c_kobold_BA_HELM", "#60#" );
-	SetLocalString( oModule, "XC_c_kobold_CL_BODY", "#1#2#3#" );
+	SetLocalString( oModule, "XC_c_kobold_BA_HELM", "#6#60#84#105#" );
+	SetLocalString( oModule, "XC_c_kobold_CH_HELM", "#50#82##" );
+	string sKoboldclBody = "#1#2#3#25#40#49#50#51#52#53#54#55#56#57#58#59#60#61#62#63#64#65#66#67#69#72#85#119#121#166#";
+	sKoboldclBody += "168#199#200#210#218#";
+	SetLocalString( oModule, "XC_c_kobold_CL_BODY", sKoboldclBody);
+	SetLocalString( oModule, "XC_c_kobold_CL_HELM", "#16#40#48#51#53#54#66#99#100#128#");
+	SetLocalString( oModule, "XC_c_kobold_CP_BODY", "#2#");
+	SetLocalString( oModule, "XC_c_kobold_GBX_HELM", "#245#");
+	SetLocalString( oModule, "XC_c_kobold_ACME_HELM", "#2#3#5#6#8#10#11#12#" );
+	SetLocalString( oModule, "XC_c_kobold_ACME_BODY", "#1#2#3#35#38#211#");
+	SetLocalString( oModule, "XC_c_kobold_DMCB_BODY", "#30#31#32#33#34#");
+	SetLocalString( oModule, "XC_c_kobold_DMCB_HELM", "#1#2#3#4#5#6#103#");
+	SetLocalString( oModule, "XC_c_kobold_MP_BODY", "#2##4#7#8#9#10#11#12#16#17#21#28#29#30#83#84#");
+	SetLocalString( oModule, "XC_c_kobold_MP_HELM", "#5#9#11#30#");
+	string sKoboldMPHAbody = "#1#2#3#4#5#6#7#8#9#10#11#12#13#14#15#16#17#18#19##20#21#22#23#24#25#26#27#28#29#30#";
+	sKoboldMPHAbody += "31#32#33#34#35#36#37#38#39#40#41#42#43#44#";
+	SetLocalString( oModule, "XC_c_kobold_MPHA_BODY", sKoboldMPHAbody);
+	SetLocalString( oModule, "XC_c_kobold_SC_BODY", "#1#3#25#");
 	SetLocalString( oModule, "XC_c_kobold_CL_BELT", "#2#3#" );
 	SetLocalString( oModule, "XC_c_kobold_CL_BOOTS", "#1#" );
 	SetLocalString( oModule, "XC_c_kobold_CL_GLOVES", "#1#" );
-	SetLocalString( oModule, "XC_c_kobold_CH_BODY", "#1#" );
+	SetLocalString( oModule, "XC_c_kobold_CH_BODY", "#1#52#72#" );
 	SetLocalString( oModule, "XC_c_kobold_HD_HELM", "#3#4#" );
-	SetLocalString( oModule, "XC_c_kobold_LE_BODY", "#1#2#" );
+	SetLocalString( oModule, "XC_c_kobold_LE_BODY", "#1#2#41#" );
 	SetLocalString( oModule, "XC_c_kobold_NK_BODY", "#1#" );
-	SetLocalString( oModule, "XC_c_kobold_PF_BODY", "#1#2#" );
+	SetLocalString( oModule, "XC_c_kobold_PF_BODY", "#1#2#3#49#51#52#53#54#99#160#161#163#165#166#170#200#201#" );
 	SetLocalString( oModule, "XC_c_kobold_PF_BELT", "#1#3#" );
 	SetLocalString( oModule, "XC_c_kobold_PF_HELM", "#5#7#8#10#11#" );
-	SetLocalString( oModule, "XC_c_kobold_PH_HELM", "#1#2#3#5#6#10#60#61#62#63#64#65#66#67#68#69#70#71#" );
+	SetLocalString( oModule, "XC_c_kobold_PH_HELM", "#1#2#3#5#6#10#42#51#52##60#61#62#63#64#65#66#67#68#69#70#71#201#" );
 	SetLocalString( oModule, "XC_c_kobold_SC_HELM", "#1#60#" );
-	SetLocalString( oModule, "XC_c_kobold_SCOD_HELM", "#1#18#22#23#24#25#" );
+	SetLocalString( oModule, "XC_c_kobold_SCOD_BODY", "#1#2#4#6#7#8#9#10#11#12#13#15#19#24#25#28#29#32#33#34#42#" );
+	SetLocalString( oModule, "XC_c_kobold_SCOD_HELM", "#1#2#6#7#8#9#10#18#22#23#24#25#26#" );
 	SetLocalString( oModule, "XC_c_skel_CL_BODY", "#1#2#" );
 	SetLocalString( oModule, "XC_c_skel_CH_BODY", "#1#" );
 	SetLocalString( oModule, "XC_c_skel_PH_BODY", "#1#" );
@@ -1207,9 +1225,9 @@ void main() {
 	SetLocalString( oModule, "XC_AVT_c_orc_BODY", "#0#2#4#5#" );
 	SetLocalString( oModule, "XC_AVT_c_lizman_BODY", "#0#1#2#4#6#8#9#21#" );
 	SetLocalString( oModule, "XC_AVT_c_lizman_HELM", "#0#2#4#5#6#7#8#9#21#" );
-	SetLocalString( oModule, "XC_AVT_c_kobold_BODY", "#0#2#8#10#" );
+	SetLocalString( oModule, "XC_AVT_c_kobold_BODY", "#0#1#2#4#5#8#10#15#16#17#20#21#" );
 	SetLocalString( oModule, "XC_AVT_c_kobold_BELT", "#0#1#2#4#5#8#9#10#15#16#17#18#21#" );
-	SetLocalString( oModule, "XC_AVT_c_kobold_HELM", "#0#1#2#4#5#8#9#10#15#16#17#18#21#" );
+	SetLocalString( oModule, "XC_AVT_c_kobold_HELM", "#0#1#2#4#5#6#7#8#9#10#15#16#17#18#21#" );
 	SetLocalString( oModule, "XC_AVT_c_skel_BODY", "#0#4#7#" );
 	SetLocalString( oModule, "XC_AVT_c_giantfire_BODY", "#0#8#" );
 	SetLocalString( oModule, "XC_AVT_c_giantfire_HELM", "#8#" );
