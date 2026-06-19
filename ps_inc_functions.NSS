@@ -213,7 +213,7 @@ int PS_GetSkillRank(int nSkill, object oTarget = OBJECT_SELF, int bBaseOnly = FA
 
 int GetHasSpiritShamanProgression(object oPC, int iClass);
 
-int GetSpiritShamanTRUECasterlevel(object oPC);
+int GetSpiritShamanTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE);
 
 int GetHasKnightProgression(object oPC, int iClass);
 
@@ -1537,7 +1537,7 @@ void GiveEssenceBlastShapes(object oPC) {
     
 }
 
-int GetWarlockCasterLevelBase(object oPC) {
+int GetWarlockCasterLevelBase(object oPC, int bIgnorePracticed = FALSE) {
     int iSlotNumber; 
     int iClass;
     int iTotal = 0; 
@@ -1554,7 +1554,7 @@ int GetWarlockCasterLevelBase(object oPC) {
         else if (GetHasWarlockProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE)){
+    if (GetHasFeat(FEAT_PRACTICED_INVOKER,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
 		if (iTotal > nLevel) iTotal = nLevel;
@@ -1655,7 +1655,7 @@ int GetHasSpiritShamanProgression(object oPC, int iClass)
     else return FALSE;
 }
 
-int GetSpiritShamanTRUECasterlevel(object oPC)
+int GetSpiritShamanTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
     int iSlotNumber; int iClass;
     int iTotal; int iTrue;
@@ -1672,7 +1672,7 @@ int GetSpiritShamanTRUECasterlevel(object oPC)
         else if (GetHasSpiritShamanProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(2003,oPC,TRUE)){
+    if(GetHasFeat(2003,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int iLevel = PS_GetLevel(oPC);
 		if (iTotal > iLevel) iTotal = iLevel;
@@ -1782,7 +1782,7 @@ int GetPaladinAndPRCClassLevels(object oPC)
 }
 
 
-int GetPaladinTRUECasterlevel(object oPC)
+int GetPaladinTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
     int iSlotNumber; int iClass;
     int iTotal; int iTrue;
@@ -1799,7 +1799,7 @@ int GetPaladinTRUECasterlevel(object oPC)
         else if (GetHasPaladinProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE)){
+    if (GetHasFeat(FEAT_PRACTICED_SPELLCASTER_PALADIN,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int iLevel = PS_GetLevel(oPC);
 		if (iTotal > iLevel) iTotal = iLevel;
@@ -1905,7 +1905,7 @@ int GetRangerAndPRCClassLevels(object oPC)
     return iTotal;
 }
 
-int GetRangerTRUECasterlevel(object oPC)
+int GetRangerTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
     int iSlotNumber; int iClass;
     int iTotal; int iTrue;
@@ -1922,7 +1922,7 @@ int GetRangerTRUECasterlevel(object oPC)
         else if (GetHasRangerProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE)){
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_RANGER,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
 		if (iTotal > nLevel) iTotal = nLevel;
@@ -1987,7 +1987,7 @@ int GetHasWizardProgression(object oPC, int iClass)
     else return FALSE;
 }
 
-int GetWizardTRUECasterlevel(object oPC)
+int GetWizardTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
     int iSlotNumber; int iClass;
     int iTotal; int iTrue;
@@ -2004,7 +2004,7 @@ int GetWizardTRUECasterlevel(object oPC)
         else if (GetHasWizardProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_WIZARD,oPC,TRUE)){
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_WIZARD,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
 		if (iTotal > nLevel) iTotal = nLevel;
@@ -2073,7 +2073,7 @@ int GetHasSorcererProgression(object oPC, int iClass)
     else return FALSE;
 }
 
-int GetSorcererTRUECasterlevel(object oPC)
+int GetSorcererTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
     int iSlotNumber; int iClass;
     int iTotal; int iTrue;
@@ -2090,7 +2090,7 @@ int GetSorcererTRUECasterlevel(object oPC)
         else if (GetHasSorcererProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_SORCERER,oPC,TRUE)){
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_SORCERER,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
 		if (iTotal > nLevel) iTotal = nLevel;
@@ -2199,7 +2199,7 @@ int GetBardAndPRCClassLevels(object oPC)
     return iTotal;
 }
 
-int GetBardTRUECasterlevel(object oPC)
+int GetBardTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
     int iSlotNumber; int iClass;
     int iTotal; int iTrue;
@@ -2216,7 +2216,7 @@ int GetBardTRUECasterlevel(object oPC)
         else if (GetHasBardProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_BARD,oPC,TRUE)){
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_BARD,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
 		if (iTotal > nLevel) iTotal = nLevel;
@@ -2306,7 +2306,7 @@ int GetDruidAndPRCClassLevels(object oPC)
     return iTotal;
 }
 
-int GetDruidTRUECasterlevel(object oPC)
+int GetDruidTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
     int iSlotNumber; int iClass;
     int iTotal; int iTrue;
@@ -2323,7 +2323,7 @@ int GetDruidTRUECasterlevel(object oPC)
         else if (GetHasDruidProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_DRUID,oPC,TRUE)){
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_DRUID,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
 		if (iTotal > nLevel) iTotal = nLevel;
@@ -2413,7 +2413,7 @@ int GetFavoredSoulAndPRCClassLevels(object oPC)
     return iTotal;
 }
 
-int GetFavoredSoulTRUECasterlevel(object oPC)
+int GetFavoredSoulTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
 	if(GetLevelByClass(CLASS_TYPE_FAVORED_SOUL, oPC) == 0) return 0;   
 	
@@ -2431,7 +2431,7 @@ int GetFavoredSoulTRUECasterlevel(object oPC)
         else if (GetHasFavoredSoulProgression(oPC,iClass)) iTotal += GetClassBspLevel(oPC,iClass);
     }
     
-    if (GetHasFeat(2068,oPC,TRUE)){
+    if (GetHasFeat(2068,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
 		if (iTotal > nLevel) iTotal = nLevel;
@@ -2576,7 +2576,7 @@ int GetClericLevel(object oPC)
     return 0;
 }
 
-int GetClericTRUECasterlevel(object oPC)
+int GetClericTRUECasterlevel(object oPC, int bIgnorePracticed = FALSE)
 {
     int iSlotNumber; int iClass;
     int iTotal; int iTrue;
@@ -2593,7 +2593,7 @@ int GetClericTRUECasterlevel(object oPC)
         else if (GetHasClericProgression(oPC,iClass)) iTotal = iTotal + GetClassBspLevel(oPC,iClass);
     }
     
-    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_CLERIC,oPC,TRUE)){
+    if(GetHasFeat(FEAT_PRACTICED_SPELLCASTER_CLERIC,oPC,TRUE) && !bIgnorePracticed){
 		iTotal += 4;
 		int nLevel = PS_GetLevel(oPC);
 		if (iTotal > nLevel) iTotal = nLevel;
@@ -3849,10 +3849,25 @@ string PS_ColorizeChatMessage(string Text)
 //For simple uses/day
 int GetBardicClassLevelForUses(object oPC){
 
-    int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-    
-    nBARD += GetLevelByClass(117, oPC); // warchanter
-    
+    int nSongs = GetLevelByClass(CLASS_TYPE_BARD, oPC);
+	if (nSongs < 1) return 0;
+	
+	nSongs = GetBardTRUECasterlevel(oPC, TRUE);
+    nSongs += GetLevelByClass(117, oPC); // warchanter
+	
+	//eldritch knight advances spells but not songs
+	//ek spell progression is +1 for every level beyond first,
+	//so subtract all but 1 ek levels to remove ek spell progress
+	int nEK = GetLevelByClass(52, oPC);
+	if (nEK > 1){
+		nEK -= 1;
+		nSongs -= nEK;
+	}
+	return nSongs;
+	
+    /* old
+	int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
+	nBARD += GetLevelByClass(117, oPC); // warchanter
     if (GetHasFeat(2481, oPC, TRUE)) 
         nBARD += (GetLevelByClass(CLASS_TYPE_FIRRE_PRC,oPC));
         
@@ -3874,6 +3889,7 @@ int GetBardicClassLevelForUses(object oPC){
     }
         
     return nBARD;
+	*/
 }
 
 //For classes that advance songs known
