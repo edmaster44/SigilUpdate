@@ -3858,6 +3858,7 @@ int GetBardicClassLevelForUses(object oPC){
 	//eldritch knight advances spells but not songs
 	//ek spell progression is +1 for every level beyond first,
 	//so subtract all but 1 ek levels to remove ek spell progress
+	//for songs
 	int nEK = GetLevelByClass(52, oPC);
 	if (nEK > 1){
 		nEK -= 1;
