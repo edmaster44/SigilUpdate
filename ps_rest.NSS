@@ -7,6 +7,24 @@
 const int cSaveWait = 300;
 const int bSHOW_REST_STAGE_DEBUG_MESSAGES = FALSE;
 
+//bypass the 20 song per day limit for non-pure-class bards
+void ResetBardSongs(object oPC){
+	int nUses = GetBardicClassLevelForUses(oPC);
+	if (nUses < 21) return; // we don't need to do anything for less than 21 USESPERDAY
+	
+	if (GetHasFeat(423, oPC)) nUses += 4; //extra music
+	
+	int i;
+	for (i = 34; i >= 0; i--){
+		DecrementRemainingFeatUses(oPC, 257);
+		if (!GetHasFeat(257, oPC)) break; // if no bard song uses left, break
+	}
+	
+	for (i = 0; i < nUses; i++){
+		IncrementRemainingFeatUses(oPC, 257);
+	}
+}
+
 //debug function used in May 2025 by Flatted Fifth to diagnose at what stage
 // of rest the TempChange local variable was being altered
 void IncrementalDebug(object oPC, string sStage){
@@ -285,6 +303,7 @@ void RestFinish(object oPC)
 	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	//DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
 	AlternativeSkillStatScaling(oPC);
+	ResetBardSongs(oPC);
 	
 	if (CheckTimeStamp(oPC, "REST") > cSaveWait)
 	{	
@@ -328,8 +347,6 @@ int IsInSafeRestZone(object oPC) {
 	
     return bPCInTrigger;
 }
-
-
 
 void main()
 {
