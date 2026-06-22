@@ -1229,7 +1229,8 @@ void main() {
 	SetLocalString( oModule, "XC_AVT_c_lizman_HELM", "#0#2#4#5#6#7#8#9#21#" );
 	SetLocalString( oModule, "XC_AVT_c_kobold_BODY", "#0#1#2#4#5#8#10#15#16#17#20#21#" );
 	SetLocalString( oModule, "XC_AVT_c_kobold_BELT", "#0#1#2#4#5#8#9#10#15#16#17#18#21#" );
-	SetLocalString( oModule, "XC_AVT_c_kobold_HELM", "#0#1#2#3#4#5#6#7#8#9#10#14#15#16#17#18#20#21#22#24#" ); //all
+	SetLocalString( oModule, "XC_AVT_c_kobold_HELM", "#2#5#7#16#21#" ); //working
+	//SetLocalString( oModule, "XC_AVT_c_kobold_HELM", "#0#1#2#3#4#5#6#7#8#9#10#14#15#16#17#18#20#21#22#24#" ); //all
 	//SetLocalString( oModule, "XC_AVT_c_kobold_HELM", "#2#5#21#" ); //limited
 	//SetLocalString( oModule, "XC_AVT_c_kobold_HELM", "#0#1#2#4#5#8#9#10#15#16#17#18#21#" );//original
 	//SetLocalString( oModule, "XC_AVT_c_kobold_HELM", "#0#1#2#4#5#6#7#8#9#10#15#16#17#18#21#" ); //kaji

@@ -59,6 +59,10 @@ void UpgradeCreatureWeapons(object oPC)
 //Bardic music stacks
 void CheckBardicSongs(object oPC)
 {
+	if (GetBardicClassLevelForUses(oPC) < 1) return;
+	StackBardicUses(oPC);
+	StackBardMusicUses(oPC);
+	/* OLD
 	int nSONG;
 	int nMUSIC;
 
@@ -94,6 +98,7 @@ void CheckBardicSongs(object oPC)
 	
 	if (nSONG == TRUE) StackBardicUses(oPC);
 	if (nMUSIC == TRUE) StackBardMusicUses(oPC);
+	*/
 }
 
 // Grants specific feats to evil clerics.

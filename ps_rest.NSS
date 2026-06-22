@@ -9,6 +9,8 @@ const int bSHOW_REST_STAGE_DEBUG_MESSAGES = FALSE;
 
 
 //bypass the 20 song per day limit for non-pure-class bards
+// not working, but it SHOULD work. Come back to this when I'm not exhausted and busy
+
 void ResetBardSongs(object oPC){
 
 	if (!GetHasFeat(373, oPC, TRUE)) return; // we dont need to do anything if they don'taken
@@ -26,6 +28,7 @@ void ResetBardSongs(object oPC){
 		IncrementRemainingFeatUses(oPC, 373);
 	}
 }
+
 
 //debug function used in May 2025 by Flatted Fifth to diagnose at what stage
 // of rest the TempChange local variable was being altered
