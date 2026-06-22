@@ -608,6 +608,17 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			return TRUE;
 		
 		}
+		else if (sInput == "#testepicskill"){
+			if (GetHasFeat(594, oSender)){
+				FeatRemove(oSender, 594);
+				SendMessageToPC(oSender, "Epic skill focus hide removed");
+			} else {
+				FeatAdd(oSender, 594, FALSE);
+				SendMessageToPC(oSender, "Epic skill focus hide granted");
+			}
+			return TRUE;
+		
+		}
 	}
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);
