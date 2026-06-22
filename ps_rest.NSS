@@ -7,21 +7,23 @@
 const int cSaveWait = 300;
 const int bSHOW_REST_STAGE_DEBUG_MESSAGES = FALSE;
 
+
 //bypass the 20 song per day limit for non-pure-class bards
 void ResetBardSongs(object oPC){
+
+	if (!GetHasFeat(373, oPC, TRUE)) return; // we dont need to do anything if they don'taken
+	// have the lvl 20 bard song
 	int nUses = GetBardicClassLevelForUses(oPC);
-	if (nUses < 21) return; // we don't need to do anything for less than 21 USESPERDAY
-	
 	if (GetHasFeat(423, oPC)) nUses += 4; //extra music
 	
 	int i;
-	for (i = 34; i >= 0; i--){
-		DecrementRemainingFeatUses(oPC, 257);
-		if (!GetHasFeat(257, oPC)) break; // if no bard song uses left, break
+	for (i = 40; i > 0; i--){
+		DecrementRemainingFeatUses(oPC, 373);
+		if (!GetHasFeat(373, oPC, FALSE)) break; // if no bard song uses left, break
 	}
 	
-	for (i = 0; i < nUses; i++){
-		IncrementRemainingFeatUses(oPC, 257);
+	for (i = 0; i <= nUses; i++){
+		IncrementRemainingFeatUses(oPC, 373);
 	}
 }
 

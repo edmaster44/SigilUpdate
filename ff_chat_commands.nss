@@ -597,6 +597,17 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
 		}
+		else if (sInput == "#testcosmo"){
+			if (GetHasFeat(1255, oSender)){
+				FeatRemove(oSender, 1255);
+				SendMessageToPC(oSender, "Cosmo disable device removed");
+			} else {
+				FeatAdd(oSender, 1255, FALSE);
+				SendMessageToPC(oSender, "Cosmo disable device granted");
+			}
+			return TRUE;
+		
+		}
 	}
 
 	if (sFeedback != "") SendMessageToPC(oSender, sFeedback);

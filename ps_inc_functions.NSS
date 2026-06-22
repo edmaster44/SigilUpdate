@@ -3896,6 +3896,8 @@ int GetBardicClassLevelForUses(object oPC){
 //For classes that advance songs known
 int GetBardicClassLevelForSongs(object oPC)
 {   
+	return GetBardicClassLevelForUses(oPC);
+	/*
     int nBARD = GetLevelByClass(CLASS_TYPE_BARD, oPC);
     nBARD += GetLevelByClass(CLASS_TYPE_FIRRE_PRC, oPC);
     
@@ -3912,6 +3914,7 @@ int GetBardicClassLevelForSongs(object oPC)
         if (nDragon >= 1) nBARD += nDragon;
     }   
     return nBARD;
+	*/
 }
 
 void StackBardicUses(object oPC)
@@ -3920,9 +3923,10 @@ void StackBardicUses(object oPC)
     if (GetHasFeat(FEAT_ARTIST, oPC))
         nBardicUses += 3;
     
+	/*
     if (nBardicUses > 20)
         nBardicUses = 20;
-        
+       */
     //1 = 257 No need to add 1 use, no bardic prc can be taken without Bard levels
     //2-20 = 355 - 373
     int nMax = nBardicUses - 1 + 355;
@@ -3930,8 +3934,9 @@ void StackBardicUses(object oPC)
     
     if (nMax == 0) return;
 
-    for (iFeatCurrent = 355; iFeatCurrent< nMax; iFeatCurrent++)
+    for (iFeatCurrent = 355; iFeatCurrent<= nMax; iFeatCurrent++)
     {
+		if (iFeatCurrent >= 374) return;
         FeatAdd(oPC, iFeatCurrent,FALSE);
     }       
 }
