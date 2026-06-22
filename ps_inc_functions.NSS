@@ -3934,7 +3934,7 @@ void StackBardicUses(object oPC)
     
     if (nMax == 0) return;
 
-    for (iFeatCurrent = 355; iFeatCurrent<= nMax; iFeatCurrent++)
+    for (iFeatCurrent = 355; iFeatCurrent< nMax; iFeatCurrent++)
     {
 		if (iFeatCurrent >= 374) return;
         FeatAdd(oPC, iFeatCurrent,FALSE);
