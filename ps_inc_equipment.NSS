@@ -936,6 +936,8 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
     if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE) return FALSE;
 	// base item type of creature skin is 73
 	if (nITEM == 73) return FALSE;
+	//DEBUG: New creature shield based on torch is item 205
+	if (nITEM == 205) return FALSE;
     
     switch (nITEM)
     {

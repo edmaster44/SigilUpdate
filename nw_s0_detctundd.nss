@@ -39,7 +39,12 @@ void main()
 
     //Declare major variables
     object oTarget = GetSpellTargetObject();
-    int nCasterLvl = PS_GetCasterLevel(OBJECT_SELF);
+	object oPC = OBJECT_SELF;
+	int nCasterLvl;
+	if (GetLocalInt(oPC, "HUCASTING")){
+		int nHUlvl = GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+		nCasterLvl = nHUlvl + ((PS_GetLevel(oPC) - nHUlvl) / 2);
+	} else nCasterLvl = PS_GetCasterLevel(oPC);
     float fDuration = TurnsToSeconds(nCasterLvl);
 
     //Enter Metamagic conditions
@@ -47,7 +52,7 @@ void main()
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId(), FALSE));
+    SignalEvent(oTarget, EventSpellCastAt(oPC, GetSpellId(), FALSE));
 
     //effect eVis = EffectVisualEffect(VFX_DUR_MAGICAL_SIGHT);	// NWN1 VFX
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX

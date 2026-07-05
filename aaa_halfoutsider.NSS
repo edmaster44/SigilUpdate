@@ -36,6 +36,7 @@ void main()
 			PS_HOM_Resurrection(oPC, nSpell, oTarget);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
+	/*
 		case 1639 :		//Planar Heritage - Half-Fiend
 			PS_HO_PlanarHeritageFiend(oPC, oItem);
 		break;
@@ -43,6 +44,7 @@ void main()
 		case 1640 :		//Planar Heritage - Half-Celestial
 			PS_HO_PlanarHeritageCelestial(oPC, oItem);
 		break;
+		*/
 ///////////////////////////////////////////////////////////////////////////////////
 		case 1641 :		// Half-Outsider Immunity
 			PS_HO_Immunity(oPC, nSpell);
@@ -60,9 +62,11 @@ void main()
 			PS_HO_OutsiderMagic(oPC, oItem);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
+/*
 		case 1645 :		//Outsider Apotheosis
 			PS_HO_Apotheosis(oPC, nSpell, oItem);
 		break;
+	*/
 ///////////////////////////////////////////////////////////////////////////////////
 		case 1646 :		//Outsider Magic - Fiendish Smiting
 			PS_HOM_FiendishSmiting(oPC, nSpell);

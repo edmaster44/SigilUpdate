@@ -30,27 +30,31 @@ int CancelIfNotInMeleeRange(object oCaller, object oTarget, int nFeatID)
 }
 */ 
 
+int GetUndeadLevel(object oPC){
+	int iUndead = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);
+	if (iUndead > 0) return iUndead;
+	iUndead = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);
+	if (iUndead > 0) return iUndead;
+	iUndead = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);
+	if (iUndead > 0) return iUndead;
+	iUndead = GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);	
+	if (iUndead > 0) return iUndead;
+	iUndead = GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);	
+	if (iUndead > 0) return iUndead;
+	iUndead = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);	
+	if (iUndead > 0) return iUndead;
+	iUndead = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);
+	if (iUndead > 0) return iUndead;
+	
+	return 0;
+}
 
 // Upon becoming undead, move the character 35 points towards evil and apply template ECL adjustment
 void PS_Undead_TouchOfEvil(object oPC)
 {
 	object 	oItem	= PS_GetEssence(oPC);
 	
-	int iUndead = 0;
-	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-	{	iUndead = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0)
-	{	iUndead = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
-	{	iUndead = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC) > 0)
-	{	iUndead = GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC) > 0)
-	{	iUndead = GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0)
-	{	iUndead = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
-	{	iUndead = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);	}
+	int iUndead = GetUndeadLevel(oPC);
 	
 	if(iUndead != 0)
 	
@@ -161,22 +165,11 @@ void PS_UndeadProperties(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;	}
 
-	int iLevel = 0;
-	int iLevelV = 0;
-	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC) > 0)
-	{	iLevelV = GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC) > 0)
-	{	iLevelV = GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);	}
+	int iLevel = GetUndeadLevel(oPC);
+	int iLevelVII = GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
+	iLevelVII += GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
+	iLevelVII += GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
+	
 
 	effect eMindS	= EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
 	effect eSleep	= EffectImmunity(IMMUNITY_TYPE_SLEEP);
@@ -207,11 +200,11 @@ void PS_UndeadProperties(object oPC, int nSpell)
 		eTen		= EffectLinkEffects(eSneak, eTen);
 	effect eTenGo	= SupernaturalEffect(eTen);
 
-		if(iLevel >= 10 || iLevelV >= 7){
+		if(iLevel >= 10 || iLevelVII >= 7){
 			eTenGo = SetEffectSpellId(eTenGo, nSpell);
 			RemoveEffectsFromSpell(oPC, nSpell);
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eTenGo, oPC);	
-		} else if(iLevel >= 5 || iLevelV >= 4){
+		} else if(iLevel >= 5 || iLevelVII >= 4){
 			eFiveGo = SetEffectSpellId(eFiveGo, nSpell);
 			RemoveEffectsFromSpell(oPC, nSpell);
 			ApplyEffectToObject(DURATION_TYPE_PERMANENT, eFiveGo, oPC);	
@@ -225,6 +218,11 @@ void PS_UndeadProperties(object oPC, int nSpell)
 // Determines if character is halfling, gnome, or dwarf.
 int GetIsShortRace(object oPC)
 {
+	if (GetCreatureSize(oPC) <= CREATURE_SIZE_SMALL ||
+		GetOriginalRace(oPC) == RACIAL_TYPE_DWARF)
+			return TRUE;
+	return FALSE;
+/* old
 	object oEssence	= PS_GetEssence(oPC);
 	switch(GetOriginalRace(oPC))
 	{	case RACIAL_TYPE_DWARF:
@@ -233,24 +231,25 @@ int GetIsShortRace(object oPC)
 			return TRUE; break;
 	}
 	return FALSE;
+*/
 }
 
 // Helper function for PS_RottingVisage
 // Determines if character is an elf or drow
 int GetIsElf(object oPC)
 {
+	return (GetOriginalRace(oPC) == 1); //RACIAL_TYPE_ELF
+	/* old
 	object oEssence	= PS_GetEssence(oPC);
 	int nRace		= GetLocalInt(oEssence, VAR_OLD_RACE);
 	return nRace == TRUE;
+	*/
 }
 
 // Helper function for PS_RottingVisage
 // Appearance Change to Lich model
 void PS_RottingVisage(object oPC, int nSpell)
 {
-	if (!X2PreSpellCastCode())
-    {	return;		}
-	
 	object oItem	= PS_GetEssence(oPC);
 	int nTemp		= GetLocalInt(oItem, "TempChange");
 	int iForm = 102;
@@ -280,16 +279,7 @@ void PS_RottingVisage(object oPC, int nSpell)
 // Applies non-stacking natural armor based on level
 void PS_NatArmor_Lich(object oPC, int nSpell)
 {
-    if (!X2PreSpellCastCode())
-    {	return;	}
-
-	int iLevel = 0;
-	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
+	int iLevel = GetUndeadLevel(oPC);
 	
 	int iBonus = 0;
 // Determine AC bonus granted based on PRC class level
@@ -299,11 +289,11 @@ void PS_NatArmor_Lich(object oPC, int nSpell)
 	{	iBonus = 3;		} 
 	else if (iLevel >= 4)	//+1 bonus at 4rd level
 	{	iBonus = 1;		}
+	RemoveEffectsFromSpell(oPC, nSpell);
 	if (iBonus > 0){	
 		effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
 		eAC = SupernaturalEffect(eAC);
 		eAC = SetEffectSpellId(eAC, nSpell);
-		RemoveEffectsFromSpell(oPC, nSpell);
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);		
 	}
 }
@@ -311,43 +301,30 @@ void PS_NatArmor_Lich(object oPC, int nSpell)
 // Damaging and Paralyzing Touch
 void PS_LichParalyzingTouch(object oPC, object oTarget, int nSpell)
 {
-	int iLevel = 0;
-	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
-
-	int iPale = 0;
-	if (GetLevelByClass(CLASS_TYPE_PALEMASTER, oPC) > 0)
-	{	iPale = GetLevelByClass(CLASS_TYPE_PALEMASTER, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC) > 0)
-	{	iPale = GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);	}
-
-	int iLevels		= iLevel + iPale;
-	SendMessageToPC(oPC, "Total levels: " + IntToString(iLevel));
-	int iTouch		= TouchAttackMelee(oTarget, TRUE);
-
-	if (iTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
-	{	iLevels = iLevels * 2;	}
+	int iLevel = GetUndeadLevel(oPC);
 	
-	int iDam		= d6(1) + iLevels;
-	SendMessageToPC(oPC, "Total damage: " + IntToString(iDam));
+	iLevel +=  GetLevelByClass(CLASS_TYPE_PALEMASTER, oPC);	
+	iLevel += GetLevelByClass(CLASS_TYPE_PALEMASTER_W, oPC);	
+
+	//SendMessageToPC(oPC, "Total levels: " + IntToString(iLevel));
+	int iTouch		= TouchAttackMelee(oTarget, TRUE);
+	int iDam		= d6(1) + iLevel;
+	if (iTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
+	{	iDam *= 2;	}
+	
+	//SendMessageToPC(oPC, "Total damage: " + IntToString(iDam));
 	int iChaMod		= GetAbilityModifier(ABILITY_CHARISMA, oPC);
-	int iSave		= 10 + iLevels + iChaMod;
+	int iSave		= 10 + iLevel + iChaMod;
 	int iDur		= d4(1) + iLevel;
 	float fDur		= RoundsToSeconds(iDur);
-	effect eDam 	= EffectDamage(iLevels, DAMAGE_TYPE_NEGATIVE);
+	effect eDam 	= EffectDamage(iLevel, DAMAGE_TYPE_NEGATIVE);
 	effect eVisD 	= EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
 		eDam		= EffectLinkEffects(eDam, eVisD);
 		
-	int bSaveEveryRound;
+	int bSaveEveryRound = FALSE;
 	if (GetIsPC(oTarget))
 		bSaveEveryRound = TRUE;
-	else
-		bSaveEveryRound = FALSE;
-		
+	
     effect ePara	= EffectParalyze(iSave, SAVING_THROW_FORT, bSaveEveryRound);
 	effect eVisP	= EffectVisualEffect(VFX_DUR_PARALYZED);
     if (iTouch > 0)
@@ -386,13 +363,9 @@ void ApplyLichFullImmunities(object oPC, int nImm, int nSpell)
 // Applies immunities based on class level
 void PS_LichImmunity(object oPC, int nSpell)
 {
-	int iLevel = 0;
-	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-		iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);
-	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0)
-		iLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);
-	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
-		iLevel = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);
+	int iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);
+	iLevel += GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);
+	iLevel += GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);
 	
 	int nImm = 0;
 	
@@ -411,14 +384,12 @@ void PS_LichImmunity(object oPC, int nSpell)
 // Applies damage reduction based on class level
 void PS_LichDR(object oPC, int nSpell)
 {
-    if (!X2PreSpellCastCode())
-    {    return;    }
-    
-    int iLevel = 0;
-    if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-    {    iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);    }
-
-    int iDR;
+   
+   	int iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);
+	iLevel += GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);
+	iLevel += GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);
+	
+	int iDR;
     
     if (iLevel >= 10) iDR = 10;   
     else if (iLevel >= 7) iDR = 7;    
@@ -440,13 +411,9 @@ void PS_LichDR(object oPC, int nSpell)
 // Are you scared yet? You will be after the Lich unleashes his Fear Aura!
 void PS_LichFearAura(object oPC, int nSpell)
 {
-	int iLevel = 0;
-	if (GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);	}
-	if (GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC) > 0)
-	{	iLevel = GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);	}
+	int iLevel = GetLevelByClass(CLASS_TYPE_LICH_PRC, oPC);
+	iLevel += GetLevelByClass(CLASS_TYPE_LICH_D_PRC, oPC);
+	iLevel += GetLevelByClass(CLASS_TYPE_LICH_W_PRC, oPC);
 
 	int iCLev = GetTotalLevels(oPC, FALSE);
 	
@@ -554,12 +521,10 @@ void PS_DKNegativeWeapon(object oPC, int nSpell)
 
 void PS_DKDamageReduction(object oPC, int nSpell)
 {
-    if (!X2PreSpellCastCode())
-    {    return;    }
-    
-    int iLevel = 0;
-    if (GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC) > 0)
-    {    iLevel = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);    }
+  
+    int iLevel = GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC, oPC);
+	RemoveEffectsFromSpell(oPC, nSpell);
+	if (iLevel <= 0) return;
 
     int iDR;
     
@@ -571,7 +536,7 @@ void PS_DKDamageReduction(object oPC, int nSpell)
 	// Dae: This block is weird, was there supposed to be a conditional here?
 	eGood = SupernaturalEffect(eGood);
 	eGood = SetEffectSpellId(eGood, nSpell);
-	RemoveEffectsFromSpell(oPC, nSpell);
+	
     ApplyEffectToObject(DURATION_TYPE_PERMANENT, eGood, oPC);
 	if (GetLocalInt(oPC, "drGood") != iDR){
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iDR) + "/good applied.");
@@ -640,26 +605,21 @@ void PS_DKFearAura(object oPC, int nSpell)
 void PS_VampArmor(object oPC)
 {
 //Determine class level of prestige classes which use this feat	
-	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
-	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
-	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int iPRCLvl_other	= iPRCLvl_Lup + iPRCLvl_Dra;
-	int iBonus;
+	int iPRCLvl	 = GetUndeadLevel(oPC);
+	int iBonus = 0;
+	int nSpell = GetSpellId();
 
 //Determine AC bonus granted based on PRC class level
-	if (iPRCLvl_Mal > 0)
-	{	iBonus = iPRCLvl_Mal / 2;}
-	else if (iPRCLvl_other >= 3)
-	{	iBonus = iPRCLvl_other - 2;	}
-	else
-	{	iBonus = 0;		}
+	if (iPRCLvl >= 3) iBonus = iPRCLvl - 2;
+	
+	RemoveEffectsFromSpell(oPC, nSpell);
+	if (iBonus == 0) return;
 	
 	//Calculate and apply AC bonus
 	effect eAC = EffectACIncrease(iBonus, AC_NATURAL_BONUS);
 	eAC = SupernaturalEffect(eAC);
-	int nSpell = GetSpellId();
 	eAC = SetEffectSpellId(eAC, nSpell);
-	RemoveEffectsFromSpell(oPC, nSpell);
+
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAC, oPC);
 }
 
@@ -671,10 +631,9 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), FALSE))
 		return;
 		
-	int iPRCLvl	= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
-	iPRCLvl += GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
-	iPRCLvl += GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
+	int iPRCLvl	= GetUndeadLevel(oPC);
 	iPRCLvl += GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+	
 	int nDamage;
 	if (GetCreatureSize(oPC) == CREATURE_SIZE_LARGE)
 	{	nDamage = d8(1);	}
@@ -682,7 +641,7 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 	{	nDamage = d4(1);	}
 	else
 	{	nDamage = d6(1);	}
-		nDamage = nDamage + (iPRCLvl * 2);
+	nDamage = nDamage + (iPRCLvl * 2);
 	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC) >= 7) nDamage += d6(1);
 	int nTouch      = TouchAttackMelee(oTarget, GetSpellCastItem() == OBJECT_INVALID);
 	if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
@@ -719,6 +678,7 @@ void PS_VampSlam(object oPC, object oTarget, int nSpell)
 			}
 }	}	}
 
+//TODO MAKE THIS MAKE SENSE AND BE RP USABLE ON PCS
 void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 
 	int nRace = GetRacialType(oTarget);
@@ -726,7 +686,7 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 		nRace == RACIAL_TYPE_UNDEAD || nRace == RACIAL_TYPE_OOZE ||
 		nRace == RACIAL_TYPE_INCORPOREAL || nRace == RACIAL_TYPE_INVALID ||
 		GetObjectType(oTarget) != OBJECT_TYPE_CREATURE){
-		SendMessageToPC(oPC, "Don't bite "+GetName(oTarget)+"s. They don't taste good.");
+		SendMessageToPC(oPC, "Don't bite "+GetName(oTarget)+". They don't taste good.");
 		return;
 	}
 	
@@ -736,11 +696,8 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 	}
 
 	int nTouch			= TouchAttackMelee(oTarget);
-	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
-	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
-	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int iLevel			= iPRCLvl_Mal;
-	int iLevelV			= iPRCLvl_Lup + iPRCLvl_Dra + iPRCLvl_Mal;
+	int iPRCLvl			= GetUndeadLevel(oPC);
+	
 	int iVBAB			= GetBaseAttackBonus(oPC) + GetAbilityModifier(ABILITY_STRENGTH, oPC);
 	int iTBAB			= GetBaseAttackBonus(oTarget);
 	int bTargetHelpless = FALSE;
@@ -754,8 +711,6 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 	{	sGend = "her";	}
 	else {	sGend = "his";	}
 	int nDrain = 1;
-	if (iLevel >= 10 || iLevelV >= 7)
-	{	nDrain = 2;	} 
 
     if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) ||
 		(spellsIsTarget(oTarget, SPELL_TARGET_ALLALLIES, OBJECT_SELF) && !GetHasEffect(EFFECT_TYPE_DOMINATED, oTarget) == TRUE))
@@ -878,18 +833,15 @@ void PS_VampAltForm_DireWolf(object oPC, int nSpell)
 
 void PS_VampResistance(object oPC, int nSpell)
 {
-	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
-	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
-	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int iPRCLvl			= iPRCLvl_Mal;
-	int iPRCLvlV		= iPRCLvl_Lup + iPRCLvl_Dra;
+
+	int iPRCLvl			= GetUndeadLevel(oPC);
+	
 	int iBonus;
-	if (iPRCLvl >= 8 || iPRCLvlV >= 6) 	
-	{	iBonus = 10;		} 
-	else if (iPRCLvl >= 2 || iPRCLvlV >= 2)	
-	{	iBonus = 5;		} 
-	else					//no bonus
-	{	iBonus = 0;		}
+	if (iPRCLvl >= 6) iBonus = 10;
+	else if (iPRCLvl >= 2) iBonus = 5;
+	else iBonus = 0;	
+	RemoveEffectsFromSpell(oPC, nSpell);
+	if (iBonus == 0) return;
 
 	effect eColdRes = EffectDamageResistance(DAMAGE_TYPE_COLD, iBonus);
 	effect eElecRes = EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, iBonus);
@@ -902,83 +854,68 @@ void PS_VampResistance(object oPC, int nSpell)
 
 void PS_VampFastHealing(object oPC, int nSpell)
 {
-	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
-	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
-	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int iPRCLvl_other	= iPRCLvl_Lup + iPRCLvl_Dra;
-	int iBonus;
+	int iPRCLvl = GetUndeadLevel(oPC);
+	int iBonus = 0;
 
 	
-	if (iPRCLvl_Mal >= 10 || iPRCLvl_other >= 7)
-	{	iBonus = 3;		}
-	else if (iPRCLvl_Mal >= 7 || iPRCLvl_other >= 5)
-	{	iBonus = 2;		}
-	else if (iPRCLvl_Mal >= 4 || iPRCLvl_other >= 3)
-	{	iBonus = 1;		}
-	else
-	{	iBonus = 0;		}
-	if (iBonus > 0){	
-		effect eRegen	= EffectRegenerate(iBonus, 6.0f);
-		eRegen		= SupernaturalEffect(eRegen);
-		eRegen = SetEffectSpellId(eRegen, nSpell);
-		RemoveEffectsFromSpell(oPC, nSpell);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
-	}
+	if (iPRCLvl >= 7) iBonus = 3;		
+	else if (iPRCLvl >= 5) iBonus = 2;		
+	else if (iPRCLvl >= 3)iBonus = 1;
+	RemoveEffectsFromSpell(oPC, nSpell);
+	
+	if (iBonus == 0) return;
+	
+	effect eRegen	= EffectRegenerate(iBonus, 6.0f);
+	eRegen		= SupernaturalEffect(eRegen);
+	eRegen = SetEffectSpellId(eRegen, nSpell);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegen, oPC);	
 }
 
 void PS_VampDR(object oPC, int nSpell)
 {
-	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
-	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
-	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int iPRCLvl			= iPRCLvl_Mal;
-	int iPRCLvlV		= iPRCLvl_Lup + iPRCLvl_Dra;
-	int iBonus;
-	if (iPRCLvl >= 10 || iPRCLvlV >= 7)
-	{	iBonus = 10;	}
-	else if (iPRCLvl >= 4 || iPRCLvlV >= 4)
-	{	iBonus = 5;		}
-	else
-	{	iBonus = 0;		}
-    if (iBonus > 0){	
-		effect eDR		= EffectDamageReduction(iBonus, GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
-		effect eCold	= EffectDamageResistance(DAMAGE_TYPE_COLD, iBonus);
-		effect eElec	= EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, iBonus);
-		effect eLink	= EffectLinkEffects(eDR, eCold);
-			eLink		= EffectLinkEffects(eLink, eElec);
-			eLink		= SupernaturalEffect(eLink);
+	int iPRCLvl			= GetUndeadLevel(oPC);
+	int iBonus = 0;
+	if (iPRCLvl >= 7) iBonus = 10;	
+	else if (iPRCLvl >= 4) iBonus = 5;	
+	
+	RemoveEffectsFromSpell(oPC, nSpell);
+	
+	if (iBonus == 0) return;
+		
+	effect eDR		= EffectDamageReduction(iBonus, GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
+	effect eCold	= EffectDamageResistance(DAMAGE_TYPE_COLD, iBonus);
+	effect eElec	= EffectDamageResistance(DAMAGE_TYPE_ELECTRICAL, iBonus);
+	effect eLink	= EffectLinkEffects(eDR, eCold);
+		eLink		= EffectLinkEffects(eLink, eElec);
+		eLink		= SupernaturalEffect(eLink);
 
-		eLink = SetEffectSpellId(eLink, nSpell);
-		RemoveEffectsFromSpell(oPC, nSpell);
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		if (GetLocalInt(oPC, "vampDr") != iBonus){
-			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iBonus) + "/alchemical silver and resistance of " + IntToString(iBonus) + " to cold and electricity applied.");
-			SetLocalInt(oPC, "vampDr", iBonus);
-		}
+	eLink = SetEffectSpellId(eLink, nSpell);
+	
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	if (GetLocalInt(oPC, "vampDr") != iBonus){
+		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(iBonus) + "/alchemical silver and resistance of " + IntToString(iBonus) + " to cold and electricity applied.");
+		SetLocalInt(oPC, "vampDr", iBonus);
 	}
+
 }
 
 void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 {
-    if (!X2PreSpellCastCode())
-    {	return;	}
+    if (!X2PreSpellCastCode()) return;
 	
-    effect eDom 		= EffectDominated();
-    	eDom = GetScaledEffect(eDom, oTarget);
-    effect eVis 		= EffectVisualEffect(VFX_DUR_SPELL_DOM_PERSON);
-	effect eLink 		= EffectLinkEffects(eDom, eVis);
-	effect eEyes		= EffectNWN2SpecialEffectFile("fx_vampire_gaze", oPC);
-	int iPRCLvl_Lup		= GetLevelByClass(CLASS_TYPE_VAMPIRE_LUP_PRC, oPC);
-	int iPRCLvl_Dra		= GetLevelByClass(CLASS_TYPE_VAMPIRE_DRA_PRC, oPC);
-	int iPRCLvl_Mal		= GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC);
-	int nCasterLevel	= (iPRCLvl_Lup + iPRCLvl_Dra + iPRCLvl_Mal) * 2;
-	int nCharLevel		= PS_GetLevel(oPC);
-    int nDuration 		= nCasterLevel;
-	int iChaBonus		= GetAbilityModifier(ABILITY_CHARISMA, oPC);
-	if (iPRCLvl_Mal > 0) iChaBonus += d6(1);
-	int nDC 			= 10 + (nCharLevel / 2) + iChaBonus;
+    effect eDom 		= 	EffectDominated();
+    	eDom 			= 	GetScaledEffect(eDom, oTarget);
+    effect eVis 		= 	EffectVisualEffect(VFX_DUR_SPELL_DOM_PERSON);
+	effect eLink 		= 	EffectLinkEffects(eDom, eVis);
+	effect eEyes		= 	EffectNWN2SpecialEffectFile("fx_vampire_gaze", oPC);
+	int iPRCLvl			= 	GetUndeadLevel(oPC);
+	int nCharLevel		= 	PS_GetLevel(oPC);
+	int nCasterLevel	= 	iPRCLvl + ((nCharLevel - iPRCLvl) / 2);
+	if (GetLevelByClass(CLASS_TYPE_VAMPIRE_MAL_PRC, oPC) > 0) nCasterLevel += d6();
+    int nDuration 		= 	nCasterLevel;
+	int iChaBonus		= 	GetAbilityModifier(ABILITY_CHARISMA, oPC);
+	int nDC 			= 10 + (nCasterLevel) + iChaBonus;
     nDuration = GetScaledDuration(nDuration, oTarget);
-    SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 3.0f);
 	if (oTarget == oPC){
 		int nBonus = nCasterLevel;
@@ -988,7 +925,6 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_PERFORM, nBonus), eSkill);
 		eSkill = SetEffectSpellId( eSkill, nSpell);
 		SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
-		PS_RemoveEffects(oPC, nSpell, EFFECT_TYPE_SKILL_INCREASE, oPC);
 		PS_RemoveEffects(oPC, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
 	}else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC) && !GetIsPC(oTarget)){
@@ -1083,7 +1019,7 @@ void PS_Vamp_BloodFrenzy(object oPC, int iLevel, int nSpell)
 	SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC, RoundsToSeconds(nDur));
 }
-
+/*
 void PS_VampMal_BonusFeat(object oPC, object oItem, int nSpell)
 {
 
@@ -1102,3 +1038,4 @@ void PS_VampMal_BonusFeat(object oPC, object oItem, int nSpell)
 
 	SetLocalInt(oItem, "VML5", 1);
 }
+*/

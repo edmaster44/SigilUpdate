@@ -26,7 +26,7 @@ void StoreClasses(object oPC){
 }
 
 //this is called on the level up event only in ff_update_feats before the above function is called.
-// this info will be used in the function LevelUpGuiChoices() to determine if we need to launch
+// this info will be used in the function ClassOneShotAdjustments() to determine if we need to launch
 // gui_extra_choices and if so with which params. This way we can make 2 improvements:
 // 1: We can ditch the "persistent" flag on feats such as half outsider apotheosis that is 
 // unnecessarily running on heartbeat just to launch the gui one time

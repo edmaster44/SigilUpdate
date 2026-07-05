@@ -44,6 +44,7 @@ void PS_OutsiderBloodlineCelestial(object oPC, int nSpell)
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSacred, oPC);
 }
 
+/* redundant
 void PS_HO_PlanarHeritageFiend(object oPC, object oItem)
 {
 	string sFiend		= GetLocalString(oItem, "Planar");
@@ -89,7 +90,7 @@ void PS_HO_PlanarHeritageCelestial(object oPC, object oItem)
 			//SetLocalString(oItem, "Planar", "HalfCelestial");	}
 	//}
 }
-
+*/
 void PS_HO_Immunity(object oPC, int nSpell)
 {
 	effect eImmune;
@@ -123,8 +124,17 @@ void PS_HO_Resistance(object oPC, int nSpell)
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 }
 
-void PS_HO_DR(object oPC, int nSpell)
-{
+void PS_HO_DR(object oPC, int nSpell){
+	
+	int nHOlevel = GetLevelByClass(62, oPC); // Half-Outsider class level
+	int nMax = StringToInt(Get2DAString("classes", "MaxLevel", 62));
+	int nDR = (nHOlevel < nMax) ? 5 : 10; // dr 5 if HO level < 6, 10 if 6
+	// DR material is iron if character is chaotic, silver otherwise
+	int nMat = (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC) ? GMATERIAL_METAL_COLD_IRON : GMATERIAL_METAL_ALCHEMICAL_SILVER;
+	
+	effect eDR = EffectDamageReduction(nDR, nMat, 0, DR_TYPE_GMATERIAL);
+	
+	/* old
 	int nReduct = 5;
 	int nDamagePower = DAMAGE_POWER_PLUS_ONE;
 	
@@ -134,17 +144,18 @@ void PS_HO_DR(object oPC, int nSpell)
 			nDamagePower = DAMAGE_POWER_PLUS_THREE;
 		else if (PS_GetLevel(oPC) >= 15)
 			nDamagePower = DAMAGE_POWER_PLUS_TWO;
-		
 	}
-	
 	effect eDR = EffectDamageReduction(nReduct, nDamagePower, 0, DR_TYPE_MAGICBONUS);
-		eDR = SupernaturalEffect(eDR);
+		*/
+	eDR = SupernaturalEffect(eDR);
 	eDR = SetEffectSpellId(eDR, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC);
+
 }
 
+/* redundant
 void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 {
     string sHeritage; 
@@ -186,7 +197,7 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 	
 	SetLocalInt(oItem, "HO1", 1);
 	
-/*	if (iWings == 1 && !GetHasFeat(2120, oPC))
+	if (iWings == 1 && !GetHasFeat(2120, oPC))
 	{	FeatAdd(oPC, 2120, FALSE);	}		
 	
 	if (iWings != 1 && !GetHasFeat(2556, oPC))
@@ -195,8 +206,8 @@ void PS_HO_Apotheosis(object oPC, int nSpell, object oItem)
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
 	if (GetHasFeat(2556, oPC))
-	{	SetLocalInt(oItem, "SupSight", 1);	} */
-}
+	{	SetLocalInt(oItem, "SupSight", 1);	} 
+}*/
 
 void PS_HOM_FiendishSmiting(object oPC, int nSpell)
 {

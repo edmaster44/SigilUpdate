@@ -215,7 +215,7 @@ void main()
 	PsyWarProgression(oPC);
 	DoPsionFeatProgression(oPC);
 	DoPsyPathFeatProgression(oPC);
-	HalfUndeadFeat(oPC);
+	//HalfUndeadFeat(oPC); // this is unnecessary use of custom GUI. Half undead type now chosen by bonus feat
 	UpgradeCreatureWeapons(oPC);
  	GiveEvilClericFeats(oPC);
 	

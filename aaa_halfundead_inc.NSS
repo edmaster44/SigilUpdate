@@ -5,103 +5,89 @@
 #include "nw_i0_spells"
 #include "aaa_changeself_inc"
 #include "x0_i0_match"
+// tlk 16781639
 
+void HalfUndeadImmunity(object oPC, int nSpell){
 
-void HalfUndeadImmunity(object oPC, int nSpell)	
-{
+	int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+	int nAmount = (nLevel >= 5) ? 10 : 5;
+	int nVull 	= (nLevel >= 5) ? 25 : 15;
 
-		int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
-		int nAmount		= 5;
-		int nVulD 		= 15;
-		if (nLevel >= 5 ) 
-		{	nVulD 	= 25;	}
-		
-		if (nLevel >= 5 ) 
-		{	nAmount 	= 10;	}
-		effect eVul1   =  EffectDamageImmunityDecrease(DAMAGE_TYPE_DIVINE,nVulD);
-		effect eNeg		=EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE,nAmount);
-		effect eDR		= EffectDamageReduction(nAmount,GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
-		
-			eDR			= SupernaturalEffect(eDR);
-			eNeg		= SupernaturalEffect(eNeg);
-			eVul1		= SupernaturalEffect(eVul1);
-		effect	eLink    =EffectLinkEffects(eDR,eNeg);
-				eLink    =EffectLinkEffects(eLink,eVul1);
-				eLink = SupernaturalEffect(eLink);
-				eLink = SetEffectSpellId(eLink, nSpell);
-		RemoveEffectsFromSpell(oPC, nSpell);	
-				
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		if (!GetLocalInt(oPC, "halfUndeadDR")){
-			SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
-			SetLocalInt(oPC, "halfUndeadDR", TRUE);
-		}	
+	effect eVull =	EffectDamageImmunityDecrease(DAMAGE_TYPE_DIVINE,nVull);
+	effect eNeg	 = 	EffectDamageImmunityIncrease(DAMAGE_TYPE_NEGATIVE,nVull);
+	effect eDR	 = 	EffectDamageReduction(nAmount,GMATERIAL_METAL_ALCHEMICAL_SILVER, 0, DR_TYPE_GMATERIAL);
+	effect eLink =	EffectLinkEffects(eVull, eNeg);
+	eLink    	 =	EffectLinkEffects(eDR, eLink);
+	eLink 		 = 	SupernaturalEffect(eLink);
+	eLink 		 = 	SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);	
+
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	if (GetLocalInt(oPC, "halfUndeadDR") != nAmount){
+		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
+		SetLocalInt(oPC, "halfUndeadDR", nAmount);
+	}	
 }
 
 
 
-void GhedeanDeadNerves(object oPC, object oItem, int nSpell)
-{
-int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
-		int nAmount		= 5;
-		if (nLevel >= 5 ) 
-		{	nAmount 	= 10;	}
-		int nSkill = 8;
-		
-effect eNegHand =EffectSkillDecrease(SKILL_SLEIGHT_OF_HAND,nSkill);
-effect eNegLock =EffectSkillDecrease(SKILL_OPEN_LOCK,nSkill);
-effect eDR = EffectDamageReduction(nAmount, DAMAGE_TYPE_ALL, 0, DR_TYPE_NONE);
-effect eLink = EffectLinkEffects(eNegHand,eNegLock);
-eLink = EffectLinkEffects(eLink,eDR);
-eLink = SupernaturalEffect(eLink);
-eLink = SetEffectSpellId(eLink, nSpell);
-RemoveEffectsFromSpell(oPC, nSpell);
-
-ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-}
-
-
-
-void HalfUndeadSkills(object oPC, int nSpell)
-{
-	int nAmount;
-	int iSkill3;
-	int iSkill4;
+void GhedeanDeadNerves(object oPC, object oItem, int nSpell){
+	int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+	int nAmount	= (nLevel >= 5) ? 10 : 5;
 	
+	effect eNegTrap =	EffectSkillDecrease(SKILL_DISABLE_TRAP, nAmount);
+	effect eNegTrap2=	EffectSkillDecrease(SKILL_SET_TRAP, nAmount);
+	effect eNegHand = 	EffectSkillDecrease(SKILL_SLEIGHT_OF_HAND, nAmount);
+	effect eNegLock = 	EffectSkillDecrease(SKILL_OPEN_LOCK, nAmount);
+	effect eDR 		= 	EffectDamageReduction(nAmount, DAMAGE_TYPE_ALL, 0, DR_TYPE_NONE);
+	effect eLink 	= 	EffectLinkEffects(eNegHand,eNegLock);
+	eLink 			=	EffectLinkEffects(eNegTrap, eLink);
+	eLink			=	EffectLinkEffects(eNegTrap2, eLink);
+	eLink 			= 	EffectLinkEffects(eDR, eLink);
+	eLink 			= 	SupernaturalEffect(eLink);
+	eLink 			= 	SetEffectSpellId(eLink, nSpell);
+	RemoveEffectsFromSpell(oPC, nSpell);
+
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+}
 
 
-	if (GetHasFeat(FEAT_HALFVAMPIRE,oPC))
-	{	nAmount = 4;
+
+void HalfUndeadSkills(object oPC, int nSpell){
+	
+	int iSkill3, iSkill4;
+
+	if (GetHasFeat(FEAT_HALFVAMPIRE, oPC)){
 		iSkill3 = SKILL_BLUFF;
-		iSkill4 = SKILL_LISTEN; }
-
-	if (GetHasFeat(FEAT_FETCH,oPC))
-	{	nAmount = 2;
-		iSkill3 = SKILL_LORE;
-		iSkill4 = SKILL_CONCENTRATION;}
-if 	(GetHasFeat(FEAT_GHUL,oPC))
-	{	nAmount = 2;
+		iSkill4 = SKILL_LISTEN;
+	} else if (GetHasFeat(FEAT_FETCH,oPC)){	
+		iSkill3 = SKILL_SPELLCRAFT;
+		iSkill4 = SKILL_CONCENTRATION;
+	} else if (GetHasFeat(FEAT_GHUL,oPC)){
 		iSkill3 = SKILL_SURVIVAL;
-		iSkill4 = SKILL_CRAFT_TRAP;}
+		iSkill4 = SKILL_CRAFT_TRAP;
+	} else if (GetHasFeat(FEAT_GHAEDEN, oPC)){
+		iSkill3 = SKILL_SURVIVAL;
+		iSkill4 = SKILL_LISTEN;
+	}
 	
-	effect eSk1		=	EffectSkillIncrease(SKILL_HIDE, nAmount);
-	effect eSk2 	=	EffectSkillIncrease(SKILL_MOVE_SILENTLY, nAmount);
-	effect eSk3 	=	EffectSkillIncrease(iSkill3, nAmount);
-	effect eSk4 	=	EffectSkillIncrease(iSkill4, nAmount);
+	effect eSk1		=	EffectSkillIncrease(SKILL_HIDE, 3);
+	effect eSk2 	=	EffectSkillIncrease(SKILL_MOVE_SILENTLY, 3);
+	effect eSk3 	=	EffectSkillIncrease(iSkill3, 3);
+	effect eSk4 	=	EffectSkillIncrease(iSkill4, 3);
 	effect eLink	= 	EffectLinkEffects(eSk1,eSk2);
-		   eLink	=	EffectLinkEffects(eLink,eSk3);
-		   eLink	=	EffectLinkEffects(eLink,eSk4);
+		   eLink	=	EffectLinkEffects(eSk3, eLink);
+		   eLink	=	EffectLinkEffects(eSk4, eLink);
 		   eLink	=	SupernaturalEffect(eLink);	
-	eLink = SetEffectSpellId(eLink, nSpell);
+		   eLink 	= 	SetEffectSpellId(eLink, nSpell);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);			
-
-	
 }
 
-void HalfUndeadPower(object oPC, int nSpell)
-{		float fDur = 150.00;
+void HalfUndeadPower(object oPC, int nSpell){		
+		//TODO: Make duration 1 minute + con mod, and max 3 uses per day
+		float fDur = 150.00;
 		effect eMind = EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
 		effect eCharm = EffectImmunity(IMMUNITY_TYPE_CHARM);
 		effect ePoison = EffectImmunity(IMMUNITY_TYPE_POISON);
@@ -132,7 +118,7 @@ void HalfUndeadPower(object oPC, int nSpell)
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oPC,fDur);
 }
 
-
+/*
 int ed_checkhalfvampirestats(object oPC)
 {
 	string name = SQLEncodeSpecialChars(GetName(oPC));
@@ -155,7 +141,7 @@ void ed_updatehalfvampirestat(object oPC, int delete = 0)
 
 void ed_halfvampirestats(object oPC, int nSpell)
 {
-/*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
+//Bonuses to Strength, Dex and Charima at Level 3 and 5
 int iLevel = GetLevelByClass(114,oPC);
 int iVal = ed_checkhalfvampirestats(oPC);
 if (iVal >2)
@@ -186,6 +172,7 @@ if (iVal == 1 && iLevel >=5 )
 	ExportSingleCharacter(oPC);
 	
 }
+
 int ed_checkghulstats(object oPC)
 {
 	string name = SQLEncodeSpecialChars(GetName(oPC));
@@ -208,7 +195,7 @@ void ed_updateghul(object oPC, int delete = 0)
 
 void ed_ghulstats(object oPC, int nSpell)
 {
-/*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
+//Bonuses to Strength, Dex and Charima at Level 3 and 5
 int iLevel = GetLevelByClass(114,oPC);
 int iVal = ed_checkghulstats(oPC);
 if (iVal >2)
@@ -238,6 +225,7 @@ if (iVal == 1 && iLevel >=5 )
 	ExportSingleCharacter(oPC);
 	
 }
+
 int ed_checkfetchstats(object oPC)
 {
 	string name = SQLEncodeSpecialChars(GetName(oPC));
@@ -259,7 +247,7 @@ void ed_updatefetch(object oPC, int delete = 0)
 
 void ed_fetchstats(object oPC, int nSpell)
 {
-/*Bonuses to Strength, Dex and Charima at Level 3 and 5*/
+//Bonuses to Strength, Dex and Charima at Level 3 and 5
 int iLevel = GetLevelByClass(114,oPC);
 int iVal = ed_checkfetchstats(oPC);
 
@@ -336,3 +324,4 @@ if (iVal == 1 && iLevel >=5 )
 	
 	ExportSingleCharacter(oPC);
 }
+*/

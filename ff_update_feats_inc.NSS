@@ -104,7 +104,9 @@ void SituationalAwareness(object oPC);
 void ImprovedDefense(object oPC);
 void AdjustAbilityScore(object oPC, int nAbility, int nAmount);
 void PS_ManageImbueItem(object oPC);
-void LevelUpGuiChoices(object oPC);
+void ClassOneShotAdjustments(object oPC);
+void AdjustHalfOutsider(object oPC, int nLastLevel);
+void FF_WingFix(object oPC);
 
 void ManageAppearance(object oPC){
 	object oEss	= GetItemPossessedBy(oPC,"ps_essence");	
@@ -117,76 +119,160 @@ void ManageAppearance(object oPC){
 
 }
 
-void LevelUpGuiChoices(object oPC){
+void FF_WingFix(object oPC){
+	if (!GetHasFeat(2120, oPC)){ // if we dont have the default nwn wing feat that gives move rate..
+		//..and we have wings..
+		if (GetHasFeat(288, oPC) || GetHasFeat(2179, oPC) || GetHasFeat(3024, oPC) || GetHasFeat(2781, oPC) || 
+			GetHasFeat(3021, oPC) || GetHasFeat(3022, oPC) || GetHasFeat(3023, oPC) || GetHasFeat(3008, oPC)) 
+				FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //..then give the default wing feat
+	}
+	//if we DO have the wings feat but don't have my new appearance persistor, give it
+	if (GetHasFeat(2120, oPC, TRUE) && !GetHasFeat(21905, oPC, TRUE))
+		FeatAdd(oPC, 21905, FALSE, FALSE, TRUE);
+}
+
+void AdjustHalfUndead(object oPC, int nLastLevel){
+
+	if (GetHasFeat(3049, oPC)){ //half vampire
+		if (nLastLevel == 1){
+			int nDex = GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE);
+			int nStr = GetAbilityScore(oPC, ABILITY_STRENGTH, TRUE);
+			int nBuff = (nDex > nStr) ? ABILITY_DEXTERITY : ABILITY_STRENGTH;
+			AdjustAbilityScore(oPC, nBuff, 2);
+		} else if (nLastLevel == 3 || nLastLevel == 5){
+			AdjustAbilityScore(oPC, ABILITY_STRENGTH, 1);
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 1);
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 1);
+		}
+	} else if (GetHasFeat(3051, oPC)){ //fetch
+		if (nLastLevel == 1){
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
+		} else if (nLastLevel == 3 || nLastLevel == 5){
+			AdjustAbilityScore(oPC, ABILITY_CONSTITUTION, 1);
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 1);
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 1);
+		}
+	} else if (GetHasFeat(3050, oPC)){ //ghul
+		if (nLastLevel == 1){
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
+		} else if (nLastLevel == 3 || nLastLevel == 5){
+			AdjustAbilityScore(oPC, ABILITY_CONSTITUTION, 1);
+			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 1);
+			AdjustAbilityScore(oPC, ABILITY_STRENGTH, 1);
+		}
+	} else if (GetHasFeat(3052, oPC)){ //ghedan
+		if (nLastLevel == 1){
+			AdjustAbilityScore(oPC, ABILITY_STRENGTH, 2);
+			AdjustAbilityScore(oPC, ABILITY_CONSTITUTION, 2);
+			AdjustAbilityScore(oPC, ABILITY_CHARISMA, -2);
+		} else if (nLastLevel == 3 || nLastLevel == 5){
+			AdjustAbilityScore(oPC, ABILITY_CONSTITUTION, 1);
+			AdjustAbilityScore(oPC, ABILITY_STRENGTH, 1);
+		}
+	} 
+}
+
+
+void AdjustHalfOutsider(object oPC, int nLastLevel){  //half outsider template
+	object oEss = GetItemPossessedBy(oPC,"ps_essence");
+	if (nLastLevel == 6){ 
+		//APOTHEOSIS
+		if (GetOriginalRace(oPC) != RACIAL_TYPE_OUTSIDER ||
+			GetOriginalSubrace(oPC) != RACIAL_SUBTYPE_OUTSIDER){
+				SetLocalString(oEss, "Template", "HalfOutsider");
+				SetLocalString(oEss, "RaceChange", "Outsider");
+				SetLocalInt(oEss, "TemplateFix", 0);
+				PS_SetRacialType(oPC, RACIAL_TYPE_OUTSIDER);
+				PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_OUTSIDER);
+		}	
+		// add +2 ability according to spell progression feat
+		int nAbility = ABILITY_CHARISMA;
+		if (GetHasFeat(3028, oPC) || GetHasFeat(3032, oPC) || GetHasFeat(3031, oPC) ||
+			GetHasFeat(2989, oPC) || GetHasFeat(3037, oPC)) 
+				nAbility = ABILITY_WISDOM;
+		else if (GetHasFeat(3026, oPC) || GetHasFeat(2988, oPC)) 
+			nAbility = ABILITY_INTELLIGENCE;
+		else if (GetHasFeat(2987, oPC))
+			nAbility = ABILITY_CONSTITUTION;
+		AdjustAbilityScore(oPC, nAbility, 2);
+		
+	} else if (nLastLevel == 3){
+		if (GetHasFeat(3034, oPC)){ //path of strength
+			if (!GetHasFeat(28, oPC))// power attack
+				FeatAdd(oPC, 28, FALSE);
+		} else if (GetHasFeat(3038, oPC) || GetHasFeat(3039, oPC) || 
+			GetHasFeat(3040, oPC)){// mental ability paths
+			if (!GetHasFeat(7, oPC))// combat casting
+				FeatAdd(oPC, 7, FALSE); 
+		}
+		// add toughness feat for those who did not progress spells
+		if (GetHasFeat(2987, oPC) && !GetHasFeat(40, oPC))
+			FeatAdd(oPC, 40, FALSE);
+ 	} else if (nLastLevel == 1){
+		//Assign heritage feat and local int here instead of 2da for two reasons:
+		//1: we can handle the case of a character having both backgrounds
+		//2: so we can set the local integer on the essence without the feat having to be persistent just for that.
+		//todo: At some point launch a dialog that will allow characters with both backgrounds, like an aasimar 
+		// choosing fiendish, to choose which is dominant through a dialog. For now, though, just default to fiendish 
+		//if both
+		if (GetHasFeat(81, oPC) && !GetHasFeat(2537)){//fiendish
+			FeatAdd(oPC, 2537, FALSE); 
+			SetLocalString(oEss, "Planar", "HalfFiend");
+		} else if (GetHasFeat(86, oPC) && !GetHasFeat(2538)){ // celestial
+			FeatAdd(oPC, 2538, FALSE);
+			SetLocalString(oEss, "Planar", "HalfCelestial");
+		}
+	}
+}
+
+void AdjustVampMaleficus(object oPC, int nLastLevel){
+	if (nLastLevel < 3) return;
+	int nAbility = ABILITY_WISDOM;
+	if (GetHasFeat(2572, oPC) || GetHasFeat(2575, oPC) || GetHasFeat(2579, oPC) || 
+		GetHasFeat(2580, oPC) || GetHasFeat(2883, oPC)) // charisma casters
+			nAbility = ABILITY_CHARISMA;
+	else if (GetHasFeat(2577, oPC) || GetHasFeat(2881, oPC)) // wizard and psion		
+			nAbility = ABILITY_INTELLIGENCE;
+	
+	if (nLastLevel == 3 || nLastLevel == 5 || nLastLevel == 7)
+		AdjustAbilityScore(oPC, nAbility, 2);
+}
+
+//this feat fetches the most recent class leveled up and what it was leveled up to by checking local integers
+//tracked on the character's essence, one integer for each of the four class positions. This is for functions, 
+//such as ability score adjustments and launching the custom feat selection UI, that we need to happen on specific 
+//levels of specific classes and then never repeated. We could make sure of non repetition by storing a bunch of local 
+//integers for each separate feature, but that woud entail dozens of local integers instead of 4. This is cleaner.
+void ClassOneShotAdjustments(object oPC){
 
 	int nLastClass = GetLastClassLeveledUp(oPC);
 	if (nLastClass == -1 || nLastClass == -2){
-		string sMessage = "Error in function LevelUpGuiChoices in script ff_update_feats_inc.";
+		string sMessage = "Error in function ClassOneShotAdjustments in script ff_update_feats_inc.";
 		if (nLastClass == -1) sMessage += "\nEssence not found";
 		else if (nLastClass == -2) sMessage += "\nLast leveled up class not found";
 		sMessage += "\nPlease screenshot this entire message and send to an admin on our Discord.";
 		SendMessageToPC(oPC, sMessage);
 		return;
 	}
-	object oEss = GetItemPossessedBy(oPC, "ps_essence");
 	
 	int nLastClassLevel = GetLevelByClass(nLastClass, oPC);
-	if (nLastClass == 62){ //half outsider rprc
-		//APOTHEOSIS
-		if (nLastClassLevel >= 6){
-			string sHeritage = GetLocalString(oEss, "Planar");
-			if (sHeritage == ""){	
-				SendMessageToPC(oPC, "Planar heritage not found. Please contact an administrator on our Discord");
-				return;	
-			}
-			int nType;
-			if (sHeritage == "HalfFiend") nType = 1;	
-			else if (sHeritage == "HalfCelestial") nType = 2;	
-			int iWings = GetLocalInt(oEss, "DarkFlight");
-			int iHasBonus = GetLocalInt(oEss, "HO1");
+	if (nLastClass == CLASS_TYPE_HALFOUTSIDER_PRC){
+		AdjustHalfOutsider(oPC, nLastClassLevel);
 	
-			if (GetOriginalRace(oPC) != RACIAL_TYPE_OUTSIDER ||
-				GetOriginalSubrace(oPC) != RACIAL_SUBTYPE_OUTSIDER){	
-				SetLocalString(oEss, "Template", "HalfOutsider");
-				SetLocalString(oEss, "RaceChange", "Outsider");
-				SetLocalInt(oEss, "TemplateFix", 0);
-				PS_SetRacialType(oPC, RACIAL_TYPE_OUTSIDER);
-				PS_SetSubRacialType(oPC, RACIAL_SUBTYPE_OUTSIDER);	
-			}	
-			if (iHasBonus == 1) return;
-			SetLocalInt(oEss, "HO1", 1);
-			AddScriptParameterString("START");
-			AddScriptParameterString("");
-			ExecuteScriptEnhanced("gui_extra_choices", oPC);
-		} else if (nLastClassLevel >= 3){
-			if (GetHasFeat(3034, oPC)){ //path of strength
-				if (!GetHasFeat(28, oPC))// power attack
-					FeatAdd(oPC, 28, FALSE);
-			} else if (GetHasFeat(3038, oPC) || GetHasFeat(3039, oPC) || 
-				GetHasFeat(3040, oPC)){// mental ability paths
-				if (!GetHasFeat(7, oPC))// combat casting
-					FeatAdd(oPC, 7, FALSE); 
-			}
-		//PATH 
-		} else if (nLastClassLevel >= 2){
-			// if they do not have a HalfOutsider path yet
-			if (!GetHasFeat(3033, oPC) && !GetHasFeat(3034, oPC) && !GetHasFeat(3038, oPC) && 
-				!GetHasFeat(3039, oPC) && !GetHasFeat(3040, oPC)){
-				AddScriptParameterString("HO_PATH");
-				AddScriptParameterString("");
-				ExecuteScriptEnhanced("gui_extra_choices", oPC);
-			}
-		}
+	/* TODO: Launch custom ui for psy/psi progression if half outsider has the prog feat
+		
+		AddScriptParameterString("START");
+		AddScriptParameterString("");
+		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
+	*/
+	} else if (nLastClass == CLASS_TYPE_HALF_UNDEAD){
+		AdjustHalfUndead(oPC, nLastClassLevel);
+		//SAME TODO AS ABOVE
+	} else if (nLastClass == CLASS_TYPE_VAMPIRE_MAL_PRC){
+		AdjustVampMaleficus(oPC, nLastClassLevel);
+		//SAME TODO AS ABOVE
 	}
-	
-	if (!GetHasFeat(2120, oPC)){ // if we dont have the default nwn wing feat that gives move rate..
-		if (GetHasFeat(288, oPC) || GetHasFeat(2179, oPC) || GetHasFeat(3024, oPC) || GetHasFeat(2781, oPC) || 
-			GetHasFeat(3021, oPC) || GetHasFeat(3022, oPC) || GetHasFeat(3023, oPC) || GetHasFeat(3008, oPC)) //..and we're adding wings..
-				FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //..then give the default wing feat
-	}
-	//if we DO have the wings feat but don't have my new appearance persistor, give it
-	if (GetHasFeat(2120, oPC, TRUE) && !GetHasFeat(21905, oPC, TRUE))
-		FeatAdd(oPC, 21905, FALSE, FALSE, TRUE);
+	ExportSingleCharacter(oPC);
 }
 
 //manually give creature weapon proficiency to any race or class that is meant to have it
@@ -541,12 +627,8 @@ int fCalcSneakDice(object oPC)
 		nSneakDice += (GetLevelByClass(129, oPC) / 2);
 	
 	// half outsider
-	if (GetHasFeat(idFeatPathOfGuile, oPC, TRUE)){
-		int nHOlev = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
-		if (nHOlev >= 5) nSneakDice += 3;
-		else if (nHOlev >= 4) nSneakDice += 2;
-		else if (nHOlev >= 3) nSneakDice += 1;
-	}
+	if (GetHasFeat(idFeatPathOfGuile, oPC, TRUE))
+		nSneakDice += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) / 2;
 
 	// psychic warrior
 	if (GetHasFeat(idFeatPsyWarLurk, oPC, TRUE))

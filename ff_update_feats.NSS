@@ -63,7 +63,7 @@ void ff_update_feats(object oPC, int bOnLevelUp = FALSE){
 	
 	DelayCommand(3.0f, AdjustAbilityScores(oPC));
 	
-	if (bOnLevelUp) LevelUpGuiChoices(oPC);
+	if (bOnLevelUp) ClassOneShotAdjustments(oPC);
 
 	if (bSaveAfterThisScript)
 	{
@@ -109,6 +109,8 @@ void fGrantSneakFeats(object oPC){
 void fUpdateOtherFeats(object oPC){
 	// call to ps_inc_functions to grant Imbue Item to psi and to warlocks with warlock prcs.
 	PS_ManageImbueItem(oPC);
+	
+	FF_WingFix(oPC);
 	
 	ApplyGatecrasherAC(oPC);
 	ApplyTurnResist(oPC);

@@ -13,8 +13,8 @@
 #include "nw_i0_plot"
 #include "ginc_2da"
 
-void main()
-{
+void main(){
+
 	object oPC			= GetItemActivator();
 	object oItem		= GetItemActivated();
 	
@@ -28,12 +28,13 @@ void main()
 	string sCraftLoc2	= Get2DAString(s2da, "CraftLoc2", iRow);
 	object oArea		= GetArea(oPC);
 	string sArea		= GetTag(oArea);
-	if((sArea != sCraftLoc1) && (sArea != sCraftLoc2))
-	{
-		SendMessageToPC(oPC, "You are in the area " + sArea + ".");
-		SendMessageToPC(oPC, "But you must be in " + sCraftLoc1 + " or " + sCraftLoc2 + ".");
-		SendMessageToPC(oPC, "You cannot build this golem in this area.");
-		return;
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if((sArea != sCraftLoc1) && (sArea != sCraftLoc2)){
+			SendMessageToPC(oPC, "You are in the area " + sArea + ".");
+			SendMessageToPC(oPC, "But you must be in " + sCraftLoc1 + " or " + sCraftLoc2 + ".");
+			SendMessageToPC(oPC, "You cannot build this golem in this area.");
+			return;
+		}
 	}
 	
 	// Next, we determine if the PC has the necessary skill ranks to build this golem.
@@ -44,10 +45,12 @@ void main()
 	int iPCAlchemy		= GetSkillRank(27, oPC);
 	int iPCArmor		= GetSkillRank(25, oPC);
 	int iPCWeapon		= GetSkillRank(26, oPC);
-	if((iPCAlchemy < iAlchemyRank) || (iPCArmor < iArmorRank) || (iPCWeapon < iWeaponRank))
-	{
-		SendMessageToPC(oPC, "You lack the necessary crafting skill ranks to build this golem.");
-		return;
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if((iPCAlchemy < iAlchemyRank) || (iPCArmor < iArmorRank) || (iPCWeapon < iWeaponRank))
+		{
+			SendMessageToPC(oPC, "You lack the necessary crafting skill ranks to build this golem.");
+			return;
+		}
 	}
 	
 	// Next, we determine if the PC has the necessary caster level and/or average skill rank (if Golem Master) to build this golem.
@@ -59,27 +62,33 @@ void main()
 	
 	int iGMAverage;
 	if (GetHasFeat(2808, oPC, TRUE)) iGMAverage = (iPCAlchemy + iPCArmor + iPCWeapon) / 3;
-	if ((iPCCasterLevel < iCasterLevel) && (iGMAverage < iCasterLevel))
-	{
-		SendMessageToPC(oPC, "You lack either the casting ability or crafting knowledge to create this golem.");
-		return;
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if ((iPCCasterLevel < iCasterLevel) && (iGMAverage < iCasterLevel))
+		{
+			SendMessageToPC(oPC, "You lack either the casting ability or crafting knowledge to create this golem.");
+			return;
+		}
 	}
 	
 	//	Next, we check if the recipe is Golem Master only, and if the PC has the necessary levels.
 	int iGMLevel = Get2DAInt(s2da, "GMLevel", iRow);
 	int iGMClassLvl	= GetLevelByClass(77, oPC);
-	if (iGMClassLvl < iGMLevel)
-	{
-		SendMessageToPC(oPC, "You do not have the necessary levels in Golem Master to create this golem.");
-		return;
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if (iGMClassLvl < iGMLevel)
+		{
+			SendMessageToPC(oPC, "You do not have the necessary levels in Golem Master to create this golem.");
+			return;
+		}
 	}
 
 	// Next, we check if the PC has the required feat to craft the golems
 	int iFeat = Get2DAInt(s2da, "Feat", iRow);
-	if (GetHasFeat(iFeat, oPC, TRUE) == FALSE)
-	{	
-		SendMessageToPC(oPC, "You do not have the necessary feat to create this golem.");
-		return;
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if (GetHasFeat(iFeat, oPC, TRUE) == FALSE)
+		{	
+			SendMessageToPC(oPC, "You do not have the necessary feat to create this golem.");
+			return;
+		}
 	}
 		
 	/* Next, we check if the PC has the required alignment to craft the golems
@@ -98,23 +107,27 @@ void main()
 	int iAlign2	= Get2DAInt(s2da, "Align2", iRow);	
 	int iAlignGood = GetAlignmentGoodEvil(oPC);
 	int iAlignLawful = GetAlignmentLawChaos(oPC);
-		
-	if(iAlignGood == iAlign2 || iAlignLawful == iAlign1)
-	{
-		SendMessageToPC(oPC, "Disallowed alignment is " + IntToString(iAlign1) + " or " + IntToString(iAlign2) + ".");
-		SendMessageToPC(oPC, "Your alignment is " + IntToString(iAlignLawful) + " and " + IntToString(iAlignGood) + ".");
-		SendMessageToPC(oPC, "You do not have the necessary alignment to create this golem.");
-		return;
+	
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if(iAlignGood == iAlign2 || iAlignLawful == iAlign1)
+		{
+			SendMessageToPC(oPC, "Disallowed alignment is " + IntToString(iAlign1) + " or " + IntToString(iAlign2) + ".");
+			SendMessageToPC(oPC, "Your alignment is " + IntToString(iAlignLawful) + " and " + IntToString(iAlignGood) + ".");
+			SendMessageToPC(oPC, "You do not have the necessary alignment to create this golem.");
+			return;
+		}
 	}
 	
 	// Now comes the determinations as to the XP cost for Golem Masters (reduced by Animating Essence feat)
 	int iXP	= Get2DAInt(s2da, "CostXP", iRow);
 	if (GetHasFeat(2802, oPC, TRUE)) iXP = iXP - ((iXP/10) * iGMClassLvl);
 	int iPCXP = GetXP(oPC);
-	if (iPCXP < iXP)
-	{
-		SendMessageToPC(oPC, "You lack the necessary experience to create this golem.");
-		return;
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if (iPCXP < iXP)
+		{
+			SendMessageToPC(oPC, "You lack the necessary experience to create this golem.");
+			return;
+		}
 	}
 	
 	//	And finally, we determine whether the PC can afford the gold and materials price of building the golem.
@@ -124,8 +137,7 @@ void main()
 	string sMaterial2	= Get2DAString(s2da, "Material2", iRow);
 	string sMaterial3	= Get2DAString(s2da, "Material3", iRow);
 	
-	if (GetHasFeat(2804, oPC, TRUE))
-	{
+	if (GetHasFeat(2804, oPC, TRUE)){
 		if (iGMClassLvl >= 10) iGP = iGP / 4;
 		else iGP = iGP / 2;
 	}
@@ -135,12 +147,14 @@ void main()
 	else if (GetItemQuantity(oPC, sMaterial1, TRUE) < 1) nRETURN = TRUE;
 	else if (GetItemQuantity(oPC, sMaterial2, TRUE) < 1) nRETURN = TRUE;
 	else if (GetItemQuantity(oPC, sMaterial3, TRUE) < 1) nRETURN = TRUE;
-	if (nRETURN == TRUE)
-	{	
-		//SendMessageToPC(oPC, "This golem will cost " + IntToString(iGP) + "gp to build.");
-		//SendMessageToPC(oPC, "You have " + IntToString(iPCGold) + "gp currently.");
-		SendMessageToPC(oPC, "You lack the gold or materials necessary to create this golem.");
-		return;
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		if (nRETURN == TRUE)
+		{	
+			//SendMessageToPC(oPC, "This golem will cost " + IntToString(iGP) + "gp to build.");
+			//SendMessageToPC(oPC, "You have " + IntToString(iPCGold) + "gp currently.");
+			SendMessageToPC(oPC, "You lack the gold or materials necessary to create this golem.");
+			return;
+		}
 	}
 	
 	// At this point, we've gotten past all the checks and know what we're doing, so it's time to make the golem control device!
@@ -165,6 +179,9 @@ void main()
 	else if (iSkillRank >= iBase2) sGolem = sGolem + "_2";
 	else if (iSkillRank >= iBase1) sGolem = sGolem + "_1";
 	
+	
+	//TODO: MOVE THIS TO A SEPARATE FILE OR FUNCTION TRIGGERED BY CONVO IF GOLEM COULD POTENTIALLY BE >= 24 HD
+	//Maybe put args in this main to control where it goes from convo
 	object oDevice = CreateItemOnObject(sGolem, oPC);
 	if (oDevice == OBJECT_INVALID)
 	{
@@ -175,12 +192,15 @@ void main()
 	int iGolemName		= Get2DAInt(s2da, "GolemNameStrf", iRow);
 	string sGolemName	= GetStringByStrRef(iGolemName);
 	string sDevice = GetName(oDevice);
-	AssignCommand(oPC, PS_TakeGoldFromCreature(iGP, oPC, TRUE));
-	ConsumeItems(oPC, sMaterial1);
-	ConsumeItems(oPC, sMaterial2);
-	ConsumeItems(oPC, sMaterial3);
-	
-	SetXP(oPC, iPCXP - iXP);
+	if (!GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
+		AssignCommand(oPC, PS_TakeGoldFromCreature(iGP, oPC, TRUE));
+		ConsumeItems(oPC, sMaterial1);
+		ConsumeItems(oPC, sMaterial2);
+		ConsumeItems(oPC, sMaterial3);
+		
+		SetXP(oPC, iPCXP - iXP);
+	}
+	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE")) iXP = 0;
 	SendMessageToPC(oPC, "You have successfully created the " + sGolemName + ". The " + sDevice + " has been placed in your inventory. The effort of creating this golem has cost you " + IntToString(iXP) + " experience points.");
 
 	/* DEBUG */	

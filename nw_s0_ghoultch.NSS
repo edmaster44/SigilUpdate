@@ -41,17 +41,18 @@ void main()
     }
 
 // End of Spell Cast Hook
-
+	object oPC = OBJECT_SELF;
 	StoreSpellDataForAoE("GhoulTouch");
     //Declare major variables including Area of Effect Object
     effect eAOE = EffectAreaOfEffect(AOE_PER_FOGGHOUL);
 	int nSaveDC;
-	int nCha = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	if (GetHasFeat(3054,OBJECT_SELF))
-	{
-	nSaveDC = 5 + PS_GetLevel(OBJECT_SELF) + (nCha/2);
-	}
-	else nSaveDC = GetSpellSaveDC();
+	int nCha = GetAbilityModifier(ABILITY_CHARISMA, OBJECT_SELF);
+	
+	if (GetHasFeat(3054,OBJECT_SELF) && GetLocalInt(oPC, "HUCASTING")){
+		int nHUlvl = GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+		nSaveDC = 10 + nHUlvl + ((GetHitDice(oPC) - nHUlvl) / 2);
+	} else nSaveDC = GetSpellSaveDC();
+	
     effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_NEGATIVE);
     effect eDur2 = EffectVisualEffect(VFX_DUR_PARALYZED);
@@ -65,10 +66,6 @@ void main()
     int nDuration = d6()+2;
     int nMetaMagic = GetMetaMagicFeat();
     //Enter Metamagic conditions
-	if (GetHasFeat(3054,OBJECT_SELF))
-	{
-	nDuration = 5 + PS_GetLevel(OBJECT_SELF);
-	}
     if (nMetaMagic == METAMAGIC_MAXIMIZE)
     {
         nDuration = 8;//Damage is at max

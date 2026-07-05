@@ -117,7 +117,7 @@ int	PRICING_SYSTEM_OLD	= 0;	//Uses GetGoldPieceValue
 int	PRICING_SYSTEM_NEW	= 1;	//Uses new logic
 
 //Pricing options for players selling crafted items to npcs
-const int bCUSTOM_CRAFT_PRICING = TRUE;
+const int bUSE_CUSTOM_PRICING = TRUE;
 float fCraftProfit = 1.1f; // multiply crafted item value by this amount, so 1.1 = 10% profit over cost
 
 //Item categories
@@ -306,9 +306,34 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 
 
+int GetFixedItemValue(object oItem){
+	int nCost;
+	string sRef = GetResRef(oItem);
+	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_lessersequencernew") nCost = 700;
+	else if (sRef == "ps_potion_sequencer" || sRef == "ps_potion_sequencernew") nCost =  1400;
+	else if	(sRef == "ps_potion_greatersequncer" || sRef == "ps_potion_greatersequncernew") nCost = 2100; 
+	else if	(sRef == "sigisparchment") nCost = 2;
+	else if	(sRef == "ps_parchment") nCost = 1;
+	else if	(sRef == "i_ps_itemeditor_pc") nCost = 1; 
+	else if	(sRef == "i_ps_itemeditor") nCost = 1; 
+	else if	(sRef == "ps_npc_remote") nCost = 1; 
+	else if	(sRef == "ps_signitem_documents") nCost = 5;
+	else if	(sRef == "ps_signitem_cookies") nCost = 10; 
+	else if	(sRef == "ps_signitem_bread") nCost = 5;
+	else if	(sRef == "ps_signitem_map") nCost = 3; 
+	else if	(sRef == "psplacewand") nCost = 1;
+	else if	(sRef == "i_ps_pipe") nCost =  1;
+	else if	(sRef == "psplacewand") nCost = 1;
+	else if (FindSubString(sRef, "i_ps_umbrella") != -1) nCost = 3;
+	else if (FindSubString(sRef, "ps_i_basket") != -1) nCost =  3;
+	else if (FindSubString(sRef, "i_ps_cigar") != -1) nCost = 3;
+	else nCost = 0;
+	return nCost;
+}
+
+
 string GetCraftedItemValue(object oItem, string sCost){
-	if (!GetIsPlayerMade(oItem) || bCUSTOM_CRAFT_PRICING != TRUE) 
-		return sCost;
+	if (!GetIsPlayerMade(oItem)) return sCost;
 		
 	int nItem = GetBaseItemType(oItem);
 	
@@ -318,6 +343,14 @@ string GetCraftedItemValue(object oItem, string sCost){
 	int nRoundedCost = PS_RoundToInt(fBaseCost);
 	
 	return IntToString(nRoundedCost);
+}
+
+string GetCustomItemValue(object oItem, string sCost){
+	if (bUSE_CUSTOM_PRICING != TRUE) return sCost;
+	int nCost = GetFixedItemValue(oItem);
+	if (nCost == 0) sCost = GetCraftedItemValue(oItem, sCost);
+	else sCost = IntToString(nCost);
+	return sCost;
 }
 
 void DS_CloseShop(object oPC, object oStore)
@@ -602,6 +635,8 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	
 	//If the cost is less than or equal to 0, set it to 1
 	if(iItemCost <= 0)	{	iItemCost	= 1;	}
+	
+	if (DS_GetIsProjectile(oItem) && iItemCost > 100) iItemCost = 100;
 
 	//Lastly return the determined item cost
 	return iItemCost;
@@ -774,14 +809,11 @@ int DS_GetItemCategory(object oItem)
 	return iCategory;
 }
 
-int DS_GetIsProjectile(object oItem)
-{//Simply do the check
-	if(IPGetIsProjectile(oItem)	||
-		GetBaseItemType(oItem) == BASE_ITEM_THROWINGAXE	||
-		GetBaseItemType(oItem) == BASE_ITEM_SHURIKEN	||
-		GetBaseItemType(oItem) == BASE_ITEM_DART		)
-	{	return TRUE;	}
-	//If we got this far return FALSE
+int DS_GetIsProjectile(object oItem){
+	int nItem = GetBaseItemType(oItem);
+	if (nItem == BASE_ITEM_ARROW || nItem == BASE_ITEM_BOLT || nItem == BASE_ITEM_BULLET ||
+		nItem == BASE_ITEM_THROWINGAXE	|| nItem == BASE_ITEM_SHURIKEN	|| nItem == BASE_ITEM_DART)
+			return TRUE;	
 	return FALSE;
 }
 

@@ -37,15 +37,18 @@ void main()
 
 
     //Declare major variables
-	int nSaveDC;
-	int nCha = GetAbilityModifier(ABILITY_CHARISMA,OBJECT_SELF);
-	if (GetHasFeat(3051,OBJECT_SELF))
-	{
 	
-	nSaveDC = 10 + PS_GetLevel(OBJECT_SELF) + (nCha/2);
+	object oPC = OBJECT_SELF;
+	int nSaveDC, nCasterLevel;
+	if (GetHasFeat(3051,oPC) && GetLocalInt(oPC, "HUCASTING")){
+		int nHUlvl = GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+		int nHD = PS_GetLevel(oPC);
+		nCasterLevel = nHUlvl + ((nHD - nHUlvl) / 2);
+		nSaveDC = 10 + (nHD / 2) + GetAbilityModifier(ABILITY_CHARISMA, oPC);
+	} else {
+		nSaveDC = GetSpellSaveDC();
+		nCasterLevel = GetCasterLevel(oPC);
 	}
-	else nSaveDC = GetSpellSaveDC();
-    int nCasterLevel = GetCasterLevel(OBJECT_SELF);
     int nMetaMagic = GetMetaMagicFeat();
     float fDuration = RoundsToSeconds(nCasterLevel);
     int nDamage;
@@ -65,16 +68,16 @@ void main()
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, GetSpellTargetLocation(), TRUE);
     while(GetIsObjectValid(oTarget))
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC))
     	{
             fDelay = GetRandomDelay();
             //Fire cast spell at event for the specified target
-            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_FEAR));
+            SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_FEAR));
             //Make SR Check
-            if(!MyResistSpell(OBJECT_SELF, oTarget, fDelay))
+            if(!MyResistSpell(oPC, oTarget, fDelay))
             {
                 //Make a will save
-                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC, SAVING_THROW_TYPE_FEAR, OBJECT_SELF, fDelay))
+                if(!MySavingThrow(SAVING_THROW_WILL, oTarget, nSaveDC, SAVING_THROW_TYPE_FEAR, oPC, fDelay))
                 {
                     //Apply the linked effects and the VFX impact
                     DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFear, oTarget, fDuration));

@@ -56,18 +56,20 @@ void main()
     //--------------------------------------------------------------------------
 
 	int nCasterLevel;
+	object oPC = OBJECT_SELF;
     object oTarget = GetSpellTargetObject();
     int nMetaMagic = GetMetaMagicFeat();
-	int PML = GetPureMageLevels(OBJECT_SELF);
+	int PML = GetPureMageLevels(oPC);
 	int nFeatId = GetSpellFeatId();
-	if (nFeatId == 3049){
-		nCasterLevel = PS_GetLevel(OBJECT_SELF);
+	if (nFeatId == 3049 && GetLocalInt(oPC, "HUCASTING")){
+		int nHUlvl = GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
+		nCasterLevel = nHUlvl + ((PS_GetLevel(oPC) - nHUlvl) / 2);
 	} else {
 		nFeatId = NULL;
-		nCasterLevel= PS_GetCasterLevel(OBJECT_SELF);
+		nCasterLevel= PS_GetCasterLevel(oPC);
 	}
 	
-	if (!PS_GetTargetInRange(OBJECT_SELF, oTarget, nFeatId, FALSE))
+	if (!PS_GetTargetInRange(oPC, oTarget, nFeatId, FALSE))
 		return;
 		
 
@@ -130,22 +132,22 @@ void main()
 	
     if(GetObjectType(oTarget) == OBJECT_TYPE_CREATURE)
     {
-        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) &&
+        if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC) &&
             GetRacialType(oTarget) != RACIAL_TYPE_UNDEAD &&
             GetRacialType(oTarget) != RACIAL_TYPE_CONSTRUCT &&
             !GetHasSpellEffect(SPELL_NEGATIVE_ENERGY_PROTECTION, oTarget))
         {
 
 
-            SignalEvent(OBJECT_SELF, EventSpellCastAt(OBJECT_SELF, SPELL_VAMPIRIC_TOUCH, FALSE));
-            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELL_VAMPIRIC_TOUCH, TRUE));
+            SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_VAMPIRIC_TOUCH, FALSE));
+            SignalEvent(oTarget, EventSpellCastAt(oPC, SPELL_VAMPIRIC_TOUCH, TRUE));
             // GZ: * GetSpellCastItem() == OBJECT_INVALID is used to prevent feedback from showing up when used as OnHitCastSpell property
             if (nTouch>0)
             {
-                if(MyResistSpell(OBJECT_SELF, oTarget) == 0)
+                if(MyResistSpell(oPC, oTarget) == 0)
         		{
 					// If applicable adds any sneak damage to total to be inflicted and reports the damage.
-					nDamage += PS_AddSneakDmgToSpell(OBJECT_SELF, oTarget, DAMAGE_TYPE_NEGATIVE);
+					nDamage += PS_AddSneakDmgToSpell(oPC, oTarget, DAMAGE_TYPE_NEGATIVE);
 	
     				effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE);
     				effect eVis = EffectVisualEffect(VFX_HIT_SPELL_NECROMANCY);
@@ -153,9 +155,9 @@ void main()
 				 
                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
                     ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage, oTarget);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, OBJECT_SELF);
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eVisHeal, oPC);
                     RemoveTempHitPoints();
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, OBJECT_SELF, HoursToSeconds(nDuration));
+                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHeal, oPC, HoursToSeconds(nDuration));
                  }
             }
         }

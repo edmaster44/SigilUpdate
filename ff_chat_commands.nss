@@ -377,6 +377,10 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			oItem = CreateItemOnObject("ps_arrow_mundane", oSender, d10(2));
 			return TRUE;
 		}
+		else if (sInput == "#creatureshield"){
+			oItem = CreateItemOnObject("creatureshield", oSender); 
+		
+		}
 	}
 	//END DM OR TEST SERVER ONLY COMMANDS
 	
@@ -477,6 +481,18 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			}
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 9) == "#tailtest"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 9);
+			int nTail = StringToInt(sMessage);
+			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
+			app.TailVariation = nTail;
+			PS_SetCreatureCoreAppearance(oSender, app);
+			ServerExts_RefreshCreatureAppearance(oSender, oSender);
+		}
+		else if (sInput == "#naturalspell"){ //add or remove natural spell feat for testing purposes
+			if (!GetHasFeat(1108, oSender)) FeatAdd(oSender, 1108, FALSE);
+			else FeatRemove(oSender, 1108);
 		}
 		else if (GetStringLeft(sInput, 8) == "#wandmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 8);
