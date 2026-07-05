@@ -379,7 +379,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 		else if (sInput == "#creatureshield"){
 			oItem = CreateItemOnObject("creatureshield", oSender); 
-		
+			return TRUE;
 		}
 	}
 	//END DM OR TEST SERVER ONLY COMMANDS
@@ -489,10 +489,12 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			app.TailVariation = nTail;
 			PS_SetCreatureCoreAppearance(oSender, app);
 			ServerExts_RefreshCreatureAppearance(oSender, oSender);
+			return TRUE;
 		}
 		else if (sInput == "#naturalspell"){ //add or remove natural spell feat for testing purposes
 			if (!GetHasFeat(1108, oSender)) FeatAdd(oSender, 1108, FALSE);
 			else FeatRemove(oSender, 1108);
+			return TRUE;
 		}
 		else if (GetStringLeft(sInput, 8) == "#wandmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 8);
