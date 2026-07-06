@@ -116,6 +116,7 @@ void PS_KnightLevels(object oPC){
 	  		FeatAdd(oPC,FEAT_KNIGHTS_AURA,FALSE,FALSE,FALSE);// Knight's Aura, Knight Path
 			FeatAdd(oPC,FEAT_PRACTICED_SPELLCASTER_PALADIN,FALSE,FALSE,FALSE);// Practiced Spell Caster
 		}
+			
 		if (iTotal > 20){ 
 			FeatAdd(oPC,1990,FALSE,FALSE,FALSE);//Rescue Feat , Knight Path
 		}
