@@ -223,6 +223,19 @@ void AdjustHalfOutsider(object oPC, int nLastLevel){  //half outsider template
 			SetLocalString(oEss, "Planar", "HalfCelestial");
 		}
 	}
+	if (nLastLevel == 6 || nLastLevel == 2){
+		AddScriptParameterString("START");
+		AddScriptParameterString("");
+		ExecuteScriptEnhanced("gui_extra_choices", oPC);
+	}
+	/* coming soon
+	if (GetHasFeat(2988, oPC) || GetHasFeat(2989, oPC)){ // psion and psywar prog feats
+		if (nLastLevel == 1 || (nLastLevel >= 3 && nLastLevel <= 5)){
+			AddScriptParameterString("PSI/Y");
+			AddScriptParameterString("");
+			ExecuteScriptEnhanced("gui_extra_choices", oPC);
+		}
+	} */
 }
 
 void AdjustVampMaleficus(object oPC, int nLastLevel){
@@ -628,7 +641,7 @@ int fCalcSneakDice(object oPC)
 	
 	// half outsider
 	if (GetHasFeat(idFeatPathOfGuile, oPC, TRUE))
-		nSneakDice += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) / 2;
+		nSneakDice += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC) - 3;
 
 	// psychic warrior
 	if (GetHasFeat(idFeatPsyWarLurk, oPC, TRUE))

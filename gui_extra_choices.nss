@@ -39,7 +39,7 @@ int CheckEpiteth(int nCLASS, object oPC)
 					else if (GetHasFeat(2511)==TRUE) return TRUE;
 					else if (GetHasFeat(2512)==TRUE) return TRUE;
 					else break; //Draconic Heritage
-		/*
+		
 		case 62:	if (GetHasFeat(2781)==TRUE) return TRUE; //Dark Flight
 					else if (GetHasFeat(2556)==TRUE) return TRUE; //Supernatural Sight
 					else if (GetHasFeat(3021)== TRUE) return TRUE;//Mezzo Wings
@@ -47,7 +47,7 @@ int CheckEpiteth(int nCLASS, object oPC)
 					else if (GetHasFeat(3023)== TRUE) return TRUE;//Tattered Wings
 					else if (GetHasFeat(3024)== TRUE) return TRUE;//New celestial Wings
 					else break; //Half-Fiend Wings/Eyes
-		*/
+		
 		case 76:	if (GetHasFeat(2781)==TRUE) return TRUE; //Dark Flight
 					else if (GetHasFeat(2556)==TRUE) return TRUE; //Supernatural Sight
 					else if (GetHasFeat(3021)== TRUE) return TRUE;//Mezzo Wings
@@ -68,12 +68,11 @@ int CheckEpiteth(int nCLASS, object oPC)
 		case 110: 	if (GetHasFeat(21470)==TRUE) return TRUE;//Psychic Warrior, Lurk Path
 				  	else if (GetHasFeat(21471)==TRUE) return TRUE;
 				  	else break;
-					
 		case 114:	if (GetHasFeat(FEAT_HALFVAMPIRE)==TRUE) return TRUE;//Half Vampire
 					else if (GetHasFeat(FEAT_FETCH)==TRUE) return TRUE;//Fetch
 					else if (GetHasFeat(FEAT_GHUL)==TRUE) return TRUE;//Ghul
 					else if (GetHasFeat(FEAT_GHAEDEN)==TRUE) return TRUE;//Ghaeden
-					else break;			
+					else break;		
 		case 621:	if (GetHasFeat(2179)==TRUE) return TRUE; //Bright Flight
 					else if (GetHasFeat(2556)==TRUE) return TRUE; //Supernatural Sight
 					else if (GetHasFeat(3024)== TRUE) return TRUE;//New celestial Wings
@@ -93,17 +92,15 @@ int GetRelevantClass(object oPC) {
 
 	if ((GetLevelByClass(42, oPC) > 0) && (CheckEpiteth(42, oPC) == FALSE)) return 42; //Celestial Envoy
 	if ((GetLevelByClass(49, oPC) > 0) && (CheckEpiteth(49, oPC) == FALSE)) return 49; //Draconic Heritage
-	/*
-	if ((GetLevelByClass(62, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend Wings/Eyes
-	if ((GetLevelByClass(62, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial Wings/Eyes, Magic
-	if ((GetLevelByClass(62, oPC) >= 2) && ((GetHasFeat(2537, oPC)) || GetHasFeat(2538, oPC)) && 
+	if ((GetLevelByClass(62, oPC) == 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend Wings/Eyes
+	if ((GetLevelByClass(62, oPC) == 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial Wings/Eyes, Magic
+	if ((GetLevelByClass(62, oPC) == 2) && ((GetHasFeat(2537, oPC)) || GetHasFeat(2538, oPC)) && 
 		!GetHasFeat(3033, oPC) && !GetHasFeat(3034, oPC) && !GetHasFeat(3038, oPC) && !GetHasFeat(3039, oPC)
 		&& !GetHasFeat(3040, oPC)) return 622;//Half-Outsider Path
-	*/
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend(magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial(Magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
-	if ((GetLevelByClass(106, oPC) >= 5) && (GetHasFeat(2584, oPC))) return 106; //VampMal L5 Bonus Feat
+	//if ((GetLevelByClass(106, oPC) >= 5) && (GetHasFeat(2584, oPC))) return 106; //VampMal L5 Bonus Feat
 	if ((GetLevelByClass(108, oPC) >= 6)) return 108; //Gray Slaad Chaotic Crafting
 	if ((GetLevelByClass(110,oPC) > 0 ) && (CheckEpiteth(110,oPC) == FALSE)) return 110;//Psychic Warrior
 	if ((GetLevelByClass(114,oPC) > 0 ) && (CheckEpiteth(114,oPC) == FALSE)) return 114;//Half Undead
@@ -152,7 +149,7 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 16: return 2511; //Shadow
 			case 17: return 2512; //Fang
 		}	break;
-		/*
+		
 		case 62: switch(nCOUNT) //Half-Fiend Wings/Eyes
 		{
 			case 1: return 2781; //Dark Flight
@@ -161,7 +158,7 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 4:return 3022;//Erinyes Wings
 			case 5:return 3023; //Tattered Fiend Wings
 		}	break;
-		*/
+
 		case 104: switch(nCOUNT) //Lycan Affliction
 		{
 			case 1: return 2592; //Werewolf
@@ -210,7 +207,7 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 3: return FEAT_GHUL;
 			case 4:	return FEAT_GHAEDEN;
 		} break;
-		/*
+		
 		case 621: switch(nCOUNT) //Half-Celestial Wings/Eyes
 		{
 			case 1: return 2179; //Bright Flight
@@ -225,7 +222,6 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 4: return 3040; //int
 			case 5: return 3039; //cha
 		}	break;
-		*/
 		case 499: switch(nCOUNT) //Half-Dragon Wings
 		{
 			case 1: return 288; //Wings
@@ -244,7 +240,7 @@ string GetClassSubtitle(int nCLASS)
 		case 49: return "You must select your draconic heritage. This selection determines your breath weapon, immunities, and draconic magic."; //Draconic Heritage
 		case 62: return "You must select either fiendish wings or supernatural sight."; //Half-Fiend
 		case 104: return "You must select your lycanthropic affliction."; //Lycanthrope
-		case 106: return "You must select your bonus feat."; //VampMal
+		//case 106: return "You must select your bonus feat."; //VampMal
 		case 108: return "You must select your bonus crafting feat."; //Gray Slaad
 		case 110: return "You must Select Your Psychic Warrior Path";//Psychic Warrior
 		case 114: return "You must Select your Undead Heritage";//Half-Undead
@@ -412,7 +408,7 @@ void main(string sCOMMAND, string sFEAT)
 		nPAGE = nPAGE + 1;
 		SetLocalInt(oPC, "EXTRA_UI_PAGE", nPAGE);
 		DelayCommand(0.0f, PopulateList(oPC, nCLASS, nPAGE, sSCREEN));
-	} 
+	} /*
 	else if (sCOMMAND == "HO_PATH"){
 		nTITLE = GetTitle(nCLASS);
 		DisplayGuiScreen(oPC, sSCREEN, TRUE, "extra_choices.xml");
@@ -421,5 +417,5 @@ void main(string sCOMMAND, string sFEAT)
 		SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_OK", TRUE);
 		SetLocalInt(oPC, "EXTRA_UI_PAGE", 0);
 		PopulateList(oPC, nCLASS, 0, sSCREEN);	
-	}
+	}*/
 }
