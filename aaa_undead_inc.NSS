@@ -854,6 +854,7 @@ void PS_VampResistance(object oPC, int nSpell)
 
 void PS_VampFastHealing(object oPC, int nSpell)
 {
+	
 	int iPRCLvl = GetUndeadLevel(oPC);
 	int iBonus = 0;
 

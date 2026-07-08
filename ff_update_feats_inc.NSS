@@ -118,6 +118,15 @@ void ManageAppearance(object oPC){
 	}
 
 }
+//give vampires two versions of dom gaze, one that targets friendly pcs for rp purposes and
+// one that targets hostile npcs
+void UpdateDominatingGaze(object oPC){
+	if (GetHasFeat(2474, oPC) && !GetHasFeat(3106, oPC))
+		FeatAdd(oPC, 3106, FALSE);
+		
+	if (GetHasFeat(2473, oPC) && !GetHasFeat(3105, oPC))
+		FeatAdd(oPC, 3105, FALSE);
+}
 
 void FF_WingFix(object oPC){
 	if (!GetHasFeat(2120, oPC)){ // if we dont have the default nwn wing feat that gives move rate..

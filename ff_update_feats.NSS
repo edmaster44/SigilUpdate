@@ -112,6 +112,8 @@ void fUpdateOtherFeats(object oPC){
 	
 	FF_WingFix(oPC);
 	
+	UpdateDominatingGaze(oPC);
+	
 	ApplyGatecrasherAC(oPC);
 	ApplyTurnResist(oPC);
 	GiveCreatureWeaponProf(oPC);
