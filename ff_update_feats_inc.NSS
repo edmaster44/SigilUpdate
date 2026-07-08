@@ -132,6 +132,12 @@ void FF_WingFix(object oPC){
 }
 
 void AdjustHalfUndead(object oPC, int nLastLevel){
+	
+	if (nLastLevel == 1){
+		AddScriptParameterString("HALF_UNDEAD_START");
+		AddScriptParameterString("");
+		ExecuteScriptEnhanced("gui_extra_choices", oPC);
+	}
 
 	if (GetHasFeat(3049, oPC)){ //half vampire
 		if (nLastLevel == 1){
@@ -224,7 +230,8 @@ void AdjustHalfOutsider(object oPC, int nLastLevel){  //half outsider template
 		}
 	}
 	if (nLastLevel == 6 || nLastLevel == 2){
-		AddScriptParameterString("START");
+		string sArg = (nLastLevel == 6) ? "HO_APOTHEOSIS_START" : "HO_PATH_START";
+		AddScriptParameterString(sArg);
 		AddScriptParameterString("");
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);
 	}
@@ -249,6 +256,11 @@ void AdjustVampMaleficus(object oPC, int nLastLevel){
 	
 	if (nLastLevel == 3 || nLastLevel == 5 || nLastLevel == 7)
 		AdjustAbilityScore(oPC, nAbility, 2);
+	if (nLastLevel == 6){
+		AddScriptParameterString("VAMP_MAL_START");
+		AddScriptParameterString("");
+		ExecuteScriptEnhanced("gui_extra_choices", oPC);
+	}
 }
 
 //this feat fetches the most recent class leveled up and what it was leveled up to by checking local integers
@@ -284,6 +296,12 @@ void ClassOneShotAdjustments(object oPC){
 	} else if (nLastClass == CLASS_TYPE_VAMPIRE_MAL_PRC){
 		AdjustVampMaleficus(oPC, nLastClassLevel);
 		//SAME TODO AS ABOVE
+	} else if (nLastClass == CLASS_TYPE_NATUREWARRIOR){
+		if (nLastClassLevel == 2){
+			AddScriptParameterString("NATURE_WARRIOR_START");
+			AddScriptParameterString("");
+			ExecuteScriptEnhanced("gui_extra_choices", oPC);
+		}
 	}
 	ExportSingleCharacter(oPC);
 }

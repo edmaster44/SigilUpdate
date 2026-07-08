@@ -2,12 +2,16 @@
 #include "nwn2_inc_spells"
 #include "aaa_constants"
 
-int iNaturesWarrior = GetLevelByClass(CLASS_TYPE_NATUREWARRIOR,OBJECT_SELF);
-int nBonus;
-effect eLink;
+// get the NW level of the object or of the object's master if the object is an animal companion
+int GetWarriorLevel(object oPC){
+	object oWarrior = oPC;
+	if (GetAssociateType(oWarrior) != ASSOCIATE_TYPE_NONE) oWarrior = GetMaster(oWarrior);
+	return GetLevelByClass(CLASS_TYPE_NATUREWARRIOR, oWarrior);
+}
 
 void Armor_of_the_crocodile(object oPC, int nSpell){
 	
+	int iNaturesWarrior = GetWarriorLevel(oPC);
 	int nCrocAC = 0;
 	switch (iNaturesWarrior){
 		case 4: case 3: nCrocAC = 2; break;
@@ -62,74 +66,52 @@ void Armor_of_the_crocodile(object oPC, int nSpell){
 		if (!GetHasFeat(FEAT_CROC_ARMOR_AC_1, oPC, TRUE))
 			FeatAdd(oPC, FEAT_CROC_ARMOR_AC_1, FALSE);
 	}
-		
-
-	/*
-	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
-
-	if(iNaturesWarrior == 5) nBonus = 3;
-	else if(iNaturesWarrior >= 3) nBonus = 2;
-		else nBonus = 1;
-		
-	effect eArmor = EffectACIncrease(nBonus,AC_DODGE_BONUS);
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eArmor, oPC));
-	*/
 }
 
 
 
-void Claws_of_the_grizzly(object oPC, int nSpell)
-{
-
+void Claws_of_the_grizzly(object oPC, int nSpell){
 	int nDamage = DAMAGE_BONUS_3;
 	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
 	effect eSlashing = EffectDamageIncrease(nDamage,DAMAGE_TYPE_SLASHING);
+	eSlashing = SupernaturalEffect(eSlashing);
 	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eSlashing, oPC));
 }
 
 
-void Earth_Resilience(object oPC, int nSpell)
-{
+void Earth_Resilience(object oPC, int nSpell){
 
+	int iNaturesWarrior = GetWarriorLevel(oPC);
 	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
-
-/*	if (!GetHasFeat(493,oPC))
-	FeatAdd(oPC,493,FALSE,FALSE,FALSE);*/
 	
-		nBonus = 10; 
-		effect eDR = EffectDamageReduction(nBonus, DAMAGE_TYPE_ALL, 0, DR_TYPE_DMGTYPE);
-		
-		
-		eLink = EffectLinkEffects(eDR, eLink);
-	
-		if(iNaturesWarrior == 5) eLink = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN),eLink);
-		
-	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
-
-}
-void Nature_Weapon(object oPC, int nSpell)
-{
-if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
-effect eLink;
-int iNaturesWarrior = GetLevelByClass(CLASS_TYPE_NATUREWARRIOR,oPC); int nBonus;
-if(iNaturesWarrior == 5) nBonus = 3;
-else if (iNaturesWarrior == 3) nBonus = 2;
-else nBonus = 1;
-eLink = EffectLinkEffects(EffectAttackIncrease(nBonus),eLink);
-DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC));
+	effect eDR = EffectDamageReduction(10, GMATERIAL_METAL_ADAMANTINE, 0, DR_TYPE_GMATERIAL);
+	if(iNaturesWarrior >= 5) eDR = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN),eDR);
+	eDR = SupernaturalEffect(eDR);	
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eDR, oPC));
 
 }
 
-void Wild_Growth(object oPC, int nSpell)
-{
-
+void Nature_Weapon(object oPC, int nSpell){
 	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
-int iNaturesWarrior = GetLevelByClass(CLASS_TYPE_NATUREWARRIOR,oPC); int nBonus;
+	int iNaturesWarrior = GetWarriorLevel(oPC);
+	int nBonus = 1;
+	if (iNaturesWarrior >= 5) nBonus = 3;
+	else if (iNaturesWarrior >= 3) nBonus = 2;
+	
+	effect eAB = EffectAttackIncrease(nBonus);
+	eAB = SupernaturalEffect(eAB);
+	DelayCommand(0.1f, ApplyEffectToObject(DURATION_TYPE_PERMANENT, eAB, oPC));
 
-if (iNaturesWarrior = 5) nBonus =3;
-else nBonus = 1;
-effect eRegenerate = EffectRegenerate(nBonus,6.0f);
-SupernaturalEffect(eRegenerate);
- ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegenerate, oPC);
+}
 
+void Wild_Growth(object oPC, int nSpell){
+	if (GetHasSpellEffect(nSpell, oPC)) RemoveEffectsFromSpell(oPC, nSpell);
+	int iNaturesWarrior = GetWarriorLevel(oPC);
+	int nBonus = 1;
+	if (iNaturesWarrior >= 5) nBonus = 3;
+	else if (iNaturesWarrior >= 3) nBonus = 2;
+	
+	effect eRegenerate = EffectRegenerate(nBonus, 6.0f);
+	SupernaturalEffect(eRegenerate);
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eRegenerate, oPC);
 }

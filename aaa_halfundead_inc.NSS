@@ -29,8 +29,6 @@ void HalfUndeadImmunity(object oPC, int nSpell){
 	}	
 }
 
-
-
 void GhedeanDeadNerves(object oPC, object oItem, int nSpell){
 	int nLevel	= GetLevelByClass(CLASS_TYPE_HALF_UNDEAD, oPC);
 	int nAmount	= (nLevel >= 5) ? 10 : 5;
@@ -55,6 +53,7 @@ void GhedeanDeadNerves(object oPC, object oItem, int nSpell){
 
 void HalfUndeadSkills(object oPC, int nSpell){
 	
+	int nBonus = 3;
 	int iSkill3, iSkill4;
 
 	if (GetHasFeat(FEAT_HALFVAMPIRE, oPC)){
@@ -71,10 +70,10 @@ void HalfUndeadSkills(object oPC, int nSpell){
 		iSkill4 = SKILL_LISTEN;
 	}
 	
-	effect eSk1		=	EffectSkillIncrease(SKILL_HIDE, 3);
-	effect eSk2 	=	EffectSkillIncrease(SKILL_MOVE_SILENTLY, 3);
-	effect eSk3 	=	EffectSkillIncrease(iSkill3, 3);
-	effect eSk4 	=	EffectSkillIncrease(iSkill4, 3);
+	effect eSk1		=	EffectSkillIncrease(SKILL_HIDE, nBonus);
+	effect eSk2 	=	EffectSkillIncrease(SKILL_MOVE_SILENTLY, nBonus);
+	effect eSk3 	=	EffectSkillIncrease(iSkill3, nBonus);
+	effect eSk4 	=	EffectSkillIncrease(iSkill4, nBonus);
 	effect eLink	= 	EffectLinkEffects(eSk1,eSk2);
 		   eLink	=	EffectLinkEffects(eSk3, eLink);
 		   eLink	=	EffectLinkEffects(eSk4, eLink);
@@ -86,8 +85,11 @@ void HalfUndeadSkills(object oPC, int nSpell){
 }
 
 void HalfUndeadPower(object oPC, int nSpell){		
-		//TODO: Make duration 1 minute + con mod, and max 3 uses per day
-		float fDur = 150.00;
+		int nCon = GetAbilityModifier(ABILITY_CONSTITUTION, oPC);
+		if (nCon < 1) nCon = 0;
+		nCon += 1; // duration is 1 minute + 1 min per con
+		if (nCon > 10) nCon = 10; //max 10 minutes
+		float fDur = IntToFloat(nCon * 60);
 		effect eMind = EffectImmunity(IMMUNITY_TYPE_MIND_SPELLS);
 		effect eCharm = EffectImmunity(IMMUNITY_TYPE_CHARM);
 		effect ePoison = EffectImmunity(IMMUNITY_TYPE_POISON);

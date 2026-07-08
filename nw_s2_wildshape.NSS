@@ -19,12 +19,28 @@
 //::	Remove panther
 //:: AFW-OEI 07/29/2006:
 //:: 	Default to brown bear
-
 #include "x2_inc_itemprop"
+#include "x2_inc_spellhook"
+
+void RemoveMonkAC(object oPC){
+	if (GetLevelByClass(CLASS_TYPE_MONK, oPC) == 0)
+		return;
+	else if (PS_GetHasEffectById(oPC, SPELLABILITY_WILD_SHAPE)){
+		if (!PS_GetHasEffectById(oPC, 4727)){ //id 4727 reserved for monk ac penalty
+			int nWis = GetAbilityModifier(ABILITY_WISDOM, oPC);
+			effect ePenalty = EffectACDecrease(nWis, AC_SHIELD_ENCHANTMENT_BONUS);
+			ePenalty = SetEffectSpellId(ePenalty, 4727);
+			ePenalty = SupernaturalEffect(ePenalty);
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePenalty, oPC, HoursToSeconds(24));
+		}
+		DelayCommand(3.0, RemoveMonkAC(oPC));
+	} else PS_RemoveEffects(oPC, 4727);
+}
 
 void main()
 {
     //Declare major variables
+	object oPC = OBJECT_SELF;
     int nSpell = GetSpellId();
     object oTarget = GetSpellTargetObject();
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
@@ -44,17 +60,17 @@ void main()
 	int WILDSHAPE_BGFEAT_COLD = 2858;
 	int iWildshapeBGFeat = 0;
 	
-	if (GetHasFeat(WILDSHAPE_BGFEAT_WOODLAND,OBJECT_SELF,TRUE) == TRUE) 
+	if (GetHasFeat(WILDSHAPE_BGFEAT_WOODLAND,oPC,TRUE) == TRUE) 
 		iWildshapeBGFeat = WILDSHAPE_BGFEAT_WOODLAND;
-	if (GetHasFeat(WILDSHAPE_BGFEAT_ELEMENTAL,OBJECT_SELF,TRUE) == TRUE) 
+	if (GetHasFeat(WILDSHAPE_BGFEAT_ELEMENTAL,oPC,TRUE) == TRUE) 
 		iWildshapeBGFeat = WILDSHAPE_BGFEAT_ELEMENTAL;
-	if (GetHasFeat(WILDSHAPE_BGFEAT_JUNGLE,OBJECT_SELF,TRUE) == TRUE) 
+	if (GetHasFeat(WILDSHAPE_BGFEAT_JUNGLE,oPC,TRUE) == TRUE) 
 		iWildshapeBGFeat = WILDSHAPE_BGFEAT_JUNGLE;
-	if (GetHasFeat(WILDSHAPE_BGFEAT_DESERT,OBJECT_SELF,TRUE) == TRUE) 
+	if (GetHasFeat(WILDSHAPE_BGFEAT_DESERT,oPC,TRUE) == TRUE) 
 		iWildshapeBGFeat = WILDSHAPE_BGFEAT_DESERT;
-	if (GetHasFeat(WILDSHAPE_BGFEAT_UNDERDARK,OBJECT_SELF,TRUE) == TRUE) 
+	if (GetHasFeat(WILDSHAPE_BGFEAT_UNDERDARK,oPC,TRUE) == TRUE) 
 		iWildshapeBGFeat = WILDSHAPE_BGFEAT_UNDERDARK;
-	if (GetHasFeat(WILDSHAPE_BGFEAT_COLD,OBJECT_SELF,TRUE) == TRUE) 
+	if (GetHasFeat(WILDSHAPE_BGFEAT_COLD,oPC,TRUE) == TRUE) 
 		iWildshapeBGFeat = WILDSHAPE_BGFEAT_COLD;
 	
 	// Now let's figure out the value of nPolymorph
@@ -132,27 +148,27 @@ void main()
 */
 
     ePoly = EffectPolymorph(nPoly, FALSE, TRUE);	// AFW-OEI 11/27/2006: Use 3rd boolean to say this is a wildshape polymorph.
-    ePoly = SupernaturalEffect(ePoly);
 	ePoly = EffectLinkEffects( ePoly, eVis );
+	ePoly = SetEffectSpellId(ePoly, SPELLABILITY_WILD_SHAPE);
 	ePoly = SupernaturalEffect(ePoly);
 		
     //Fire cast spell at event for the specified target
-    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, SPELLABILITY_WILD_SHAPE, FALSE));
+    SignalEvent(oTarget, EventSpellCastAt(oPC, SPELLABILITY_WILD_SHAPE, FALSE));
 
     int bWeapon = StringToInt(Get2DAString("polymorph","MergeW",nPoly)) == 1;
     int bArmor  = StringToInt(Get2DAString("polymorph","MergeA",nPoly)) == 1;
     int bItems  = StringToInt(Get2DAString("polymorph","MergeI",nPoly)) == 1;
 
-    object oWeaponOld = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,OBJECT_SELF);
-    object oArmorOld = GetItemInSlot(INVENTORY_SLOT_CHEST,OBJECT_SELF);
-    object oRing1Old = GetItemInSlot(INVENTORY_SLOT_LEFTRING,OBJECT_SELF);
-    object oRing2Old = GetItemInSlot(INVENTORY_SLOT_RIGHTRING,OBJECT_SELF);
-    object oAmuletOld = GetItemInSlot(INVENTORY_SLOT_NECK,OBJECT_SELF);
-    object oCloakOld  = GetItemInSlot(INVENTORY_SLOT_CLOAK,OBJECT_SELF);
-    object oBootsOld  = GetItemInSlot(INVENTORY_SLOT_BOOTS,OBJECT_SELF);
-    object oBeltOld = GetItemInSlot(INVENTORY_SLOT_BELT,OBJECT_SELF);
-    object oHelmetOld = GetItemInSlot(INVENTORY_SLOT_HEAD,OBJECT_SELF);
-    object oShield    = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,OBJECT_SELF);
+    object oWeaponOld = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC);
+    object oArmorOld = GetItemInSlot(INVENTORY_SLOT_CHEST,oPC);
+    object oRing1Old = GetItemInSlot(INVENTORY_SLOT_LEFTRING,oPC);
+    object oRing2Old = GetItemInSlot(INVENTORY_SLOT_RIGHTRING,oPC);
+    object oAmuletOld = GetItemInSlot(INVENTORY_SLOT_NECK,oPC);
+    object oCloakOld  = GetItemInSlot(INVENTORY_SLOT_CLOAK,oPC);
+    object oBootsOld  = GetItemInSlot(INVENTORY_SLOT_BOOTS,oPC);
+    object oBeltOld = GetItemInSlot(INVENTORY_SLOT_BELT,oPC);
+    object oHelmetOld = GetItemInSlot(INVENTORY_SLOT_HEAD,oPC);
+    object oShield    = GetItemInSlot(INVENTORY_SLOT_LEFTHAND,oPC);
     if (GetIsObjectValid(oShield))
     {
         if (GetBaseItemType(oShield) !=BASE_ITEM_LARGESHIELD &&
@@ -168,18 +184,21 @@ void main()
 
     //Apply the VFX impact and effects
     ClearAllActions(); // prevents an exploit
-    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
-    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, OBJECT_SELF, HoursToSeconds(nDruidLevel));
+    //ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oPC);
+    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(nDruidLevel));
+	
+	// apply the removal of monk ac bonus
+	DelayCommand(3.0, RemoveMonkAC(oPC));
 	
 	// Now get VFX that should really be applied
 	string sVFX = Get2DAString("polymorph", "VFX", nPoly);
 	if (sVFX != "")
-		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFX), OBJECT_SELF, HoursToSeconds(nDruidLevel));
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, EffectNWN2SpecialEffectFile(sVFX), oPC, HoursToSeconds(nDruidLevel));
 
-    object oWeaponNew = GetItemInSlot(INVENTORY_SLOT_CWEAPON_L,OBJECT_SELF);
-	object oWeaponNew1 = GetItemInSlot(INVENTORY_SLOT_CWEAPON_R,OBJECT_SELF);
-    object oWeaponNew2 = GetItemInSlot(INVENTORY_SLOT_CWEAPON_B,OBJECT_SELF);
-    object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CARMOUR,OBJECT_SELF);
+    object oWeaponNew = GetItemInSlot(INVENTORY_SLOT_CWEAPON_L,oPC);
+	object oWeaponNew1 = GetItemInSlot(INVENTORY_SLOT_CWEAPON_R,oPC);
+    object oWeaponNew2 = GetItemInSlot(INVENTORY_SLOT_CWEAPON_B,oPC);
+    object oArmorNew = GetItemInSlot(INVENTORY_SLOT_CARMOUR,oPC);
 
     if (bWeapon)
     {

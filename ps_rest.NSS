@@ -195,7 +195,7 @@ void RemoveBuffs(object oPC)
 		}
 	}
 }
-
+/* RUDE! This should only be while wildshaped
 void GiveDruidMonkPenaltyFeat (object oPC)
 {
 	if (GetLevelByClass(CLASS_TYPE_MONK, oPC) > 0 &&
@@ -204,7 +204,7 @@ void GiveDruidMonkPenaltyFeat (object oPC)
 	   FeatAdd (oPC, 4727, FALSE, FALSE, FALSE );
 	}
 
-}
+} */
 
 
 void RestStart(object oPC)
@@ -306,7 +306,7 @@ void RestFinish(object oPC)
 	PS_CalculateECL(oPC);
 	DoPsyProgression(oPC);
 	DoPsyPathFeatProgression(oPC);
-	GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
+	//GiveDruidMonkPenaltyFeat(oPC); //giving out the druid/monk feat
 	//DelayCommand(1.0f,ExecuteScript("gui_modebar_stealth",oPC));
 	AlternativeSkillStatScaling(oPC);
 	//ResetBardSongs(oPC);

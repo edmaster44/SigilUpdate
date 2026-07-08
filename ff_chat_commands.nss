@@ -311,6 +311,20 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
+	else if (sInput == "#togglewings"){
+		if (GetRacialType(oSender) == 11){
+			sFeedback = "This command cannot be used by dragons";
+		} else {
+			oItem = PS_GetEssence(oSender);
+			int nNoWings = !GetLocalInt(oItem, "NO_WINGS");
+			SetLocalInt(oItem, "NO_WINGS", nNoWings);
+			ExecuteScriptEnhanced("ff_persist_wingtail", oSender);
+			if (nNoWings) sFeedback = "Turning off wings";
+			else sFeedback = "Turning on wings";
+		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	else if (GetStringLeft(sInput, 9) == "#vampeyes"){
 		if (GetLevelByClass(78, oSender) + GetLevelByClass(105, oSender) +
 			GetLevelByClass(106, oSender) < 1){
@@ -489,11 +503,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			app.TailVariation = nTail;
 			PS_SetCreatureCoreAppearance(oSender, app);
 			ServerExts_RefreshCreatureAppearance(oSender, oSender);
-			return TRUE;
-		}
-		else if (sInput == "#naturalspell"){ //add or remove natural spell feat for testing purposes
-			if (!GetHasFeat(1108, oSender)) FeatAdd(oSender, 1108, FALSE);
-			else FeatRemove(oSender, 1108);
 			return TRUE;
 		}
 		else if (GetStringLeft(sInput, 8) == "#wandmod"){

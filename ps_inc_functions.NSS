@@ -1594,7 +1594,7 @@ int GetWarlockCasterLevel(object oPC)
     }
     
     
-    if (iTotal >= 16)
+    if (iTotal >= 20)
     {
         if (!GetHasFeat(FEAT_EPIC_ELDRITCH_ADEPT,oPC,TRUE))
         FeatAdd(oPC,FEAT_EPIC_ELDRITCH_ADEPT,FALSE,FALSE,FALSE);

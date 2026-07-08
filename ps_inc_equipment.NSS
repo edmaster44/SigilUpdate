@@ -30,7 +30,7 @@ int GetACProvidedByShield(object oShield);
 void DrunkMasterImprovised(object oPC, int nRIGHT);
 void ShieldRangedConceal(object oPC, int nSHIELD);
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value");
-void MonkDruidPenalty(object oPC);
+//void MonkDruidPenalty(object oPC);
 //void UnearthlyGrace(object oPC, object oCHEST);
 int GetArmorQualifiesForArmorOpt(object oARMOR);
 void ArmorOptimizations(object oPC, object oARMOR);
@@ -153,7 +153,7 @@ void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
     SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
     ArmorOptimizations(oPC, oCHEST);
    // UnearthlyGrace(oPC, oCHEST);
-	MonkDruidPenalty(oPC);
+	//MonkDruidPenalty(oPC);
 	HandAndAHalfWeapon(oPC, oRHAND, oLHAND);
 	UpdateWeaponBenefits(oPC, oRHAND, oLHAND, oCHEST, oChanged, bOnEquip);
 
@@ -1155,7 +1155,7 @@ void UnearthlyGrace(object oPC, object oCHEST)
 }
 */
 
-
+/*
 // Keep monk AC from affecting druids
 void MonkDruidPenalty(object oPC)
 {
@@ -1166,7 +1166,7 @@ void MonkDruidPenalty(object oPC)
     effect eFX = EffectACDecrease(nWis, AC_SHIELD_ENCHANTMENT_BONUS);
     ApplyEquipmentEffect(oPC, eFX);
 	SendMessageToPC(oPC, "Both Druid and Monk levels detected. Applying AC penalty based on WIS mod");
-}
+} */
 
 //Fixes the Spell Resistance bug from items.
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value")

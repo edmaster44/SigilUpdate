@@ -32,8 +32,9 @@ void main(){
 	if (GetLocalInt(oEss, "TempChange")) return;
 	//Debug
 	//SendMessageToPC(oPC, "Initiating wings persist");
-
-	if (GetHasFeat(288, oPC, TRUE)) PS_HD_Dragonflight(oPC, oEss);
+	int nWing = -1;
+	if (GetLocalInt(oEss, "NO_WINGS")) nWing = 0; // a command in ff_chat_commands allows turning wings off
+	else if (GetHasFeat(288, oPC, TRUE)) PS_HD_Dragonflight(oPC, oEss);
 	else if (GetHasFeat(2179, oPC, TRUE) || GetHasFeat(3023, oPC, TRUE) ||
 		GetHasFeat(3024, oPC, TRUE) || GetHasFeat(2781, oPC, TRUE) || 
 		GetHasFeat(3021, oPC, TRUE) || GetHasFeat(022, oPC, TRUE))
@@ -41,9 +42,9 @@ void main(){
 	else if (GetHasFeat(3008, oPC, TRUE)) PS_FeyWings(oPC, oEss);
 	else SetRacialWing(oPC, oEss);
 	
-	int nWing = PS_GetWingNumber(oPC);
+	if (nWing != 0) nWing = PS_GetWingNumber(oPC);
 	int nTail = PS_GetTailNumber(oPC);
-	if (nWing == 0 && nTail == 0) return;
+	//if (nWing == 0 && nTail == 0) return;
 	
 		//Debug
 	//SendMessageToPC(oPC, "Wing Set to " + IntToString(nWing));

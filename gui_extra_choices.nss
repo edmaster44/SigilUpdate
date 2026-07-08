@@ -3,6 +3,8 @@
 #include "ps_inc_functions"
 #include "ps_inc_wingtail"
 
+const string sSCREEN = "SCREEN_EXTRA_CHOICES";
+
 int CheckEpiteth(int nCLASS, object oPC)
 {
 	object 	oItem		= GetItemPossessedBy(oPC,"ps_essence");
@@ -88,22 +90,48 @@ int CheckEpiteth(int nCLASS, object oPC)
 	return FALSE;
 }
 
-int GetRelevantClass(object oPC) {
+// the original structure of this function relied upon the character only having one of the featured classes, 
+// which will no longer be true once we start using this for psy/i power selection. So instead we're
+// going to embed the class we want in the initial command. We're also doing away with all the persistent
+// feats that were launching this and instead calling the gui from ff_update_feats function 
+// ClassOneShotAdjustments()  -FlattedFifth, July 7, 2026
+// 
+int GetRelevantClass(object oPC, string sCOMMAND) {
+
+	if (sCOMMAND == "NATURE_WARRIOR_START") return 113;
+	else if (sCOMMAND == "HO_APOTHEOSIS_START"){
+		if (!CheckEpiteth(62, oPC)){ 
+			if (GetHasFeat(2537, oPC)) return 62;
+			else if (GetHasFeat(2538, oPC)) return 621;
+		}
+	} else if (sCOMMAND == "HO_PATH_START"){
+		if ((GetHasFeat(2537, oPC) || GetHasFeat(2538, oPC)) && 
+			!GetHasFeat(3033, oPC) && !GetHasFeat(3034, oPC) && !GetHasFeat(3038, oPC) && 
+			!GetHasFeat(3039, oPC) && !GetHasFeat(3040, oPC)) 
+				return 622;//Half-Outsider Path
+	} else if (sCOMMAND == "VAMP_MAL_START") return 106;
+	else if (sCOMMAND == "HALF_UNDEAD_START") return 114;
+	
+	
+	
 
 	if ((GetLevelByClass(42, oPC) > 0) && (CheckEpiteth(42, oPC) == FALSE)) return 42; //Celestial Envoy
 	if ((GetLevelByClass(49, oPC) > 0) && (CheckEpiteth(49, oPC) == FALSE)) return 49; //Draconic Heritage
+	/*
 	if ((GetLevelByClass(62, oPC) == 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend Wings/Eyes
 	if ((GetLevelByClass(62, oPC) == 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial Wings/Eyes, Magic
 	if ((GetLevelByClass(62, oPC) == 2) && ((GetHasFeat(2537, oPC)) || GetHasFeat(2538, oPC)) && 
 		!GetHasFeat(3033, oPC) && !GetHasFeat(3034, oPC) && !GetHasFeat(3038, oPC) && !GetHasFeat(3039, oPC)
 		&& !GetHasFeat(3040, oPC)) return 622;//Half-Outsider Path
+	
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend(magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial(Magic path) Wings/Eyes, Magic
+	*/
 	if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
 	//if ((GetLevelByClass(106, oPC) >= 5) && (GetHasFeat(2584, oPC))) return 106; //VampMal L5 Bonus Feat
 	if ((GetLevelByClass(108, oPC) >= 6)) return 108; //Gray Slaad Chaotic Crafting
 	if ((GetLevelByClass(110,oPC) > 0 ) && (CheckEpiteth(110,oPC) == FALSE)) return 110;//Psychic Warrior
-	if ((GetLevelByClass(114,oPC) > 0 ) && (CheckEpiteth(114,oPC) == FALSE)) return 114;//Half Undead
+	//if ((GetLevelByClass(114,oPC) > 0 ) && (CheckEpiteth(114,oPC) == FALSE)) return 114;//Half Undead
 	if ((GetLevelByClass(49, oPC) >= 6) && (CheckEpiteth(499, oPC) == FALSE)) return 499; //Half-Dragon Wings
 	if (GetRacialType(oPC) == RACIAL_TYPE_FEY && GetHasFeat(2843, oPC) && (CheckEpiteth(CLASS_TYPE_FEY, oPC) == FALSE)) return CLASS_TYPE_FEY;
 	else return -1;
@@ -200,6 +228,13 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 2: return 21471; // Feral Path
 			
 		} break;
+		case 113: switch(nCOUNT)//Nature Warrior spellcasting feat
+		{
+			case 1: return 2944; //ranger casting
+			case 2: return 2945; //druid casting
+			case 3: return 2946; //shaman casting
+			case 4: return 2947; //cleric casting
+		} break;
 		case 114: switch(nCOUNT)//Half Undead Heritage
 		{
 			case 1: return FEAT_HALFVAMPIRE;
@@ -263,6 +298,7 @@ int GetTitle(int nCLASS)
 		case 106: return 16780457; //VampMal L5 Bonus Feat
 		case 108: return 16780538; //Gray Slaad Chaotic Crafting
 		case 110: return 16781147; // Psychic warrior path
+		case 113: return 16781149; //Nature Warrior bonus
 		case 114: return 16781148;//Half-Undead Heritage
 		case 621: return 16780074; //Outsider Apotheosis
 		case 622: return 16780980; //Half-Outsider Path
@@ -322,7 +358,7 @@ void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN)
 		{
 			SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_NEXT", TRUE);
 			break;
-		}
+		} 
 		else SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_NEXT", FALSE);
 		
 		SetGUIObjectHidden(oPC, sSCREEN, "CHOICE_PANE_"+IntToString(nCOUNT), FALSE);
@@ -364,23 +400,33 @@ void AddEpithetFeat(object oPC, int nFeat) {
 	FeatAdd(oPC, nFeat, FALSE, FALSE, TRUE);
 }
 
+void DoStart(object oPC, int nCLASS){
+	int nTITLE = GetTitle(nCLASS);
+	DisplayGuiScreen(oPC, sSCREEN, TRUE, "extra_choices.xml");
+	SetGUIObjectText(oPC, sSCREEN, "CHOICE_TITLE", nTITLE, "");
+	SetGUIObjectText(oPC, sSCREEN, "CHOICE_SUBTITLE", -1, GetClassSubtitle(nCLASS));
+	SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_OK", TRUE);
+	SetLocalInt(oPC, "EXTRA_UI_PAGE", 0);
+	PopulateList(oPC, nCLASS, 0, sSCREEN);
+}
+
 void main(string sCOMMAND, string sFEAT)
 {
 	object oPC = OBJECT_SELF;
-	int nCLASS = GetRelevantClass(oPC);
-	int nTITLE;
+	int nCLASS;
+	if (GetLocalInt(oPC, "GUI_XTRA_CHOICES_CLASS_FOUND")){
+		nCLASS = GetLocalInt(oPC, "GUI_XTRA_CHOICES_CLASS");
+	} else {
+		nCLASS = GetRelevantClass(oPC, sCOMMAND);
+		if (nCLASS == -1) return;
+		// psions will get to choose 2 powers when they level up
+		if (nCLASS == 90) SetLocalInt(oPC, "GUI_EXTRA_CHOICES_NUMBER", 2);
+		SetLocalInt(oPC, "GUI_XTRA_CHOICES_CLASS_FOUND", TRUE);
+		SetLocalInt(oPC, "GUI_XTRA_CHOICES_CLASS", nCLASS);
+	}
 	int nPAGE = GetLocalInt(oPC, "EXTRA_UI_PAGE");
-	if (nCLASS == -1) return;
-	string sSCREEN = "SCREEN_EXTRA_CHOICES";
-	if (sCOMMAND == "START") 
-	{
-		nTITLE = GetTitle(nCLASS);
-		DisplayGuiScreen(oPC, sSCREEN, TRUE, "extra_choices.xml");
-		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TITLE", nTITLE, "");
-		SetGUIObjectText(oPC, sSCREEN, "CHOICE_SUBTITLE", -1, GetClassSubtitle(nCLASS));
-		SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_OK", TRUE);
-		SetLocalInt(oPC, "EXTRA_UI_PAGE", 0);
-		PopulateList(oPC, nCLASS, 0, sSCREEN);
+	if (TestStringAgainstPattern("**START**", sCOMMAND)){
+		DoStart(oPC, nCLASS);
 	}
 	else if (sCOMMAND == "SELECT")
 	{
@@ -393,9 +439,23 @@ void main(string sCOMMAND, string sFEAT)
 	else if (sCOMMAND == "CONFIRM")
 	{
 		int nADD = GetLocalInt(oPC, "EXTRA_CHOICES_ADD");
-		CloseGUIScreen(oPC, sSCREEN);
 		AddEpithetFeat(oPC, nADD);
-		DeleteLocalInt(oPC, "EXTRA_UI_PAGE");
+		// when we're using this for psion powers, psions will get 2 feats so we will need
+		// to store the number 2 as "GUI_EXTRA_CHOICES_NUMBER" and then when a choice is
+		// made decriment that number by 1 and launch again if they still have a choice
+		// left
+		int nChoices = GetLocalInt(oPC, "GUI_EXTRA_CHOICES_NUMBER");
+		if (nChoices > 0) nChoices--;
+		if (nChoices > 0){
+			SetLocalInt(oPC, "GUI_EXTRA_CHOICES_NUMBER", nChoices);
+			DoStart(oPC, nCLASS);
+		} else {
+			CloseGUIScreen(oPC, sSCREEN);
+			DeleteLocalInt(oPC, "EXTRA_UI_PAGE");
+			DeleteLocalInt(oPC, "GUI_XTRA_CHOICES_CLASS_FOUND");
+			DeleteLocalInt(oPC, "GUI_XTRA_CHOICES_CLASS");
+			DeleteLocalInt(oPC, "GUI_EXTRA_CHOICES_NUMBER");
+		}
 	}
 	else if (sCOMMAND == "PREV")
 	{
@@ -408,14 +468,5 @@ void main(string sCOMMAND, string sFEAT)
 		nPAGE = nPAGE + 1;
 		SetLocalInt(oPC, "EXTRA_UI_PAGE", nPAGE);
 		DelayCommand(0.0f, PopulateList(oPC, nCLASS, nPAGE, sSCREEN));
-	} /*
-	else if (sCOMMAND == "HO_PATH"){
-		nTITLE = GetTitle(nCLASS);
-		DisplayGuiScreen(oPC, sSCREEN, TRUE, "extra_choices.xml");
-		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TITLE", nTITLE, "");
-		SetGUIObjectText(oPC, sSCREEN, "CHOICE_SUBTITLE", -1, GetClassSubtitle(nCLASS));
-		SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_OK", TRUE);
-		SetLocalInt(oPC, "EXTRA_UI_PAGE", 0);
-		PopulateList(oPC, nCLASS, 0, sSCREEN);	
-	}*/
+	} 
 }
