@@ -72,7 +72,8 @@ void main()
         nDuration *= 2;
 		nCasterLevel *= 2;
     }
-	
+	//must be flagged non hostile otherwise target remains hostile after charm
+	SignalEvent(oCaster, EventSpellCastAt(oTarget, SPELL_CHARM_PERSON, FALSE));
 	if (oTarget == oCaster){
 		int nBonus = nCasterLevel;
 		if (nBonus > 10) nBonus = 10;
@@ -81,7 +82,6 @@ void main()
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_DIPLOMACY, nBonus), eSkill);
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_PERFORM, nBonus), eSkill);
 		eSkill = SetEffectSpellId( eSkill, SPELL_CHARM_PERSON);
-		SignalEvent(oCaster, EventSpellCastAt(oCaster, SPELL_CHARM_PERSON, FALSE));
 		PS_RemoveEffects(oCaster, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oCaster);
 		PS_RemoveEffects(oCaster, 1320, EFFECT_TYPE_SKILL_INCREASE, oCaster); // vampire gaze to boost skills
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oCaster, HoursToSeconds(nCasterLevel));
@@ -125,7 +125,6 @@ void main()
 		SendMessageToPC(oTarget, sTargetMessage);
 	} else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oCaster)){
         //Fire cast spell at event for the specified target
-        SignalEvent(oTarget, EventSpellCastAt(oCaster, SPELL_CHARM_PERSON, TRUE));
 		//Verify that the Racial Type is humanoid
 		if  (GetIsPlayableRacialType(oTarget) ||
 			(nRacial == RACIAL_TYPE_HUMANOID_GOBLINOID) ||
@@ -136,7 +135,7 @@ void main()
 			if (!ResistCheck(oTarget, nDC, oCaster))
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nDuration));
 		}
-    } else SendMessageToPC(oCaster, "Invalid target");
+    } else SendMessageToPC(oCaster, "Cannot target friendly NPCs or non-humanoids");
 }
 
 int ResistCheck(object oTarget, int nDC, object oCaster){

@@ -941,13 +941,10 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 	ToggleGaze(oPC, TRUE);
 	DelayCommand(fCooldown, ToggleGaze(oPC, FALSE));
 	
-	effect eCharm		= 	EffectCharmed();
     effect eDom 		= 	EffectDominated();
     eDom 				= 	GetScaledEffect(eDom, oTarget); 
-   // effect eVis 		= 	EffectVisualEffect(VFX_DUR_SPELL_DOM_PERSON);
 	effect eVis 		= 	EffectVisualEffect(VFX_DUR_SPELL_DOM_MONSTER);
 	effect eLink 		= 	EffectLinkEffects(eDom, eVis);
-	eLink 				=	EffectLinkEffects(eCharm, eLink);
 	eLink 				= 	SetEffectSpellId(eLink, nSpell);
 	effect eEyes		= 	EffectNWN2SpecialEffectFile("fx_vampire_gaze", oPC);
 	int iPRCLvl			= 	GetUndeadLevel(oPC);
@@ -957,8 +954,9 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
     int nDuration 		= 	nCasterLevel;
 	int iChaBonus		= 	GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDC 			= 10 + (nCasterLevel) + iChaBonus;
-    //nDuration = GetScaledDuration(nDuration, oTarget); 
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 5.0f);
+    nDuration = GetScaledDuration(nDuration, oTarget); 
+	//must be flagged non-hostile otherwise target becomes hostile after domination
+	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, FALSE)); 
 	if (oTarget == oPC){
 		int nBonus = nCasterLevel;
 		if (nBonus > 10) nBonus = 10;
@@ -968,11 +966,9 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		if (!GetLocalInt(oEss, "vampeyesoffcharm"))
 			eSkill = EffectLinkEffects(eEyes, eSkill);
 		eSkill = SetEffectSpellId( eSkill, nSpell);
-		SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 		PS_RemoveEffects(oPC, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
 	}else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC) && !GetIsPC(oTarget)){
-		SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
 		if (!GetLocalInt(oEss, "vampeyesoffcharm"))
 					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 5.0f);
 		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC))
@@ -999,7 +995,6 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 			sCasterMessage += " has resisted your domination effect!";
 			sTargetMessage += " tried to use a domination effect upon you but you resisted.";
 		} else {
-			SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
 			sCasterMessage += " has succumbed to your dominating gaze!";
 			sTargetMessage += " has dominated you!";
 		}
@@ -1011,6 +1006,8 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		sTargetMessage += "the attempt and both of you RP as if nothing happened.)";
 		SendMessageToPC(oPC, sCasterMessage + "</c>");
 		SendMessageToPC(oTarget, sTargetMessage + "</c>");
+	} else {
+		SendMessageToPC(oPC, "This ability cannot be used on friendly npcs");
 	}
 }
 
