@@ -1014,7 +1014,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 						nTempResult = GetHasSpellEffect(SPELL_BIGBYS_CLENCHED_FIST, oTestTarget) || GetHasSpellEffect(SPELL_BIGBYS_CRUSHING_HAND, oTestTarget) || GetHasSpellEffect(SPELL_BIGBYS_GRASPING_HAND, oTestTarget);						
 						if (!nTempResult)
 						{				 
-							fCurChance *= CheckGrappleResult(oTestTarget, nCasterLevel + GetCasterAbilityModifier(OBJECT_SELF) + 10, GRAPPLE_CHECK_HIT | GRAPPLE_CHECK_HOLD);
+							fCurChance *= CheckGrappleResult(oTestTarget, nCasterLevel + GetArcaneCasterAbilityModifier(OBJECT_SELF) + 10, GRAPPLE_CHECK_HIT | GRAPPLE_CHECK_HOLD);
 						}					
 					}
 					else if (spellID == SPELL_BIGBYS_CLENCHED_FIST)
@@ -1022,7 +1022,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 						nTempResult = GetHasSpellEffect(SPELL_BIGBYS_CLENCHED_FIST, oTestTarget) || GetHasSpellEffect(SPELL_BIGBYS_CRUSHING_HAND, oTestTarget) || GetHasSpellEffect(SPELL_BIGBYS_GRASPING_HAND, oTestTarget);						
 						if (!nTempResult)
 						{				 
-							fCurChance *= CheckGrappleResult(oTestTarget, nCasterLevel + GetCasterAbilityModifier(OBJECT_SELF) + 11, GRAPPLE_CHECK_HIT);
+							fCurChance *= CheckGrappleResult(oTestTarget, nCasterLevel + GetArcaneCasterAbilityModifier(OBJECT_SELF) + 11, GRAPPLE_CHECK_HIT);
 						}					
 					}
 					else /* if (spellID == SPELL_BIGBYS_CRUSHING_HAND) */
@@ -1030,7 +1030,7 @@ void HenchSpellAttack(int saveType, int targetInformation)
 						nTempResult = GetHasSpellEffect(SPELL_BIGBYS_CRUSHING_HAND, oTestTarget) || GetHasSpellEffect(SPELL_BIGBYS_GRASPING_HAND, oTestTarget);						
 						if (!nTempResult)
 						{				 
-							fCurChance *= CheckGrappleResult(oTestTarget, nCasterLevel + GetCasterAbilityModifier(OBJECT_SELF) + 12, GRAPPLE_CHECK_HIT | GRAPPLE_CHECK_HOLD);
+							fCurChance *= CheckGrappleResult(oTestTarget, nCasterLevel + GetArcaneCasterAbilityModifier(OBJECT_SELF) + 12, GRAPPLE_CHECK_HIT | GRAPPLE_CHECK_HOLD);
 						}					
 					}
                     break;

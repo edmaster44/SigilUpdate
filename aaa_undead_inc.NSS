@@ -900,14 +900,45 @@ void PS_VampDR(object oPC, int nSpell)
 
 }
 
+// helper feat for vamp gaze
+void ToggleGaze(object oPC, int bOff){
+	string sMessage;
+	if (bOff){
+		SetLocalInt(oPC, "USED_GAZE", TRUE);
+		sMessage = "Vampire Gaze Powers Exhausted";
+	} else {
+		DeleteLocalInt(oPC, "USED_GAZE");
+		sMessage = "Vampire Gaze Powers Renewed";
+	}
+	FloatingTextStringOnCreature(sMessage, oPC, FALSE);
+}
+
 void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 {
     if (!X2PreSpellCastCode()) return;
 	
+	// feats with cooldowns instead of uses per day ignore the "UsesMapFeat" column
+	// so I have to do a custom workaround to make sure that the hostile and non-hostile 
+	// versions cannot be used immediately one after the other
+	if (GetLocalInt(oPC, "USED_GAZE")){
+		SendMessageToPC(oPC, "It has not been long enough since you last used this power");
+		return;
+	}
+	
+	int nGaze;
+	if (GetHasFeat(2474, oPC, TRUE)) nGaze = 2474;
+	else nGaze = 2473;
+	
+	float fCooldown = StringToFloat(Get2DAString("feat", "Cooldown", nGaze));
+	SetLocalInt(oPC, "USED_GAZE", TRUE);
+	ToggleGaze(oPC, TRUE);
+	DelayCommand(fCooldown, ToggleGaze(oPC, FALSE));
+	
     effect eDom 		= 	EffectDominated();
-    	eDom 			= 	GetScaledEffect(eDom, oTarget);
+    //	eDom 			= 	GetScaledEffect(eDom, oTarget); // this is unnecessary because of faction checking
     effect eVis 		= 	EffectVisualEffect(VFX_DUR_SPELL_DOM_PERSON);
 	effect eLink 		= 	EffectLinkEffects(eDom, eVis);
+	eLink 				= 	SetEffectSpellId(eLink, nSpell);
 	effect eEyes		= 	EffectNWN2SpecialEffectFile("fx_vampire_gaze", oPC);
 	int iPRCLvl			= 	GetUndeadLevel(oPC);
 	int nCharLevel		= 	PS_GetLevel(oPC);
@@ -924,6 +955,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		effect eSkill = EffectSkillIncrease(SKILL_BLUFF, nBonus);
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_DIPLOMACY, nBonus), eSkill);
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_PERFORM, nBonus), eSkill);
+		eSkill = EffectLinkEffects(eEyes, eSkill);
 		eSkill = SetEffectSpellId( eSkill, nSpell);
 		SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 		PS_RemoveEffects(oPC, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oPC);
@@ -935,6 +967,7 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		else if (!MyResistSpell(oPC, oTarget)){
 			if (!MySavingThrow(SAVING_THROW_WILL, oTarget, nDC, SAVING_THROW_TYPE_MIND_SPELLS, oPC, 1.0)){
 				ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLink, oTarget, RoundsToSeconds(nCasterLevel * 3));
+				AssignCommand(oTarget, ClearAllActions(TRUE));
 			}
 		}
 	} else if (GetIsPC(oTarget)){

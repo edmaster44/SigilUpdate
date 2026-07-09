@@ -149,7 +149,7 @@ void AdjustHalfUndead(object oPC, int nLastLevel){
 	}
 
 	if (GetHasFeat(3049, oPC)){ //half vampire
-		if (nLastLevel == 1){
+		if (nLastLevel == 2){
 			int nDex = GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE);
 			int nStr = GetAbilityScore(oPC, ABILITY_STRENGTH, TRUE);
 			int nBuff = (nDex > nStr) ? ABILITY_DEXTERITY : ABILITY_STRENGTH;
@@ -160,7 +160,7 @@ void AdjustHalfUndead(object oPC, int nLastLevel){
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 1);
 		}
 	} else if (GetHasFeat(3051, oPC)){ //fetch
-		if (nLastLevel == 1){
+		if (nLastLevel == 2){
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 2);
 		} else if (nLastLevel == 3 || nLastLevel == 5){
 			AdjustAbilityScore(oPC, ABILITY_CONSTITUTION, 1);
@@ -168,7 +168,7 @@ void AdjustHalfUndead(object oPC, int nLastLevel){
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, 1);
 		}
 	} else if (GetHasFeat(3050, oPC)){ //ghul
-		if (nLastLevel == 1){
+		if (nLastLevel == 2){
 			AdjustAbilityScore(oPC, ABILITY_DEXTERITY, 2);
 		} else if (nLastLevel == 3 || nLastLevel == 5){
 			AdjustAbilityScore(oPC, ABILITY_CONSTITUTION, 1);
@@ -176,7 +176,7 @@ void AdjustHalfUndead(object oPC, int nLastLevel){
 			AdjustAbilityScore(oPC, ABILITY_STRENGTH, 1);
 		}
 	} else if (GetHasFeat(3052, oPC)){ //ghedan
-		if (nLastLevel == 1){
+		if (nLastLevel == 2){
 			AdjustAbilityScore(oPC, ABILITY_STRENGTH, 2);
 			AdjustAbilityScore(oPC, ABILITY_CONSTITUTION, 2);
 			AdjustAbilityScore(oPC, ABILITY_CHARISMA, -2);
@@ -185,6 +185,13 @@ void AdjustHalfUndead(object oPC, int nLastLevel){
 			AdjustAbilityScore(oPC, ABILITY_STRENGTH, 1);
 		}
 	} 
+}
+
+//helper function for AdjustHalfOutsider()
+void SetHoHeritage(object oPC, object oEss, string sOutsider){
+	if (sOutsider == "HalfFiend") FeatAdd(oPC, 2537, FALSE); 
+	else FeatAdd(oPC, 2538, FALSE);
+	SetLocalString(oEss, "Planar", sOutsider);
 }
 
 
@@ -223,19 +230,21 @@ void AdjustHalfOutsider(object oPC, int nLastLevel){  //half outsider template
 		// add toughness feat for those who did not progress spells
 		if (GetHasFeat(2987, oPC) && !GetHasFeat(40, oPC))
 			FeatAdd(oPC, 40, FALSE);
- 	} else if (nLastLevel == 1){
-		//Assign heritage feat and local int here instead of 2da for two reasons:
-		//1: we can handle the case of a character having both backgrounds
-		//2: so we can set the local integer on the essence without the feat having to be persistent just for that.
-		//todo: At some point launch a dialog that will allow characters with both backgrounds, like an aasimar 
-		// choosing fiendish, to choose which is dominant through a dialog. For now, though, just default to fiendish 
-		//if both
-		if (GetHasFeat(81, oPC) && !GetHasFeat(2537)){//fiendish
-			FeatAdd(oPC, 2537, FALSE); 
-			SetLocalString(oEss, "Planar", "HalfFiend");
+	// if lvl 1 and has not had heritage assigned
+ 	} else if (nLastLevel == 1 && !GetHasFeat(2537, oPC) && !GetHasFeat(2538, oPC)){
+		if (GetHasFeat(81, oPC) && GetHasFeat(86, oPC)){ // if has both backgrounds
+			int nSub = GetSubRace(oPC);
+			if (nSub == RACIAL_SUBTYPE_TIEFLING){
+				if (GetAlignmentGoodEvil(oPC) != ALIGNMENT_EVIL) SetHoHeritage(oPC, oEss, "HalfCelestial");
+				else SetHoHeritage(oPC, oEss, "HalfFiend");
+			} else if (nSub == RACIAL_SUBTYPE_AASIMAR){
+				if (GetAlignmentGoodEvil(oPC) != ALIGNMENT_GOOD) SetHoHeritage(oPC, oEss, "HalfFiend");
+				else SetHoHeritage(oPC, oEss, "HalfCelestial");
+			} else SetHoHeritage(oPC, oEss, "HalfFiend");
+		} else if (GetHasFeat(81, oPC)){//fiendish
+			SetHoHeritage(oPC, oEss, "HalfFiend");
 		} else if (GetHasFeat(86, oPC) && !GetHasFeat(2538)){ // celestial
-			FeatAdd(oPC, 2538, FALSE);
-			SetLocalString(oEss, "Planar", "HalfCelestial");
+			SetHoHeritage(oPC, oEss, "HalfCelestial");
 		}
 	}
 	if (nLastLevel == 6 || nLastLevel == 2){

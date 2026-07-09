@@ -82,6 +82,15 @@ void ShowEffectFadeReport(object oCaller, object oTarget, object oAddReceiver, i
 int X2PreSpellCastCode()
 {
 	object oCaster = OBJECT_SELF;
+	
+	if (GetLastSpellCastClass() == CLASS_TYPE_DRUID){
+		if (GetAlignmentLawChaos(oCaster) != ALIGNMENT_NEUTRAL && 
+			GetAlignmentGoodEvil(oCaster) != ALIGNMENT_NEUTRAL){
+			SendMessageToPC(oCaster, "Your alignment has strayed too far from Balance to cast spells.");
+			return FALSE;
+		}
+	}
+	
 	object oTarget = GetSpellTargetObject();
 	object oItem = GetSpellCastItem();
 	int nSpellId = GetSpellId();

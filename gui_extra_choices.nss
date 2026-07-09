@@ -392,11 +392,12 @@ void AddEpithetFeat(object oPC, int nFeat) {
 			FeatAdd(oPC, 3016, FALSE, FALSE, TRUE);
 		}
 	}
-	if (!GetHasFeat(2120, oPC)){ // if we dont have the default nwn wing feat that gives move rate
-		if (nFeat == 288 || nFeat == 2179 || nFeat == 3024 || nFeat == 2781 || 
-			nFeat == 3021 || nFeat == 3022 || nFeat == 3023 || nFeat == 3008) //and we're adding wings
-				FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); //then give the move rate feat
-	}
+	if (nFeat == 288 || nFeat == 2179 || nFeat == 3024 || nFeat == 2781 || 
+			nFeat == 3021 || nFeat == 3022 || nFeat == 3023 || nFeat == 3008){ //if we're adding wings
+				if (!GetHasFeat(2120, oPC)) FeatAdd(oPC, 2120, FALSE, FALSE, TRUE); // add move rate feat
+				if (!GetHasFeat(21905, oPC))  FeatAdd(oPC, 21905, FALSE, FALSE, TRUE); //add wing refresh feat
+	}		
+	
 	FeatAdd(oPC, nFeat, FALSE, FALSE, TRUE);
 }
 

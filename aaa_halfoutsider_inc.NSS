@@ -411,6 +411,11 @@ void PS_HOM_CrownOfFlame(object oPC, int nSpell)
 
 void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 {
+		//No polymorphing while discorporated
+	if (GetHasSpellEffect(SPELL_I_DARK_DISCORPORATION)) {
+		SendMessageToPC(oPC, "You may not use Fiendform while Discorporated.");
+		return; 
+	}
     effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
     effect eFiend;
     int nFiend;

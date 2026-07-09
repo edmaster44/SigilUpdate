@@ -45,7 +45,7 @@ void RunHandImpact(object oTarget, object oCaster, int nMetaMagic)
         return;
     }
 	int PML = GetPureMageLevels(OBJECT_SELF);
-    int nCasterModifiers = GetCasterAbilityModifier(oCaster) + GetCasterLevel(oCaster);
+    int nCasterModifiers = GetArcaneCasterAbilityModifier(oCaster) + GetCasterLevel(oCaster);
     int nCasterRoll = d20(1) + nCasterModifiers + 11 + -1 + (PML/5);
     int nTargetRoll = GetAC(oTarget);
 	int nMetaMagic = GetMetaMagicFeat();
@@ -122,7 +122,7 @@ void main()
 
         if(nResult  == 0)
         {
-			int nCasterModifier = GetCasterAbilityModifier(OBJECT_SELF);
+			int nCasterModifier = GetArcaneCasterAbilityModifier(OBJECT_SELF);
             effect eHand = EffectVisualEffect(VFX_DUR_BIGBYS_CLENCHED_FIST);
             ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHand, oTarget, RoundsToSeconds(nDuration));
 

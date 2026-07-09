@@ -99,7 +99,7 @@ void main()
 
 int RunGrappleHit( object oTarget )
 {
-	int nCasterModifier = GetCasterAbilityModifier(OBJECT_SELF);
+	int nCasterModifier = GetArcaneCasterAbilityModifier(OBJECT_SELF);
 	int PML = GetPureMageLevels(OBJECT_SELF);
     int nCasterRoll = d20(1)
     	+ nCasterModifier
@@ -131,7 +131,7 @@ void RunGrappleHold( object oTarget, int nDuration )
 	
 	int nCasterRoll;
 	int nTargetRoll;
-	int nCasterModifier = GetCasterAbilityModifier(OBJECT_SELF);
+	int nCasterModifier = GetArcaneCasterAbilityModifier(OBJECT_SELF);
 	
      nCasterRoll = d20(1) + nCasterModifier
     	+ GetCasterLevel(OBJECT_SELF) + 10 +4;
@@ -226,7 +226,7 @@ void main()
         {
             // Check caster ability vs. target's AC
 
-            int nCasterModifier = GetCasterAbilityModifier(OBJECT_SELF);
+            int nCasterModifier = GetArcaneCasterAbilityModifier(OBJECT_SELF);
             int nCasterRoll = d20(1)
                 + nCasterModifier
                 + GetCasterLevel(OBJECT_SELF) + 10 + -1;

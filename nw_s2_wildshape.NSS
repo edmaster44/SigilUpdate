@@ -41,7 +41,16 @@ void main()
 {
     //Declare major variables
 	object oPC = OBJECT_SELF;
-    int nSpell = GetSpellId();
+	
+	if (GetAlignmentLawChaos(oPC) != ALIGNMENT_NEUTRAL && 
+		GetAlignmentGoodEvil(oPC) != ALIGNMENT_NEUTRAL){
+		SendMessageToPC(oPC, "Your alignment has strayed too far from Balance to use Wildshape.");
+		return;
+	}
+
+	int nSpell = GetSpellId(); 
+
+	
     object oTarget = GetSpellTargetObject();
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
 	eVis = SupernaturalEffect(eVis);	// AFW-OEI 12/07/2006: Make it so you can't dispel the visual effect, which was dispelling wildshape.
@@ -188,7 +197,7 @@ void main()
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(nDruidLevel));
 	
 	// apply the removal of monk ac bonus
-	DelayCommand(3.0, RemoveMonkAC(oPC));
+	//DelayCommand(3.0, RemoveMonkAC(oPC)); // is this unnecessary? Is server exts doing this already?
 	
 	// Now get VFX that should really be applied
 	string sVFX = Get2DAString("polymorph", "VFX", nPoly);

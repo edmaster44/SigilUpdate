@@ -120,7 +120,7 @@ int ArcaneArcherCalculateBonus();
 int GetSizeModifier(object oCreature);
 
 // *  Returns the modifier from the ability    score that matters for this caster
-int GetCasterAbilityModifier(object oCaster);
+int GetArcaneCasterAbilityModifier(object oCaster);
 
 // * Checks the appropriate metamagic to see
 // * how the damage should be scaled.
@@ -548,7 +548,7 @@ void DoGrenade(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit
 }
 
 //::///////////////////////////////////////////////
-//:: GetCasterAbilityModifier
+//:: GetArcaneCasterAbilityModifier
 //:: Copyright (c) 2001 Bioware Corp.
 //:://////////////////////////////////////////////
 /*
@@ -559,7 +559,7 @@ void DoGrenade(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit
 //:: Created By:
 //:: Created On:
 //:://////////////////////////////////////////////
-int GetCasterAbilityModifier(object oCaster)
+int GetArcaneCasterAbilityModifier(object oCaster)
 {
     int nClass = GetLevelByClass(CLASS_TYPE_WIZARD, oCaster);
     int nAbility;
@@ -2135,7 +2135,7 @@ void spellsDispelAoE(object oTargetAoE, object oCaster, int nCasterLevel)
     }
 
 
-    nChance += ((nCasterLevel + GetCasterAbilityModifier(oCaster)) - (10  + GetCasterAbilityModifier(oCreator))*2) ;
+    nChance += ((nCasterLevel + GetArcaneCasterAbilityModifier(oCaster)) - (10  + GetArcaneCasterAbilityModifier(oCreator))*2) ;
 
     //--------------------------------------------------------------------------
     // the AI does cheat here, because it can not react as well as a player to

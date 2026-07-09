@@ -321,6 +321,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			ExecuteScriptEnhanced("ff_persist_wingtail", oSender);
 			if (nNoWings) sFeedback = "Turning off wings";
 			else sFeedback = "Turning on wings";
+			sFeedback += "\nYou will need to transition area for the change to take effect";
 		}
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
