@@ -694,8 +694,11 @@ void PS_VampDrainBlood(object oPC, object oTarget, int nSpell) {
 		SendMessageToPC(oPC, "You're really quite full and couldn't drink another drop.");
 		return;
 	}
-
-	int nTouch			= TouchAttackMelee(oTarget);
+	//make finessable melee touch attack
+	int nStr = GetAbilityModifier(ABILITY_STRENGTH, oPC);
+	int nDex = GetAbilityModifier(ABILITY_DEXTERITY, oPC);
+	int nFinesse = (nDex > nStr) ? nDex - nStr : 0;
+	int nTouch			= TouchAttackMelee(oTarget, FALSE, nFinesse);
 	int iPRCLvl			= GetUndeadLevel(oPC);
 	
 	int iVBAB			= GetBaseAttackBonus(oPC) + GetAbilityModifier(ABILITY_STRENGTH, oPC);
@@ -909,6 +912,10 @@ void ToggleGaze(object oPC, int bOff){
 	} else {
 		DeleteLocalInt(oPC, "USED_GAZE");
 		sMessage = "Vampire Gaze Powers Renewed";
+		ResetFeatUses(oPC, 2474, FALSE, TRUE);
+		ResetFeatUses(oPC, 2473, FALSE, TRUE); 
+		ResetFeatUses(oPC, 3105, FALSE, TRUE);
+		ResetFeatUses(oPC, 3106, FALSE, TRUE);
 	}
 	FloatingTextStringOnCreature(sMessage, oPC, FALSE);
 }
@@ -917,6 +924,12 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 {
     if (!X2PreSpellCastCode()) return;
 	
+	object oEss = PS_GetEssence(oPC);
+	int nGaze;
+	if (GetHasFeat(2474, oPC, TRUE)) nGaze = 2474;
+	else nGaze = 2473;
+	float fCooldown = StringToFloat(Get2DAString("feat", "Cooldown", nGaze));
+	
 	// feats with cooldowns instead of uses per day ignore the "UsesMapFeat" column
 	// so I have to do a custom workaround to make sure that the hostile and non-hostile 
 	// versions cannot be used immediately one after the other
@@ -924,20 +937,17 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		SendMessageToPC(oPC, "It has not been long enough since you last used this power");
 		return;
 	}
-	
-	int nGaze;
-	if (GetHasFeat(2474, oPC, TRUE)) nGaze = 2474;
-	else nGaze = 2473;
-	
-	float fCooldown = StringToFloat(Get2DAString("feat", "Cooldown", nGaze));
 	SetLocalInt(oPC, "USED_GAZE", TRUE);
 	ToggleGaze(oPC, TRUE);
 	DelayCommand(fCooldown, ToggleGaze(oPC, FALSE));
 	
+	effect eCharm		= 	EffectCharmed();
     effect eDom 		= 	EffectDominated();
-    //	eDom 			= 	GetScaledEffect(eDom, oTarget); // this is unnecessary because of faction checking
-    effect eVis 		= 	EffectVisualEffect(VFX_DUR_SPELL_DOM_PERSON);
+    eDom 				= 	GetScaledEffect(eDom, oTarget); 
+   // effect eVis 		= 	EffectVisualEffect(VFX_DUR_SPELL_DOM_PERSON);
+	effect eVis 		= 	EffectVisualEffect(VFX_DUR_SPELL_DOM_MONSTER);
 	effect eLink 		= 	EffectLinkEffects(eDom, eVis);
+	eLink 				=	EffectLinkEffects(eCharm, eLink);
 	eLink 				= 	SetEffectSpellId(eLink, nSpell);
 	effect eEyes		= 	EffectNWN2SpecialEffectFile("fx_vampire_gaze", oPC);
 	int iPRCLvl			= 	GetUndeadLevel(oPC);
@@ -947,21 +957,24 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
     int nDuration 		= 	nCasterLevel;
 	int iChaBonus		= 	GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDC 			= 10 + (nCasterLevel) + iChaBonus;
-    nDuration = GetScaledDuration(nDuration, oTarget);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 3.0f);
+    //nDuration = GetScaledDuration(nDuration, oTarget); 
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 5.0f);
 	if (oTarget == oPC){
 		int nBonus = nCasterLevel;
 		if (nBonus > 10) nBonus = 10;
 		effect eSkill = EffectSkillIncrease(SKILL_BLUFF, nBonus);
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_DIPLOMACY, nBonus), eSkill);
 		eSkill = EffectLinkEffects(EffectSkillIncrease(SKILL_PERFORM, nBonus), eSkill);
-		eSkill = EffectLinkEffects(eEyes, eSkill);
+		if (!GetLocalInt(oEss, "vampeyesoffcharm"))
+			eSkill = EffectLinkEffects(eEyes, eSkill);
 		eSkill = SetEffectSpellId( eSkill, nSpell);
 		SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
 		PS_RemoveEffects(oPC, SPELL_CHARM_PERSON, EFFECT_TYPE_SKILL_INCREASE, oPC);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSkill, oPC, HoursToSeconds(nCasterLevel));
 	}else if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oPC) && !GetIsPC(oTarget)){
 		SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
+		if (!GetLocalInt(oEss, "vampeyesoffcharm"))
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 5.0f);
 		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC))
 			SendMessageToPC(oPC, "Target Immune");
 		else if (!MyResistSpell(oPC, oTarget)){
@@ -976,6 +989,8 @@ void PS_VampDominatingGaze(object oPC, int nSpell, object oTarget)
 		int bImmune = FALSE;
 		int bResist = FALSE;
 		int bSave = FALSE;
+		if (!GetLocalInt(oEss, "vampeyesoffcharm"))
+					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eEyes, oPC, 5.0f);
 		if (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS, oPC)){
 			sCasterMessage += " is immune to mind spells!";
 			sTargetMessage += " tried to dominate you but you're immune.";

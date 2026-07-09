@@ -348,6 +348,11 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			SetLocalInt(oItem, "vampeyesoffgas", nGas);
 			if (nGas) sFeedback = "Turning off eye glow for gaseous form";
 			else sFeedback = "Turning on eye glow for gaseous form";
+		} else if (sInput == "#vampeyescharm"){
+			int nCharm = !GetLocalInt(oItem, "vampeyesoffcharm");
+			SetLocalInt(oItem, "vampeyesoffcharm", nCharm);
+			if (nCharm) sFeedback = "Turning off eye glow for Dominating Gaze";
+			else sFeedback = "Turning on eye glow for Dominating Gaze";
 		} else {
 			sFeedback = "Invalid command. Valid commands are #VampEyesBat, #VampEyesBeast, ";
 			sFeedback += "and #VampEyesGas";
