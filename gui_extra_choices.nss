@@ -228,12 +228,23 @@ int GetEpiteth(int nCLASS, int nCOUNT)
 			case 2: return 21471; // Feral Path
 			
 		} break;
-		case 113: switch(nCOUNT)//Nature Warrior spellcasting feat
+		case 113: switch(nCOUNT)//Nature Warrior
 		{
+			case 1: return 2936; //armor of croc
+			case 2: return 2937; //blaze of glory
+			case 3: return 2938; //claws of grizz
+			case 4: return 2939; //earth res
+			case 5: return 2940; //nature weapon
+			case 6: return 2941; //robe of clouds
+			case 7: return 2942; //serpentine coil
+			case 8: return 2943; //wild growth
+			
+			/*
 			case 1: return 2944; //ranger casting
 			case 2: return 2945; //druid casting
 			case 3: return 2946; //shaman casting
 			case 4: return 2947; //cleric casting
+			*/
 		} break;
 		case 114: switch(nCOUNT)//Half Undead Heritage
 		{
@@ -360,13 +371,14 @@ void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN)
 			break;
 		} 
 		else SetGUIObjectDisabled(oPC, sSCREEN, "CHOICES_NEXT", FALSE);
-		
 		SetGUIObjectHidden(oPC, sSCREEN, "CHOICE_PANE_"+IntToString(nCOUNT), FALSE);
 		sICON = Get2DAString("feat", "ICON", nEPITETH) + ".tga";
 		SetGUITexture(oPC, sSCREEN, "CHOICE_ICON_"+IntToString(nCOUNT), sICON);
 		sNAME = GetEpitethName(nEPITETH);
 		SetGUIObjectText(oPC, sSCREEN, "CHOICE_TEXT_"+IntToString(nCOUNT), -1, sNAME);
 		SetLocalGUIVariable(oPC, sSCREEN, nCOUNT, IntToString(nEPITETH));
+		if (GetHasFeat(nEPITETH, oPC, TRUE))
+			SetGUIObjectDisabled(oPC, sSCREEN, "CHOICE_PANE_"+IntToString(nCOUNT), TRUE);
 		nCOUNT = nCOUNT + 1;
 	}
 	

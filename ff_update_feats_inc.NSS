@@ -315,7 +315,7 @@ void ClassOneShotAdjustments(object oPC){
 		AdjustVampMaleficus(oPC, nLastClassLevel);
 		//SAME TODO AS ABOVE
 	} else if (nLastClass == CLASS_TYPE_NATUREWARRIOR){
-		if (nLastClassLevel == 2){
+		if (nLastClassLevel == 1 || nLastClassLevel == 3 || nLastClassLevel == 5){
 			AddScriptParameterString("NATURE_WARRIOR_START");
 			AddScriptParameterString("");
 			ExecuteScriptEnhanced("gui_extra_choices", oPC);
