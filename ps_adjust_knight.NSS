@@ -134,8 +134,7 @@ int KnightLevels(object oPC, int bForSneakDice = FALSE){
 	if (nLevel < 1 ) return 0;
 	
 	nLevel += GetLevelByClass(CLASS_TYPE_WARPRIEST,oPC) + 
-		GetLevelByClass(CLASS_TYPE_DIVINECHAMPION,oPC) +
-		GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);
+		GetLevelByClass(CLASS_TYPE_DIVINECHAMPION,oPC);
 	
 	// add knight path new dragon PRC, gets +1 knight lvl for lvls 3 through 6 of new prc
 	if (GetHasFeat(3676, oPC)){
@@ -143,19 +142,23 @@ int KnightLevels(object oPC, int bForSneakDice = FALSE){
 		if (iDragonKnight > 0) nLevel += iDragonKnight;
 	}
 	
+	
 	if(GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL){
 		nLevel += GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC)
 		+ GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC) + GetLevelByClass(CLASS_TYPE_ERINYES,oPC);
+		if (GetHasFeat(2537, oPC)) nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC); //half fiend
 		
 	} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD){
 		nLevel += GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC);
 		nLevel += GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); 
 		nLevel += GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);
+		if (GetHasFeat(2538, oPC)) nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC); //half celestial
 		
 	} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL){
 		nLevel += GetLevelByClass(CLASS_NWNINE_WARDER,oPC) + 
 			GetLevelByClass(CLASS_TYPE_DOOMGUIDE,oPC) +
-			GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);
+			GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC) +
+			GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);
 		if (GetHasFeat(2673)) nLevel += GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC);
 		if (GetHasFeat(2635)) nLevel += GetLevelByClass(42,oPC);	
 	}

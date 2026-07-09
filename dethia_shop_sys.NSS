@@ -306,8 +306,7 @@ void SetItemCostVariables(object oItem, int addToDB = FALSE, object oPC = OBJECT
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 
 
-int GetFixedItemValue(object oItem){
-	int nCost;
+int GetFixedItemValue(object oItem, int nCost = 0){
 	string sRef = GetResRef(oItem);
 	if (sRef == "ps_potion_lessersequencer" || sRef == "ps_potion_lessersequencernew") nCost = 700;
 	else if (sRef == "ps_potion_sequencer" || sRef == "ps_potion_sequencernew") nCost =  1400;
@@ -327,7 +326,6 @@ int GetFixedItemValue(object oItem){
 	else if (FindSubString(sRef, "i_ps_umbrella") != -1) nCost = 3;
 	else if (FindSubString(sRef, "ps_i_basket") != -1) nCost =  3;
 	else if (FindSubString(sRef, "i_ps_cigar") != -1) nCost = 3;
-	else nCost = 0;
 	return nCost;
 }
 
@@ -347,8 +345,7 @@ int GetCraftedItemValue(object oItem, int nCost){
 
 string GetCustomItemValue(object oItem, string sCost){
 	if (bUSE_CUSTOM_PRICING != TRUE) return sCost;
-	int nCost = GetFixedItemValue(oItem);
-	if (nCost == 0) return sCost;
+	int nCost = GetFixedItemValue(oItem, StringToInt(sCost));
 	return IntToString(nCost);
 }
 
@@ -514,8 +511,10 @@ void DS_AddItemsToShop(object oStore, object oPC, int iCategory, int iMarkUp, in
 		
 		string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIconSafe(oItem)) + ".tga";
 		int		iItemCost	= FloatToInt((PS_GetItemValue(oItem)*fCostMod)/GetItemStackSize(oItem));
+		
 		if(iItemCost <= 0)	//If the item cost is less than or equal to 0, set it to 1
 		{		iItemCost	= 1;	}
+		iItemCost = GetFixedItemValue(oItem, iItemCost);
 		//If this is greater than 0, the item was sold, we set it's sell price to purchase price
 		if(GetLocalInt(oItem, "DS_SELL_PRICE") > 0)
 		{	iItemCost	= GetLocalInt(oItem, "DS_SELL_PRICE");	}
