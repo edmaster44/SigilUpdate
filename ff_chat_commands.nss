@@ -312,7 +312,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		return TRUE;
 	}
 	else if (sInput == "#togglewings"){
-		if (GetRacialType(oSender) == 11){
+		if (GetRacialType(oSender) == 11 && GetLevelByClass(49, oSender) < 1){//allow half drag to use but not full
 			sFeedback = "This command cannot be used by dragons";
 		} else {
 			oItem = PS_GetEssence(oSender);
