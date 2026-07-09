@@ -146,7 +146,7 @@ string	DS_BUY_FILTER_MISCELLANEOUS	= "-5";	//Filter for the miscellaneous catego
 
 //This function gets a special value for player-made items to control how
 // much profit can be made from crafters selling to npcs
-string GetCraftedItemValue(object oItem, string sCost);
+int GetCraftedItemValue(object oItem, int nCost);
 
 //This function closes the shop, it will clear the gui, close it and execute
 //the shop's OnClose script
@@ -332,8 +332,8 @@ int GetFixedItemValue(object oItem){
 }
 
 
-string GetCraftedItemValue(object oItem, string sCost){
-	if (!GetIsPlayerMade(oItem)) return sCost;
+int GetCraftedItemValue(object oItem, int nCost){
+	if (!GetIsPlayerMade(oItem)) return nCost;
 		
 	int nItem = GetBaseItemType(oItem);
 	
@@ -342,15 +342,14 @@ string GetCraftedItemValue(object oItem, string sCost){
 	fBaseCost *= fCraftProfit;
 	int nRoundedCost = PS_RoundToInt(fBaseCost);
 	
-	return IntToString(nRoundedCost);
+	return nRoundedCost;
 }
 
 string GetCustomItemValue(object oItem, string sCost){
 	if (bUSE_CUSTOM_PRICING != TRUE) return sCost;
 	int nCost = GetFixedItemValue(oItem);
-	if (nCost == 0) sCost = GetCraftedItemValue(oItem, sCost);
-	else sCost = IntToString(nCost);
-	return sCost;
+	if (nCost == 0) return sCost;
+	return IntToString(nCost);
 }
 
 void DS_CloseShop(object oPC, object oStore)
@@ -637,7 +636,7 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	if(iItemCost <= 0)	{	iItemCost	= 1;	}
 	
 	if (DS_GetIsProjectile(oItem) && iItemCost > 100) iItemCost = 100;
-
+	else iItemCost = GetCraftedItemValue(oItem, iItemCost);
 	//Lastly return the determined item cost
 	return iItemCost;
 }

@@ -76,7 +76,9 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	object	oPC		= OBJECT_SELF;	//The player interacting with the gui
 	object	oItem	= IntToObject(StringToInt(sItemID));	//The item in question
 	object	oStore	= StringToObject(sStoreID);
-	
+	int nStackCheck = StringToInt(sStackSize);
+	if (nStackCheck < 1) sStackSize = "1";
+	else if (nStackCheck > 99) sStackSize = "99";
 	// will return a custom value for player profit on crafted items and certain rp-only items, returns original value
 	// if not crafted or if this value is turned off in dethia_shop_sys
 	sItemCost = GetCustomItemValue(oItem, sItemCost);
@@ -120,11 +122,8 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	{//First set the max stack value to quantity and update local:7 (quant-selected)
 		int nStack = StringToInt(sStackSize);
 		if(DS_GetIsProjectile(oItem)) {
-			if (nStack >= 99)
-				sStackSize = "99";
-			else 
-				sStackSize = IntToString(nStack);
-				
+			if (nStack >= 99) sStackSize = "99";
+			else sStackSize = IntToString(nStack);		
 		} else {
 			sStackSize = "1";
 		}
@@ -143,7 +142,8 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 	else if(iEvent == 6)	//Update quantity field as the slider is moved
 	{//First we update the gui text field, then the price fields
 		sStackSize	= IntToString(FloatToInt((StringToInt(sStackSize))*(StringToInt(sExtra)/100.0f)));
-		if (StringToInt(sStackSize) < 1) sStackSize = IntToString(1);
+		if (StringToInt(sStackSize) < 1) sStackSize = "1";
+		else if (StringToInt(sStackSize) > 99) sStackSize = "99";
 		SetGUIObjectText(oPC, "dethia_shop", "quantity", -1, sStackSize);
 		SetLocalGUIVariable(oPC, "dethia_shop", 7, sStackSize);
 		
@@ -212,6 +212,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 				if (nCount >= firstItem && nCount < lastItem) {
 					//We add the item to the "store_items" listbox
 					string	sStackSize	= IntToString(GetItemStackSize(oItem));
+					if (StringToInt(sStackSize) > 99) sStackSize = "99";
 					string	sItemName	= GetName(oItem) + " (" + sStackSize + ")";
 					string	sItemIcon	= Get2DAString("nwn2_icons", "ICON", GetItemIconSafe(oItem)) + ".tga";
 					int		iItemCost	= DS_GetItemSellValue(oItem, StringToInt(sUp), StringToInt(sDown),
