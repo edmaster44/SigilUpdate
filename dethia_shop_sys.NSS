@@ -345,8 +345,10 @@ int GetCraftedItemValue(object oItem, int nCost){
 
 string GetCustomItemValue(object oItem, string sCost){
 	if (bUSE_CUSTOM_PRICING != TRUE) return sCost;
-	int nCost = GetFixedItemValue(oItem, StringToInt(sCost));
-	return IntToString(nCost);
+	if (GetIsPlayerMade(oItem)) 
+		return IntToString(GetCraftedItemValue(oItem, StringToInt(sCost)));
+	
+	return IntToString(GetFixedItemValue(oItem, StringToInt(sCost)));
 }
 
 void DS_CloseShop(object oPC, object oStore)
@@ -635,7 +637,9 @@ int DS_GetItemSellValue(object oItem, int iMarkUp, int iMarkDown, int iBlackMark
 	if(iItemCost <= 0)	{	iItemCost	= 1;	}
 	
 	if (DS_GetIsProjectile(oItem) && iItemCost > 100) iItemCost = 100;
-	else iItemCost = GetCraftedItemValue(oItem, iItemCost);
+	// set fixed prices for certain rp items and for player made items to prevent ppl overpaying for bs
+	// and prevent infinite gold exploits
+	else iItemCost = StringToInt(GetCustomItemValue(oItem, IntToString(iItemCost)));
 	//Lastly return the determined item cost
 	return iItemCost;
 }

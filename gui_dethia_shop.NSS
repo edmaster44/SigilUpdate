@@ -388,12 +388,17 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		int		iSellAmount		= StringToInt(sUp);
 	//	int		iStackSize		= StringToInt(sStackSize);
 		int 	iStackSize 		= GetItemStackSize(oItem);
+		int 	iFULLstacksize = iStackSize; // save the original stack size
+		if (iStackSize < 1) iStackSize = 1; // to prevent glitches, make us only sell between 1 and 99 at a time
+		else if (iStackSize > 99) iStackSize = 99;
 		sStackSize = IntToString(iStackSize); 
-		int		iSellPrice		= StringToInt(sItemCost)*iSellAmount;
+		int		iSellPrice		= StringToInt(sItemCost) * iSellAmount;
 		
+		// DEBUG see if removing this bit fixes base ammo sale ignoring stack size prob
+		/*
 		if(DS_GetIsProjectile(oItem) && PS_GetItemValue(oItem) <= 1)
 		{		iSellPrice		/= iSellAmount;	}
-		
+		*/
 		int		iMaxBuyPrice	= GetStoreMaxBuyPrice(oStore);
 		int		iStoreGold		= GetStoreGold(oStore);
 		
@@ -418,7 +423,7 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		//If the store has enough gold the item is sold.  First we transfer it from
 		//the player's inventory to the store, and give the player his/her cash
 		object	oSoldItem	= CopyObject(oItem, GetLocation(oStore), oStore);
-		if(iSellAmount == iStackSize)
+		if(iSellAmount >=  iFULLstacksize)
 		{//If amount sold is equal to the stack size, destroy the whole lot
 			DestroyObject(oItem);
 			RemoveListBoxRow(oPC, "dethia_shop", "store_items", sExtra);
@@ -426,9 +431,10 @@ void main(string sEvent, string sItemID, string sItemCost, string sStackSize, st
 		else
 		{//If only a portion we update the stack sizes both in the store,
 			//in the player's inventory and in the GUI
-			iStackSize	-= iSellAmount;
-			sStackSize	= IntToString(iStackSize);
-			SetItemStackSize(oItem, iStackSize);
+			iFULLstacksize	-= iSellAmount;
+			sStackSize	= IntToString(iFULLstacksize);
+			if (StringToInt(sStackSize) > 99) sStackSize = "99";
+			SetItemStackSize(oItem, iFULLstacksize);
 			SetItemStackSize(oSoldItem, iSellAmount);
 			ModifyListBoxRow(oPC, "dethia_shop", "store_items", sExtra,
 									"item_name=" + GetName(oItem) + " (" + sStackSize + ")", "",
