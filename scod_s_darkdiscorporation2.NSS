@@ -15,6 +15,8 @@ const float fDiscorpDuration = 6.0f;
 
 void DiscorporationRefresh(object oPC)
 {
+
+	
 	if (!GetLocalInt(oPC,"DarkDiscorporation")) return;
 	
 	if (!GetIsInCombat())

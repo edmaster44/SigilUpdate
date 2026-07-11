@@ -16,10 +16,14 @@ void main(){
 	int nTargetType = GetObjectType(oTarget);
 
 	int nLevel;
+	int nHD = PS_GetLevel(oCaster);
 	int nId = GetSpellId();
 	int bAbyssalDark = FALSE;
 	if (nId == SPELL_RACIAL_DARKNESS) nLevel = PS_GetLevel(oCaster);
-	else if (nId == SPELLABILITY_AS_DARKNESS)nLevel = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
+	else if (nId == SPELLABILITY_AS_DARKNESS){
+		nLevel = GetLevelByClass(CLASS_TYPE_ASSASSIN, oCaster);
+		nLevel += (nHD - nLevel) / 2;
+	}
 	else nLevel = PS_GetCasterLevel(oCaster);
 	
 	if (nId == SPELL_RACIAL_DARKNESS && 

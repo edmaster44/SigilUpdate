@@ -140,6 +140,22 @@ void FF_WingFix(object oPC){
 		FeatAdd(oPC, 21905, FALSE, FALSE, TRUE);
 }
 
+// error on my part caused half outsiders to not get their path feat at lvl 3 if
+// they already had it enchanted on an item. I corrected it in AdjustHalfOutsider()
+// and then put this here so that affected players will not have to rebuild
+// -Flatted Fifth, July 11, 2026
+void CorrectHalfOutsiderOversight(object oPC){
+	if (GetLevelByClass(62, oPC) < 3) return;
+	if (GetHasFeat(3034, oPC)){ //path of strength
+		FeatAdd(oPC, 28, FALSE); // power attack
+	} else if (GetHasFeat(3038, oPC) || GetHasFeat(3039, oPC) || 
+		GetHasFeat(3040, oPC)){// mental ability paths
+			FeatAdd(oPC, 7, FALSE);  // combat casting
+	} else if (GetHasFeat(2987, oPC)){
+		FeatAdd(oPC, 40, FALSE);
+ 	}
+}
+
 void AdjustHalfUndead(object oPC, int nLastLevel){
 	
 	if (nLastLevel == 1){
@@ -220,15 +236,13 @@ void AdjustHalfOutsider(object oPC, int nLastLevel){  //half outsider template
 		
 	} else if (nLastLevel == 3){
 		if (GetHasFeat(3034, oPC)){ //path of strength
-			if (!GetHasFeat(28, oPC))// power attack
-				FeatAdd(oPC, 28, FALSE);
+			FeatAdd(oPC, 28, FALSE); // power attack
 		} else if (GetHasFeat(3038, oPC) || GetHasFeat(3039, oPC) || 
 			GetHasFeat(3040, oPC)){// mental ability paths
-			if (!GetHasFeat(7, oPC))// combat casting
-				FeatAdd(oPC, 7, FALSE); 
+				FeatAdd(oPC, 7, FALSE);  // combat casting
 		}
 		// add toughness feat for those who did not progress spells
-		if (GetHasFeat(2987, oPC) && !GetHasFeat(40, oPC))
+		if (GetHasFeat(2987, oPC))
 			FeatAdd(oPC, 40, FALSE);
 	// if lvl 1 and has not had heritage assigned
  	} else if (nLastLevel == 1 && !GetHasFeat(2537, oPC) && !GetHasFeat(2538, oPC)){

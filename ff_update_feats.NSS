@@ -114,6 +114,8 @@ void fUpdateOtherFeats(object oPC){
 	
 	UpdateDominatingGaze(oPC);
 	
+	CorrectHalfOutsiderOversight(oPC);
+	
 	ApplyGatecrasherAC(oPC);
 	ApplyTurnResist(oPC);
 	GiveCreatureWeaponProf(oPC);
