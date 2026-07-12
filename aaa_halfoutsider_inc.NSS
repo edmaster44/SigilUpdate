@@ -96,8 +96,14 @@ void PS_HO_Immunity(object oPC, int nSpell)
 	effect eImmune;
 	if(GetHasFeat(2537, oPC))
 	{	eImmune = EffectImmunity(IMMUNITY_TYPE_POISON);	}
-	else if (GetHasFeat(2538, oPC))
-	{	eImmune = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);	}
+	else if (GetHasFeat(2538, oPC)){	
+		eImmune = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);	
+		eImmune = EffectLinkEffects(EffectSpellImmunity(495), eImmune); //breath
+		eImmune = EffectLinkEffects(EffectSpellImmunity(496), eImmune); //touch
+		eImmune = EffectLinkEffects(EffectSpellImmunity(497), eImmune); //gaze
+		eImmune = EffectLinkEffects(EffectSpellImmunity(485), eImmune); //flsh2ston
+		eImmune = EffectLinkEffects(EffectSpellImmunity(1012), eImmune);//pwrwordpet
+	}
 	else return;
 	eImmune = SupernaturalEffect(eImmune);
 	eImmune = SetEffectSpellId(eImmune, nSpell);

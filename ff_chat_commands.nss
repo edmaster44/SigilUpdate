@@ -484,6 +484,10 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			int nWing = StringToInt(sMessage);
 			oItem = GetItemPossessedBy(oSender,"ps_essence");
 			SetLocalInt(oItem, "Custom_Wing", nWing);
+			if (nWing == 0) sFeedback = "Custom wing disabled";
+			else sFeedback = "Wings set to number " + IntToString(nWing);
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
 		}
 	}
 	//end trusted player only debug commands
