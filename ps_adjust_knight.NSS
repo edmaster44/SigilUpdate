@@ -142,7 +142,9 @@ int KnightLevels(object oPC, int bForSneakDice = FALSE){
 		if (iDragonKnight > 0) nLevel += iDragonKnight;
 	}
 	
-	
+	// note that although half outsider is mentioned in all 3 cases, evil chars can only
+	// advance knight levels if they gave the fiendish heritage, good only if they have celestial
+	// and neutral can in any event
 	if(GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL){
 		nLevel += GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC)
 		+ GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC) + GetLevelByClass(CLASS_TYPE_ERINYES,oPC);
@@ -153,7 +155,8 @@ int KnightLevels(object oPC, int bForSneakDice = FALSE){
 		nLevel += GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC); 
 		nLevel += GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);
 		if (GetHasFeat(2538, oPC)) nLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC); //half celestial
-		
+		if (GetHasFeat(2673)) nLevel += GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC);
+		if (GetHasFeat(2635)) nLevel += GetLevelByClass(42,oPC);	
 	} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL){
 		nLevel += GetLevelByClass(CLASS_NWNINE_WARDER,oPC) + 
 			GetLevelByClass(CLASS_TYPE_DOOMGUIDE,oPC) +

@@ -54,10 +54,78 @@ void PrintTurningLevel( int nTurnLevel );
 void PrintTurningDamage( int n2d6, int nChrMod, int nClassLevel );
 void PrintTurningResult( object oTarget, int nClassLevel, int nTurnLevel, int nHDRemaining, int nResult = TURN_RESULT_FAILURE );
 
+int GetTurnAmountByClass(int nClass, object oPC){
+	int nAmount;
+	switch (nClass){
+		case CLASS_TYPE_CLERIC: return GetLevelByClass(CLASS_TYPE_CLERIC, oPC);
+		case CLASS_TYPE_PALADIN: {
+			nAmount = GetLevelByClass(CLASS_TYPE_PALADIN, oPC) - 2;
+			if (nAmount > 0) return nAmount;
+			return 0;
+		}
+		case CLASS_TYPE_DOOMGUIDE: return GetLevelByClass(CLASS_TYPE_DOOMGUIDE, oPC);
+		case CLASS_TYPE_WARPRIEST: return GetLevelByClass(CLASS_TYPE_WARPRIEST, oPC);
+		case CLASS_TYPE_LICH_D_PRC: {
+			if (GetHasFeat(2099, oPC)) return GetLevelByClass(CLASS_TYPE_LICH_D_PRC) / 2;// needs undeath domain
+			return 0;
+		}
+		case CLASS_TYPE_HALFOUTSIDER_PRC: return GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);
+		case CLASS_TYPE_DIVINECHAMPION: return GetLevelByClass(CLASS_TYPE_DIVINECHAMPION,oPC);
+		case 129:{ //dragon prc
+			if (GetHasFeat(3676, oPC) || GetHasFeat(3681, oPC)){//knight or cleric path
+				nAmount = GetLevelByClass(129, oPC) - 2;
+				if (nAmount > 0) return nAmount;
+				return 0;
+			}
+			return 0;
+		}
+		case CLASS_TYPE_DEATH_KNIGHT_PRC: case CLASS_TYPE_MARQUIS_CAMBION: case CLASS_TYPE_ERINYES:{
+			if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL){
+				return GetLevelByClass(CLASS_TYPE_DEATH_KNIGHT_PRC,oPC) + 
+					GetLevelByClass(CLASS_TYPE_MARQUIS_CAMBION,oPC) +
+					GetLevelByClass(CLASS_TYPE_ERINYES,oPC);
+			}
+			return 0;
+		}
+		case CLASS_TYPE_MOVANIC_DEVA_PRC: case CLASS_TYPE_HOUNDARCH_HERO_PRC: case CLASS_TYPE_ASTRAL_DEVA_PRC:
+			case 42:{
+			if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD){
+				return GetLevelByClass(CLASS_TYPE_MOVANIC_DEVA_PRC,oPC) + 
+					GetLevelByClass(CLASS_TYPE_HOUNDARCH_HERO_PRC,oPC) +
+					GetLevelByClass(CLASS_TYPE_ASTRAL_DEVA_PRC,oPC) +
+					GetLevelByClass(42,oPC); // celestial envoy	
+			}
+			return 0;
+		}
+		case CLASS_TYPE_GHAELE_PRC:{
+			if (GetAlignmentGoodEvil(oPC) != ALIGNMENT_EVIL){
+				return GetLevelByClass(CLASS_TYPE_GHAELE_PRC,oPC);
+			}
+			return 0;
+		}
+		case CLASS_NWNINE_WARDER:{
+			if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL)
+				return GetLevelByClass(CLASS_NWNINE_WARDER,oPC);
+			return 0;
+		}
+	}
+	return 0;
+}
+
 void main()
 {	
-  object oPC = OBJECT_SELF;
-
+	object oPC = OBJECT_SELF;
+	int nTotalLevel = PS_GetLevel(oPC);
+    int nClassLevel = 0;
+	int nClass;
+	int i;
+	for (i = 1; i <= 4; i++){
+		nClass = GetClassByPosition(i, oPC);
+		nClassLevel += GetTurnAmountByClass(nClass, oPC);
+	}
+	int nTurnLevel = nClassLevel;
+	
+	/* old turn class and level calc
     int nClericLevel = GetLevelByClass(CLASS_TYPE_CLERIC);
     int nPaladinLevel = GetLevelByClass(CLASS_TYPE_PALADIN);
     int nBlackguardlevel = GetLevelByClass(CLASS_TYPE_BLACKGUARD);
@@ -65,52 +133,44 @@ void main()
 	int nWarPriestLevel = GetLevelByClass(CLASS_TYPE_WARPRIEST);
 	int nLichLevel = GetLevelByClass(CLASS_TYPE_LICH_D_PRC);
 	int nGhaele 	= GetLevelByClass(CLASS_TYPE_GHAELE_PRC);
+	if (nPaladinLevel > 0) nPaladinLevel += GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC,oPC);
     int nTotalLevel =  PS_GetLevel(OBJECT_SELF);
 	
     int nTurnLevel = nClericLevel;
     int nClassLevel = nClericLevel;
 
 	// Ceremorph: Divine Liches with Undeath Domain
-	if (nLichLevel > 1 && GetHasFeat(2099))
-	{
+	if (nLichLevel > 1 && GetHasFeat(2099)){
 		nClassLevel += (nLichLevel / 2);
 		nTurnLevel += (nLichLevel / 2);
 	}
 
     // GZ: Since paladin levels stack when turning, blackguard levels should stack as well
     // GZ: but not with the paladin levels (thus else if).
-    if((nBlackguardlevel - 2) > 0 && (nBlackguardlevel > nPaladinLevel))
-    {
+    if((nBlackguardlevel - 2) > 0 && (nBlackguardlevel > nPaladinLevel)){
         nClassLevel += (nBlackguardlevel - 2);
         nTurnLevel  += (nBlackguardlevel - 2);
     }
-    else if((nPaladinLevel - 3) > 0)
-    {
-// JLR - OEI 06/21/05 NWN2 3.5
+    else if((nPaladinLevel - 3) > 0){
         nClassLevel += (nPaladinLevel - 3);
         nTurnLevel  += (nPaladinLevel - 3);
     }
 	
-	if (nWarPriestLevel > 0)
-	{
+	if (nWarPriestLevel > 0){
 		nClassLevel += nWarPriestLevel;
         nTurnLevel  += nWarPriestLevel;
 	}
 	
-	if (KnightLevels(oPC) > 0)
-	{
+	if (KnightLevels(oPC) > 0){
 		nClassLevel += KnightLevels(oPC);
 		nTurnLevel += KnightLevels(oPC);
-	
 	}
 	
-	if (nGhaele > 0)
-	{
+	if (nGhaele > 0){
 		nClassLevel += nGhaele;
 		nTurnLevel += nGhaele;
-	
 	}	
-    
+    */
     // Should this stack with Paladin/Blackguard/Cleric/Doomguide multi class?
     // Why are you leveling that combination anyways?!
 
@@ -128,8 +188,7 @@ void main()
 		
 	// Empower Turning Feat
 	int nEmpower = GetHasFeat(FEAT_EMPOWER_TURNING);
-	// Kelemvor's Boon Feat
-	int nKelemvorsBoon = GetHasFeat(FEAT_KELEMVORS_BOON);
+
 	// Improved Turning
 	int nImprovedTurning = GetHasFeat(FEAT_IMPROVED_TURNING);
 	
@@ -137,11 +196,7 @@ void main()
     // Doomguide adds doomguide+cleric levels for purpose of turning Undead
     // with feat KELEMVOR'S BOON (automatically granted @ lvl 1 Doomguide
 	object opc = GetFirstPC();
-    if ( nKelemvorsBoon )
-    {
-		nClassLevel += nDoomguideLevel;
-		nTurnLevel += nDoomguideLevel;	
-    }
+  
 	
 	if ( nImprovedTurning )
 	{
@@ -150,7 +205,7 @@ void main()
 	}
 
     //Make a turning check roll, modify if have the Sun Domain
-    int nChrMod = GetAbilityModifier(ABILITY_CHARISMA);
+    int nChrMod = GetAbilityModifier(ABILITY_CHARISMA, oPC);
     int nTurnCheck = d20();              //The roll to apply to the max HD of undead that can be turned --> nTurnLevel
     if(nSun == TRUE)
     {

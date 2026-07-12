@@ -484,11 +484,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			int nWing = StringToInt(sMessage);
 			oItem = GetItemPossessedBy(oSender,"ps_essence");
 			SetLocalInt(oItem, "Custom_Wing", nWing);
-			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
-			app.WingVariation = nWing;
-			PS_SetCreatureCoreAppearance(oSender, app);
-			ServerExts_RefreshCreatureAppearance(oSender, oSender);
-			return TRUE;
 		}
 	}
 	//end trusted player only debug commands

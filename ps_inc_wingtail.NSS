@@ -466,3 +466,51 @@ void PS_DragonGlitchFix(object oPC)
 	ServerExts_RefreshCreatureAppearance(oPC,oPC);
 	PS_SaveOriginalAppearance(oPC);
 }
+
+/* all wings
+WING_TYPE_ANGEL_M = 25;
+WING_TYPE_ANGEL_F = 26;
+WING_TYPE_HEZEBEL_M	= 60;
+WING_TYPE_HEZEBEL_F = 21;
+WING_TYPE_DWARF_BAT_M = 43;
+WING_TYPE_DWARF_BAT_F = 44;
+WING_TYPE_ORC_BAT_M = 47;
+WING_TYPE_ORC_BAT_F	= 48;
+WING_TYPE_ERINYES_M	= 59;
+WING_TYPE_ERINYES_F	= 14;
+WING_TYPE_BAT_M	= 55;
+WING_TYPE_BAT_F	= 56;
+WING_TYPE_HAWK_M = 63;
+WING_TYPE_HAWK_F = 64;
+WING_TYPE_RAVEN_M = 65;
+WING_TYPE_RAVEN_F = 66;
+WING_TYPE_LILITU_M = 67;
+WING_TYPE_LILITU_F = 68;
+WING_TYPE_MEZZOLOTH	= 62;
+WING_TYPE_WORDARCHON_F = 72;
+WING_TYPE_WORDARCHON_M = 73;
+tattered_dwarf_f = 87
+tattered_gnome_f = 98
+tattered_human_f = 6
+tattered_orc_f = 91
+tattered_DWARF_m return 86;
+tattered_GNOME_m return 88;
+tattered_HUMAN_m return 5;
+tattered_ORC_m return 90;
+mezzo_DWARF_f return 97;
+mezzo_GNOME_f return 95;
+mezzo_HUMAN_f return 2;
+mezzo_ORC_f return 93;
+mezzo_DWARF_m return 96;
+mezzo_GNOME_m return 94;
+mezzo_HUMAN_m return 62;
+mezzo_ORC_m return 92;
+erinyes_DWARF_f return 36;
+erinyes_GNOME_f return 38;
+erinyes_HUMAN_f return 14;
+erinyes_ORC_f return 40;
+erinyes_DWARF_m return 35;
+erinyes_GNOME_m return 37;
+erinyes_HUMAN_m return 59;
+erinyes_ORC_m return 39;
+*/
