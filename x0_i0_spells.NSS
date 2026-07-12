@@ -1344,10 +1344,13 @@ void DoPetrification(int nPower, object oSource, object oTarget, int nSpellID, i
     if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
         // * exit if creature is immune to petrification
-        if (spellsIsImmuneToPetrification(oTarget) == TRUE)
-        {   return;	}
-		if (GetIsImmune(oTarget, IMMUNITY_TYPE_PARALYSIS) == TRUE)
-		{	return;	}
+        if (spellsIsImmuneToPetrification(oTarget) || GetIsImmune(oTarget, IMMUNITY_TYPE_PARALYSIS)){
+			if (GetIsPC(oSource))
+				SendMessageToPC(oSource, "<c=orange>Target immune to petrification!</c>");
+			if (GetIsPC(oTarget))
+				SendMessageToPC(oTarget, "<c=cyan>Immune to petrification</c>");
+			return;	
+		}
 		
         float fDifficulty = 0.0;
         int bIsPC = GetIsPC(oTarget);
@@ -1760,8 +1763,12 @@ void RemoveSpellEffects2(int nSpell_ID, object oCaster, object oTarget, int nSpe
 // * returns true if the creature has flesh
 int spellsIsImmuneToPetrification(object oCreature)
 {
+	//half celestial path of half outsider prc immune to petrify
+	if (GetHasFeat(2538, oCreature)) return TRUE;
     int nAppearance = GetAppearanceType(oCreature);
     int bImmune = FALSE;
+	
+	
     switch (nAppearance)
     {
     case APPEARANCE_TYPE_BASILISK:

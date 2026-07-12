@@ -63,6 +63,15 @@ void main()
 
 	object 	oCaster		=	OBJECT_SELF;
 	object	oTarget		=	GetSpellTargetObject();
+	
+	if (spellsIsImmuneToPetrification(oTarget)){
+		if (GetIsPC(oCaster))
+			SendMessageToPC(oCaster, "<c=orange>Target immune to petrification!</c>");
+		if (GetIsPC(oTarget))
+			SendMessageToPC(oTarget, "<c=cyan>Immune to petrification</c>");
+		return;
+	
+	}
 	int	nTargetHP	=	GetCurrentHitPoints(oTarget);
 	effect	ePetrify	=	EffectPetrify();
 	effect	eVis	=	EffectVisualEffect(VFX_DUR_SPELL_POWER_WORD_PETRIFY);

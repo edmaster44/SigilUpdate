@@ -45,11 +45,15 @@ void main()
 void DoPetrificationNew(int nPower, object oSource, object oTarget, int nSpellID, int nFortSaveDC)
 {
 
-    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
+    if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, oSource))
     {
         // * exit if creature is immune to petrification
-        if (spellsIsImmuneToPetrification(oTarget) == TRUE)
+        if (spellsIsImmuneToPetrification(oTarget))
         {
+			if (GetIsPC(oSource))
+				SendMessageToPC(oSource, "<c=orange>Target immune to petrification!</c>");
+			if (GetIsPC(oTarget))
+				SendMessageToPC(oTarget, "<c=cyan>Immune to petrification</c>");
             return;
         }
         float fDifficulty = 0.0;
