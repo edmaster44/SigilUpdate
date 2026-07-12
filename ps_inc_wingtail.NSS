@@ -39,6 +39,8 @@ void PS_SetWingNumber(object oPC, int nVar)
 // Returns the value from the essence variable PC_Wing
 int PS_GetWingNumber(object oPC){
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
+	int nCustom = GetLocalInt(oEssence, "Custom_Wing");
+	if (nCustom != 0) return nCustom;
 	return GetLocalInt(oEssence, "PC_Wing");
 }
 
@@ -117,10 +119,12 @@ int PS_Get_WingRace(object oPC)
 //Determine what wing a Half-Fiend gets based on original subrace
 int PS_GetWing_Fiend(object oPC)
 {
-	int nWingRace = PS_Get_WingRace(oPC);
-	
+
 	if (GetHasFeat(2556, oPC)) // If they select the "supernatural sight" feat instead of wings...
 	{	return 0;	}
+	
+	int nWingRace = PS_Get_WingRace(oPC);
+	
 	
 	
 	

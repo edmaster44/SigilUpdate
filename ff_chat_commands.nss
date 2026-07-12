@@ -479,6 +479,17 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
 		}
+		else if (GetStringLeft(sInput, 9) == "#setwings"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 9);
+			int nWing = StringToInt(sMessage);
+			oItem = GetItemPossessedBy(oSender,"ps_essence");
+			SetLocalInt(oItem, "Custom_Wing", nWing);
+			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
+			app.WingVariation = nWing;
+			PS_SetCreatureCoreAppearance(oSender, app);
+			ServerExts_RefreshCreatureAppearance(oSender, oSender);
+			return TRUE;
+		}
 	}
 	//end trusted player only debug commands
 	//testers and test server only commands to adjust crafting consumable costs.

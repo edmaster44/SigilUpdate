@@ -26,6 +26,8 @@ void PS_Ability_DarkFlight(object oPC, object oEss);
 void PS_HD_Dragonflight(object oPC, object oEss);
 void PS_FeyWings(object oPC, object oEss);
 
+//brown wings = 64
+
 void main(){
 	object oPC = OBJECT_SELF;
 	object oEss	= GetItemPossessedBy(oPC,"ps_essence");	
@@ -138,28 +140,29 @@ void PS_Ability_DarkFlight(object oPC, object oEss){
 	
 	int iWing;
 	int iWingRace;
+	int nGender = GetGender(oPC);
 	{	if (GetLevelByClass(CLASS_TYPE_BRACHINA, oPC) != 0)
-		{	if (GetGender(oPC) == GENDER_FEMALE)
+		{	if (nGender == GENDER_FEMALE)
 			{	iWing = WING_TYPE_RAVEN_F;		}
 			else
 			{	iWing = WING_TYPE_RAVEN_M;		}	}
 		else if (GetLevelByClass(CLASS_TYPE_ERINYES, oPC) != 0)
-		{	if (GetGender(oPC) == GENDER_FEMALE)
+		{	if (nGender == GENDER_FEMALE)
 			{	iWing = WING_TYPE_ERINYES_F;	}
 			else
 			{	iWing = WING_TYPE_ERINYES_M;	}	}
 		else if (GetLevelByClass(CLASS_TYPE_SUCCUBUS_INCUBUS, oPC) != 0)
-		{	if (GetGender(oPC) == GENDER_FEMALE)
+		{	if (nGender == GENDER_FEMALE)
 			{	iWing = WING_TYPE_BAT_F;	}
 			else
 			{	iWing = WING_TYPE_BAT_M;	}	}
 		else if (GetLevelByClass(CLASS_TYPE_TRUMPET_ARCHON_PRC, oPC) != 0)
-		{	if (GetGender(oPC) == GENDER_FEMALE)
+		{	if (nGender == GENDER_FEMALE)
 			{	iWing = WING_TYPE_HEZEBEL_F;	}
 			else
 			{	iWing = WING_TYPE_HEZEBEL_M;	}	}
 		else if (GetLevelByClass(CLASS_TYPE_WORD_ARCHON_PRC, oPC) != 0)
-		{	if (GetGender(oPC) == GENDER_FEMALE)
+		{	if (nGender == GENDER_FEMALE)
 			{	iWing = WING_TYPE_HEZEBEL_F;	}
 			else
 			{	iWing = WING_TYPE_HEZEBEL_M;	}	}
