@@ -18,6 +18,7 @@
 void DoGemReCut(object oPC, object oTarget);
 void ReCutGem(object oPC, object oGem);
 void DoMeltDownItem(object oPC, object oTarget);
+string StripFlags(string sInput); //remove all <color=beige></c> or whatev from a string
 
 void main(){
     object oPC = GetItemActivator();
@@ -95,10 +96,10 @@ void DoMeltDownItem(object oPC, object oTarget){
 	//allow the smith hammer to destroy golem control devices, otherwise
 	//there's no way to get rid of a lot of them
 	if (GetTag(oTarget) == "ps_golemsum"){
-		SetCustomToken(4001, GetName(oTarget));
+		SetCustomToken(4001, StripFlags(GetName(oTarget)));
 		SetLocalString(oPC, "melt_ingotRes", "");
 		SetLocalObject(oPC, "melt_itemObject", oTarget);
-		AssignCommand(oPC, ActionStartConversation(oPC, "confirm_meltdown_dialog", TRUE, FALSE, TRUE, TRUE));
+		AssignCommand(oPC, ActionStartConversation(oPC, "confirm_destroy_dialog", TRUE, FALSE, TRUE, TRUE));
 		return;
 	}
 	
@@ -188,7 +189,7 @@ void DoMeltDownItem(object oPC, object oTarget){
 				}
 			}
 		}
-		string sItemName = GetName(oTarget);
+		string sItemName = StripFlags(GetName(oTarget));
 		if (RemoveWhitespace(sItemName) == "")
 			sItemName = GetFirstName(oTarget) + " " + GetLastName(oTarget);
 		if (RemoveWhitespace(sItemName) == ""){
@@ -231,4 +232,23 @@ void DoMeltDownItem(object oPC, object oTarget){
 		ErrorNotify(oPC, ERROR_UNRECOGNIZED_HAMMER_USAGE);
 	}		
 	PrettyDebug("i_smithhammer_ac : completed");*/
-}		
+}
+
+string StripFlags(string sInput){
+    int nStart = FindSubString(sInput, "<");
+	if (nStart == -1) return sInput;
+	int nEnd;
+	string sBefore, sAfter;
+    while (nStart != -1){
+        nEnd = FindSubString(sInput, ">", nStart);
+        if (nEnd == -1) break; //not closing >, bail to avoid inf loop
+		sBefore = GetSubString(sInput, 0, nStart);
+        sAfter  = GetSubString(sInput, nEnd + 1, GetStringLength(sInput) - (nEnd + 1));
+
+        sInput = sBefore + sAfter;
+        nStart = FindSubString(sInput, "<");
+    }
+    return sInput;
+}	
+
+	
