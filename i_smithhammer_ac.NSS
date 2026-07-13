@@ -92,6 +92,16 @@ void ReCutGem(object oPC, object oGem){
 void DoMeltDownItem(object oPC, object oTarget){	
 	object oBench = GetNearestSmithingWorkbench(oPC);
 	
+	//allow the smith hammer to destroy golem control devices, otherwise
+	//there's no way to get rid of a lot of them
+	if (GetTag(oTarget) == "ps_golemsum"){
+		SetCustomToken(4001, GetName(oTarget));
+		SetLocalString(oPC, "melt_ingotRes", "");
+		SetLocalObject(oPC, "melt_itemObject", oTarget);
+		AssignCommand(oPC, ActionStartConversation(oPC, "confirm_meltdown_dialog", TRUE, FALSE, TRUE, TRUE));
+		return;
+	}
+	
 	// all of the workbenches in the foundry were converted to environment objects instead
 	// of placeables. This means that they don't register in the check for workbenches, 
 	// so I've made the smith hammer work anywhere in the Foundry.

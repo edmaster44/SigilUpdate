@@ -538,6 +538,13 @@ void ApplyTotemSpell(
 	case SPELL_ID_TOTEM_PARALYSIS:
 		if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCreator) && !TotemEffectActive(oTarget, oCreator, nAoeSpellId)) {
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_ID_TOTEM_PARALYSIS, TRUE));
+			if (GetIsImmune(oTarget, IMMUNITY_TYPE_PARALYSIS, oCreator)){
+				if (GetIsPC(oCreator)) 
+					SendMessageToPC(oCreator, "<c=orange>Target is immune to paralysis!</c>");
+				if (GetIsPC(oTarget))
+					SendMessageToPC(oTarget, "<c=cyan>Immune to paralysis</c>");
+				return;
+			}
 			if(!GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)) {
 				effect eParal = EffectParalyze(nSaveDC, SAVING_THROW_WILL, FALSE);
 				effect eHit = EffectVisualEffect( VFX_DUR_SPELL_HOLD_MONSTER );
@@ -553,6 +560,13 @@ void ApplyTotemSpell(
 	case SPELL_ID_TOTEM_PETRIFICATION:
 		if(spellsIsTarget(oTarget, SPELL_TARGET_SELECTIVEHOSTILE, oCreator) && !TotemEffectActive(oTarget, oCreator, nAoeSpellId)) {
 			SignalEvent(oTarget, EventSpellCastAt(oCreator, SPELL_ID_TOTEM_PETRIFICATION, TRUE));
+			if (spellsIsImmuneToPetrification(oTarget)){
+				if (GetIsPC(oCreator)) 
+					SendMessageToPC(oCreator, "<c=orange>Target is immune to petrification!</c>");
+				if (GetIsPC(oTarget))
+					SendMessageToPC(oTarget, "<c=cyan>Immune to petrification</c>");
+				return;
+			}
 			effect ePetrify	= EffectPetrify();
 			effect eVis	= EffectVisualEffect(VFX_DUR_SPELL_POWER_WORD_PETRIFY);
 			effect eLink = EffectLinkEffects(ePetrify, eVis);

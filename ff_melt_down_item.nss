@@ -15,7 +15,10 @@ void main(){
  
 	object oDestroy = GetLocalObject(oPC, "melt_itemObject");
 	string sIngot = GetLocalString(oPC, "melt_ingotRes");
-	
+	if (sIngot == ""){
+		DestroyObject(oDestroy, 0.3f); //golem control devices do not give ingots
+		return;
+	}
 	object oIngot = CreateItemOnObject(sIngot, oPC);
 	DelayCommand(0.5f, ConfirmAndMelt(oIngot, oDestroy));
 }

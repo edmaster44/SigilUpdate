@@ -32,6 +32,7 @@
 #include "psi_inc_manifest"
 #include "psi_inc_pwresist"
 #include "psi_spellhook"
+#include "x0_i0_spells"
 //#include "spinc_common"
 
 void main()
@@ -67,6 +68,15 @@ void main()
 		effect eVis = EffectNWN2SpecialEffectFile("psi_crystallize.sef", oTarget);
 		effect ePet = EffectPetrify();
 		effect eLink = EffectLinkEffects(eVis, ePet);
+		
+		//check for petrification immunity
+		if (spellsIsImmuneToPetrification(oTarget)){
+			if (GetIsPC(oManifester)) 
+				SendMessageToPC(oManifester, "<c=orange>Target is immune to petrification!</c>");
+			if (GetIsPC(oTarget))
+				SendMessageToPC(oTarget, "<c=cyan>Immune to petrification</c>");
+			return;
+		}
         // Handle Twin Power
         int nRepeats = manif.bTwin ? 2 : 1;
         for(; nRepeats > 0; nRepeats--)

@@ -197,9 +197,12 @@ void DoBeholderPetrify(int nDuration,object oSource, object oTarget, int nSpellI
     if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF) && !GetIsDead(oTarget))
     {
         // * exit if creature is immune to petrification
-        if (spellsIsImmuneToPetrification(oTarget) == TRUE)
-        {
-            return;
+        if (spellsIsImmuneToPetrification(oTarget)){
+			if (GetIsPC(OBJECT_SELF)) 
+				SendMessageToPC(OBJECT_SELF, "<c=orange>Target is immune to petrification!</c>");
+			if (GetIsPC(oTarget))
+				SendMessageToPC(oTarget, "<c=cyan>Immune to petrification</c>");
+			return;
         }
         //float fDifficulty = 0.0;
         int bIsPC = GetIsPC(oTarget);
