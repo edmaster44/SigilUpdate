@@ -63,8 +63,12 @@ void main()
         }
 		
 		if (!bPetrifyFound){
-			int nDuration = PS_GetCasterLevel(OBJECT_SELF) * 600; // 10 mins per level
-			effect eImmune =  EffectSpellImmunity(EFFECT_TYPE_PETRIFY);
+			// There is no blanket petrify immunity effect or item property we can give
+			// so we will have this give immunity to the touch petrify and have 
+			// spellsIsImmuneToPetrification() in x0_i0_spells read that as blanket
+			// petrification immunity.
+			int nDuration = PS_GetCasterLevel(OBJECT_SELF) * 180; // 3 mins per level
+			effect eImmune =   EffectSpellImmunity(496);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImmune, oTarget, IntToFloat(nDuration));
 		
 		}

@@ -254,7 +254,7 @@ void AdjustHalfOutsider(object oPC, int nLastLevel){  //half outsider template
 			} else if (nSub == RACIAL_SUBTYPE_AASIMAR){
 				if (GetAlignmentGoodEvil(oPC) != ALIGNMENT_GOOD) SetHoHeritage(oPC, oEss, "HalfFiend");
 				else SetHoHeritage(oPC, oEss, "HalfCelestial");
-			} else SetHoHeritage(oPC, oEss, "HalfFiend");
+			} else SetHoHeritage(oPC, oEss, "HalfFiend");// default in case there's any I missed
 		} else if (GetHasFeat(81, oPC)){//fiendish
 			SetHoHeritage(oPC, oEss, "HalfFiend");
 		} else if (GetHasFeat(86, oPC) && !GetHasFeat(2538)){ // celestial

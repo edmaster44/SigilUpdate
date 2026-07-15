@@ -97,17 +97,19 @@ void PS_HO_Immunity(object oPC, int nSpell)
 	if(GetHasFeat(2537, oPC))
 	{	eImmune = EffectImmunity(IMMUNITY_TYPE_POISON);	}
 	else if (GetHasFeat(2538, oPC)){	
-		eImmune = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);	
-		eImmune = EffectLinkEffects(EffectSpellImmunity(495), eImmune); //breath
-		eImmune = EffectLinkEffects(EffectSpellImmunity(496), eImmune); //touch
-		eImmune = EffectLinkEffects(EffectSpellImmunity(497), eImmune); //gaze
-		eImmune = EffectLinkEffects(EffectSpellImmunity(485), eImmune); //flsh2ston
-		eImmune = EffectLinkEffects(EffectSpellImmunity(1012), eImmune);//pwrwordpet
+		// Someone gave HO celes paralysis immunity and thought that
+		// would make them immune to petrify. It does not. Removing it.
+		//eImmune = EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
+		
+		// function spellsIsImmuneToPetrification() in x0_i0_spells
+		// returns immune on finding feat 2538, so no need to have any
+		// effect here at all.
+		return;
 	}
 	else return;
+	RemoveEffectsFromSpell(oPC, nSpell);
 	eImmune = SupernaturalEffect(eImmune);
 	eImmune = SetEffectSpellId(eImmune, nSpell);
-	RemoveEffectsFromSpell(oPC, nSpell);
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eImmune, oPC);
 }
 

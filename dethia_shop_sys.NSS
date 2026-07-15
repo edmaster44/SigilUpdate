@@ -326,6 +326,7 @@ int GetFixedItemValue(object oItem, int nCost = 0){
 	else if (FindSubString(sRef, "i_ps_umbrella") != -1) nCost = 3;
 	else if (FindSubString(sRef, "ps_i_basket") != -1) nCost =  3;
 	else if (FindSubString(sRef, "i_ps_cigar") != -1) nCost = 3;
+	else if (sRef == "ps_potion_gorgon") nCost = 300;
 	return nCost;
 }
 

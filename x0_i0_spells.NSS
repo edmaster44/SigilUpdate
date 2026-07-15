@@ -1344,7 +1344,7 @@ void DoPetrification(int nPower, object oSource, object oTarget, int nSpellID, i
     if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
     {
         // * exit if creature is immune to petrification
-        if (spellsIsImmuneToPetrification(oTarget) || GetIsImmune(oTarget, IMMUNITY_TYPE_PARALYSIS)){
+        if (spellsIsImmuneToPetrification(oTarget)){
 			if (GetIsPC(oSource))
 				SendMessageToPC(oSource, "<c=orange>Target immune to petrification!</c>");
 			if (GetIsPC(oTarget))
@@ -1765,6 +1765,20 @@ int spellsIsImmuneToPetrification(object oCreature)
 {
 	//half celestial path of half outsider prc immune to petrify
 	if (GetHasFeat(2538, oCreature)) return TRUE;
+	
+	//spell id 496 is petrify touch and immunity is granted
+	//when Stone to Flesh is cast on someone who is not petrified.
+	//and is meant to make target immune to all petrification.
+	effect eFX = GetFirstEffect(oCreature);
+    while (GetIsEffectValid(eFX)){
+        if (GetEffectType(eFX) == EFFECT_TYPE_SPELL_IMMUNITY){
+            if (GetEffectInteger(eFX, 0) == 496)
+                return TRUE;
+        }
+        eFX = GetNextEffect(oCreature);
+    }
+   
+		
     int nAppearance = GetAppearanceType(oCreature);
     int bImmune = FALSE;
 	
