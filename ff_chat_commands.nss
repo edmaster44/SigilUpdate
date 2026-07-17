@@ -37,6 +37,10 @@ string GetDebugInfo(object oPC);
 //gets all available information about a target non-pc creature
 string GetCreatureInfo(object oCreature, object oCaller = OBJECT_INVALID, int bFromChat = FALSE);
 
+//keeps track of the xp modifier calls made by dms, ems, or testers and, when none are left
+//removes them. 
+void DecrementXpModCalls(object oCarrier);
+
 //primary function
 int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 
@@ -87,21 +91,28 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		return TRUE;
 	}
 	else if (GetStringLeft(sInput, 4) == "#xp%"){
-		if (GetIsDM(oSender) || (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE"))){
+		if (GetIsDM(oSender) || GetIsTester(oSender)){
+			int bHasDMpower = (GetIsDM(oSender) || GetLocalInt(GetModule(), "SIGIL_DEV_MODE"));
 			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 4);
+			object oCarrier = (bHasDMpower) ? GetModule() : oSender;
+			int nMaxBonus = (bHasDMpower) ? 500 : 300;
 			int nPercent = StringToInt(sRight);
 			if (sRight == "off" || nPercent == 100){
-				DeleteLocalFloat(GetModule(), "DM_XP_MOD");
+				DeleteLocalFloat(oCarrier, "DM_XP_MOD");
 				sFeedback = "Turning off XP%";
-			} else if (nPercent < 1 || nPercent > 500){
-				sFeedback = "Invalid entry. Must be an integer between 1 and 500, inclusive.\n";
+			} else if (nPercent < 1 || nPercent > nMaxBonus){
+				sFeedback = "Invalid entry. Must be an integer between 1 and " +IntToString(nMaxBonus)+ ", inclusive.\n";
 				sFeedback += "For example, 150 to give players 150% (aka 1.5X) XP or 80 to give them ";
 				sFeedback += "only 80% of normal XP.\n";
 				sFeedback += "If you are trying to turn XP% off, type #XP% OFF or #XP% 100.";
 			} else {
-				SetLocalFloat(GetModule(), "DM_XP_MOD", IntToFloat(nPercent) / 100.0);
+				int nCalls = GetLocalInt(oCarrier, "XP_MOD_CALLS");
+				SetLocalInt(oCarrier, "XP_MOD_CALLS", nCalls + 1);
+				SetLocalFloat(oCarrier, "DM_XP_MOD", IntToFloat(nPercent) / 100.0); //150 = times 1.5
+				DelayCommand(7201.0, DecrementXpModCalls(oCarrier));
 				sFeedback = "Setting XP gains to " + IntToString(nPercent) + "% of normal.\n";
-				sFeedback = "This will last until you type #XP% OFF, #XP% 100, or until server reset";
+				sFeedback = "This will last until you type #XP% OFF, #XP% 100, until server reset, or 2 hours have passed";
+				
 			}
 		} else {
 			sFeedback = "On main server this command is only for DMs. On test server this command is only "; 
@@ -1189,6 +1200,13 @@ int GetHasAllAccess(object oPC){
 	return FALSE;
 }
 
+void DecrementXpModCalls(object oCarrier){
+	int nCalls = GetLocalInt(oCarrier, "XP_MOD_CALLS") - 1;
+	if (nCalls < 1){
+		DeleteLocalFloat(oCarrier, "DM_XP_MOD");
+		DeleteLocalInt(oCarrier, "XP_MOD_CALLS");
+	} else SetLocalInt(oCarrier, "XP_MOD_CALLS", nCalls);
+}
 
 int GetIsTester(object oPC){
 	int bIsTester = FALSE;

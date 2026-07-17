@@ -1,5 +1,11 @@
 //V. 1.03
 
+// July 17, 2026 FlattedFifth: Implementing new group xp model
+// that ignores considerations such as max lvl in party and average lvl in party.
+// Now everyone will get whatever xp they normally would plus a group bonus, but max
+// xp is 150 (set as MAXMONSTERXP in ps_inc_functions). Average level is still a 
+// considerations for the amount of party xp boost, though.
+
 
 #include "ps_inc_onhit"
 #include "nwnx_sql"
@@ -9,11 +15,13 @@ struct PartyData{
 int nMax;
 float fAvg;
 int nNum;
+float fXPmod; // testers can cause there to be a dm xp bonus to kills if they have 3 or more in party
 };
 
+
 float GetPartyXPBonus(float fAvgLevel, float fCR, int nNum);
-float GetBaseXP(float fLevel, float fCR, int nNum);
-void GiveKillCopper(object oPC, float fCR);
+float GetBaseXP(float fLevel, float fCR);
+int GetKillCopper(float fCR, int nNum);
 struct PartyData GetPartyData(object oPC);
 object PS_GetKiller();
 
@@ -34,20 +42,14 @@ void main(){
 	
 	int nRaceDead = GetRacialType(oDead);
 	int nSubDead = GetSubRace(oDead);
-	int bGiveCopper = (GetLocalInt(oDead, "X2_L_NOTREASURE") == FALSE && 
-		nRaceDead != RACIAL_TYPE_ANIMAL && nRaceDead != RACIAL_TYPE_BEAST &&
-		nRaceDead != RACIAL_TYPE_CONSTRUCT && nRaceDead != RACIAL_TYPE_ELEMENTAL &&
-		nRaceDead != RACIAL_TYPE_VERMIN && nSubDead != 23 && nSubDead != 24 &&
-		nSubDead != 25 && nSubDead != 30 && nSubDead != 36 && nSubDead != 37 &&
-		nSubDead != 40 && nSubDead != 44 && nSubDead != 140 && nSubDead != 141 &&
-		nSubDead != 142);
+	
 	float fCRoriginal = GetChallengeRating(oDead);
 	float fDeadHD = IntToFloat(GetHitDice(oDead));
 	float fCR;
 	// Several mobs have their CR set ridiculously high, the hobgoblin bosses in Clangor, for example
 	// have their CR set to 99, same as The Ascended and the White Dragon. It shouldnt be CR 99 if you
-	// can kill it in two rounds. If it's a really epic boss with 50 hd or more, use the higher of CR or HD. 
-	// If it's got between 50 and 30 hd, use the average of CR and HD. If it's 30 hd or below, use the lower.
+	// can kill it in two rounds. If it's a really epic boss with 40 hd or more, use the higher of CR or HD. 
+	// If it's got between 40 and 20 hd, use the average of CR and HD. If it's 20 hd or below, use the lower.
 	if (fDeadHD >= 40.0) fCR = (fCRoriginal > fDeadHD) ? fCRoriginal : fDeadHD;
 	else if (fDeadHD < 40.0 && fDeadHD >= 21.0) fCR = (fDeadHD + fCRoriginal) / 2;
 	else fCR = (fCRoriginal > fDeadHD) ? fDeadHD : fCRoriginal;
@@ -64,65 +66,68 @@ void main(){
 	// within 10 lvls of a lvl 30 with any ecl. However, ecl IS counted in average because it affects
 	// the overall difficulty of the encounter
 	struct PartyData data = GetPartyData(oKiller);
-	float fPartyLevel = data.fAvg;
-	float fPartyXP = GetBaseXP(fPartyLevel, fCR, data.nNum);
-	float fPartyBonus = GetPartyXPBonus(fPartyLevel, fCR, data.nNum);
+	float fPartyBonus = GetPartyXPBonus(data.fAvg, fCR, data.nNum);
+	
+	// no coin on creatures that would not be carrying money
+	int bGiveCopper = (GetLocalInt(oDead, "X2_L_NOTREASURE") == FALSE && 
+		nRaceDead != RACIAL_TYPE_ANIMAL && nRaceDead != RACIAL_TYPE_BEAST &&
+		nRaceDead != RACIAL_TYPE_CONSTRUCT && nRaceDead != RACIAL_TYPE_ELEMENTAL &&
+		nRaceDead != RACIAL_TYPE_VERMIN && nSubDead != 23 && nSubDead != 24 &&
+		nSubDead != 25 && nSubDead != 30 && nSubDead != 36 && nSubDead != 37 &&
+		nSubDead != 40 && nSubDead != 44 && nSubDead != 140 && nSubDead != 141 &&
+		nSubDead != 142);
+		
+	int nCopper = (bGiveCopper) ? GetKillCopper(fCR, data.nNum) : 0;
 
     int nLevel, nECL, nFinalXP, rp_pool, rp_bonus, bUpdateDB;
-	float fLevel, fIndividualXP, fSoloXP, fBonusXP;
-	string sID, sDebug;
+	float fBaseXP, fLevel, fIndividualXP, fBonusXP;
+	string sID, sDebug, sDMadjustMessage;
 	string sXPbanking = "You have surpassed the required XP to level up.";
 	sXPbanking += "\nYour XP is being calculated as though you were level ";
 	
 	float fDMadjust = GetLocalFloat(GetModule(), "DM_XP_MOD");
+	if (data.fXPmod > fDMadjust) fDMadjust = data.fXPmod; // use higher of dm adjust or tester adjust
 	if (fDMadjust <= 0.0) fDMadjust = 1.0;
 	
 	object oArea = GetArea(oKiller);
 	object oMember = GetFirstFactionMember(oKiller, TRUE);
     while(GetIsObjectValid(oMember)){
-		if (oArea == GetArea(oMember) && !GetIsDM(oMember)){
+		if (oArea == GetArea(oMember) && !GetIsDM(oMember)){ // only give xp to party members in area and not dms
 		
-			if (bGiveCopper) GiveKillCopper(oMember, fCR);
+			if (bGiveCopper) PS_GiveGoldToCreature(oMember, nCopper);
+			
 			rp_pool = 0;
 			nLevel = PS_GetLevelByXP(oMember);
 			if (nLevel > GetHitDice(oMember)){
 				SendMessageToPC(oMember, sXPbanking + IntToString(nLevel) + ".");
 			}
 			fLevel = IntToFloat(nLevel);
-			nECL = GetNewECL(oMember);
-			
-			
-			//assume that if the cr of the enemy is higher then they'd be fighting something their own size
-			// if they were alone, otherwise calc solo value based on actual data
-			fSoloXP = (fCR >= fLevel) ? GetBaseXP(fLevel, fLevel, 1) : GetBaseXP(fLevel, fCR, 1);
-		
-			// if the character (including ECL) is in party range (excluding ECL) they get the higher of solo xp or party xp
-			if (fLevel + IntToFloat(nECL) >= IntToFloat(data.nMax - MAXPARTYRANGE)){
-				fIndividualXP = (fPartyXP > fSoloXP) ? fPartyXP : fSoloXP;
-			// else they get the lesser amount
-			} else fIndividualXP = (fPartyXP > fSoloXP) ? fSoloXP : fPartyXP;
+			fIndividualXP = GetBaseXP(fLevel, fCR);
 			
 			// in the unlikely event that they're getting more than max, give them max
 			if (fIndividualXP > MAXMONSTERXP) fIndividualXP = MAXMONSTERXP;
-			
-			//if the monster is not more than 10 levels below the player then the player should get 
-			// at least 1 xp
-			if (fIndividualXP < 1.0 && fCR >= fLevel - IntToFloat(MAXPARTYRANGE))
-				fIndividualXP = 1.0;
+				
 			// now we factor in ECL BEFORE we apply party and rp bonuses
 			nFinalXP = GetECLXP(PS_RoundToInt(fIndividualXP), oMember);
 			
-			if (fPartyBonus > 0.0)
-				fBonusXP = nFinalXP * fPartyBonus;
-			else fBonusXP = 0.0;
-			nFinalXP += PS_RoundToInt(fBonusXP);
-		
 			//if the monster is not more than 10 levels below the player then the player should get 
 			// at least 1 xp
 			if (nFinalXP < 1 && PS_RoundToInt(fCR) >= nLevel - MAXPARTYRANGE)
 				nFinalXP = 1;
 			
-				
+			if (fPartyBonus > 0.0){
+				fBonusXP = nFinalXP * fPartyBonus;
+				nFinalXP += PS_RoundToInt(fBonusXP);
+			}
+			// apply DM adjustments last
+			if (fDMadjust != 1.0){
+				nFinalXP = PS_RoundToInt(nFinalXP * fDMadjust);
+				if (fDMadjust < 1.0) sDMadjustMessage = "<c=orange>DM XP Penalty: ";
+				else sDMadjustMessage = "<c=green>DM XP Bonus: ";
+				sDMadjustMessage += FloatToString(fDMadjust * 100.0) + "%";
+				SendMessageToPC(oMember, sDMadjustMessage);
+			}
+
 			if(nFinalXP > 0){
 				sID = PS_GetCharID(oMember);
 				//SendMessageToPC(oPartyMember,"id:" + sID);
@@ -145,13 +150,12 @@ void main(){
 						SQLExecDirect("UPDATE characterdata SET rp_pool=" + IntToString(rp_pool) + " WHERE id=" + sID); 
 				} else rp_bonus = 0;
 			}
-			// apply DM adjustments last
-			nFinalXP = PS_RoundToInt(nFinalXP * fDMadjust);
 			// if player is using #KillInfo chat command, which is not meant to show quest or rp xp
 			if (GetLocalInt(oMember, "xpdebug")){
 				sDebug = "Max level in party: " + IntToString(data.nMax);
 				sDebug += "\nParty Size: " + IntToString(data.nNum);
 				sDebug += "\nBase XP: " + IntToString(PS_RoundToInt(fIndividualXP));
+				nECL = GetNewECL(oMember);
 				sDebug += "\nECL: " + IntToString(nECL);
 				sDebug += "\nECL XP Tax: ";
 				if (nECL < 1) sDebug += "none";
@@ -173,9 +177,8 @@ void main(){
 	}
 }
 
-void GiveKillCopper(object oPC, float fCR){
+int GetKillCopper(float fCR, int nNum){
 	int nCopper;
-	// note that this is not d3(100) because that would be minimum 300. This is max 300, min 100
 	if (fCR >= 90.0)  nCopper =  d3() * 100 + d8() * 10 + d8(); 
 	else if (fCR < 90.0 && fCR >= 80.0) nCopper = d2() * 100 + d6() * 10 + d8();
 	else if (fCR < 80.0 && fCR >= 70.0) nCopper = d2() * 100 + d4() * 10 + d6();
@@ -189,7 +192,12 @@ void GiveKillCopper(object oPC, float fCR){
 	if (GOLD_MULTIPLIER > 0.0){
 		nCopper = PS_RoundToInt(nCopper * GOLD_MULTIPLIER);
 	}
-	PS_GiveGoldToCreature(oPC, nCopper);
+	if (nNum > 1){
+		float fPartyCoinBoost = IntToFloat(nNum - 1) * 0.03;
+		float fCopper = IntToFloat(nCopper) * (fPartyCoinBoost + 1.0);
+		nCopper = FloatToInt(fCopper);
+	}
+	return nCopper;
 }
 
 struct PartyData GetPartyData(object oPC){
@@ -200,6 +208,8 @@ struct PartyData GetPartyData(object oPC){
 	data.nNum = 0;
 	int nLvl = 0;
 	int nTotal = 0;
+	float fXPmodTemp;
+	float fXPmod = 0.0;
 	object oMember = GetFirstFactionMember(oPC, TRUE);
     while(GetIsObjectValid(oMember)){ 
 		if (GetArea(oMember) == oArea && !GetIsDM(oMember)){
@@ -208,10 +218,16 @@ struct PartyData GetPartyData(object oPC){
 			if (nLvl > data.nMax)
 				data.nMax = nLvl; 
 			nTotal += nLvl;
+			if (GetIsTester(oMember)){
+				fXPmodTemp = GetLocalFloat(oMember, "DM_XP_MOD");
+				if (fXPmodTemp > fXPmod) fXPmod = fXPmodTemp;
+			}
+	
 		}
         oMember = GetNextFactionMember(oPC, TRUE);     
 	}
- 
+	if (data.nNum >= 3) data.fXPmod = fXPmod;
+	else fXPmod = 0.0;
 	data.fAvg = IntToFloat(nTotal) / IntToFloat(data.nNum);
 	return data;
 }
@@ -246,22 +262,22 @@ float GetPartyXPBonus(float fAvgLevel, float fCR, int nNum){
 	return fPartyBoost * fPartySizeMult;
 }
 
-float GetBaseXP(float fLevel, float fCR, int nNum){
+float GetBaseXP(float fLevel, float fCR){
 	// if the level (whether party average or solo) is more than 25 higher than CR, 
 	// then no xp
-	if (fLevel - fCR > 25.0 && nNum == 1) return 0.0;
+	if (fLevel - fCR > 25.0) return 0.0;
 
-    float fPartyXP = BASEXP;
+    float fBaseXP = BASEXP;
 	
 	if (fCR != fLevel){
 		if(fCR > fLevel){
-			fPartyXP *= (1.0 + (1.8 * log(1.0 + fCR / fLevel) / 2.302));
+			fBaseXP *= (1.0 + (1.8 * log(1.0 + fCR / fLevel) / 2.302));
 		} else { //For lower CR give xp penalty
-			fPartyXP *= pow(0.905, fLevel - fCR);
+			fBaseXP *= pow(0.905, fLevel - fCR);
 		}
 	}
-	if (fPartyXP <= 0.0) fPartyXP = 1.0;
-    return fPartyXP;
+	if (fBaseXP <= 0.0) fBaseXP = 1.0;
+    return fBaseXP;
 }
 
 

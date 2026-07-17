@@ -70,15 +70,15 @@ string GetSortRelevant(object oPC, object oList, string sSORT)
 		case 1: sTXT = GetFirstName(oList);
 				break; //SortByName
 		case 2: sTXT = FactionIdToName(GetFaction(oList));
-				if (GetLocalInt(oESS,"KScry_Faction")==0&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
+				if (GetLocalInt(oESS,"KScry_Faction")== 0 && GetIsDM(oPC)==FALSE) nHIDDEN = 1;
 				break; //SortByFaction
 		case 3: sTXT = GetName(GetArea(oList));
-				if (GetLocalInt(oESS,"KScry_Location")==1&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
+				if (GetLocalInt(oESS,"KScry_Location") == 1 && GetIsDM(oPC)==FALSE) nHIDDEN = 1;
 				break; //SortByArea
 		case 4: nLVL = PS_GetLevel(oList);
 				sTXT = IntToString(nLVL);
 				if (nLVL < 10) sTXT = "0"+sTXT;
-				if (GetLocalInt(oESS,"KScry_Level")==0&&GetIsDM(oPC)==FALSE) nHIDDEN = 1;
+				if (GetLocalInt(oESS,"KScry_Level") == 1 && GetIsDM(oPC)==FALSE) nHIDDEN = 1;
 				break; //SortByLevel
 		case 5: sTXT = GetLocalString(oList, "KScry_Status");
 				if (sTXT == "") sTXT = "   ";

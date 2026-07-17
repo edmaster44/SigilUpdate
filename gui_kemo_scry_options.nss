@@ -37,8 +37,8 @@ void main(string sOPTION)
 		case 8: SetLocalInt(oESS, "KScry_Faction", 1); break; //Faction Shown
 		case 9: SetLocalInt(oESS, "KScry_Faction", 0); break; //Faction Hidden
 		case 10: SetLocalInt(oESS, "KScry_Faction", 2); break; //Faction Seek
-		case 11: SetLocalInt(oESS, "KScry_Level", 1); break; //Level Shown
-		case 12: SetLocalInt(oESS, "KScry_Level", 0); break; //Level Hidden
+		case 11: SetLocalInt(oESS, "KScry_Level", 0); break; //Level Shown
+		case 12: SetLocalInt(oESS, "KScry_Level", 1); break; //Level Hidden
 		case 13: SetLocalInt(oESS, "KScry_Location", 0); break; //Area Shown
 		case 14: SetLocalInt(oESS, "KScry_Location", 1); break; //Area Hidden
 		default: return; //Something wrong happened
