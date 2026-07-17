@@ -101,8 +101,11 @@ void ChangeList(int nANON, object oPC, object oList, string sRow, int nSTART)
 	string sPCLevel;
 	string sPCFaction;
 	string sPCArea;
-	if ((nPCLevel != 0)||(GetIsDM(oPC))) sPCLevel = IntToString(PS_GetLevel(oList));
-	else sPCLevel = "??";
+	if ((nPCLevel == 0)|| (GetIsDM(oPC))){
+		sPCLevel = IntToString(PS_GetLevel(oList));
+		int nECL = GetNewECL(oList);
+		if (nECL > 0) sPCLevel += " (+" +IntToString(nECL)+ ")";
+	} else sPCLevel = "??";
 	if ((nPCFaction == 0)&&(GetIsDM(oPC)==FALSE)) sPCFaction = "????";
 	else if (nPCFaction == 2) sPCFaction = "Seeking";
 	else sPCFaction = FactionIdToName(GetFaction(oList));
