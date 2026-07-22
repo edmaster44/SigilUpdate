@@ -206,6 +206,13 @@ void ED_ApplyFriendlySongEffectsToParty( object oCaster, int nSpellId, effect eL
 		    if(!HasBardSpell(nSpellId, oAnimal)) ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oAnimal, 35.0 );
 	   		else RefreshSpellEffectDurations(oAnimal, nSpellId, 35.0);
 		}
+
+		oAnimal = GetAssociate(ASSOCIATE_TYPE_HENCHMAN,oTarget);
+		if(GetIsObjectValidSongTarget(oAnimal) && !GetIsDead(oAnimal))
+		{
+		    if(!HasBardSpell(nSpellId, oAnimal)) ApplyEffectToObject( DURATION_TYPE_TEMPORARY, eLink, oAnimal, 35.0 );
+	   		else RefreshSpellEffectDurations(oAnimal, nSpellId, 35.0);
+		}
 		
 		oAnimal = GetAssociate(ASSOCIATE_TYPE_FAMILIAR,oTarget);
 		if(GetIsObjectValidSongTarget(oAnimal) && !GetIsDead(oAnimal))

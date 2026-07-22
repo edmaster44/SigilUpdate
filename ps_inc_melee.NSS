@@ -42,6 +42,7 @@ void ApplyEffectToGroup(object oCaster, int nSpellId, effect eLink, float fDurat
             GetArea(oTarget) == GetArea(oCaster));
 		
 		if (bTargetValid && bIsSong) bTargetValid = GetIsObjectValidSongTarget(oTarget);
+		
         
         // only check if the target is close enough to caster if fDistance is
         // non-zero and the previous check passed
