@@ -161,41 +161,41 @@ void PS_Feat_BG_CreateUndead(object oPC, int nSpell)
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eSummon, GetSpellTargetLocation(), HoursToSeconds(24));
     
 }
+/* TLK says
+Type of Feat: Class
+Prerequisite: Blackguard level 5.
+Specifics: Starting at 5th level, a blackguard may summon a fiendish dire rat to serve him. At 9th level, this ability improves and the fiendish dire rat becomes more powerful. The fiendish servant remains for 24 hours or until killed. This ability is on a 10 minute cooldown, but summoning a new one will replace the old.
+*/
 
-void PS_Feat_BG_FiendishServant(object oPC, int nSpell)
-{
-	int nLevel 			= GetLevelByClass(CLASS_TYPE_BLACKGUARD, oPC) ||KnightLevels(oPC);
-    int nCharLevel 		= GetTotalLevels(oPC,0);
-	object oItem		= GetItemPossessedBy(oPC,"ps_essence");
-	string sLA 			= GetLocalString(oItem, "ECL");
-	int nLA 			= StringToInt(sLA);
-	int nEffLevel = (nCharLevel + nLA);
+//TODO: Look up these creatures and decide at what lvl they should be given
+
+void PS_Feat_BG_FiendishServant(object oPC, int nSpell){
+	int nLevel 			= KnightLevels(oPC);
 	int iAlignmentLaw = GetAlignmentLawChaos(oPC);
 
 /*	Destroy any henchmen already commanded by the PC. This is required, as otherwise additional
 	summonned henchmen will appear as hostile and attempt to attack the PC or the existant henchman.	*/
-	object oOldHench= GetHenchman(oPC);
-	DestroyObject(oOldHench);
+	DestroyObject(GetHenchman(oPC));
 	string sCritter;
 	location lCaster = GetLocation(oPC);	
 	
- 	if (nLevel <= 8)
-    {	if (iAlignmentLaw == ALIGNMENT_LAWFUL)
-        	sCritter = "ps_summon_bgfiendl1";
+ 	if (nLevel <= 10){	
+		if (iAlignmentLaw == ALIGNMENT_LAWFUL)
+        	sCritter = "ps_summon_bgfiendl1"; // 10 hd
 		else
-        	sCritter = "ps_summon_bgfiendc1";	}
-	else
-	{	if (nEffLevel >= 25)
-		{	if (iAlignmentLaw == ALIGNMENT_LAWFUL)
-        		sCritter = "ps_summon_bgfiendl3";
+        	sCritter = "ps_summon_bgfiendc1";	
+	} else if (nLevel >= 16){	
+		if (iAlignmentLaw == ALIGNMENT_LAWFUL)
+        		sCritter = "ps_summon_bgfiendl3"; //17 hd
 			else
-        		sCritter = "ps_summon_bgfiendc3";	}
+        		sCritter = "ps_summon_bgfiendc3";	
+	} else {	
+		if (iAlignmentLaw == ALIGNMENT_LAWFUL)
+        		sCritter = "ps_summon_bgfiendl2"; //14 hd
 		else
-		{	if (iAlignmentLaw == ALIGNMENT_LAWFUL)
-        		sCritter = "ps_summon_bgfiendl2";
-			else
-        		sCritter = "ps_summon_bgfiendc2";	}
+       		sCritter = "ps_summon_bgfiendc2";	
 	}
+	
 
     object oHench = CreateObject(OBJECT_TYPE_CREATURE, sCritter, lCaster);
 	string sName = GetName(oHench);	

@@ -621,7 +621,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 11);
 			int nMessage = StringToInt(sMessage);
 			if (sMessage == ""){
-				sFeedback = "Heal scroll costs set to ";
 				float fHealScrollMod = GetLocalFloat(GetModule(), "HEAL_SEQ_COST_MOD");
 				if (fHealScrollMod == 0.0) sFeedback += "100%";
 				else sFeedback += PS_PrettyFloatString(fHealScrollMod * 100.0) +"%";
@@ -650,28 +649,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			}
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
-		}
-		else if (sInput == "#testcosmo"){
-			if (GetHasFeat(1255, oSender)){
-				FeatRemove(oSender, 1255);
-				SendMessageToPC(oSender, "Cosmo disable device removed");
-			} else {
-				FeatAdd(oSender, 1255, FALSE);
-				SendMessageToPC(oSender, "Cosmo disable device granted");
-			}
-			return TRUE;
-		
-		}
-		else if (sInput == "#testepicskill"){
-			if (GetHasFeat(594, oSender)){
-				FeatRemove(oSender, 594);
-				SendMessageToPC(oSender, "Epic skill focus hide removed");
-			} else {
-				FeatAdd(oSender, 594, FALSE);
-				SendMessageToPC(oSender, "Epic skill focus hide granted");
-			}
-			return TRUE;
-		
 		}
 	}
 
@@ -1211,7 +1188,8 @@ void DecrementXpModCalls(object oCarrier){
 int GetIsTester(object oPC){
 	int bIsTester = FALSE;
 	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
-	if (sName == "swordsaintmusashiden" || sName == "snailin8r" || sName == "unseen_boredom")
+	if (sName == "swordsaintmusashiden" || sName == "snailin8r" || sName == "unseen_boredom" ||
+		sName == "mereyn" || sName == "homicidal maniac")
 			bIsTester = TRUE;
 	if (GetHasAllAccess(oPC)) bIsTester = TRUE;
 	

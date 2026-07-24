@@ -103,8 +103,8 @@ void main(){
 	Demon = No Lawful, no Good = 2,4
 	*/
 	
-	int iAlign1	= Get2DAInt(s2da, "Align1", iRow);
-	int iAlign2	= Get2DAInt(s2da, "Align2", iRow);	
+	int iAlign1	= Get2DAInt(s2da, "Align1", iRow);  // law / chaos axis
+	int iAlign2	= Get2DAInt(s2da, "Align2", iRow);	//good / evil axis
 	int iAlignGood = GetAlignmentGoodEvil(oPC);
 	int iAlignLawful = GetAlignmentLawChaos(oPC);
 	

@@ -18,25 +18,171 @@
 	
 	EDIT 6/10/12—Agony Aunt's UMD bypass script added. Item restrictions will not be bypassable.
 */
+
+// -FlatteFifth, July 23, 2026. Sometimes items, particularly if they've been in bags, get their resource reference
+// truncated to 16 characters instead of 32. Added function GetIsSetItem() to include to determine whether an item 
+// belongs to a particular set even if the res refs are shortened. We don't actually need to get the full resref
+// because we can check by item slot and/or base item type. It's not like anyone can equip a bracer on their head.
  
 #include "ginc_ps_itemset"
 #include "ps_itemrestrict_inc"
 
+
+void main(){
+    object oPC      = GetPCItemLastEquippedBy();
+    object oItem    = GetPCItemLastEquipped();
+	RestrictItemUse(oItem, oPC);
+	int nSet 		= GetLocalInt(oItem,"vSetID");
+	string sNotice, sMessage;
+	int bDisplay = FALSE;
+	
+	switch (nSet){
+//////////////////////////////////////////////////////////////////////////////////////////
+//Sword Saint: Katana, Bracers, and Armor
+		case 1 :{
+			if (GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_ARMS, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_CHEST, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC), nSet)){
+					sNotice = "As your hand grips the katana's hilt, a sudden oneness with the blade is felt, ";
+					sNotice += "as if it were an extension of your will.";
+					sMessage = "Item Set Equipped: Blade of the Sword Saint";
+					bDisplay = TRUE;
+					SwordSaint1Enhanced(GetItemInSlot(INVENTORY_SLOT_RIGHTHAND,oPC));
+			}
+			break;
+		}
+//////////////////////////////////////////////////////////////////////////////////////////
+//Celestial Glory: Rings and Torc
+		case 2:{
+			if (GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_NECK, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oPC), nSet) &&
+				GetName(GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC)) != 
+				GetName(GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oPC))){
+					sNotice = "The rings' gems begin to glow with a soft blue light, before the torc echoes this,"; sNotice += " emanating an aura of peace and truth.";
+					sMessage = "Item Set Equipped: Celestial Glory";	
+					bDisplay = TRUE;
+					CelestialGloryEnhanced(GetItemInSlot(INVENTORY_SLOT_NECK, oPC));
+			}
+			break;
+		}
+//////////////////////////////////////////////////////////////////////////////////////////
+//Arboreal Archer: Gloves, Belt, and Bow
+		case 3:{
+			if (GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_ARMS, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_BELT, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC), nSet)){
+					sNotice = "Powerful magic courses through the bow, the shaped wood seeming to become ";
+					sNotice += "not only an extension of your hand, but of your mind.";
+					sMessage = "Item Set Equipped: Arboreal Archer";	
+					bDisplay = TRUE;
+					ArborealArcherEnhanced(GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC), oPC);
+			}
+		break;
+		}
+//////////////////////////////////////////////////////////////////////////////////////////
+//Fallen Shadow: Boots, Cloak, Helm, and Clothing
+		case 4:{
+			if (GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_BOOTS, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_HEAD, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_CHEST, oPC), nSet)){
+					sNotice = "Shadows begin to swirl about you, dappled darkness seeming to settle into your skin.";
+					sMessage = "Item Set Equipped: Legacy of Fallen Shadow";
+					bDisplay = TRUE;
+					FallenShadowsEnhanced(GetItemInSlot(INVENTORY_SLOT_CHEST, oPC));
+			}
+		break;
+		}
+//////////////////////////////////////////////////////////////////////////////////////////
+//Slaadskin: Boots, Cloak, and Gloves
+		case 5: {
+			if (GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_BOOTS, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_ARMS, oPC), nSet)){
+					sNotice = "A hideous, croaking roar sounds in your mind as the power of Chaos settles ";
+					sNotice += "into your very being.";
+					sMessage = "Item Set Equipped: Slaadskin";
+					bDisplay = TRUE;
+					SlaadskinEnhanced(GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC));
+			}
+		break;
+		}
+//////////////////////////////////////////////////////////////////////////////////////////
+//Iggwilv: Cloak, Bracers, and Helmet (Collar)
+		case 6:{
+			if (GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_HEAD, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_ARMS, oPC), nSet)){
+					if(GetAlignmentGoodEvil(oPC) == 4){
+						IggwilvEnhanced(GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC));
+						IggwilvVsGood(GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC));
+						sNotice = "A vision of demonic horror flashes before your eyes as the evil power ";
+						sNotice += " of the cloak envelops you, the sheer terror of it sapping your will.";
+					} else {	
+						IggwilvEnhanced(GetItemInSlot(INVENTORY_SLOT_CLOAK, oPC));
+						sNotice = "A vision of demonic horror flashes before your eyes as the evil power ";
+						sNotice += "of the cloak envelops you.";
+					}
+					bDisplay = TRUE;
+					sMessage = "Item Set Equipped: The Accoutrements of Iggwilv";	
+			}
+		break;
+		}
+//////////////////////////////////////////////////////////////////////////////////////////
+//Brazen: Armor, Helm, Gauntlets, and Boots
+		case 7:{
+			if (GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_BOOTS, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_ARMS, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_HEAD, oPC), nSet) &&
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_CHEST, oPC), nSet)){
+					sNotice = "Sudden fire whirls about you, settling into the pattern of the armor and ";
+					sNotice += "causing its glow to strengthen";
+					sMessage = "Item Set Equipped: Brazen Fireplate";
+					bDisplay = TRUE;
+					BrazenEnhanced(GetItemInSlot(INVENTORY_SLOT_CHEST, oPC));	
+			}
+		break;
+		}
+//////////////////////////////////////////////////////////////////////////////////////////
+//Fighter-Specific Set
+		case 8:{
+			if (GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_ARMS, oPC), nSet) &&
+				(GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC), nSet) ||
+				GetIsSetItem(GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oPC), nSet))){
+					sNotice = "Sudden fire whirls about you, settling into the pattern of the armor ";
+					sNotice += "and causing its glow to strengthen";
+					sMessage = "Item Set Equipped: Warlord's Bracers";	
+					bDisplay = TRUE;
+					FighterSpecEnhanced(GetItemInSlot(INVENTORY_SLOT_ARMS, oPC));
+			}
+			break;
+		}
+	}
+//////////////////////////////////////////////////////////////////////////////////////////
+
+	if (bDisplay){
+		SetNoticeText(oPC, sNotice);
+		SendMessageToPC(oPC, sMessage);	
+	}
+}
+
+
+/* old version
 void main()
 {
     object oPC      = GetPCItemLastEquippedBy();
     object oItem    = GetPCItemLastEquipped();
 	
 RestrictItemUse(oItem, oPC);
-switch (GetLocalInt(oItem,"vSetID"))
-{	
+switch (GetLocalInt(oItem,"vSetID")){	
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //Sword Saint: Katana, Bracers, and Armor
 
-case 1 :
+	case 1 :
 
-if (
+	if (
 	TRUE
 	&& GetResRef(GetItemInSlot(INVENTORY_SLOT_ARMS,oPC)) == "ps_itemset_swordsaint2" 
 	&& GetResRef(GetItemInSlot(INVENTORY_SLOT_CHEST,oPC)) == "ps_itemset_swordsaint3" 
@@ -213,3 +359,4 @@ break;
 }
 
 }
+*/

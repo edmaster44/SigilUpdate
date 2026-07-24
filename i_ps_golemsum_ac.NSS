@@ -10,26 +10,44 @@
 
 #include "ps_inc_golem"
 
+string GetNonGMgolem(string sGolem);
+
 void main()
 {
 	object oPC		= GetItemActivator();
 	object oItem	= GetItemActivated();
-	// Collect variable from the calling item to determine what will be summonned
-	string sGolem	= GetLocalString(oItem, "golem");
-	location oLoc 	= GetItemActivatedTargetLocation();
-
 	// If the PC already has a creature in the henchman slot (golem or not), it will be unsummoned (destroyed). This
 	// removes the need for an unsummon widget, as well as clearing out additional henchman before creating the golem.
+	// NOTE: It does NOT remove the need for the unsummon widget unless we want people just wandering around in rp
+	// areas with their golems 24/7.  -FlattedFifth, July 23, 2026
 	if (GetHenchman(oPC) != OBJECT_INVALID)
 	{	
 		object oHENCH = GetHenchman(oPC);
 		RemoveHenchman(oPC, oHENCH);
 		DestroyObject(oHENCH, 0.5);
-		if (GetResRef(oHENCH) == sGolem) return;
-		else if (GetTag(oHENCH) == sGolem) return;
 	}
+	
+	// Collect variable from the calling item to determine what will be summonned
+	// AND make sure that the resulting HD of the golem is 23 or less for non- golem masters. -FF
+	string sGolem	= GetLocalString(oItem, "golem");
+	location oLoc 	= GetItemActivatedTargetLocation();
+	if (GetLevelByClass(77, oPC) < 1) sGolem = GetNonGMgolem(sGolem); // get reduced hd string for non gm
+	
 
 	// Create the new henchman as an object
 	object oGolem = CreateObject(OBJECT_TYPE_CREATURE, sGolem, oLoc);
 	DelayCommand(0.5, AdjustGolem(oPC, oGolem, oItem));			
+}
+
+string GetNonGMgolem(string sGolem){
+
+	if (sGolem == "ps_gmg_bone_3") return "ps_gmg_bone_2";
+	else if (sGolem == "ps_gmg_brain_3") return "ps_gmg_brain_2";
+	else if (sGolem == "ps_gmg_crystal_3") return "ps_gmg_crystal_2";
+	else if (sGolem == "ps_gmg_demon_3") return "ps_gmg_demon_2";
+	else if (sGolem == "ps_gmg_hellfire_2" || sGolem == "ps_gmg_hellfire_3") return "ps_gmg_hellfire_1";
+	else if (sGolem == "ps_gmg_woodwraith_3" || sGolem == "ps_gmg_woodwraith_2") return "ps_gmg_woodwraith_1";
+	else if (sGolem == "ps_gmg_valor_3") return "ps_gmg_valor_2";
+	
+	return sGolem;
 }

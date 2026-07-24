@@ -414,6 +414,9 @@ void HSS_PCTools_ApplyVFX(object oPC, string sVFX);
 //removes (destroys) a placeable created by PC Tools (tent or campfire)
 void HSS_PCTools_Remove(object oPC, int nObject);
 
+//destroys henchman
+void ReleaseHenchman(object oPC);
+
 //Function handles the execution of code for the 9 custom buttons.
 //See the function implementation to add your own code for the behaviour
 //of these buttons.  Set their display name via the constants above.
@@ -486,8 +489,6 @@ void HSS_PCTools_StartTimer(object oPC, int nTime, string sLabel, string sAlarm)
 void HSS_PCTools_DisplayMessageBox(object oPC, string sMsg, int nOkCB, int nCancelCB, int bShowCancel = TRUE, string sOk = "Yes", string sCancel = "No");
 
 
-
-
 void main(string sParamString1, int nParamInt, float fParamFloat, string sParamString2, string sParamString3, int nParamInt2, float fParamFloat2, float fParamFloat3, float fParamFloat4)
 {
    object oPC = OBJECT_SELF;
@@ -501,11 +502,7 @@ void main(string sParamString1, int nParamInt, float fParamFloat, string sParamS
 		switch (nParamInt){
 			case 1: DoReleaseSpells(oPC); break;
 			case 2: ReleaseCalledCreatures(oPC); break;
-			default:{
-				DoReleaseSpells(oPC);
-				ReleaseCalledCreatures(oPC);
-				break;
-			}
+			default: ReleaseHenchman(oPC); break;
 		}
 		return;
 	}
@@ -3378,6 +3375,16 @@ void HSS_PCTools_StartTimer(object oPC, int nTime, string sLabel, string sAlarm)
 	  FadeToBlack(oPC, FADE_SPEED_FASTEST, 0.2, 16711680);
 	  DelayCommand(1.0, FadeToBlack(oPC, FADE_SPEED_FASTEST, 0.2, 16711680));	  
 	  }				   
+}
+
+void ReleaseHenchman(object oPC){
+	object oHench = GetHenchman(oPC);
+	if (oHench != OBJECT_INVALID){	
+		RemoveHenchman(oPC, oHench);
+		DestroyObject(oHench, 0.5);
+	} else {
+		SendMessageToPC(oPC, "No henchman found");
+	}
 }
 
 void HSS_PCTools_DisplayMessageBox(object oPC, string sMsg, int nOkCB, int nCancelCB, int bShowCancel = TRUE, string sOk = "Yes", string sCancel = "No")

@@ -1,5 +1,5 @@
 
-
+#include "ginc_ps_itemset"
 #include "ps_inc_newenchanting"
 
 void PlayEnchantingAnimation(object oPC) {
@@ -25,12 +25,11 @@ void main () {
 	
 	// make sure the item being targeted is not the member of an itemset that receives the set bonuses
 	// because the item sets strip all enchants off of one item to replace it with the set enchants
-	string sRef = GetResRef(oTarget);
-	if (sRef == "ps_itemset_swordsaint1" || sRef == "ps_itemset_celglory1" || sRef == "ps_itemset_aarcher3"
-		 || sRef == "ps_itemset_fallshad4" || sRef == "ps_itemset_slaadskin2" || sRef == "ps_itemset_iggwilv1"
-		 || sRef == "ps_itemset_brazen1" || sRef == "ps_itemset_fighter1"){
+	if (GetTag(oTarget) == "ps_itemset"){
+		if (GetIsItemSetKey(oTarget)){
 			SendMessageToPC(oPC, "This item cannot be enchanted.");
 			return; 
+		}
 	}
 	
 	CloseGUIScreen(oPC, sEnchantingScreen);

@@ -18,11 +18,74 @@
 
 // -FlatteFifth, Jan 30, 2026. Gave 5 dodge AC to all sets that include boots with no AC, boosted
 // set properties that are lower than crafted max to be equal to crafted max (5 ability score instead of 4, etc)
+// -FlatteFifth, July 23, 2026. Sometimes items, particularly if they've been in bags, get their resource reference
+// truncated to 16 characters instead of 32. Added function GetIsSetItem() to determine whether an item belongs
+// to a particular set even if the res refs are shortened.  We don't actually need to get the full resref
+// because we can check by item slot and/or base item type. It's not like anyone can equip a bracer on their head.
+ 
 #include "x2_inc_itemprop"
 
 const int SET_DODGE_EFFECT_ID = 8675309; //Jenny's number
+const int SET_SWORD_SAINT 	=	1;
+const int SET_CELESTIAL		= 	2;
+const int SET_ARBOREAL		= 	3;
+const int SET_FALLEN_SHADOW	=	4;
+const int SET_SLAAD			= 	5;
+const int SET_IGGY			= 	6;
+const int SET_BRAZEN		= 	7;
+const int SET_FIGHTER		=	8;
+
+
 void ApplySetBootsAC(object oItem, int nBonus);
 void RemoveSetBootsAC(object oItem);
+int GetIsSetItem(object oItem, int nSet);
+
+//this function determines if the item is the item that gets the enchantments.
+// This is used in i_ps_enchantmentfocus_ac.nss to prevent players from wasting
+// coin and materials enchanting set items that have their item properties reset
+int GetIsItemSetKey(object oItem){
+	int nItem = GetBaseItemType(oItem);
+	int nSet = GetLocalInt(oItem,"vSetID");
+	switch (nSet){
+		case SET_SWORD_SAINT: if (GetIsSetItem(oItem, nSet) && nItem == BASE_ITEM_KATANA) return TRUE;
+		case SET_CELESTIAL: if (GetIsSetItem(oItem, nSet) && nItem == BASE_ITEM_AMULET) return TRUE;
+		case SET_ARBOREAL: if (GetIsSetItem(oItem, nSet) && nItem == BASE_ITEM_LONGBOW) return TRUE;
+		case SET_FALLEN_SHADOW: if (GetIsSetItem(oItem, nSet) && nItem == BASE_ITEM_ARMOR) return TRUE;
+		case SET_SLAAD: if (GetIsSetItem(oItem, nSet) && nItem == BASE_ITEM_CLOAK) return TRUE;
+		case SET_IGGY: if (GetIsSetItem(oItem, nSet) && nItem == BASE_ITEM_CLOAK) return TRUE;
+		case SET_BRAZEN: if (GetIsSetItem(oItem, nSet) && nItem == BASE_ITEM_ARMOR) return TRUE;
+		case SET_FIGHTER: if (GetIsSetItem(oItem, nSet) && nItem == BASE_ITEM_BRACER) return TRUE;
+	}
+	return FALSE;
+}
+
+// This function determines if the item belongs to the given set. I've noticed that
+// somehow items resource references are sometimes getting truncated to 16 characters
+// so we will test against the first 16 characters and the item's name
+int GetIsSetItem(object oItem, int nSet){
+	
+	string sRef = GetResRef(oItem);
+	// first 11 will always be "ps_itemset_"
+	if (GetStringLeft(sRef, 11) != "ps_itemset_")
+		return FALSE;
+	//get the first 16 characters of the resource reference
+	sRef = GetStringLeft(sRef, 16);
+	//now remove the first 11 since we already established what they are
+	sRef = GetStringRight(sRef, 5);
+	string sPattern;
+	switch (nSet){
+		case SET_SWORD_SAINT: sPattern = "sword"; break;
+		case SET_CELESTIAL: sPattern = "celgl"; break;
+		case SET_ARBOREAL: sPattern = "aarch"; break;
+		case SET_FALLEN_SHADOW: sPattern = "falls"; break;
+		case SET_SLAAD: sPattern = "slaad"; break;
+		case SET_IGGY: sPattern = "iggwi"; break;
+		case SET_BRAZEN: sPattern = "braze"; break;
+		case SET_FIGHTER: sPattern = "fight"; break;
+	}
+	if (sRef == sPattern) return TRUE;
+	return FALSE;
+}
 
 
 /* ///////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +124,7 @@ void CelestialGloryEnhanced(object oItem) //amulet
 	IPSafeAddItemProperty(oItem, ItemPropertyLimitUseBySAlign(IP_CONST_ALIGNMENT_LG),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 	IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1272),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 	IPSafeAddItemProperty(oItem, ItemPropertyAbilityBonus(ABILITY_CHARISMA, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
-	IPSafeAddItemProperty(oItem, ItemPropertyRegeneration(1),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+	IPSafeAddItemProperty(oItem, ItemPropertyRegeneration(2),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 }
 
 void CelestialGloryStandard(object oItem) //amulet
@@ -211,7 +274,7 @@ void BrazenEnhanced(object oItem) //armor
 		IPSafeAddItemProperty(oItem, ItemPropertyBonusFeat(1171),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyLight(3, 5),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		IPSafeAddItemProperty(oItem, ItemPropertyDamageVulnerability(7, 3),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
-		IPSafeAddItemProperty(oItem, ItemPropertyVampiricRegeneration(2), 0.0f, X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
+		IPSafeAddItemProperty(oItem, ItemPropertyRegeneration(2),0.0f,X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, TRUE, FALSE);
 		
 		ApplySetBootsAC(oItem, 2);
 }
