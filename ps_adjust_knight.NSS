@@ -83,13 +83,13 @@ void PS_KnightLevels(object oPC){
 		if (iTotal >= 4){
 	  		FeatAdd(oPC,FEAT_TURN_UNDEAD,FALSE,FALSE,FALSE);// Turn Undead, Paladin Path
 		}
+		if (iTotal >= 5){
+	  		FeatAdd(oPC,2836,FALSE,FALSE,FALSE);// Armor Optimization, Paladin Path
+		}
 		if (iTotal >= 6){
 	  		FeatAdd(oPC,FEAT_REMOVE_DISEASE,FALSE,FALSE,FALSE);// Remove Disease, Paladin Path
 		}
-		if (iTotal >= 7){
-	  		FeatAdd(oPC,2836,FALSE,FALSE,FALSE);// Armor Optimization, Paladin Path
-		}
-		if (iTotal >= 14){
+		if (iTotal >= 15){
 	  		FeatAdd(oPC,2837,FALSE,FALSE,FALSE);// Greater Armor Optimization, Paladin Path
 		}
 	  	if (iTotal >= 21){

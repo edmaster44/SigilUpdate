@@ -19,7 +19,9 @@ void Armor_of_the_crocodile(object oPC, int nSpell){
 		default: nCrocAC = 4; break;
 	}
 	nCrocAC = nCrocAC - GetUnarmoredAC(oPC); //doesn't stack with duelist, invis blade, monk, or mystic
-
+	
+	// note that this also doesn't stack with dodge AC from Gatecrasher, but in that case
+	// you get this instead of the Gatecrasher AC, as scripted in the impact script for it
 	if (!GetHasFeat(2936, oPC, TRUE) || nCrocAC < 1){
 		if (GetHasFeat(FEAT_CROC_ARMOR_AC_4, oPC, TRUE))
 			FeatRemove(oPC, FEAT_CROC_ARMOR_AC_4);

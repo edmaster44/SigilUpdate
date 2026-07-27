@@ -156,22 +156,6 @@ void FF_WingFix(object oPC){
 		FeatAdd(oPC, 21905, FALSE, FALSE, TRUE);
 }
 
-// error on my part caused half outsiders to not get their path feat at lvl 3 if
-// they already had it enchanted on an item. I corrected it in AdjustHalfOutsider()
-// and then put this here so that affected players will not have to rebuild
-// -Flatted Fifth, July 11, 2026
-void CorrectHalfOutsiderOversight(object oPC){
-	if (GetLevelByClass(62, oPC) < 3) return;
-	if (GetHasFeat(3034, oPC)){ //path of strength
-		FeatAdd(oPC, 28, FALSE); // power attack
-	} else if (GetHasFeat(3038, oPC) || GetHasFeat(3039, oPC) || 
-		GetHasFeat(3040, oPC)){// mental ability paths
-			FeatAdd(oPC, 7, FALSE);  // combat casting
-	} else if (GetHasFeat(2987, oPC)){
-		FeatAdd(oPC, 40, FALSE);
- 	}
-}
-
 void AdjustHalfUndead(object oPC, int nLastLevel){
 	
 	if (nLastLevel == 1){
@@ -264,7 +248,14 @@ void AdjustHalfOutsider(object oPC, int nLastLevel){  //half outsider template
  	} else if (nLastLevel == 1 && !GetHasFeat(2537, oPC) && !GetHasFeat(2538, oPC)){
 		if (GetHasFeat(81, oPC) && GetHasFeat(86, oPC)){ // if has both backgrounds
 			int nSub = GetSubRace(oPC);
-			if (nSub == RACIAL_SUBTYPE_TIEFLING){
+			// if user set path ahead of time with chat command available 
+			// to characters with both history feats
+			string sPreset = GetLocalString(oEss, "HOpathPreset");
+			if (sPreset != ""){
+				if (sPreset == "fiend") SetHoHeritage(oPC, oEss, "HalfFiend");
+				else if (sPreset == "celestial") SetHoHeritage(oPC, oEss, "HalfCelestial");
+				DeleteLocalString(oEss, "HOpathPreset");
+			} else if (nSub == RACIAL_SUBTYPE_TIEFLING){
 				if (GetAlignmentGoodEvil(oPC) != ALIGNMENT_EVIL) SetHoHeritage(oPC, oEss, "HalfCelestial");
 				else SetHoHeritage(oPC, oEss, "HalfFiend");
 			} else if (nSub == RACIAL_SUBTYPE_AASIMAR){

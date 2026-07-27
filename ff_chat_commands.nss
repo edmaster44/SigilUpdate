@@ -71,6 +71,31 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
+	// manually set Half Outsider path, ONLY works for characters who have BOTH
+	// backgrounds AND have not yet gained any levels of Half Outsider
+	else if (GetStringLeft(sInput, 10) == "#sethopath"){
+		if (GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oSender) > 0){
+			sFeedback = "You must use this command BEFORE taking any levels of Half Outsider";
+			sFeedback += " and ONLY if you have BOTH bloodline history feats";
+		} else if (GetHasFeat(81, oSender) && GetHasFeat(86, oSender)){ // if has both backgrounds
+			oItem = PS_GetEssence(oSender);
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 10);
+			sFeedback = "Half-Outsider Path preset to ";
+			if (sMessage == "fiendish" || sMessage == "fiend"){
+				SetLocalString(oItem, "HOpathPreset", "fiend");
+				sFeedback += " Fiendish";
+			} else if (sMessage == "celestial"){
+				SetLocalString(oItem, "HOpathPreset", "celestial");
+				sFeedback += " Celestial";
+			}
+		} else {
+			sFeedback = "You can only use this command if you have both the fiendish ";
+			sFeedback += " and celestial Outsider Bloodline history feats";
+			sFeedback += " and BEFORE taking any levels of Half-Outsider";
+		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	// #shout command to send a message to everyone in case server needs to come down and you're not logged
 	// in as dm. Only myself and admin staff, as only ppl who have the ability to update server need this.
 	// Did not enable shout channel directly for these users because if I did then I'm sure I would shout
@@ -509,6 +534,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		if (GetStringLeft(sInput, 9) == "#giveitem"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 9);
 			CreateItemOnObject(sMessage, oSender);
+			return TRUE;
 		}
 		else if (GetStringLeft(sInput, 12) == "#healwandmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 12);
@@ -526,6 +552,17 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			}
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 9) == "#wingtest"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 9);
+			int nWing = StringToInt(sMessage);
+			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
+			app.WingVariation = nWing;
+			PS_SetCreatureCoreAppearance(oSender, app);
+			ServerExts_RefreshCreatureAppearance(oSender, oSender);
+			return TRUE;
+		
+		
 		}
 		else if (GetStringLeft(sInput, 9) == "#tailtest"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 9);
