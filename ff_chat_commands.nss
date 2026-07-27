@@ -506,7 +506,11 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	// LOT of copy-paste bs here but I'm just going to remove these once we have 
 	// some good numbers. -FlattedFifth
 	if (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-		if (GetStringLeft(sInput, 12) == "#healwandmod"){
+		if (GetStringLeft(sInput, 9) == "#giveitem"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 9);
+			CreateItemOnObject(sMessage, oSender);
+		}
+		else if (GetStringLeft(sInput, 12) == "#healwandmod"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 12);
 			int nMessage = StringToInt(sMessage);
 			if (sMessage == ""){

@@ -107,6 +107,22 @@ void PS_ManageImbueItem(object oPC);
 void ClassOneShotAdjustments(object oPC);
 void AdjustHalfOutsider(object oPC, int nLastLevel);
 void FF_WingFix(object oPC);
+void ManageAppearance(object oPC);
+void GrantArmorOptByBAB(object oPC);
+
+// To avoid a "feat tax" situation, we're now granting armor optimization
+// feats once the character reaches a certain level of martial skill measured
+// by base attack bonus
+void GrantArmorOptByBAB(object oPC){
+	if (GetBaseAttackBonus(oPC) >= 6 && !GetHasFeat(2836, oPC) && 
+		!GetHasFeat(2837, oPC) && !GetHasFeat(2838, oPC))
+			FeatAdd(oPC, 2836, FALSE, FALSE, TRUE);
+	if (GetBaseAttackBonus(oPC) >= 16 && 
+		!GetHasFeat(2837, oPC) && !GetHasFeat(2838, oPC))
+			FeatAdd(oPC, 2837, FALSE, FALSE, TRUE);
+	if (GetBaseAttackBonus(oPC) >= 26 && !GetHasFeat(2838, oPC))
+			FeatAdd(oPC, 2838, FALSE, FALSE, TRUE);
+}
 
 void ManageAppearance(object oPC){
 	object oEss	= GetItemPossessedBy(oPC,"ps_essence");	
