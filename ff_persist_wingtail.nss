@@ -52,14 +52,10 @@ void main(){
 	//SendMessageToPC(oPC, "Wing Set to " + IntToString(nWing));
 	
 	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
-	if (nWing != app.WingVariation || nTail != app.TailVariation){
-		app.WingVariation = nWing;
-		app.TailVariation = nTail;
-		PS_SetCreatureCoreAppearance(oPC, app);
-		PS_RefreshAppearance(oPC);
-		PS_SetCreatureCoreAppearance(oPC, app);
-	ServerExts_RefreshCreatureAppearance(oPC,oPC);
-	}
+	app.WingVariation = nWing;
+	app.TailVariation = nTail;
+	PS_SetCreatureCoreAppearance(oPC, app);
+	PS_RefreshAppearance(oPC);
 }
 
 void SetRacialWing(object oPC, object oEss){
