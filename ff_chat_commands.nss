@@ -362,7 +362,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	}
 	else if (sInput == "#vfxfiend"){
 		if (GetLevelByClass(CLASS_TYPE_WARLOCK, oSender) < 1 &&
-			GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oSender) < 1){
+			GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oSender) < 1){
 				sFeedback = "This command does nothing unless you are a Warlock";
 				sFeedback += " or Half-Outsider";
 		} else {
