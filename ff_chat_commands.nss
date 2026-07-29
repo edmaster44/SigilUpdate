@@ -412,7 +412,24 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	}
 	//THE FOLLOWING ARE DEBUGGING COMMANDS THAT ONLY WORK IF USED BY A DM OR ON THE TEST SERVER
 	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") || GetIsDM(oSender)){
-		if (sInput == "#testcraftcost"){
+		if (sInput == "#vfxgreen"){
+			effect eVFX = EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN");	
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSender, 300.0);
+
+		} else if (sInput == "#vfxfiend"){
+			effect eVFX = EffectNWN2SpecialEffectFile("FX_SE_SPIRIT_EMERGE_LOOP");	
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSender, 300.0);
+
+		} else if (sInput == "#vfxhell"){
+			effect eVFX = EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS");	
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSender, 300.0);
+
+		}  else if (sInput == "#vfxfire"){
+			effect eVFX = EffectNWN2SpecialEffectFile("FX_ASHFIRE_2");	
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSender, 300.0);
+
+		}
+		else if (sInput == "#testcraftcost"){
 			if (GetLocalInt(oSender, "TestCraftCost")){
 				SetLocalInt(oSender, "TestCraftCost", FALSE);
 				sFeedback = "Turning off craft costs.";
