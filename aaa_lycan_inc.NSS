@@ -281,6 +281,9 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 		
 		if (GetLocalInt(oItem, "VFX_LYCAN")){
 			PS_RestoreOriginalAppearance(oPC);
+			string sVFXmessage = "The power of your hybrid form surges through your body, but you manage to ";
+			sVFXmessage += " channel the strength without changing form.";
+			SendMessageToPC(oPC, sVFXmessage);
 			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("VFX_DUR_BOND_OF_FATAL_TOUCH", oPC), eLink);
 			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN", oPC), eLink);
 			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN_B", oPC), eLink);

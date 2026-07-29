@@ -4901,6 +4901,9 @@ void FiendformBoni(object oPC, string sVFX = "", int bAltVFX = FALSE) {
     
 	if (bAltVFX){
 		PS_RestoreOriginalAppearance(oPC);
+		string sVFXmessage = "The powers of the Abyss surge through your body, but you manage to ";
+		sVFXmessage += " channel the strength without changing form.";
+		SendMessageToPC(oPC, sVFXmessage);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_A_SPIRIT_EMERGE_LOOP"), eBoost);
 	}
