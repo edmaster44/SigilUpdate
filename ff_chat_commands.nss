@@ -555,11 +555,26 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		}
 	}
 	//end trusted player only debug commands
-	//testers and test server only commands to adjust crafting consumable costs.
+	//testers and test server only commands to adjust crafting consumable costs and various other tasks.
 	// LOT of copy-paste bs here but I'm just going to remove these once we have 
 	// some good numbers. -FlattedFifth
 	if (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-		if (GetStringLeft(sInput, 9) == "#giveitem"){
+		if (GetStringLeft(sInput, 14) == "#setappearance"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 14);
+			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
+			app.AppearanceType = StringToInt(sMessage);
+			PS_SetCreatureCoreAppearance(oSender, app);
+			ServerExts_RefreshCreatureAppearance(oSender, oSender);
+			SetLocalInt(PS_GetEssence(oSender), "TempChange", TRUE);
+			return TRUE;
+		}
+		else if (sInput == "#resetappearance"){
+			PS_RestoreOriginalAppearance(oSender);
+			PS_RefreshAppearance(oSender);
+			SetLocalInt(PS_GetEssence(oSender), "TempChange", FALSE);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 9) == "#giveitem"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 9);
 			CreateItemOnObject(sMessage, oSender);
 			return TRUE;
