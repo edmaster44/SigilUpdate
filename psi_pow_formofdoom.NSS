@@ -98,6 +98,7 @@ void main()
 	eLink = EffectLinkEffects(EffectMovementSpeedIncrease(33), eLink);
 	eLink = EffectLinkEffects(EffectSkillIncrease(SKILL_INTIMIDATE, 10), eLink);
 	eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("psi_sp__form_of_doom.sef"), eLink);
+	eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_SPIRIT_EMERGE_LOOP"), eLink);
 	eLink = SetEffectSpellId(eLink,nId);
 	float fDuration = 6.0f * (manif.nManifesterLevel);
 	if(manif.bExtend) fDuration *= 2;
