@@ -74,6 +74,7 @@ void main() {
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 	if (nSpell == 1721) { //Demon
 		if (GetLocalInt(PS_GetEssence(oCaster), "VFX_FIENDFORM")){
+			PS_RestoreOriginalAppearance(oCaster);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 			AddPolymorphBoni(oCaster, "fx_f_beetle_eyes", TRUE);
 			return;

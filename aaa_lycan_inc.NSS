@@ -280,8 +280,11 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 	{	//FeatAdd (oPC, 289, FALSE);
 		
 		if (GetLocalInt(oItem, "VFX_LYCAN")){
-			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("VFX_DUR_BOND_OF_FATAL_TOUCH"), eLink);
-			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN"), eLink);
+			PS_RestoreOriginalAppearance(oPC);
+			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("VFX_DUR_BOND_OF_FATAL_TOUCH", oPC), eLink);
+			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN", oPC), eLink);
+			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN_B", oPC), eLink);
+			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN", oPC), eLink);
 		} else {
 			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 			app.AppearanceType = nAfflict;

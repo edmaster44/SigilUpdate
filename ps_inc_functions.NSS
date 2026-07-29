@@ -4900,6 +4900,7 @@ void FiendformBoni(object oPC, string sVFX = "", int bAltVFX = FALSE) {
         eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile(sVFX), eBoost);
     
 	if (bAltVFX){
+		PS_RestoreOriginalAppearance(oPC);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_A_SPIRIT_EMERGE_LOOP"), eBoost);
 	}
