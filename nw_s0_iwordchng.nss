@@ -29,7 +29,7 @@ void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appeara
 
 struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID);
 
-void AddPolymorphBoni(object oCaster, string sVFX = "");
+void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE);
 
 void main() {
 
@@ -73,7 +73,11 @@ void main() {
 	
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 	if (nSpell == 1721) { //Demon
-	
+		if (GetLocalInt(PS_GetEssence(oCaster), "VFX_FIENDFORM")){
+			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+			AddPolymorphBoni(oCaster, "fx_f_beetle_eyes", TRUE);
+			return;
+		}
 		AddPolymorphBoni(oCaster, "fx_f_beetle_eyes");
 		struct CreatureCoreAppearance Appearance = GetPolymorphAppearance("ps_polymorph_warlockdemon", oCaster);
 		
@@ -141,7 +145,7 @@ void main() {
 	
 }
 
-void AddPolymorphBoni(object oCaster, string sVFX = "") {
+void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE){
 	effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
 	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
 	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
@@ -155,6 +159,11 @@ void AddPolymorphBoni(object oCaster, string sVFX = "") {
 	
 	if (sVFX != "") {
 		eBoost = EffectLinkEffects(eBoost, EffectNWN2SpecialEffectFile(sVFX));
+	}
+	
+	if (bVFXonly){
+		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);
+		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_A_SPIRIT_EMERGE_LOOP"), eBoost);
 	}
 		
 	eBoost = SetEffectSpellId(eBoost, 843);

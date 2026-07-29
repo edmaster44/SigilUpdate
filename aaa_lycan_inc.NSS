@@ -277,12 +277,18 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 		//FeatRemove(oPC, 289);
 	}
 	else 
-	{	FeatAdd (oPC, 289, FALSE);
-		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+	{	//FeatAdd (oPC, 289, FALSE);
+		
+		if (GetLocalInt(oItem, "VFX_LYCAN")){
+			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("VFX_DUR_BOND_OF_FATAL_TOUCH"), eLink);
+			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN"), eLink);
+		} else {
+			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 			app.AppearanceType = nAfflict;
 			PS_SetCreatureCoreAppearance(oPC, app);
-		SetLocalInt(oItem, "TempChange", 1);
-		PS_RefreshAppearance(oPC);
+			SetLocalInt(oItem, "TempChange", 1);
+			PS_RefreshAppearance(oPC);
+		}
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		SetLocalInt(oItem, "Hybrid", 1);

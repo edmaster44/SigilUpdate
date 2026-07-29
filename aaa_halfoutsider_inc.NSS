@@ -419,7 +419,7 @@ void PS_HOM_CrownOfFlame(object oPC, int nSpell)
 
 void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 {
-		//No polymorphing while discorporated
+	//No polymorphing while discorporated
 	if (GetHasSpellEffect(SPELL_I_DARK_DISCORPORATION)) {
 		SendMessageToPC(oPC, "You may not use Fiendform while Discorporated.");
 		return; 
@@ -462,12 +462,16 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			} else eEffect = GetNextEffect( oPC );
 		}
 	}
-	
+	if (GetLocalInt(PS_GetEssence(oPC), "VFX_FIENDFORM")){
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+		FiendformBoni(oPC,"fx_f_beetle_eyes", TRUE);
+		return;
+	}
+	FiendformBoni(oPC,"fx_f_beetle_eyes");	
 	int nGender = GetGender(oPC);
 	if (nLevel >= 23)
 	{	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL) {
-		
-			FiendformBoni(oPC,"fx_f_beetle_eyes");	
+	
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_polymorph_warlockdevil", oPC);
 			Appearance.Gender = nGender;
 			if (nGender == GENDER_FEMALE){
@@ -483,7 +487,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		}	//Greater Baatezu
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC) {
 			
-			FiendformBoni(oPC,"fx_f_beetle_eyes");
+			
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_polymorph_warlockdemon", oPC);
 			Appearance.Gender = nGender;
 			if (nGender == GENDER_FEMALE){
@@ -501,7 +505,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		}	//Greater Tanar'ri
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
 		{	
-			FiendformBoni(oPC,"fx_f_beetle_eyes");	
+			
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugolothnew", oPC);
 			if (nGender == GENDER_FEMALE){
 				Appearance.WingVariation = 2;
@@ -516,7 +520,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
     else
 	{	if (GetAlignmentLawChaos(oPC) == ALIGNMENT_LAWFUL)
 		{	
-			FiendformBoni(oPC,"fx_f_beetle_eyes");
+			
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_polymorph_warlockdevil", oPC);
 			Appearance.Gender = nGender;
 			if (nGender == GENDER_FEMALE){
@@ -531,7 +535,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		}	//Lesser Baatezu
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC)
 		{	
-			FiendformBoni(oPC,"fx_f_beetle_eyes");
+			
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_polymorph_warlockdemon", oPC);
 			Appearance.Gender = nGender;
 			if (nGender == GENDER_FEMALE){
@@ -547,7 +551,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 		}	//Lesser Tanar'ri
 		else if(GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
 		{	
-			FiendformBoni(oPC,"fx_f_beetle_eyes");	 //Lesser Yugoloth
+		 //Lesser Yugoloth
 			struct CreatureCoreAppearance Appearance = GetNewFormAppearance("ps_fiendform_yugolothnew", oPC);
 			if (nGender == GENDER_FEMALE){
 				Appearance.WingVariation = 2;

@@ -347,6 +347,34 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
+	else if (sInput == "#vfxlycan"){
+		if (GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oSender) < 1){
+				sFeedback = "This command does nothing unless you are a Lycan";
+		} else {
+			oItem = PS_GetEssence(oSender);
+			int bVFXLycan = !GetLocalInt(oItem, "VFX_LYCAN");
+			if (bVFXLycan) sFeedback = "Setting hybrid form to use vfx only";
+			else sFeedback = "Setting hybrid form to use default appearance";
+			SetLocalInt(oItem, "VFX_LYCAN", bVFXLycan);
+		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
+	else if (sInput == "#vfxfiend"){
+		if (GetLevelByClass(CLASS_TYPE_WARLOCK, oSender) < 1 &&
+			GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oSender) < 1){
+				sFeedback = "This command does nothing unless you are a Warlock";
+				sFeedback += " or Half-Outsider";
+		} else {
+			oItem = PS_GetEssence(oSender);
+			int bVFXFiend = !GetLocalInt(oItem, "VFX_FIENDFORM");
+			if (bVFXFiend) sFeedback = "Setting FiendForm to use vfx only";
+			else sFeedback = "Setting Fiendform to use default appearance";
+			SetLocalInt(oItem, "VFX_FIENDFORM", bVFXFiend);
+		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	else if (sInput == "#togglewings"){
 		if (GetRacialType(oSender) == 11 && GetLevelByClass(49, oSender) < 1){//allow half drag to use but not full
 			sFeedback = "This command cannot be used by dragons";
@@ -412,24 +440,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	}
 	//THE FOLLOWING ARE DEBUGGING COMMANDS THAT ONLY WORK IF USED BY A DM OR ON THE TEST SERVER
 	if (GetLocalInt(GetModule(), "SIGIL_DEV_MODE") || GetIsDM(oSender)){
-		if (sInput == "#vfxgreen"){
-			effect eVFX = EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN");	
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSender, 300.0);
-
-		} else if (sInput == "#vfxfiend"){
-			effect eVFX = EffectNWN2SpecialEffectFile("FX_SE_SPIRIT_EMERGE_LOOP");	
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSender, 300.0);
-
-		} else if (sInput == "#vfxhell"){
-			effect eVFX = EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS");	
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSender, 300.0);
-
-		}  else if (sInput == "#vfxfire"){
-			effect eVFX = EffectNWN2SpecialEffectFile("FX_ASHFIRE_2");	
-			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oSender, 300.0);
-
-		}
-		else if (sInput == "#testcraftcost"){
+		if (sInput == "#testcraftcost"){
 			if (GetLocalInt(oSender, "TestCraftCost")){
 				SetLocalInt(oSender, "TestCraftCost", FALSE);
 				sFeedback = "Turning off craft costs.";

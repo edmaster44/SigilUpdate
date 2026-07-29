@@ -4889,16 +4889,20 @@ void Assumenewform(object oPC, struct CreatureCoreAppearance Appearance) {
     SetLocalInt(oEssence, "TempChange", 1);
 }
 
-void FiendformBoni(object oPC, string sVFX = "") {
+void FiendformBoni(object oPC, string sVFX = "", int bAltVFX = FALSE) {
     effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
     eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
     eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
     eBoost = EffectLinkEffects(eBoost, EffectRegenerate(5, 6.0f));
         
     
-    if (sVFX != "") {
-        eBoost = EffectLinkEffects(eBoost, EffectNWN2SpecialEffectFile(sVFX));
-    }
+    if (sVFX != "")
+        eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile(sVFX), eBoost);
+    
+	if (bAltVFX){
+		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);
+		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_A_SPIRIT_EMERGE_LOOP"), eBoost);
+	}
         
     eBoost = SetEffectSpellId(eBoost, 1657);
     eBoost = SupernaturalEffect(eBoost);
