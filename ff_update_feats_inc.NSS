@@ -110,6 +110,17 @@ void FF_WingFix(object oPC);
 void ManageAppearance(object oPC);
 void GrantArmorOptByBAB(object oPC);
 
+
+	//grant bite attack to lycans who do not have it, remove old bestial power Feats
+void UpdateLycanWithoutRemake(object oPC){
+	if (GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oPC) < 4)
+		return;
+	FeatAdd(oPC, 3118, FALSE, FALSE, FALSE);
+	FeatRemove(oPC, 2589);
+	FeatRemove(oPC, 2590);
+	FeatRemove(oPC, 2591);	
+}
+
 // To avoid a "feat tax" situation, we're now granting armor optimization
 // feats once the character reaches a certain level of martial skill measured
 // by base attack bonus

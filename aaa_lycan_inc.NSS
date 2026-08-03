@@ -17,7 +17,66 @@ May 30, 2024: FlattedFifth
 #include "ps_inc_melee"
 #include "x2_inc_itemprop"
 
+void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
+	// cannot use unless in hybrid or animal form
+	int bReset = FALSE;
+	if (!GetLocalInt(oItem, "Hybrid") && !GetLocalInt(oItem, "TempChange") &&
+		!GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC)){
+		SendMessageToPC(oPC, "You can only use this ability in hybrid or animal form");
+		bReset = TRUE;
+	}
+	if (!PS_GetTargetInRange(oPC, oTarget, GetSpellFeatId(), FALSE)){
+		SendMessageToPC(oPC, "You can only bite enemies within biting range");
+		bReset = TRUE;
+	}
+	if (bReset){
+		ResetFeatUses(oPC, GetSpellFeatId(), TRUE, TRUE);
+		return;
+	}
+	// do a finessable melee touch attack to see if the bite hits
+	int nStr = GetAbilityModifier(ABILITY_STRENGTH, oPC);
+	int nDex = GetAbilityModifier(ABILITY_DEXTERITY, oPC);
+	int nBonus = (nDex > nStr) ? nDex - nStr : 0;
+	// * These return TOUCH_ATTACK_RESULT_MISS, TOUCH_ATTACK_RESULT_HIT, or TOUCH_ATTACK_RESULT_CRITICAL
+	int nAttack = TouchAttackMelee(oTarget, FALSE, nBonus);
+	if (nAttack == TOUCH_ATTACK_RESULT_MISS){
+		SendMessageToPC(oPC, "<c=tomato>Bite attack: Miss!</c>");
+		return;
+	}
+	int nDamage = d10() + nStr;
 
+	if (nAttack == TOUCH_ATTACK_RESULT_CRITICAL){
+		nDamage *= 2;
+		SendMessageToPC(oPC, "<c=orange>Bite attack critical hit!</c>");
+	} else SendMessageToPC(oPC, "Bite attack hit!");
+	
+	// now apply damage and see if it's all resisted or not
+	int nHP = GetCurrentHitPoints(oTarget);
+	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
+	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+	int nPostHP = GetCurrentHitPoints(oTarget);
+	// if the target's DR absorbed all damage, then no bleed DOT. Exit
+	if (nPostHP >= nHP){
+		SendMessageToPC(oPC, "<c=tomato>Your target resisted all damage from your bite!</c>");
+		return;
+	} else {
+		SendMessageToPC(oPC, "You've bitten your opponent for " + IntToString(nHP - nPostHP) + " damage!");
+	}
+	
+	// constructs, elementals, incorporeal, oozes, plants, and undead do not take bleed damage
+	int nRace = GetRacialType(oTarget);
+	int nSub = GetSubRace(oTarget);
+	if (nRace == RACIAL_TYPE_UNDEAD || nRace == RACIAL_TYPE_ELEMENTAL || nRace == RACIAL_TYPE_CONSTRUCT || 
+		nRace == RACIAL_TYPE_OOZE || nRace == RACIAL_TYPE_INCORPOREAL || nSub == RACIAL_SUBTYPE_CONSTRUCT || 
+		nSub == RACIAL_SUBTYPE_ELEMENTAL || nSub == RACIAL_SUBTYPE_UNDEAD || nSub == RACIAL_SUBTYPE_INCORPOREAL || 
+		nSub ==  RACIAL_SUBTYPE_PLANT || nSub == RACIAL_SUBTYPE_OOZE)
+			return;
+	int nDot = d6();
+	if (nAttack == TOUCH_ATTACK_RESULT_CRITICAL) nDot *= 2;		
+	effect eDot = EffectDamageOverTime(nDot, 6.0, DAMAGE_TYPE_MAGICAL, TRUE);
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDot, oTarget, 18.0);
+}
 
 
 void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)	
@@ -231,7 +290,7 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 	int nDex;
 	int nCon;
 	if (GetHasFeat(2592, oPC))
-	{	nAfflict = 1294;			//Werewolf
+	{	nAfflict = (GetGender(oPC) == GENDER_FEMALE) ? 171 : 1294;			//Werewolf 171 is female from og
 		nStr = 10;
 		nDex = 5;
 		nCon = 7;	}
@@ -253,14 +312,16 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 	else 
 	{	return;	}
 	
+	
 	effect eStr 	= EffectAbilityIncrease(ABILITY_STRENGTH, nStr);
 	effect eDex 	= EffectAbilityIncrease(ABILITY_DEXTERITY, nDex);
 	effect eCon 	= EffectAbilityIncrease(ABILITY_CONSTITUTION, nCon);
 	effect eLink 	= EffectLinkEffects(eStr, eDex);
 		eLink 		= EffectLinkEffects(eLink, eCon);
-		eLink		= SupernaturalEffect(eLink);
 		
-	int nPCLevel	= PS_GetLevel(oPC);
+	//int nPCLevel	= PS_GetLevel(oPC);
+	int nRegen = (PS_GetLevel(oPC) >= 15) ? 2 : 1;
+	eLink = EffectLinkEffects(EffectRegenerate(nRegen, 6.0), eLink);
 	
 	if (GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC))
 	{	RemoveSpecificEffect(EFFECT_TYPE_POLYMORPH, oPC);
@@ -284,10 +345,10 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 			string sVFXmessage = "The power of your hybrid form surges through your body, but you manage to ";
 			sVFXmessage += " channel the strength without changing form.";
 			SendMessageToPC(oPC, sVFXmessage);
-			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("VFX_DUR_BOND_OF_FATAL_TOUCH", oPC), eLink);
+			eLink = EffectLinkEffects(EffectVisualEffect(VFX_DUR_BOND_OF_FATAL_TOUCH), eLink);
 			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN", oPC), eLink);
-			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN_B", oPC), eLink);
-			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN", oPC), eLink);
+			//eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN_B", oPC), eLink);
+			//eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN", oPC), eLink);
 		} else {
 			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 			app.AppearanceType = nAfflict;
@@ -295,6 +356,7 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 			SetLocalInt(oItem, "TempChange", 1);
 			PS_RefreshAppearance(oPC);
 		}
+		eLink		= SupernaturalEffect(eLink);
 		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
 		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 		SetLocalInt(oItem, "Hybrid", 1);
@@ -307,9 +369,12 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 
 void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 {
-	
 	int nIsAnimal		= GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC);
 	int nIsHybrid		= GetLocalInt(oItem, "Hybrid");
+	if (!nIsAnimal && !nIsHybrid){
+		SendMessageToPC(oPC, "This ability is only usable in Animal or Hybrid form.");
+		return;
+	}
 	int nDamage			= 0;
 	int nAttack;
 	object oWeapon		= GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
@@ -404,11 +469,6 @@ void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 				SendMessageToPC(oTarget, GetName(oPC) + "'s trip attack was unsuccessful!");
 			}
 		}	
-		
-		
-	
-	else
-	{	SendMessageToPC(oPC, "This ability is only usable in Animal or Hybrid form.");	}
 }
 
 void PS_Lycan_BPWereboar(object oPC, object oItem, int nSpell)

@@ -559,7 +559,26 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	// LOT of copy-paste bs here but I'm just going to remove these once we have 
 	// some good numbers. -FlattedFifth
 	if (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-		if (GetStringLeft(sInput, 14) == "#setappearance"){
+		if (GetStringLeft(sInput, 11) == "#testvfxint"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 11);
+			int nFX = StringToInt(sMessage);
+			effect eFX = EffectVisualEffect(nFX);
+			sFeedback = "Applying visual effect " + sMessage + "\nRemove with the PC Tools";
+			sFeedback += " or wait 10 minutes";
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oSender, 600.0);
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		} 
+		else if (GetStringLeft(sInput, 14) == "#testvfxstring"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 14);
+			effect eFX = EffectNWN2SpecialEffectFile(sMessage, oSender);
+			sFeedback = "Applying visual effect " + sMessage + "\nRemove with the PC Tools";
+			sFeedback += " or wait 10 minutes";
+			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eFX, oSender, 600.0);
+			SendMessageToPC(oSender, sFeedback);
+			return TRUE;
+		}
+		else if (GetStringLeft(sInput, 14) == "#setappearance"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 14);
 			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
 			app.AppearanceType = StringToInt(sMessage);

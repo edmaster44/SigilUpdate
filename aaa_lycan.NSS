@@ -47,6 +47,10 @@ void main()
 		case 337 :		//Bestial Power - Weretiger
 		{	PS_Lycan_BPWeretiger(oPC, oTarget, oItem, nSpell);			}
 		break;	
+		case 339: PS_Lycan_Bite(oPC, oTarget, oItem, nSpell); break;  // lycan bite
+			
+		
+		
 ////////////////////////////////////////////////////////////////////////////////////
 	}
 }
