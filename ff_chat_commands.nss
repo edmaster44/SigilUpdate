@@ -347,6 +347,30 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
+	else if (sInput == "removelycanweapons"){
+		oItem = GetItemPossessedBy(oSender, "s3_w_werewolfbite_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		oItem = GetItemPossessedBy(oSender, "s3_w_werewolfclaw_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		oItem = GetItemPossessedBy(oSender, "s3_w_werewolfclaw_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		oItem = GetItemPossessedBy(oSender, "s3_w_wereratbite_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		oItem = GetItemPossessedBy(oSender, "s3_w_wereratclaw_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		oItem = GetItemPossessedBy(oSender, "s3_w_wereratclaw_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);		
+		oItem = GetItemPossessedBy(oSender, "s3_w_wereboargore_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		oItem = GetItemPossessedBy(oSender, "s3_w_weretigerbite_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		oItem = GetItemPossessedBy(oSender, "s3_w_weretigerclaw_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		oItem = GetItemPossessedBy(oSender, "s3_w_weretigerclaw_01");
+		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
+		SendMessageToPC(oSender, "Default Hybrid lycan weapons destroyed");
+		return TRUE;
+	}
 	else if (sInput == "#vfxlycan"){
 		if (GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oSender) < 1){
 				sFeedback = "This command does nothing unless you are a Lycan";

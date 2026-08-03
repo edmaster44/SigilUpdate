@@ -290,7 +290,7 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 	int nDex;
 	int nCon;
 	if (GetHasFeat(2592, oPC))
-	{	nAfflict = (GetGender(oPC) == GENDER_FEMALE) ? 171 : 1294;			//Werewolf 171 is female from og
+	{	nAfflict = 1294;			//Werewolf
 		nStr = 10;
 		nDex = 5;
 		nCon = 7;	}
@@ -363,8 +363,8 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 		PS_Wererat_SneakAdd(oPC);
 	}
 	
-	if (nWeapons != 1)
-	{	PS_Lycan_HybridWeaponAdd(oPC, oItem);	}
+//	if (nWeapons != 1)
+//	{	PS_Lycan_HybridWeaponAdd(oPC, oItem);	}
 }
 
 void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
