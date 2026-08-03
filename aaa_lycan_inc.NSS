@@ -37,7 +37,7 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 	int nStr = GetAbilityModifier(ABILITY_STRENGTH, oPC);
 	int nDex = GetAbilityModifier(ABILITY_DEXTERITY, oPC);
 	int nBonus = (nDex > nStr) ? nDex - nStr : 0;
-	// * These return TOUCH_ATTACK_RESULT_MISS, TOUCH_ATTACK_RESULT_HIT, or TOUCH_ATTACK_RESULT_CRITICAL
+	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 	int nAttack = TouchAttackMelee(oTarget, FALSE, nBonus);
 	if (nAttack == TOUCH_ATTACK_RESULT_MISS){
 		SendMessageToPC(oPC, "<c=tomato>Bite attack: Miss!</c>");
