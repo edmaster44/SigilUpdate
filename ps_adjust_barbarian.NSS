@@ -19,7 +19,7 @@ int GetBarbarianLevels(object oPC){
 	iBarb += GetLevelByClass(CLASS_TYPE_FROST_GIANT_PRC,oPC);//Frost Giant PRC
 	iBarb += GetLevelByClass(CLASS_TYPE_FRENZIEDBERSERKER,oPC);//Frenized Berserker.
 	
-	if(GetHasFeat(FEAT_LYCAN_BP_WEREBOAR,oPC,TRUE)) 
+	if(GetHasFeat(2610,oPC,TRUE)) // wereboar affliction
 		iBarb += GetLevelByClass(CLASS_TYPE_LYCAN_PRC,oPC);
 
 

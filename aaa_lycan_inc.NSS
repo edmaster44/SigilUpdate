@@ -45,7 +45,10 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 	}
 	int nLevel = PS_GetLevel(oPC);
 	int nPower = DAMAGE_POWER_PLUS_ONE;
-	int nDamage = d10() + nStr;
+	int nDamage = d10();
+	 // werewolf and weretiger bite harder than werewolf and wereboar
+	if (GetHasFeat(2592, oPC) || GetHasFeat(2656)) nDamage = d6(2);
+	nDamage += nStr;
 	if (nLevel >= 20){
 		nPower = DAMAGE_POWER_PLUS_THREE;
 		nDamage += 3;
