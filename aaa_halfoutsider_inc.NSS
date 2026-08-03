@@ -16,8 +16,57 @@ int PS_OutsiderLevels(object oPC)
 	int iHalfOutsiderMagic = GetLevelByClass(CLASS_TYPE_HALFOUTSIDERMAGE_PRC,oPC);//Half-Outsider Magic
 	int iTotal = iHalfOutsider + iHalfOutsiderMagic;
 	return iTotal;
+}
 
+// helper feat for rapture of Rupture to determine if target is fully or partially immune
+int GetTargetHasGuts(object oTarget){
 
+	int nAppr = GetAppearanceType(oTarget);
+	switch (nAppr){
+		case 27: /*Will-o-Wisp*/        return 0;
+        case 52: /*Air Elemental*/      return 0;
+        case 53: /*Elder AE*/           return 0;
+        case 56: /*Earth Elemental*/    return 0;
+        case 57: /*Elder EE*/           return 0;
+        case 60: /*Fire Elemental*/     return 0;
+        case 61: /*Elder FE*/           return 0;
+        case 68: /*Elder WE*/           return 0;
+        case 69: /*Water Elemental*/    return 0;
+        case 90: /*Marut*/              return 0;
+        case 493: /*Blade Golem*/       return 0;
+        case 496: /*Shadow*/            return 0;
+        case 497: /*Nightwalker*/       return 0;
+        case 537: /*Skeleton*/          return 0;
+        case 554: /*Huge AE*/           return 0;
+        case 555: /*Greater AE*/        return 0;
+        case 556: /*Huge EE*/           return 0;
+        case 557: /*Greater EE*/        return 0;
+        case 558: /*Huge FE*/           return 0;
+        case 559: /*Greater FE*/        return 0;
+        case 560: /*Huge WE*/           return 0;
+        case 561: /*Greater WE*/        return 0;
+        case 586: /*King of Shadows*/   return 0;
+        case 995: /*Bonebat*/           return 0;
+        case 1011: /*One of Many*/      return 0;
+        case 1012: /*Shambling Mound*/  return 1;
+        case 1027: /*Treant*/           return 1;
+        case 2032: /*Flying Book*/      return 0;
+        case 2045: /*Monodrone*/        return 0;
+        case 3204: /*Swarm Lesser*/     return 0;
+        case 3205: /*Swarm Regular*/    return 0;
+        case 3206: /*Swarm Greater*/    return 0;
+    }
+	int nRace = GetRacialType(oTarget);
+	int nSub = GetSubRace(oTarget);
+	if (nRace == RACIAL_TYPE_CONSTRUCT || nRace == RACIAL_TYPE_OOZE || nRace == RACIAL_TYPE_INCORPOREAL ||
+		nRace == RACIAL_TYPE_ELEMENTAL || nSub == RACIAL_SUBTYPE_CONSTRUCT || nSub == RACIAL_SUBTYPE_ELEMENTAL ||
+		nSub == RACIAL_SUBTYPE_INCORPOREAL || nSub == RACIAL_SUBTYPE_OOZE)
+			return 0;
+	
+	if (nRace == RACIAL_TYPE_UNDEAD || nSub == RACIAL_SUBTYPE_UNDEAD ||  nSub ==  RACIAL_SUBTYPE_PLANT)
+			return 1;
+	
+	return 2;
 }
 
 
@@ -347,12 +396,14 @@ void PS_HOM_HolySmite(object oPC, int nSpell, location lTarget)
 }	}
 
 //Helper function for PS_HOM_RaptureOfRupture, does ongoing damage of 1d6 per round until healed
-void PS_RunRuptureOngoing(object oTarget, int nCasterLevel)
+void PS_RunRuptureOngoing(object oTarget, int nCasterLevel, int bHasGuts)
 {
 	int nHP				= GetCurrentHitPoints(oTarget);
 	int nRuptureHP		= GetLocalInt(oTarget, "RuptureHP");
 	
 	int nOngoing		= d6(1);
+	if (bHasGuts == 1) nOngoing /= 2;
+	if (nOngoing < 1) nOngoing = 1;
 	int nSaveDC			= 10 + nCasterLevel;
 	effect eSecondary	= EffectNWN2SpecialEffectFile("sp_inflict_moderate", oTarget);
 	effect eOngoing		= EffectDamage(nOngoing, DAMAGE_TYPE_SLASHING, DAMAGE_POWER_NORMAL, TRUE);
@@ -372,7 +423,7 @@ void PS_RunRuptureOngoing(object oTarget, int nCasterLevel)
 		}
 		if (!GetIsSkillSuccessful(oTarget, SKILL_HEAL, nSaveDC))
 		{	SetLocalInt(oTarget, "RuptureHP", GetCurrentHitPoints(oTarget));
-			PS_RunRuptureOngoing(oTarget, nSaveDC);	}
+			PS_RunRuptureOngoing(oTarget, nSaveDC, bHasGuts);	}
 	}
 }
 
@@ -380,10 +431,18 @@ void PS_HOM_RaptureOfRupture(object oPC, int nSpell, object oTarget)
 {
     if (!X2PreSpellCastCode())
     {	return;		}
+	
+	int bHasGuts = GetTargetHasGuts(oTarget);
+	if (bHasGuts == 0){
+		SendMessageToPC(oPC, "You cannot use this ability on targets that do not have internal organs");
+		ResetFeatUses(oPC, GetSpellFeatId(), TRUE, TRUE);
+		return;
+	}
 
 	int nCasterLevel	= PS_GetLevel(oPC) / 2;
 	int nSaveDC			= 10 + nCasterLevel + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDam			= d6(6);
+	if (bHasGuts == 1) nDam /= 2; // undead and plants only take half damage
 	int nSave			= FortitudeSave(oTarget, nSaveDC, SAVING_THROW_TYPE_ALL, oPC);
 	effect eRupture, eImpact, eOngoing;
 
@@ -400,7 +459,7 @@ void PS_HOM_RaptureOfRupture(object oPC, int nSpell, object oTarget)
 				ApplyEffectToObject(DURATION_TYPE_INSTANT, eRupture, oTarget);
 				if (nSave == 0)
 				{	SetLocalInt(oTarget, "RuptureHP", GetCurrentHitPoints(oTarget));
-					DelayCommand(1.0f, PS_RunRuptureOngoing(oTarget, nCasterLevel));	}
+					DelayCommand(1.0f, PS_RunRuptureOngoing(oTarget, nCasterLevel, bHasGuts));	}
 
             }
         }
@@ -658,6 +717,13 @@ void PS_HOM_Gutwrench(object oPC, int nSpell, object oTarget)
 {
     if (!X2PreSpellCastCode())
     {	return;		}
+	
+	int bHasGuts = GetTargetHasGuts(oTarget);
+	if (bHasGuts == 0){
+		SendMessageToPC(oPC, "You cannot use this ability on targets that do not have internal organs");
+		ResetFeatUses(oPC, GetSpellFeatId(), TRUE, TRUE);
+		return;
+	}
 
 	effect eDeath 		= EffectDeath(TRUE);
     effect eSpurt 		= EffectNWN2SpecialEffectFile("bloodspurt", oTarget);
@@ -670,18 +736,15 @@ void PS_HOM_Gutwrench(object oPC, int nSpell, object oTarget)
 	int nCasterLevel	= PS_GetLevel(oPC) / 2;
 	int nSaveDC			= 10 + nCasterLevel + GetAbilityModifier(ABILITY_CHARISMA, oPC);
 	int nDamage			= d6(10);
+	if (bHasGuts == 1) nDamage /= 2;
     effect eDam			= EffectDamage(nDamage, DAMAGE_TYPE_NEGATIVE, DAMAGE_POWER_NORMAL, TRUE);
 
 	if (spellsIsTarget(oTarget, SPELL_TARGET_NON_ALLIED, OBJECT_SELF))
 	{	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
-		// Check for "no discernible anatomy"
-		if (PS_GetHasDiscernableAnatomy(oTarget) == FALSE)
-		{   SendMessageToPCByStrRef(oPC, 16780102);
-			ApplyEffectToObject(DURATION_TYPE_INSTANT, eFail, oPC);
-			return;		}
-		
+
         if(!MyResistSpell(OBJECT_SELF, oTarget))
-        {	if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC, SAVING_THROW_TYPE_NONE, oPC))
+        {	if (!MySavingThrow(SAVING_THROW_FORT, oTarget, nSaveDC, SAVING_THROW_TYPE_NONE, oPC) &&
+				bHasGuts == 2)
             {	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDeath, oTarget);
 				DelayCommand(0.5f, ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, ePuddle, GetLocation(oTarget), 30.0f));
 				DelayCommand(0.6f, ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eBeam, oPC, 3.0f));

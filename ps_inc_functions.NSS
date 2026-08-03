@@ -3855,15 +3855,12 @@ int GetBardicClassLevelForUses(object oPC){
 	nSongs = GetBardTRUECasterlevel(oPC, TRUE);
     nSongs += GetLevelByClass(117, oPC); // warchanter
 	
-	//eldritch knight advances spells but not songs
-	//ek spell progression is +1 for every level beyond first,
-	//so subtract all but 1 ek levels to remove ek spell progress
-	//for songs
-	int nEK = GetLevelByClass(52, oPC);
-	if (nEK > 1){
-		nEK -= 1;
-		nSongs -= nEK;
+	int nEK = GetLevelByClass(52, oPC) - 1; // Eldritch Knight spell prog levels
+	if (nEK > 0){
+		int nEKprogFeat = StringToInt(Get2DAString("CLS_FEATMAP_EKNIGHT", "SpellcasterFeat", 1));
+		if (GetHasFeat(nEKprogFeat, oPC)) nSongs -= nEK;
 	}
+	
 	return nSongs;
 	
     /* old

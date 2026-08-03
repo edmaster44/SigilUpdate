@@ -43,7 +43,16 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 		SendMessageToPC(oPC, "<c=tomato>Bite attack: Miss!</c>");
 		return;
 	}
+	int nLevel = PS_GetLevel(oPC);
+	int nPower = DAMAGE_POWER_PLUS_ONE;
 	int nDamage = d10() + nStr;
+	if (nLevel >= 20){
+		nPower = DAMAGE_POWER_PLUS_THREE;
+		nDamage += 3;
+	} else if (nLevel >= 10){
+		nPower = DAMAGE_POWER_PLUS_TWO;
+		nDamage += 3;
+	} else nDamage += 1;
 
 	if (nAttack == TOUCH_ATTACK_RESULT_CRITICAL){
 		nDamage *= 2;
@@ -52,13 +61,12 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 	
 	// now apply damage and see if it's all resisted or not
 	int nHP = GetCurrentHitPoints(oTarget);
-	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, DAMAGE_POWER_NORMAL, FALSE);
-	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell, TRUE));
+	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, nPower, FALSE);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 	int nPostHP = GetCurrentHitPoints(oTarget);
 	// if the target's DR absorbed all damage, then no bleed DOT. Exit
 	if (nPostHP >= nHP){
-		SendMessageToPC(oPC, "<c=tomato>Your target resisted all damage from your bite!</c>");
+		SendMessageToPC(oPC, "Your target resisted all damage from your bite!");
 		return;
 	} else {
 		SendMessageToPC(oPC, "You've bitten your opponent for " + IntToString(nHP - nPostHP) + " damage!");
@@ -70,7 +78,7 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 	if (nRace == RACIAL_TYPE_UNDEAD || nRace == RACIAL_TYPE_ELEMENTAL || nRace == RACIAL_TYPE_CONSTRUCT || 
 		nRace == RACIAL_TYPE_OOZE || nRace == RACIAL_TYPE_INCORPOREAL || nSub == RACIAL_SUBTYPE_CONSTRUCT || 
 		nSub == RACIAL_SUBTYPE_ELEMENTAL || nSub == RACIAL_SUBTYPE_UNDEAD || nSub == RACIAL_SUBTYPE_INCORPOREAL || 
-		nSub ==  RACIAL_SUBTYPE_PLANT || nSub == RACIAL_SUBTYPE_OOZE)
+		nSub ==  RACIAL_SUBTYPE_PLANT || nSub == RACIAL_SUBTYPE_OOZE || nRace == RACIAL_TYPE_PLANT)
 			return;
 	int nDot = d6();
 	if (nAttack == TOUCH_ATTACK_RESULT_CRITICAL) nDot *= 2;		

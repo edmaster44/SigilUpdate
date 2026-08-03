@@ -347,7 +347,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
-	else if (sInput == "removelycanweapons"){
+	else if (sInput == "#removelycanweapons"){
 		oItem = GetItemPossessedBy(oSender, "s3_w_werewolfbite_01");
 		if (oItem != OBJECT_INVALID) DestroyObject(oItem);
 		oItem = GetItemPossessedBy(oSender, "s3_w_werewolfclaw_01");
