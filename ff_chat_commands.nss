@@ -14,6 +14,8 @@
 
 int GetHasAllAccess(object oPC);
 int GetIsTester(object oPC);
+void SetWingTail(object oSender, string sInput, int bIsTail);
+
 
 // a function that sends a tick message to the player every 6 seconds
 // to be used for debugging purposes. 
@@ -94,6 +96,14 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			sFeedback += " and BEFORE taking any levels of Half-Outsider";
 		}
 		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
+	else if (GetStringLeft(sInput, 8) == "#settail" && GetHasAllAccess(oSender)){
+		SetWingTail(oSender, sInput, TRUE);
+		return TRUE;
+	}
+	else if (GetStringLeft(sInput, 9) == "#setwings" && GetHasAllAccess(oSender)){
+		SetWingTail(oSender, sInput, FALSE);
 		return TRUE;
 	}
 	// #shout command to send a message to everyone in case server needs to come down and you're not logged
@@ -564,16 +574,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 				}
 			}
 			WriteTimestampedLogEntry(sLog);
-			SendMessageToPC(oSender, sFeedback);
-			return TRUE;
-		}
-		else if (GetStringLeft(sInput, 9) == "#setwings"){
-			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 9);
-			int nWing = StringToInt(sMessage);
-			oItem = GetItemPossessedBy(oSender,"ps_essence");
-			SetLocalInt(oItem, "Custom_Wing", nWing);
-			if (nWing == 0) sFeedback = "Custom wing disabled";
-			else sFeedback = "Wings set to number " + IntToString(nWing);
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
 		}
@@ -1330,4 +1330,32 @@ int GetIsTester(object oPC){
 	}
 	
 	return bIsTester;
+}
+
+
+void SetWingTail(object oSender, string sInput, int bIsTail){
+	int nLength = (bIsTail) ? 8 : 9;
+	string sArg = GetStringRight(sInput, GetStringLength(sInput) - nLength);
+	int nAppendage = StringToInt(sArg);
+	object oTarget = GetPlayerCurrentTarget(oSender);
+	if (!GetIsPC(oTarget) && oTarget != oSender){
+		SendMessageToPC(oSender, "Must target a player");
+	}
+	object oEss = GetItemPossessedBy(oTarget, "ps_essence");
+	
+	if (GetLocalInt(oEss, "Hybrid") || GetLocalInt(oEss, "TempChange") ||
+		GetHasEffect(EFFECT_TYPE_POLYMORPH, oTarget)){
+			SendMessageToPC(oSender, "YOu can only alter the wings and tail of characters in their true forms");
+			return;
+	}
+	string sLocal = (bIsTail) ? "Custom_Tail" : "Custom_Wing";
+	SetLocalInt(oEss, sLocal, nAppendage);
+	PS_RestoreOriginalAppearance(oTarget);
+	PS_RefreshAppearance(oTarget);
+	FeatAdd(oTarget, 21905, FALSE);
+	string sType = (bIsTail) ? "tail" : "wings";
+	string sFeedback;
+	if (nAppendage == 0) sFeedback = "Custom " + sType + " disabled";
+	else sFeedback = "Custom " + sType + " set to number " + IntToString(nAppendage);
+	SendMessageToPC(oSender, sFeedback);
 }

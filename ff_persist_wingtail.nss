@@ -31,7 +31,9 @@ void PS_FeyWings(object oPC, object oEss);
 void main(){
 	object oPC = OBJECT_SELF;
 	object oEss	= GetItemPossessedBy(oPC,"ps_essence");	
-	if (GetLocalInt(oEss, "TempChange")) return;
+	if ((GetLocalInt(oEss, "Hybrid") && !GetLocalInt(oEss, "VFX_LYCAN")) || 
+		GetLocalInt(oEss, "TempChange") || GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC))
+			return;
 	//Debug
 	//SendMessageToPC(oPC, "Initiating wings persist");
 	int nWing = -1;

@@ -19,11 +19,8 @@
         That spell isn't in NWN2, so shapechange is used 
         instead.
 */
-#include "x2_inc_spellhook"
 #include "nwn2_inc_metmag"
-#include "aaa_changeself_inc"
-#include "ps_inc_functions"
-#include "ps_inc_advscript"
+#include "aaa_halfoutsider_inc"
 
 void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance);
 
@@ -38,10 +35,20 @@ void main() {
         // If code within the PreSpellCastHook (i.e. UMD) reports FALSE, do not run this spell
         return;
     }
+	object oCaster = OBJECT_SELF;
+	object oEss = PS_GetEssence(oCaster);
+	int nSpell = GetSpellId();
+	//if not Unshift and not shifting from one type to another
+	if (nSpell != 1725 && GetLocalInt(oEss, "FiendformSource") == 0){ 
+		//make sure user is not trying to stack the regen from this inv on top of another shapechange
+		if (GetLocalInt(oEss, "Hybrid") || GetLocalInt(oEss, "TempChange") ||
+			GetHasEffect(EFFECT_TYPE_POLYMORPH, oCaster)){
+				SendMessageToPC(oCaster, "You must return to your true form before using this invocation");
+				return;
+		}
+	}
 
     //Declare major variables
-    int nSpell = GetSpellId();
-    object oCaster = OBJECT_SELF;
     effect eVis = EffectVisualEffect(VFX_INVOCATION_WORD_OF_CHANGING);
     effect ePoly;
     int nPoly;
@@ -50,23 +57,24 @@ void main() {
 	float fDuration = TurnsToSeconds( GetCasterLevel(OBJECT_SELF ) );
     fDuration = ApplyMetamagicDurationMods( fDuration );
 	
-	//No polymorphing while discorporated
-	if (GetHasSpellEffect(SPELL_I_DARK_DISCORPORATION)) {
-		SendMessageToPC(oCaster, "You may not use Word of Changing while discorporated.");
-		return; 
-	}
 	
 	//843 = Word of changing base spell
-	//Remove current spell effects
-	if ( GetHasSpellEffect(843, oCaster) ) {
-		effect eEffect = GetFirstEffect( oCaster );
+	//Remove current spell effects and those from Half outsider fiendform
+	if (GetHasSpellEffect(WORD_OF_CHANGE_ID, oCaster) || GetHasSpellEffect(HO_FIENDFORM_ID, oCaster)) {
+		effect eEffect = GetFirstEffect(oCaster);
+		int nId;
 		while ( GetIsEffectValid(eEffect) ) {
-		
-			if ( GetEffectSpellId(eEffect) == 843){
+			nId = GetEffectSpellId(eEffect);
+			if (nId == HO_FIENDFORM_ID || nId == HO_FIENDFORM_ID){
 				RemoveEffect( oCaster, eEffect );
 				eEffect = GetFirstEffect( oCaster );
 			} else eEffect = GetNextEffect( oCaster );
 		}
+	}
+	// if not Unshift set vars to let us know a shift is in place
+	if (nSpell != 1725){
+		SetLocalInt(oEss, "FiendformSource", WORD_OF_CHANGE_ID);
+		SetLocalInt(oEss, "TempChange", TRUE);
 	}
 	
 	int nGender = GetGender(oCaster);
@@ -92,7 +100,7 @@ void main() {
 		
 		AssumeGivenAppearance(oCaster, Appearance);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
-		PS_HumForm_DragonUE(oCaster);
+		//PS_HumForm_DragonUE(oCaster);
 	
 	} else if (nSpell == 1722) { //Devil
 	
@@ -107,7 +115,7 @@ void main() {
 		
 		AssumeGivenAppearance(oCaster, Appearance);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
-		PS_HumForm_DragonUE(oCaster);
+		//PS_HumForm_DragonUE(oCaster);
 	
 	}  else if (nSpell == 1723) { //Abomination
 	
@@ -116,7 +124,7 @@ void main() {
 		
 		AssumeGivenAppearance(oCaster, Appearance);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
-		PS_HumForm_DragonUE(oCaster);
+		//PS_HumForm_DragonUE(oCaster);
 	
 	}  else if (nSpell == 1724) { //Fey
 	
@@ -132,16 +140,19 @@ void main() {
 		
 		AssumeGivenAppearance(oCaster, Appearance);
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
-		PS_HumForm_DragonUE(oCaster);
+		//PS_HumForm_DragonUE(oCaster);
 		
 	}  else if (nSpell == 1725) { //Unshift
-		
+		RemoveFiendForm(oCaster);
+		return;
+		/*
 		PS_RestoreOriginalAppearance(oCaster);
-		
+		SetLocalInt(oEss, "Fiendform", FALSE);
+		SetLocalInt(oEss, "TempChange" FALSE);
 		//General useful things for shifting back
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
-		PS_DragForm_DragonUE(oCaster);
-	
+		//PS_DragForm_DragonUE(oCaster); // why unequip non-creature weapons?
+		*/
 	} 
 	
 }
@@ -150,10 +161,10 @@ void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE){
 	effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
 	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
 	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
-	eBoost = EffectLinkEffects(eBoost, EffectRegenerate(5, 6.0f));
+	eBoost = EffectLinkEffects(eBoost, EffectRegenerate(3, 6.0f));
 		
 	int nSR = GetSpellResistance(oCaster);
-	int nBoost = 26-nSR;
+	int nBoost = 26 - nSR;
 	if (nBoost > 0) {
 		eBoost = EffectLinkEffects(eBoost, EffectSpellResistanceIncrease(nBoost));
 	}
@@ -163,7 +174,7 @@ void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE){
 	}
 	
 	if (bVFXonly){
-		string sVFXmessage = "The powers of the Abyss surge through your body, but you manage to ";
+		string sVFXmessage = "Fiendish power surges through your body, but you manage to ";
 		sVFXmessage += " channel the strength without changing form.";
 		SendMessageToPC(oCaster, sVFXmessage);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);

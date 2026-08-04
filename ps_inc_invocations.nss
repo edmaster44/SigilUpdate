@@ -70,13 +70,7 @@ void DoHideousBlowEffect(object oCaster, int nId, int bFromBuddy){
 }
 
 void DoDarkDiscorp(object oCaster, int nId, int bFromBuddy){
-	
-	if (GetHasSpellEffect(1657) || GetHasSpellEffect(1721)){
-		SendMessageToPC(oCaster, "You may not discorporate while Fiend Form is active.");
-		return;
-	}
     int nCasterLvl = GetWarlockCasterLevel(oCaster);
-  
 	float fDuration = TurnsToSeconds(nCasterLvl);
     fDuration = ApplyMetamagicDurationMods(fDuration);
 	
@@ -86,7 +80,7 @@ void DoDarkDiscorp(object oCaster, int nId, int bFromBuddy){
 	eBuff = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_CRITICAL_HIT), eBuff); 
 	eBuff = EffectLinkEffects(EffectImmunity(IMMUNITY_TYPE_KNOCKDOWN), eBuff);
 	//50% concealment
-	eBuff = EffectLinkEffects(EffectConcealment(50), eBuff); 
+	eBuff = EffectLinkEffects(EffectConcealment(40), eBuff); 
 	eBuff = EffectLinkEffects(EffectNWN2SpecialEffectFile("fx_dark_discorporation"), eBuff);
 	effect eAOE = EffectAreaOfEffect(97);
 	eBuff = EffectLinkEffects(eAOE, eBuff);

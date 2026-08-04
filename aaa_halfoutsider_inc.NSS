@@ -10,6 +10,10 @@
 #include "x2_inc_itemprop"
 
 
+const int WORD_OF_CHANGE_ID = 843; 
+const int HO_FIENDFORM_ID = 1657;
+
+
 int PS_OutsiderLevels(object oPC)
 {
 	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);//Half-Outsider
@@ -476,51 +480,45 @@ void PS_HOM_CrownOfFlame(object oPC, int nSpell)
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(iDuration));
 }
 
+void RemoveFiendForm(object oPC){
+	object oEss = PS_GetEssence(oPC);
+	PS_RestoreOriginalAppearance(oPC);
+	effect eEffect = GetFirstEffect(oPC);
+	int nId;
+	while (GetIsEffectValid(eEffect)){
+		nId = GetEffectSpellId(eEffect);
+		if (nId == WORD_OF_CHANGE_ID || nId == HO_FIENDFORM_ID){
+			RemoveEffect( oPC, eEffect );
+			eEffect = GetFirstEffect(oPC);
+		} else eEffect = GetNextEffect( oPC );
+	}
+	SetLocalInt(oEss, "FiendformSource", 0);
+	SetLocalInt(oEss, "TempChange", FALSE);
+	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+}
+
 void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 {
-	//No polymorphing while discorporated
-	if (GetHasSpellEffect(SPELL_I_DARK_DISCORPORATION)) {
-		SendMessageToPC(oPC, "You may not use Fiendform while Discorporated.");
-		return; 
+	object oEss = PS_GetEssence(oPC);
+	int nFiend = GetLocalInt(oEss, "FiendformSource");
+	
+	if ((GetLocalInt(oEss, "Hybrid") || GetLocalInt(oEss, "TempChange") ||
+			GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC)) && nFiend == 0){
+				SendMessageToPC(oPC, "You must return to your true form before using this ability");
+				return;
+	} else if (nFiend == nSpell){
+		RemoveFiendForm(oPC);
+		return;
+	} else if (nFiend > 0){
+		PS_RemoveEffects(oPC, WORD_OF_CHANGE_ID);
 	}
+	SetLocalInt(oEss, "FiendformSource", nSpell);
+	SetLocalInt(oEss, "TempChange", TRUE);
     effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
     effect eFiend;
-    int nFiend;
 	int nLevel = PS_GetLevel(oPC);
-    int nDuration = nLevel * 5;
 	
-	if (GetHasSpellEffect(1375)) {
-		SendMessageToPC(oPC, "You may not use Fiendform while discorporated.");
-		return; 
-	}
-	
-	if (GetHasSpellEffect(1721)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
-		return; 
-	}
-	if (GetHasSpellEffect(1722)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
-		return; 
-	}
-	if (GetHasSpellEffect(1723)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
-		return; 
-	}
-	if (GetHasSpellEffect(1724)) {
-		SendMessageToPC(oPC, "You may not use Word of changing in conjunction with Fiendform.");
-		return; 
-	}
-	int eId;
-	if (GetHasSpellEffect(843, oPC) || GetHasSpellEffect(1657, oPC)) {
-		effect eEffect = GetFirstEffect(oPC);
-		while (GetIsEffectValid(eEffect)) {
-			eId = GetEffectSpellId(eEffect);
-			if (eId == 843 || eId == 1657 ){
-				RemoveEffect( oPC, eEffect );
-				eEffect = GetFirstEffect(oPC);
-			} else eEffect = GetNextEffect( oPC );
-		}
-	}
 	if (GetLocalInt(PS_GetEssence(oPC), "VFX_FIENDFORM")){
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		FiendformBoni(oPC,"fx_f_beetle_eyes", TRUE);
@@ -541,7 +539,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			Assumenewform(oPC, Appearance);
 			
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			PS_HumForm_DragonUE(oPC);
+			//PS_HumForm_DragonUE(oPC);
 			
 		}	//Greater Baatezu
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC) {
@@ -559,7 +557,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			Assumenewform(oPC, Appearance);
 			
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			PS_HumForm_DragonUE(oPC);
+			//PS_HumForm_DragonUE(oPC);
 			
 		}	//Greater Tanar'ri
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
@@ -572,7 +570,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			Assumenewform(oPC, Appearance);
 			
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			PS_HumForm_DragonUE(oPC);
+			//PS_HumForm_DragonUE(oPC);
 			
 		}	//Greater Yugoloth
     }
@@ -590,7 +588,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			Assumenewform(oPC, Appearance);
 			
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			PS_HumForm_DragonUE(oPC);
+			//PS_HumForm_DragonUE(oPC);
 		}	//Lesser Baatezu
 		else if (GetAlignmentLawChaos(oPC) == ALIGNMENT_CHAOTIC)
 		{	
@@ -606,7 +604,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			Assumenewform(oPC, Appearance);
 			
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			PS_HumForm_DragonUE(oPC);		
+			//PS_HumForm_DragonUE(oPC);		
 		}	//Lesser Tanar'ri
 		else if(GetAlignmentLawChaos(oPC) == ALIGNMENT_NEUTRAL)
 		{	
@@ -618,17 +616,17 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 			Assumenewform(oPC, Appearance);
 			
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-			PS_HumForm_DragonUE(oPC); 
+			//PS_HumForm_DragonUE(oPC); 
 		}
-
 	}	
 											
 }
 
 											
-void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
-	{
+void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell){
 	
+	RemoveFiendForm(oPC);
+	/*
     effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
 	PS_RestoreOriginalAppearance(oPC);
 	
@@ -638,7 +636,7 @@ void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell)
 	PS_DragForm_DragonUE(oPC);
 	if ( GetHasSpellEffect(1657, oPC) ) 
 		PS_RemoveEffects(oPC, 1657);
-		
+	*/
 	
 }
 

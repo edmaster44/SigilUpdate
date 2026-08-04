@@ -4276,6 +4276,10 @@ void PS_RestoreOriginalAppearance(object oPC)
 {
     object oEssence = PS_GetEssence(oPC);
     struct CreatureCoreAppearance Appearance = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
+	int nCustomTail = GetLocalInt(oEssence, "Custom_Tail");
+	int nCustomWing = GetLocalInt(oEssence, "Custom_Wing");
+	if (nCustomTail != 0) Appearance.TailVariation = nCustomTail;
+	if (nCustomWing != 0) Appearance.WingVariation = nCustomWing;
     PS_SetCreatureCoreAppearance(oPC, Appearance);
     SendMessageToPC(oPC, "Original appearance restored");
     ServerExts_RefreshCreatureAppearance(oPC,oPC);
@@ -4890,7 +4894,7 @@ void FiendformBoni(object oPC, string sVFX = "", int bAltVFX = FALSE) {
     effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
     eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
     eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
-    eBoost = EffectLinkEffects(eBoost, EffectRegenerate(5, 6.0f));
+    eBoost = EffectLinkEffects(eBoost, EffectRegenerate(3, 6.0f));
         
     
     if (sVFX != "")
@@ -4898,7 +4902,7 @@ void FiendformBoni(object oPC, string sVFX = "", int bAltVFX = FALSE) {
     
 	if (bAltVFX){
 		PS_RestoreOriginalAppearance(oPC);
-		string sVFXmessage = "The powers of the Abyss surge through your body, but you manage to ";
+		string sVFXmessage = "Fiendish power surges through your body, but you manage to ";
 		sVFXmessage += " channel the strength without changing form.";
 		SendMessageToPC(oPC, sVFXmessage);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);

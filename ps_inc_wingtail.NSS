@@ -55,7 +55,9 @@ void PS_SetTailNumber(object oPC, int nVar){
 // Returns the value from the essence variable PC_Tail
 int PS_GetTailNumber(object oPC){
 	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
-	return GetLocalInt(oEssence, "PC_Tail");
+	int nCustom = GetLocalInt(oEssence, "Custom_Tail");
+	if (nCustom != 0) return nCustom;
+	return GetLocalInt(oEssence, "PC_Tail"); 
 }
 
 int PS_GetRacialTailType(object oPC)
