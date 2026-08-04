@@ -1338,8 +1338,9 @@ void SetWingTail(object oSender, string sInput, int bIsTail){
 	string sArg = GetStringRight(sInput, GetStringLength(sInput) - nLength);
 	int nAppendage = StringToInt(sArg);
 	object oTarget = GetPlayerCurrentTarget(oSender);
-	if (!GetIsPC(oTarget) && oTarget != oSender){
+	if (!GetIsPC(oTarget) && oTarget != oSender){ //couldnt remember if GetIsPC also includes dms
 		SendMessageToPC(oSender, "Must target a player");
+		return;
 	}
 	object oEss = GetItemPossessedBy(oTarget, "ps_essence");
 	
