@@ -38,12 +38,13 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 {
 	object oPC		= OBJECT_SELF;
 	object oItem	= GetItemPossessedBy(oPC, "ps_essence");
-	PS_RemoveAllShapeChange(oPC);
 	if (iParam != 0) SetLocalInt(oItem, "TempChange", 1);
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
+	int nWait;
 
 	switch(iParam)
 	{	case 0:
+			nWait = PS_RemoveAllShapeChange(oPC);
 			//PS_RestoreOriginalAppearance(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 			PS_DragForm_DragonUE(oPC);
@@ -109,6 +110,7 @@ void main(int iParam, int iValue, string sValue, float fValue1, float fValue2, f
 		break;
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		case 15:
+			nWait = PS_RemoveAllShapeChange(oPC);
 			PS_AltForm_Assume(oPC);
 			PS_HumForm_DragonUE(oPC);
 			ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);

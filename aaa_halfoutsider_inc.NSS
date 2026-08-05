@@ -482,7 +482,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 	effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
 	int bIsInFiendform = (GetLocalInt(oEss, "FiendformSource") == nSpell);
 	//remove all fiendform, word of changing, lycan hybrid, and polymorph
-	PS_RemoveAllShapeChange(oPC);
+	int nWait = PS_RemoveAllShapeChange(oPC);
 	// if user is casting this version of fiendform while already in this version of fiendform
 	// then the intention is to return to normal, as done above, so exit
 	if (bIsInFiendform){

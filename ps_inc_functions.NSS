@@ -33,7 +33,9 @@ const string FIENDFORM_VFX_VERSION_MESSAGE = "Fiendish power surges through your
 const string LYCAN_VFX_VERSION_MESSAGE = "Your lycanthropic strength surges through your natural form.";
 
 // removes word of changing, ho fiendform, lycan hybrid, and all polymorph
-void PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE);
+// the return value simply forces scripts that call it as an assignment to wait for the
+// whole function to complete
+int PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE);
 
 // polymorph effect wrapper that calls function above to prevent stacking fiendform or Lycan
 // hybrid with polymorphs
@@ -5174,8 +5176,8 @@ void PS_Wererat_SneakRemove(object oPC){
 }
 */
 
-void PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
-	if (!GetIsPC(oPC)) return;
+int PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
+	if (!GetIsPC(oPC)) return FALSE;
 	object oEss = PS_GetEssence(oPC);
 	effect eFX = GetFirstEffect(oPC);
 	int nId;
@@ -5220,10 +5222,11 @@ void PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
 		SetLocalInt(oEss, "Hybrid", FALSE);
 		SetLocalInt(oEss, "TempChange", FALSE);
 	}
+	return TRUE;
 }
 
 effect PS_EffectPolymorph(int nPolymorphSelection, int nLocked=FALSE, int bWildshape=FALSE){
-	PS_RemoveAllShapeChange(GetSpellTargetObject());
+	int nWait = PS_RemoveAllShapeChange(GetSpellTargetObject());
 	return EffectPolymorph(nPolymorphSelection, nLocked, bWildshape);
 }
 

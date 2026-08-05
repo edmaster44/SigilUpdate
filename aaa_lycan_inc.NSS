@@ -278,7 +278,7 @@ void PS_Lycan_DR(object oPC, int nSpell)
 void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 {
 	int bIsAlreadyHybrid = GetLocalInt(oItem, "Hybrid");
-	PS_RemoveAllShapeChange(oPC);
+	int nWait = PS_RemoveAllShapeChange(oPC);
 	if (bIsAlreadyHybrid) return;
 	
 	int nAfflict;

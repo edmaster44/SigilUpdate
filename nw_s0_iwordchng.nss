@@ -32,7 +32,7 @@ void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE);
 void main() {
     if (!X2PreSpellCastCode()) return;
 	object oPC = OBJECT_SELF;
-	PS_RemoveAllShapeChange(oPC); // remove all fiendform, word of changing, lycan, and polymorph
+	int nWait = PS_RemoveAllShapeChange(oPC); // remove all fiendform, word of changing, lycan, and polymorph
 	int nSpell = GetSpellId();
 	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 	if (nSpell == 1725){ //unshift
