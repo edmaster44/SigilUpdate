@@ -82,11 +82,26 @@ void ShowEffectFadeReport(object oCaller, object oTarget, object oAddReceiver, i
 int X2PreSpellCastCode()
 {
 	object oCaster = OBJECT_SELF;
-	
-	if (GetLastSpellCastClass() == CLASS_TYPE_DRUID){
+	int nClass = GetLastSpellCastClass();
+	if (nClass == CLASS_TYPE_DRUID){
 		if (GetAlignmentLawChaos(oCaster) != ALIGNMENT_NEUTRAL && 
 			GetAlignmentGoodEvil(oCaster) != ALIGNMENT_NEUTRAL){
 			SendMessageToPC(oCaster, "Your alignment has strayed too far from Balance to cast spells.");
+			return FALSE;
+		}
+	}
+	//to prevent bugs and exploits, particularly with fiendform, prevent casting while polymorph.
+	//normally this is prevented automatically but by default a druid with Natural Spell can
+	//cast any spell or invocation in wildshape form. To prevent stacking wildshapes and fiendform, 
+	//limit Natural Spell to Druid and Shaman spells only. 
+	if (GetHasEffect(EFFECT_TYPE_POLYMORPH, oCaster)){
+		int bNaturalSpell = FALSE;
+		if ((nClass == CLASS_TYPE_DRUID || nClass == CLASS_TYPE_SPIRIT_SHAMAN) &&
+			GetHasFeat(FEAT_NATURAL_SPELL, oCaster, TRUE))
+				bNaturalSpell = TRUE;
+		if (!bNaturalSpell){
+			string sPoly = "Wildshaped characters with the Natural Spell feat may only cast Druid and Shaman spells.";
+			SendMessageToPC(oCaster, sPoly);
 			return FALSE;
 		}
 	}
