@@ -5199,11 +5199,25 @@ void PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
 			eFX = GetFirstEffect(oPC);
 		} else eFX = GetNextEffect( oPC ); 
 	}
-	if (bRestoreApp) PS_RestoreOriginalAppearance(oPC);
-	if (oEss != OBJECT_INVALID){
+	if (bRestoreApp){
+		PS_RestoreOriginalAppearance(oPC);
+		PS_TintFixer(oPC); //Fix the tint first!
+		int nCustom = GetLocalInt(oEss, "Custom_Tail");
+		int nTail = (nCustom != 0) ? nCustom : GetLocalInt(oEss, "PC_Tail");
+		int nWing;
+		if (GetLocalInt(oEss, "NO_WINGS")) nWing = 0;
+		else {
+			nCustom = GetLocalInt(oEss, "Custom_Wing");
+			nWing = (nCustom != 0) ? nCustom : GetLocalInt(oEss, "PC_Wing");
+		}
+		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+		app.TailVariation = nTail;
+		app.WingVariation = nWing;
+		PS_SetCreatureCoreAppearance(oPC, app);
+		ServerExts_RefreshCreatureAppearance(oPC,oPC);
 		SetLocalInt(oEss, "FiendformSource", 0);
 		SetLocalInt(oEss, "Hybrid", FALSE);
-		if (bRestoreApp) SetLocalInt(oEss, "TempChange", FALSE);
+		SetLocalInt(oEss, "TempChange", FALSE);
 	}
 }
 
