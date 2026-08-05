@@ -98,12 +98,19 @@ void PS_UndeadRacialType(object oPC)
 			case RACIAL_TYPE_HALFORC:
 			case RACIAL_TYPE_GRAYORC:
 				nAppVar = 994; break;
+			case 15:{ //reptilian
+				int nSub = GetOriginalSubrace(oPC);
+				if (nSub == 61 || nSub == 60) nAppVar = 1511;//khaasta or lizardfolk
+				else nAppVar = 1008;
+				break;
+			}
 			default:
 				nAppVar = 1008; break;
 		}
 		
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = nAppVar;
+		if (nAppVar == 1511) app.HeadVariation = 1;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
