@@ -69,7 +69,7 @@ void main()
     {
         nPoly = POLYMORPH_TYPE_IRON_GOLEM;
     }
-    ePoly = EffectPolymorph(nPoly);
+    ePoly = PS_EffectPolymorph(nPoly);
     ePoly = EffectLinkEffects(ePoly, eVis);
 	
 	if(!GetIsPC(OBJECT_SELF)) 

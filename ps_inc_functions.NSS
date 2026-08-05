@@ -29,6 +29,12 @@
 #include "nwnx_dae"
 #include "ps_inc_financial"
 
+// removes word of changing, ho fiendform, lycan hybrid, and all polymorph
+void PS_RemoveAllShapeChange(object oPC);
+
+// polymorph effect wrapper that calls function above to prevent stacking fiendform or Lycan
+// hybrid with polymorphs
+effect PS_EffectPolymorph(int nPolymorphSelection, int nLocked=FALSE, int bWildshape=FALSE);
 
 void DoPsionFeatProgression(object oPC);
 
@@ -3405,11 +3411,13 @@ int PS_CalcSneakDamage(object oPC, object oTarget, int iDamageType)
                     else if (iLevelsVL >= 4) iSneakDie += 2;
                     else if (iLevelsVL >= 2) iSneakDie += 1;
                     // Lycan Wererat calc
+					// deprecated, wererats progress sneak dice like rogues
+					/*
                     if (iLevelsLrat >= 1 && GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC))
                     {   iSneakDie += 2; }
                     else if (iLevelsLrat >= 1 && GetLocalInt(oItem, "Hybrid") == 1)
                     {   iSneakDie += 2; }
-                    
+                    */
                     // and now for improved sneak attack - feats 834 to 843.
                     if (GetHasFeat(FEAT_EPIC_IMPROVED_SNEAK_ATTACK_10, oPC)) iSneakDie += 10;
                     else if (GetHasFeat(FEAT_EPIC_IMPROVED_SNEAK_ATTACK_9, oPC)) iSneakDie += 9;
@@ -5153,6 +5161,56 @@ int GetIsChristmas() {
     
     return (version == HOLIDAY_XMAS);
     
+}
+
+/*
+// Helper feat for removing wererat sneak attack bonus
+void PS_Wererat_SneakRemove(object oPC){
+	if (GetHasFeat(2593, oPC)){	
+		FeatRemove(oPC, 460);
+		FeatRemove(oPC, 461);
+		SendMessageToPC(oPC, "Wererat sneak attack feats removed while not in hybrid form.");	}
+}
+*/
+
+void PS_RemoveAllShapeChange(object oPC){
+	if (!GetIsPC(oPC)) return;
+	object oEss = PS_GetEssence(oPC);
+	effect eFX = GetFirstEffect(oPC);
+	int nId;
+	string sPolyIdList = "'";
+	while (GetIsEffectValid(eFX)){
+		nId = GetEffectSpellId(eFX);
+		if (nId == WORD_OF_CHANGE_ID || nId == HO_FIENDFORM_ID ||
+			nId == LYCAN_HYBRID_ID){
+				RemoveEffect(oPC, eFX);
+				eFX = GetFirstEffect(oPC);
+		} else {
+			if (GetEffectType(eFX) == EFFECT_TYPE_POLYMORPH)
+				sPolyIdList += IntToString(nId) + "'";
+			eFX = GetNextEffect( oPC );
+		} 
+	}
+	eFX = GetFirstEffect(oPC);
+	while (GetIsEffectValid(eFX)){
+		nId = GetEffectSpellId(eFX);
+		if (TestStringAgainstPattern("**'" + IntToString(nId) + "'**", sPolyIdList)){
+			RemoveEffect(oPC, eFX);
+			eFX = GetFirstEffect(oPC);
+		} else eFX = GetNextEffect( oPC ); 
+	}
+	PS_RestoreOriginalAppearance(oPC);
+//	PS_Wererat_SneakRemove(oPC);
+	if (oEss != OBJECT_INVALID){
+		SetLocalInt(oEss, "FiendformSource", 0);
+		SetLocalInt(oEss, "Hybrid", FALSE);
+		SetLocalInt(oEss, "TempChange", FALSE);
+	}
+}
+
+effect PS_EffectPolymorph(int nPolymorphSelection, int nLocked=FALSE, int bWildshape=FALSE){
+	PS_RemoveAllShapeChange(GetSpellTargetObject());
+	return EffectPolymorph(nPolymorphSelection, nLocked, bWildshape);
 }
 
 

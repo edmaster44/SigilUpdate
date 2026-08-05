@@ -51,7 +51,7 @@ void main()
 		
     effect eVis = EffectVisualEffect( VFX_HIT_SPELL_MASS_FOWL );
 	
-    effect ePoly = EffectPolymorph(POLYMORPH_TYPE_CHICKEN, TRUE);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_TYPE_CHICKEN, TRUE);
 	ePoly = ExtraordinaryEffect(ePoly);	// AFW-OEI 07/11/2007: No dispelling extraordinary effects.
 	
     //Declare the spell shape, size and the location.  Capture the first target object in the shape.

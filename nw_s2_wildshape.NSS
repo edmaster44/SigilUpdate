@@ -156,7 +156,7 @@ void main()
     }
 */
 
-    ePoly = EffectPolymorph(nPoly, FALSE, TRUE);	// AFW-OEI 11/27/2006: Use 3rd boolean to say this is a wildshape polymorph.
+    ePoly = PS_EffectPolymorph(nPoly, FALSE, TRUE);	// AFW-OEI 11/27/2006: Use 3rd boolean to say this is a wildshape polymorph.
 	ePoly = EffectLinkEffects( ePoly, eVis );
 	ePoly = SetEffectSpellId(ePoly, SPELLABILITY_WILD_SHAPE);
 	ePoly = SupernaturalEffect(ePoly);

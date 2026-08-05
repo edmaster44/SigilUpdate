@@ -38,14 +38,12 @@ void main() {
 	object oCaster = OBJECT_SELF;
 	object oEss = PS_GetEssence(oCaster);
 	int nSpell = GetSpellId();
-	//if not Unshift and not shifting from one type to another
-	if (nSpell != 1725 && GetLocalInt(oEss, "FiendformSource") == 0){ 
-		//make sure user is not trying to stack the regen from this inv on top of another shapechange
-		if (GetLocalInt(oEss, "Hybrid") || GetLocalInt(oEss, "TempChange") ||
-			GetHasEffect(EFFECT_TYPE_POLYMORPH, oCaster)){
-				SendMessageToPC(oCaster, "You must return to your true form before using this invocation");
-				return;
-		}
+	PS_RemoveAllShapeChange(oCaster); // remove all fiendform, word of changing, lycan, and polymorph
+	
+	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
+	if (nSpell == 1725){ //unshift
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
+		return;
 	}
 
     //Declare major variables
@@ -57,29 +55,10 @@ void main() {
 	float fDuration = TurnsToSeconds( GetCasterLevel(OBJECT_SELF ) );
     fDuration = ApplyMetamagicDurationMods( fDuration );
 	
-	
-	//843 = Word of changing base spell
-	//Remove current spell effects and those from Half outsider fiendform
-	if (GetHasSpellEffect(WORD_OF_CHANGE_ID, oCaster) || GetHasSpellEffect(HO_FIENDFORM_ID, oCaster)) {
-		effect eEffect = GetFirstEffect(oCaster);
-		int nId;
-		while ( GetIsEffectValid(eEffect) ) {
-			nId = GetEffectSpellId(eEffect);
-			if (nId == HO_FIENDFORM_ID || nId == HO_FIENDFORM_ID){
-				RemoveEffect( oCaster, eEffect );
-				eEffect = GetFirstEffect( oCaster );
-			} else eEffect = GetNextEffect( oCaster );
-		}
-	}
-	// if not Unshift set vars to let us know a shift is in place
-	if (nSpell != 1725){
-		SetLocalInt(oEss, "FiendformSource", WORD_OF_CHANGE_ID);
-		SetLocalInt(oEss, "TempChange", TRUE);
-	}
+	SetLocalInt(oEss, "FiendformSource", WORD_OF_CHANGE_ID);
+	SetLocalInt(oEss, "TempChange", TRUE);
 	
 	int nGender = GetGender(oCaster);
-	
-	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
 	if (nSpell == 1721) { //Demon
 		if (GetLocalInt(PS_GetEssence(oCaster), "VFX_FIENDFORM")){
 			PS_RestoreOriginalAppearance(oCaster);
@@ -142,19 +121,7 @@ void main() {
 		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
 		//PS_HumForm_DragonUE(oCaster);
 		
-	}  else if (nSpell == 1725) { //Unshift
-		RemoveFiendForm(oCaster);
-		return;
-		/*
-		PS_RestoreOriginalAppearance(oCaster);
-		SetLocalInt(oEss, "Fiendform", FALSE);
-		SetLocalInt(oEss, "TempChange" FALSE);
-		//General useful things for shifting back
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oCaster);
-		//PS_DragForm_DragonUE(oCaster); // why unequip non-creature weapons?
-		*/
-	} 
-	
+	}
 }
 
 void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE){

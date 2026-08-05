@@ -15,6 +15,8 @@
 	Set the item's variable "duration" to the number of turns (60 seconds each) for the effect to last,
 	i.e., 1 hour = 60 turns, while a full day = 1440 turns.
 */
+#include "ps_inc_functions"
+
 void main()
 {
     object oPC = GetItemActivator();
@@ -22,7 +24,7 @@ void main()
     object oTarget = oPC;
 	int nPoly = GetLocalInt(oItem, "polymorph");
 	int nDuration = GetLocalInt(oItem, "duration");
-	effect ePoly = EffectPolymorph(nPoly);
+	effect ePoly = PS_EffectPolymorph(nPoly);
     effect eVis = EffectNWN2SpecialEffectFile("sp_enlarge_person_hit");
 
 	AssignCommand(oTarget, ActionPlayAnimation(ANIMATION_FIREFORGET_USEITEM,1.0));

@@ -324,6 +324,12 @@ const string WOOD_ZALANTAR = "n2_crft_plkzalantar";
 						Begin Reserved Spell Ids for Equipment and Toggle Feats
 						(also marked reserved in spells.2da
 *********************************************************************************************/
+
+// constants for the three ids of appearance changes that do more than cosmetics,
+// used in PS_RemoveAllShapeChange() in ps_inc_functions
+const int LYCAN_HYBRID_ID = 334;
+const int WORD_OF_CHANGE_ID = 843; 
+const int HO_FIENDFORM_ID = 1657;
 //used in inc_tattoo.nss
 const int TATTOO_SPELL_ID = 2993; 
 

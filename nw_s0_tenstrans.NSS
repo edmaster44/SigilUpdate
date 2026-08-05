@@ -157,7 +157,7 @@ if (!X2PreSpellCastCode())
     effect eDex = EffectAbilityIncrease(ABILITY_DEXTERITY, nDEX);
     effect eAC = EffectACIncrease(4,AC_NATURAL_BONUS);
     effect eDis = EffectSkillIncrease(SKILL_DISCIPLINE, (nLevel + 2));
-    //effect ePoly = EffectPolymorph(POLYMORPH_TYPE_HEURODIS);
+    //effect ePoly = PS_EffectPolymorph(POLYMORPH_TYPE_HEURODIS);
     //Link effects
     effect eLink = EffectLinkEffects(eAttack, eSave);
     eLink = EffectLinkEffects(eLink, eDis);

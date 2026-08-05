@@ -589,7 +589,7 @@ void PS_FamiliarForm_Bat(object oPC)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = EffectPolymorph(171);
+    effect ePoly = PS_EffectPolymorph(171);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = ExtraordinaryEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_BAT);
@@ -617,7 +617,7 @@ void PS_FamiliarForm_Cat(object oPC)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = EffectPolymorph(POLYMORPH_CAT);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_CAT);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = ExtraordinaryEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_CAT);
@@ -645,7 +645,7 @@ void PS_FamiliarForm_Rat(object oPC)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = EffectPolymorph(POLYMORPH_RAT);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_RAT);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = ExtraordinaryEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_RAT);
@@ -673,7 +673,7 @@ void PS_FamiliarForm_Spider(object oPC)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = EffectPolymorph(POLYMORPH_SMALL_SPIDER);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_SMALL_SPIDER);
 	effect eScale =	EffectSetScale (0.15f, 0.15f, 0.15f);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = EffectLinkEffects (ePoly, eScale);
@@ -703,7 +703,7 @@ void PS_FamiliarForm_Weasel(object oPC)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = EffectPolymorph(POLYMORPH_WEASEL);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_WEASEL);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = ExtraordinaryEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_WEASEL);
@@ -731,7 +731,7 @@ void PS_Ability_CanineForm(object oPC)
     if (!X2PreSpellCastCode())
     {	return;		}
 	effect eVis 	= EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect eDog	= EffectPolymorph(50, FALSE, TRUE);
+    effect eDog	= PS_EffectPolymorph(50, FALSE, TRUE);
 		eDog 		= ExtraordinaryEffect(eDog);
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
@@ -744,7 +744,7 @@ void PS_Ability_CanineForm2(object oPC)
     if (!X2PreSpellCastCode())
     {	return;		}
 	effect eVis 	= EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect eDog	= EffectPolymorph(52, FALSE, TRUE);
+    effect eDog	= PS_EffectPolymorph(52, FALSE, TRUE);
 		eDog 		= ExtraordinaryEffect(eDog);
     SignalEvent(oPC, EventSpellCastAt(oPC, SPELL_POLYMORPH_SELF, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
@@ -830,7 +830,7 @@ void PS_Ability_EladrinForm(object oPC)
 	else
 	{	iForm		= 85;	}
 	effect eVis 	= EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly	= EffectPolymorph(iForm, FALSE, TRUE);
+    effect ePoly	= PS_EffectPolymorph(iForm, FALSE, TRUE);
 	effect eAOE 	= EffectAreaOfEffect(94); // new aoe Eladrin glow
 		ePoly		= EffectLinkEffects(eAOE, ePoly);
 		ePoly 		= ExtraordinaryEffect(ePoly);

@@ -13,7 +13,7 @@
 //:: AFW-OEI 07/29/2006:
 //::	Default to fire elemental
 
-#include "x2_inc_itemprop"
+#include "ps_inc_functions"
 void main()
 {
     //Declare major variables
@@ -69,7 +69,7 @@ void main()
         }
     }
 
-    ePoly = EffectPolymorph(nPoly, FALSE, TRUE);	// AFW-OEI 11/27/2006: Use 3rd boolean to say this is a wildshape polymorph.
+    ePoly = PS_EffectPolymorph(nPoly, FALSE, TRUE);	// AFW-OEI 11/27/2006: Use 3rd boolean to say this is a wildshape polymorph.
     ePoly = SupernaturalEffect(ePoly);
 	ePoly = EffectLinkEffects( ePoly, eVis );
 	ePoly = SupernaturalEffect(ePoly);

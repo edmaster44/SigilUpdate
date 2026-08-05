@@ -89,11 +89,10 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDot, oTarget, 18.0);
 }
 
-
+	/* no longer using a persistent feat to launch lycan type choice ui
 void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)	
 {
 	int nAfflict = GetLocalInt(oItem, "Lycan_Affliction");
-	
 	int nOldECL = PS_GetEssenceECL(oPC);
 	
 	if (nAfflict != 0)
@@ -107,9 +106,11 @@ void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)
 	SetLocalString(oItem, "Template", "Lycan");
 	SetLocalInt(oItem, "Lycan_Affliction", 1);  
 }
-
+*/
 
 // Helper feat for granting wererat sneak attack bonus
+// wererat just gets full sneak dice prog for parity with wereboar barb feats and lupus vamp sneak dice
+/*
 void PS_Wererat_SneakAdd(object oPC)
 {
 	// adds 2 dice of blackguard sneak attack. Shouldn't conflict with anything since blackguard
@@ -119,16 +120,8 @@ void PS_Wererat_SneakAdd(object oPC)
 		FeatAdd(oPC, 461, 0);
 		SendMessageToPC(oPC, "Wererat sneak attack feats granted while in hybrid form."); 	}
 }
-
-// Helper feat for removing wererat sneak attack bonus
-void PS_Wererat_SneakRemove(object oPC)
-{
-	if (GetHasFeat(2593, oPC))
-	{	FeatRemove(oPC, 460);
-		FeatRemove(oPC, 461);
-		SendMessageToPC(oPC, "Wererat sneak attack feats removed while not in hybrid form.");	}
-}
-
+*/
+/* wererats no longer get bonus sneak dice in animal form
 void PS_Wererat_AnimalSneakApply(object oPC)
 {	
 	itemproperty ipSneak1 	= ItemPropertyBonusFeat(553);
@@ -138,7 +131,9 @@ void PS_Wererat_AnimalSneakApply(object oPC)
 	{	IPSafeAddItemProperty(oSkin, ipSneak1, HoursToSeconds(24));
 		IPSafeAddItemProperty(oSkin, ipSneak2, HoursToSeconds(24));	}
 }
+*/
 
+/* lycans no longer get saddled with undroppable/untradeable unenchanted weapons
 void PS_Lycan_HybridWeaponAdd(object oPC, object oItem)
 {
 	string sWeapon1, sWeapon2, sWeapon3;
@@ -166,6 +161,7 @@ void PS_Lycan_HybridWeaponAdd(object oPC, object oItem)
 	SetLocalInt(oItem, "LycanWeapons", 1);
 	SendMessageToPC(oPC, "Equippable creature weapons added to inventory!");
 }
+*/
 
 void PS_Lycan_ScaledWeaponApply(object oWeapon, object oPC)
 {
@@ -233,11 +229,9 @@ void PS_Lycan_Multiattack(object oPC, int bHasMultiattack = FALSE){
 
 void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 {
-	int nCheck		= GetLocalInt(oItem, "Hybrid");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
-		
-    if (!X2PreSpellCastCode())
-    {	return;		}
+	if (!X2PreSpellCastCode()) return;		
+	
+	
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
  	int nPoly;
 	if (GetHasFeat(LYCAN_AFFLICTION_WEREBOAR, oPC))
@@ -248,25 +242,15 @@ void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 	{	nPoly = POLYMORPH_WERETIGER_ANIMFORM;	}
 	else
 	{	nPoly = POLYMORPH_WEREWOLF_ANIMFORM;	}
-    effect ePoly = EffectPolymorph(nPoly, FALSE, TRUE);
+    effect ePoly = PS_EffectPolymorph(nPoly, FALSE, TRUE);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		
-	if (nCheck == 1 || nTemp == 1) 	
-	{	PS_RestoreOriginalAppearance(oPC);
-		PS_RefreshAppearance(oPC);
-		RemoveEffectsFromSpell(oPC, 334);
-		SetLocalInt(oItem, "Hybrid", 0);
-		SetLocalInt(oItem, "TempChange", 0);
-		PS_Wererat_SneakRemove(oPC);
-		//FeatRemove(oPC, 289);
-	}	
-
     SignalEvent(oPC, EventSpellCastAt(oPC, nSpell, FALSE));
     AssignCommand(oPC, ClearAllActions()); // prevents an exploit
     PS_RestoreOriginalAppearance(oPC);
 	PS_RefreshAppearance(oPC);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
-	PS_Wererat_AnimalSneakApply(oPC);
+	//PS_Wererat_AnimalSneakApply(oPC);
 	PS_Lycan_Multiattack(oPC, TRUE);
 	PS_Lycan_ScaledWeapons(oPC);
 	
@@ -293,9 +277,10 @@ void PS_Lycan_DR(object oPC, int nSpell)
 
 void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 {
-	int nCheck		= GetLocalInt(oItem, "Hybrid");
-	int nTemp		= GetLocalInt(oItem, "TempChange");
-	int nWeapons	= GetLocalInt(oItem, "LycanWeapons");
+	int bIsAlreadyHybrid = GetLocalInt(oItem, "Hybrid");
+	PS_RemoveAllShapeChange(oPC);
+	if (bIsAlreadyHybrid) return;
+	
 	int nAfflict;
 	int nStr;
 	int nDex;
@@ -333,49 +318,28 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 	//int nPCLevel	= PS_GetLevel(oPC);
 	int nRegen = (PS_GetLevel(oPC) >= 15) ? 2 : 1;
 	eLink = EffectLinkEffects(EffectRegenerate(nRegen, 6.0), eLink);
-	
-	if (GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC))
-	{	RemoveSpecificEffect(EFFECT_TYPE_POLYMORPH, oPC);
-	}
-			
-	if (nCheck == 1 || nTemp == 1) 	
-	{	PS_RestoreOriginalAppearance(oPC);
+
+	if (GetLocalInt(oItem, "VFX_LYCAN")){
+		PS_RestoreOriginalAppearance(oPC);
+		string sVFXmessage = "The power of your hybrid form surges through your body, but you manage to ";
+		sVFXmessage += " channel the strength without changing form.";
+		SendMessageToPC(oPC, sVFXmessage);
+		eLink = EffectLinkEffects(EffectVisualEffect(VFX_DUR_BOND_OF_FATAL_TOUCH), eLink);
+		eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN", oPC), eLink);
+		//eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN_B", oPC), eLink);
+		//eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN", oPC), eLink);
+	} else {
+		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+		app.AppearanceType = nAfflict;
+		PS_SetCreatureCoreAppearance(oPC, app);
+		SetLocalInt(oItem, "TempChange", 1);
 		PS_RefreshAppearance(oPC);
-		RemoveEffectsFromSpell(oPC, nSpell);
-		SetLocalInt(oItem, "Hybrid", 0);
-		SetLocalInt(oItem, "TempChange", 0);
-		PS_Wererat_SneakRemove(oPC);
-		PS_Lycan_Multiattack(oPC, FALSE);
-		//FeatRemove(oPC, 289);
 	}
-	else 
-	{	//FeatAdd (oPC, 289, FALSE);
-		
-		if (GetLocalInt(oItem, "VFX_LYCAN")){
-			PS_RestoreOriginalAppearance(oPC);
-			string sVFXmessage = "The power of your hybrid form surges through your body, but you manage to ";
-			sVFXmessage += " channel the strength without changing form.";
-			SendMessageToPC(oPC, sVFXmessage);
-			eLink = EffectLinkEffects(EffectVisualEffect(VFX_DUR_BOND_OF_FATAL_TOUCH), eLink);
-			eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN", oPC), eLink);
-			//eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN_B", oPC), eLink);
-			//eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN", oPC), eLink);
-		} else {
-			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
-			app.AppearanceType = nAfflict;
-			PS_SetCreatureCoreAppearance(oPC, app);
-			SetLocalInt(oItem, "TempChange", 1);
-			PS_RefreshAppearance(oPC);
-		}
-		eLink		= SupernaturalEffect(eLink);
-		SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
-		ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
-		SetLocalInt(oItem, "Hybrid", 1);
-		PS_Wererat_SneakAdd(oPC);
-	}
-	
-//	if (nWeapons != 1)
-//	{	PS_Lycan_HybridWeaponAdd(oPC, oItem);	}
+	eLink		= SupernaturalEffect(eLink);
+	SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
+	SetLocalInt(oItem, "Hybrid", 1);
+	//PS_Wererat_SneakAdd(oPC);
 }
 
 void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)

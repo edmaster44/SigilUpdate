@@ -19,7 +19,7 @@ void main()
     }
 		object	oCaster	= OBJECT_SELF;
 		float fDuration = 60.0 * GetTotalLevels(oCaster, TRUE);
-		effect ePoly = EffectPolymorph(GLOBE_POLY);
+		effect ePoly = PS_EffectPolymorph(GLOBE_POLY);
 		effect eVis = EffectNWN2SpecialEffectFile(Get2DAString("polymorph", "VFX", GLOBE_POLY));
 		effect eLink = ExtraordinaryEffect(EffectLinkEffects(ePoly, eVis));
 		

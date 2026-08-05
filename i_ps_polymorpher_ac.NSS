@@ -14,13 +14,15 @@ activate this script. Any item using this script must have ps_polymorpher as its
 
 */  
 
+#include "ps_inc_functions"
+
 void main()
 {
     object oPC      = GetItemActivator();
     object oItem    = GetItemActivated();
 	int iPolym		= GetLocalInt(oItem, "polymorph");
 	int iWild		= GetLocalInt(oItem, "wild");
-	effect ePolym	= EffectPolymorph(iPolym, 0, iWild);
+	effect ePolym	= PS_EffectPolymorph(iPolym, 0, iWild);
 	effect eVis = EffectVisualEffect(VFX_IMP_POLYMORPH);
 	int iDuration	= GetLocalInt(oItem, "duration");
 	float fDuration = HoursToSeconds(iDuration);

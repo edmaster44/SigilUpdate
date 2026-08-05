@@ -319,7 +319,7 @@ void AdjustVampMaleficus(object oPC, int nLastLevel){
 //levels of specific classes and then never repeated. We could make sure of non repetition by storing a bunch of local 
 //integers for each separate feature, but that woud entail dozens of local integers instead of 4. This is cleaner.
 void ClassOneShotAdjustments(object oPC){
-
+	object oEss = PS_GetEssence(oPC);
 	int nLastClass = GetLastClassLeveledUp(oPC);
 	if (nLastClass == -1 || nLastClass == -2){
 		string sMessage = "Error in function ClassOneShotAdjustments in script ff_update_feats_inc.";
@@ -352,6 +352,12 @@ void ClassOneShotAdjustments(object oPC){
 			AddScriptParameterString("");
 			ExecuteScriptEnhanced("gui_extra_choices", oPC);
 		}
+	} else if (nLastClass == CLASS_TYPE_LYCAN_PRC && nLastClassLevel == 1){
+		AddScriptParameterString("LYCAN_START");
+		AddScriptParameterString("");
+		ExecuteScriptEnhanced("gui_extra_choices", oPC);
+		SetLocalString(oEss, "Template", "Lycan");
+		SetLocalInt(oEss, "Lycan_Affliction", 1); 
 	}
 	ExportSingleCharacter(oPC);
 }
@@ -717,6 +723,10 @@ int fCalcSneakDice(object oPC)
 
 	// rogue
 	nSneakDice += (GetLevelByClass(CLASS_TYPE_ROGUE, oPC) + 1) / 2;
+	
+	// wererat
+	if (GetHasFeat(2593, oPC, TRUE))
+		nSneakDice += (GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oPC) + 1) / 2;
 
 	// what I presume to be legacy arcane trickster
 	nSneakDice += GetLevelByClass(CLASS_TYPE_ARCANETRICKSTER, oPC) / 2;

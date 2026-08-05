@@ -73,7 +73,7 @@ void main() {
         nPoly = 171; //Bat
     }
 	
-	effect ePoly = EffectPolymorph(nPoly, TRUE);
+	effect ePoly = PS_EffectPolymorph(nPoly, TRUE);
 		
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 1680, TRUE));

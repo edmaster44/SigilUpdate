@@ -10,10 +10,6 @@
 #include "x2_inc_itemprop"
 
 
-const int WORD_OF_CHANGE_ID = 843; 
-const int HO_FIENDFORM_ID = 1657;
-
-
 int PS_OutsiderLevels(object oPC)
 {
 	int iHalfOutsider = GetLevelByClass(CLASS_TYPE_HALFOUTSIDER_PRC, oPC);//Half-Outsider
@@ -480,42 +476,21 @@ void PS_HOM_CrownOfFlame(object oPC, int nSpell)
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAOE, OBJECT_SELF, RoundsToSeconds(iDuration));
 }
 
-void RemoveFiendForm(object oPC){
-	object oEss = PS_GetEssence(oPC);
-	PS_RestoreOriginalAppearance(oPC);
-	effect eEffect = GetFirstEffect(oPC);
-	int nId;
-	while (GetIsEffectValid(eEffect)){
-		nId = GetEffectSpellId(eEffect);
-		if (nId == WORD_OF_CHANGE_ID || nId == HO_FIENDFORM_ID){
-			RemoveEffect( oPC, eEffect );
-			eEffect = GetFirstEffect(oPC);
-		} else eEffect = GetNextEffect( oPC );
-	}
-	SetLocalInt(oEss, "FiendformSource", 0);
-	SetLocalInt(oEss, "TempChange", FALSE);
-	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
-}
-
 void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 {
 	object oEss = PS_GetEssence(oPC);
-	int nFiend = GetLocalInt(oEss, "FiendformSource");
-	
-	if ((GetLocalInt(oEss, "Hybrid") || GetLocalInt(oEss, "TempChange") ||
-			GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC)) && nFiend == 0){
-				SendMessageToPC(oPC, "You must return to your true form before using this ability");
-				return;
-	} else if (nFiend == nSpell){
-		RemoveFiendForm(oPC);
+	effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
+	int bIsInFiendform = (GetLocalInt(oEss, "FiendformSource") == nSpell);
+	//remove all fiendform, word of changing, lycan hybrid, and polymorph
+	PS_RemoveAllShapeChange(oPC);
+	// if user is casting this version of fiendform while already in this version of fiendform
+	// then the intention is to return to normal, as done above, so exit
+	if (bIsInFiendform){
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
 		return;
-	} else if (nFiend > 0){
-		PS_RemoveEffects(oPC, WORD_OF_CHANGE_ID);
 	}
+	
 	SetLocalInt(oEss, "FiendformSource", nSpell);
-	SetLocalInt(oEss, "TempChange", TRUE);
-    effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
     effect eFiend;
 	int nLevel = PS_GetLevel(oPC);
 	
@@ -625,7 +600,7 @@ void PS_HOM_Fiendform(object oPC, object oTarget, int nSpell)
 											
 void PS_HOM_FIENDFORM_UNSHIFT(object oPC, object oTarget, int nSpell){
 	
-	RemoveFiendForm(oPC);
+	PS_RemoveAllShapeChange(oPC);
 	/*
     effect eVFX = EffectNWN2SpecialEffectFile("VFX_INVOCATION_WORD_OF_CHANGING");
 	PS_RestoreOriginalAppearance(oPC);

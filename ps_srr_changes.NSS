@@ -2,6 +2,7 @@
 
 #include "x2_inc_itemprop"
 #include "lycantrope_stats"
+#include "ps_inc_functions"
 
 // spell ID consts
 const int SRR_HUMAN_FORM = 1346;
@@ -110,7 +111,7 @@ void main()
 				iShape = SRR_POLY_VAMP_M;
 		}
 			
-		effect ePoly = EffectPolymorph(iShape, FALSE, TRUE);
+		effect ePoly = PS_EffectPolymorph(iShape, FALSE, TRUE);
 		ePoly = EffectLinkEffects(eVis, ePoly);
 			
 	    int bWeapon = StringToInt(Get2DAString("polymorph","MergeW",iShape)) == 1;

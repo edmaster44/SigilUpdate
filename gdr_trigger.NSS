@@ -1116,357 +1116,357 @@ void Enchant(object oPC, int spell, int power, float duration)
                 default:
                 case 0:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_BADGER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_BADGER);
                     break;
 
                 case 1:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_ANCIENT_BLUE_DRAGON);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_ANCIENT_BLUE_DRAGON);
                     break;
 
                 case 2:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_ANCIENT_GREEN_DRAGON);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_ANCIENT_GREEN_DRAGON);
                     break;
 
                 case 3:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_ANCIENT_RED_DRAGON);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_ANCIENT_RED_DRAGON);
                     break;
 
                 case 4:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_BALOR);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_BALOR);
                     break;
 
                 case 5:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_BASILISK);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_BASILISK);
                     break;
 
                 case 6:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_BEHOLDER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_BEHOLDER);
                     break;
 
                 case 7:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_BOAR);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_BOAR);
                     break;
 
                 case 8:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_BROWN_BEAR);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_BROWN_BEAR);
                     break;
 
                 case 9:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_CELESTIAL_AVENGER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_CELESTIAL_AVENGER);
                     break;
 
                 case 10:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_CHICKEN);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_CHICKEN);
                     break;
 
                 case 11:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_COW);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_COW);
                     break;
 
                 case 12:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_DEATH_SLAAD);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_DEATH_SLAAD);
                     break;
 
                 case 13:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_DIRE_BADGER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_DIRE_BADGER);
                     break;
 
                 case 14:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_DIRE_PANTHER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_DIRE_PANTHER);
                     break;
 
                 case 15:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_DIRE_WOLF);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_DIRE_WOLF);
                     break;
 
                 case 16:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_DIRETIGER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_DIRETIGER);
                     break;
 
                 case 17:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_DOOM_KNIGHT);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_DOOM_KNIGHT);
                     break;
 
                 case 18:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_DRIDER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_DRIDER);
                     break;
 
                 case 19:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_ELDER_AIR_ELEMENTAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_ELDER_AIR_ELEMENTAL);
                     break;
 
                 case 20:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_ELDER_EARTH_ELEMENTAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_ELDER_EARTH_ELEMENTAL);
                     break;
 
                 case 21:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_ELDER_FIRE_ELEMENTAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_ELDER_FIRE_ELEMENTAL);
                     break;
 
                 case 22:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_ELDER_WATER_ELEMENTAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_ELDER_WATER_ELEMENTAL);
                     break;
 
                 case 23:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_FEMALE_DROW);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_FEMALE_DROW);
                     break;
 
                 case 24:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_FIRE_GIANT);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_FIRE_GIANT);
                     break;
 
                 case 25:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_FROST_GIANT_FEMALE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_FROST_GIANT_FEMALE);
                     break;
 
                 case 26:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_FROST_GIANT_MALE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_FROST_GIANT_MALE);
                     break;
 
                 case 27:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_GARGOYLE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_GARGOYLE);
                     break;
 
                 case 28:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_GIANT_SPIDER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_GIANT_SPIDER);
                     break;
 
                 case 29:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_GOLEM_AUTOMATON);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_GOLEM_AUTOMATON);
                     break;
 
                 case 30:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_HARPY);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_HARPY);
                     break;
 
                 case 31:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_HEURODIS);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_HEURODIS);
                     break;
 
                 case 32:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_HUGE_AIR_ELEMENTAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_HUGE_AIR_ELEMENTAL);
                     break;
 
                 case 33:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_HUGE_EARTH_ELEMENTAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_HUGE_EARTH_ELEMENTAL);
                     break;
 
                 case 34:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_HUGE_FIRE_ELEMENTAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_HUGE_FIRE_ELEMENTAL);
                     break;
 
                 case 35:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_HUGE_WATER_ELEMENTAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_HUGE_WATER_ELEMENTAL);
                     break;
 
                 case 36:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_IMP);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_IMP);
                     break;
 
                 case 37:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_IRON_GOLEM);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_IRON_GOLEM);
                     break;
 
                 case 38:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_JNAH_GIANT_FEMAL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_JNAH_GIANT_FEMAL);
                     break;
 
                 case 39:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_JNAH_GIANT_MALE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_JNAH_GIANT_MALE);
                     break;
 
                 case 40:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_MALE_DROW);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_MALE_DROW);
                     break;
 
                 case 41:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_MANTICORE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_MANTICORE);
                     break;
 
                 case 42:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_MEDUSA);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_MEDUSA);
                     break;
 
                 case 43:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_MINDFLAYER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_MINDFLAYER);
                     break;
 
                 case 44:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_MINOTAUR);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_MINOTAUR);
                     break;
 
                 case 45:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_NULL_HUMAN);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_NULL_HUMAN);
                     break;
 
                 case 46:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_PANTHER);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_PANTHER);
                     break;
 
                 case 47:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_PENGUIN);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_PENGUIN);
                     break;
 
                 case 48:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_PIXIE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_PIXIE);
                     break;
 
                 case 49:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_QUASIT);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_QUASIT);
                     break;
 
                 case 50:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_RED_DRAGON);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_RED_DRAGON);
                     break;
 
                 case 51:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_RISEN_LORD);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_RISEN_LORD);
                     break;
 
                 case 52:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_SPECTRE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_SPECTRE);
                     break;
 
                 case 53:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_SUCCUBUS);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_SUCCUBUS);
                     break;
 
                 case 54:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_SUPER_CHICKEN);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_SUPER_CHICKEN);
                     break;
 
                 case 55:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_TROLL);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_TROLL);
                     break;
 
                 case 56:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_UMBER_HULK);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_UMBER_HULK);
                     break;
 
                 case 57:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_VAMPIRE_FEMALE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_VAMPIRE_FEMALE);
                     break;
 
                 case 58:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_VAMPIRE_MALE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_VAMPIRE_MALE);
                     break;
 
                 case 59:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_VROCK);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_VROCK);
                     break;
 
                 case 60:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WERECAT);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WERECAT);
                     break;
 
                 case 61:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WERERAT);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WERERAT);
                     break;
 
                 case 62:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WEREWOLF);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WEREWOLF);
                     break;
 
                 case 63:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WOLF);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WOLF);
                     break;
 
                 case 64:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WYRMLING_BLACK);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WYRMLING_BLACK);
                     break;
 
                 case 65:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WYRMLING_BLUE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WYRMLING_BLUE);
                     break;
 
                 case 66:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WYRMLING_GREEN);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WYRMLING_GREEN);
                     break;
 
                 case 67:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WYRMLING_RED);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WYRMLING_RED);
                     break;
 
                 case 68:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_WYRMLING_WHITE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_WYRMLING_WHITE);
                     break;
 
                 case 69:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_YUANTI);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_YUANTI);
                     break;
 
                 case 70:
 
-                    eEffect = EffectPolymorph(POLYMORPH_TYPE_ZOMBIE);
+                    eEffect = PS_EffectPolymorph(POLYMORPH_TYPE_ZOMBIE);
                     break;
 
             }

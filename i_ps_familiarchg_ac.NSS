@@ -17,6 +17,9 @@
 	transform familiars into, as polymorph does give statistical bonuses. A frost giant or dragon familiar could
 	be potentially game-breaking.
 */
+
+#include "ps_inc_functions"
+
 void main()
 {
     object oPC = GetItemActivator();
@@ -24,7 +27,7 @@ void main()
     object oTarget = oPC;
 	object oFamiliar = GetAssociate(3,oPC);
 	int nPoly = GetLocalInt(oItem, "polymorph");
-	effect ePoly = EffectPolymorph(nPoly);
+	effect ePoly = PS_EffectPolymorph(nPoly);
     effect eVis = EffectNWN2SpecialEffectFile("sp_enlarge_person_hit");
 
 	AssignCommand(oTarget, ActionPlayAnimation(ANIMATION_FIREFORGET_USEITEM,1.0));

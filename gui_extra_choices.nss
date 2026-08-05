@@ -111,7 +111,7 @@ int GetRelevantClass(object oPC, string sCOMMAND) {
 				return 622;//Half-Outsider Path
 	} else if (sCOMMAND == "VAMP_MAL_START") return 106;
 	else if (sCOMMAND == "HALF_UNDEAD_START") return 114;
-	
+	else if (sCOMMAND == "LYCAN_START") return 104;
 	
 	
 
@@ -127,7 +127,7 @@ int GetRelevantClass(object oPC, string sCOMMAND) {
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2537, oPC)) && (CheckEpiteth(62, oPC) == FALSE)) return 62; //Half-Fiend(magic path) Wings/Eyes, Magic
 	if ((GetLevelByClass(76, oPC) >= 6) && (GetHasFeat(2538, oPC)) && (CheckEpiteth(621, oPC) == FALSE)) return 621; //Half-Celestial(Magic path) Wings/Eyes, Magic
 	*/
-	if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
+	//if ((GetLevelByClass(104, oPC) > 0) && (CheckEpiteth(104, oPC) == FALSE)) return 104; //Lycan Affliction
 	//if ((GetLevelByClass(106, oPC) >= 5) && (GetHasFeat(2584, oPC))) return 106; //VampMal L5 Bonus Feat
 	if ((GetLevelByClass(108, oPC) >= 6)) return 108; //Gray Slaad Chaotic Crafting
 	if ((GetLevelByClass(110,oPC) > 0 ) && (CheckEpiteth(110,oPC) == FALSE)) return 110;//Psychic Warrior

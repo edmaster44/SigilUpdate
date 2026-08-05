@@ -20,9 +20,11 @@ void main()
 	switch (nSpell)
 	{
 ////////////////////////////////////////////////////////////////////////////////////
+		/* no longer using a persistent feat to launch lycan type choice ui
 		case 331 :		//Affliction
 		{	PS_Lycan_Affliction(oPC, oItem, nSpell);			}
 		break;	
+		*/
 ////////////////////////////////////////////////////////////////////////////////////
 		case 332 :		//Animal Form
 		{	PS_Lycan_AnimalForm(oPC, oItem, nSpell);			}

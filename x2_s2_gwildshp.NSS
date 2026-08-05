@@ -199,7 +199,7 @@ void main()
     //--------------------------------------------------------------------------
     // Here the actual polymorphing is done
     //--------------------------------------------------------------------------
-    ePoly = EffectPolymorph(nPoly, FALSE, TRUE);	// AFW-OEI 06/06/2007: Use 3rd boolean to say this is a wildshape polymorph.
+    ePoly = PS_EffectPolymorph(nPoly, FALSE, TRUE);	// AFW-OEI 06/06/2007: Use 3rd boolean to say this is a wildshape polymorph.
     ePoly = ExtraordinaryEffect(ePoly);
     ClearAllActions(); // prevents an exploit
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, OBJECT_SELF);
