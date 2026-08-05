@@ -104,7 +104,6 @@ void PS_UndeadRacialType(object oPC)
 		
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = nAppVar;
-		if (GetOriginalSubrace(oPC) == 61) app.HeadVariation = 1;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
 		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));
