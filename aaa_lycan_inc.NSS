@@ -321,13 +321,9 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 
 	if (GetLocalInt(oItem, "VFX_LYCAN")){
 		PS_RestoreOriginalAppearance(oPC);
-		string sVFXmessage = "The power of your hybrid form surges through your body, but you manage to ";
-		sVFXmessage += " channel the strength without changing form.";
-		SendMessageToPC(oPC, sVFXmessage);
+		SendMessageToPC(oPC, LYCAN_VFX_VERSION_MESSAGE);
 		eLink = EffectLinkEffects(EffectVisualEffect(VFX_DUR_BOND_OF_FATAL_TOUCH), eLink);
 		eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_DEATH_GOD_LIGHT_GREEN", oPC), eLink);
-		//eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN_B", oPC), eLink);
-		//eLink = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_WILLOWISP_GREEN", oPC), eLink);
 	} else {
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = nAfflict;

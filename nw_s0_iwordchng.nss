@@ -114,9 +114,7 @@ void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE){
 	}
 	
 	if (bVFXonly){
-		string sVFXmessage = "Fiendish power surges through your body, but you manage to ";
-		sVFXmessage += " channel the strength without changing form.";
-		SendMessageToPC(oCaster, sVFXmessage);
+		SendMessageToPC(oCaster, FIENDFORM_VFX_VERSION_MESSAGE);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_A_SPIRIT_EMERGE_LOOP"), eBoost);
 	}

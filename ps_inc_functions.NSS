@@ -29,6 +29,9 @@
 #include "nwnx_dae"
 #include "ps_inc_financial"
 
+const string FIENDFORM_VFX_VERSION_MESSAGE = "Fiendish power surges through your natural form.";
+const string LYCAN_VFX_VERSION_MESSAGE = "Your lycanthropic strength surges through your natural form.";
+
 // removes word of changing, ho fiendform, lycan hybrid, and all polymorph
 void PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE);
 
@@ -4910,9 +4913,7 @@ void FiendformBoni(object oPC, string sVFX = "", int bAltVFX = FALSE) {
     
 	if (bAltVFX){
 		PS_RestoreOriginalAppearance(oPC);
-		string sVFXmessage = "Fiendish power surges through your body, but you manage to ";
-		sVFXmessage += " channel the strength without changing form.";
-		SendMessageToPC(oPC, sVFXmessage);
+		SendMessageToPC(oPC, FIENDFORM_VFX_VERSION_MESSAGE);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);
 		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_A_SPIRIT_EMERGE_LOOP"), eBoost);
 	}
