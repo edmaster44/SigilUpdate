@@ -30,7 +30,7 @@
 #include "ps_inc_financial"
 
 // removes word of changing, ho fiendform, lycan hybrid, and all polymorph
-void PS_RemoveAllShapeChange(object oPC);
+void PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE);
 
 // polymorph effect wrapper that calls function above to prevent stacking fiendform or Lycan
 // hybrid with polymorphs
@@ -5173,7 +5173,7 @@ void PS_Wererat_SneakRemove(object oPC){
 }
 */
 
-void PS_RemoveAllShapeChange(object oPC){
+void PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
 	if (!GetIsPC(oPC)) return;
 	object oEss = PS_GetEssence(oPC);
 	effect eFX = GetFirstEffect(oPC);
@@ -5199,12 +5199,11 @@ void PS_RemoveAllShapeChange(object oPC){
 			eFX = GetFirstEffect(oPC);
 		} else eFX = GetNextEffect( oPC ); 
 	}
-	PS_RestoreOriginalAppearance(oPC);
-//	PS_Wererat_SneakRemove(oPC);
+	if (bRestoreApp) PS_RestoreOriginalAppearance(oPC);
 	if (oEss != OBJECT_INVALID){
 		SetLocalInt(oEss, "FiendformSource", 0);
 		SetLocalInt(oEss, "Hybrid", FALSE);
-		SetLocalInt(oEss, "TempChange", FALSE);
+		if (bRestoreApp) SetLocalInt(oEss, "TempChange", FALSE);
 	}
 }
 

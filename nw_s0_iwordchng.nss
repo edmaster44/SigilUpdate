@@ -22,11 +22,155 @@
 #include "nwn2_inc_metmag"
 #include "aaa_halfoutsider_inc"
 
-void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance);
+//void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance);
 
 struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID);
 
 void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE);
+
+
+void main() {
+    if (!X2PreSpellCastCode()) return;
+	object oPC = OBJECT_SELF;
+	PS_RemoveAllShapeChange(oPC); // remove all fiendform, word of changing, lycan, and polymorph
+	int nSpell = GetSpellId();
+	effect eVFX = EffectNWN2SpecialEffectFile("fx_spirit_gorge_hit");
+	if (nSpell == 1725){ //unshift
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+		return;
+	}
+    //Declare major variables
+	object oEss = PS_GetEssence(oPC);
+	struct CreatureCoreAppearance Appearance;
+	string sEyes = "";
+	int bVFXonly = FALSE;
+   
+	int nGender = GetGender(oPC);
+	if (nSpell == 1721) { //Demon
+		sEyes = "fx_f_beetle_eyes";
+		if (GetLocalInt(PS_GetEssence(oPC), "VFX_FIENDFORM")){
+			bVFXonly = TRUE;
+		} else {	
+			Appearance = GetPolymorphAppearance("ps_polymorph_warlockdemon", oPC);
+			Appearance.Gender = nGender;
+			if (nGender == GENDER_FEMALE){
+				Appearance.HairVariation = 100; //Different hair
+				Appearance.HeadVariation = 11;
+				Appearance.WingVariation = 42; //bat wings!
+				Appearance.TailVariation = 9; //Tail switch
+			}
+		}
+	} else if (nSpell == 1722) { //Devil
+		sEyes = "fx_f_beetle_eyes";
+		Appearance = GetPolymorphAppearance("ps_polymorph_warlockdevil", oPC);
+		Appearance.Gender = nGender;
+		if (nGender == GENDER_FEMALE){
+			Appearance.HairVariation = 157; //Different hair
+			Appearance.HeadVariation = 24; //Different head
+			Appearance.WingVariation = 66; //raven wings!
+		}
+	}  else if (nSpell == 1723) { //Abomination
+		Appearance = GetPolymorphAppearance("ps_polymorph_warlockeldritch", oPC);
+	}  else if (nSpell == 1724) { //Fey
+		sEyes = "fx_green_eyes";
+		Appearance = GetPolymorphAppearance("ps_polymorph_warlockfey", oPC);
+		Appearance.Gender = nGender;
+		if (nGender == GENDER_FEMALE){
+			Appearance.HairVariation = 158; //Different hair
+			Appearance.HeadVariation = 11; //Different head
+			sEyes = "fx_green_eyes_leaves";
+		}
+	}
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVFX, oPC);
+	if (!bVFXonly){
+		//checking what we even have saved here
+		//struct CreatureCoreAppearance originalApp = PS_RetrieveStoredCreatureCoreAppearance(oEss, "OriginalApp");
+		//SendMessageToPC(oPC, "Original Appearance type: "+IntToString(originalApp.AppearanceType));
+		Appearance.Tint_Mask = PS_CCA_TINT_ALL;
+		Appearance.HeadTint_Mask = PS_CCA_TINT_ALL;
+		Appearance.HairTint_Mask = PS_CCA_TINT_ALL;
+		PS_SetCreatureCoreAppearance(oPC, Appearance);
+		PS_RefreshAppearance(oPC);
+	}
+	AddPolymorphBoni(oPC, sEyes, bVFXonly);
+	SetLocalInt(oEss, "FiendformSource", WORD_OF_CHANGE_ID);
+	SetLocalInt(oEss, "TempChange", TRUE);
+}
+
+void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE){
+	effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
+	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
+	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
+	eBoost = EffectLinkEffects(eBoost, EffectRegenerate(3, 6.0f));
+		
+	int nSR = GetSpellResistance(oCaster);
+	int nBoost = 26 - nSR;
+	if (nBoost > 0) {
+		eBoost = EffectLinkEffects(eBoost, EffectSpellResistanceIncrease(nBoost));
+	}
+	
+	if (sVFX != "") {
+		eBoost = EffectLinkEffects(eBoost, EffectNWN2SpecialEffectFile(sVFX));
+	}
+	
+	if (bVFXonly){
+		string sVFXmessage = "Fiendish power surges through your body, but you manage to ";
+		sVFXmessage += " channel the strength without changing form.";
+		SendMessageToPC(oCaster, sVFXmessage);
+		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);
+		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_A_SPIRIT_EMERGE_LOOP"), eBoost);
+	}
+		
+	eBoost = SetEffectSpellId(eBoost, 843);
+	eBoost = SupernaturalEffect(eBoost);
+		
+	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
+}
+// because of the way nwscript multithreading works, this was being executed
+// before the appearance was reset by PS_RemoveAllShapeChange(), therefore when going from
+// a polymorph form to a fiendform, you'd get the fiendform stats with the original appearance.
+// therefore this was moved inside of main
+/*
+void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance) {
+
+	if (!GetIsPC(oCaster)) {
+		SendMessageToPC(oCaster, "NPC support not included.");
+		return;
+	}
+
+	object oEssence = GetItemPossessedBy(oCaster, "ps_essence");
+	struct CreatureCoreAppearance originalApp = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
+	SendMessageToPC(oCaster, "Original Appearance type: "+IntToString(originalApp.AppearanceType)); //checking what we even have saved here
+	
+	Appearance.Tint_Mask = PS_CCA_TINT_ALL;
+	Appearance.HeadTint_Mask = PS_CCA_TINT_ALL;
+	Appearance.HairTint_Mask = PS_CCA_TINT_ALL;
+	
+	PS_SetCreatureCoreAppearance(oCaster, Appearance);
+	PS_RefreshAppearance(oCaster);
+	SetLocalInt(oEssence, "TempChange", 1);
+}
+*/
+struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID) {
+
+ 	object oWP = GetWaypointByTag("WP_APPEARANCE_SPAWNER");
+	if (GetIsObjectValid(oPC)) {
+		SendMessageToPC(oPC, "Found oWP = "+GetFirstName(oWP));
+	} else {
+		SendMessageToPC(oPC, "Failed to find WP");
+	}
+	
+	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oWP));
+	//SendMessageToPC(oPC, "Creature: "+GetName(oCreature));
+	
+	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
+	//SendMessageToPC(oPC, "New head: "+IntToString(app.HeadVariation));
+	
+	DestroyObject(oCreature, 1.0f);
+	return app;
+}
+
+/* original main
 
 void main() {
 
@@ -123,72 +267,4 @@ void main() {
 		
 	}
 }
-
-void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE){
-	effect eBoost = EffectAbilityIncrease(ABILITY_STRENGTH, 8);
-	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_DEXTERITY, 8));
-	eBoost = EffectLinkEffects(eBoost, EffectAbilityIncrease(ABILITY_CONSTITUTION, 8));
-	eBoost = EffectLinkEffects(eBoost, EffectRegenerate(3, 6.0f));
-		
-	int nSR = GetSpellResistance(oCaster);
-	int nBoost = 26 - nSR;
-	if (nBoost > 0) {
-		eBoost = EffectLinkEffects(eBoost, EffectSpellResistanceIncrease(nBoost));
-	}
-	
-	if (sVFX != "") {
-		eBoost = EffectLinkEffects(eBoost, EffectNWN2SpecialEffectFile(sVFX));
-	}
-	
-	if (bVFXonly){
-		string sVFXmessage = "Fiendish power surges through your body, but you manage to ";
-		sVFXmessage += " channel the strength without changing form.";
-		SendMessageToPC(oCaster, sVFXmessage);
-		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_SE_RAVENOUS"), eBoost);
-		eBoost = EffectLinkEffects(EffectNWN2SpecialEffectFile("FX_A_SPIRIT_EMERGE_LOOP"), eBoost);
-	}
-		
-	eBoost = SetEffectSpellId(eBoost, 843);
-	eBoost = SupernaturalEffect(eBoost);
-		
-	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eBoost, oCaster);
-}
-
-void AssumeGivenAppearance(object oCaster, struct CreatureCoreAppearance Appearance) {
-
-	if (!GetIsPC(oCaster)) {
-		SendMessageToPC(oCaster, "NPC support not included.");
-		return;
-	}
-
-	object oEssence = GetItemPossessedBy(oCaster, "ps_essence");
-	struct CreatureCoreAppearance originalApp = PS_RetrieveStoredCreatureCoreAppearance(oEssence, "OriginalApp");
-	SendMessageToPC(oCaster, "Original Appearance type: "+IntToString(originalApp.AppearanceType)); //checking what we even have saved here
-	
-	Appearance.Tint_Mask = PS_CCA_TINT_ALL;
-	Appearance.HeadTint_Mask = PS_CCA_TINT_ALL;
-	Appearance.HairTint_Mask = PS_CCA_TINT_ALL;
-	
-	PS_SetCreatureCoreAppearance(oCaster, Appearance);
-	PS_RefreshAppearance(oCaster);
-	SetLocalInt(oEssence, "TempChange", 1);
-}
-
-struct CreatureCoreAppearance GetPolymorphAppearance(string sResRef, object oPC = OBJECT_INVALID) {
-
- 	object oWP = GetWaypointByTag("WP_APPEARANCE_SPAWNER");
-	if (GetIsObjectValid(oPC)) {
-		SendMessageToPC(oPC, "Found oWP = "+GetFirstName(oWP));
-	} else {
-		SendMessageToPC(oPC, "Failed to find WP");
-	}
-	
-	object oCreature = CreateObject(OBJECT_TYPE_CREATURE, sResRef, GetLocation(oWP));
-	//SendMessageToPC(oPC, "Creature: "+GetName(oCreature));
-	
-	struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oCreature);
-	//SendMessageToPC(oPC, "New head: "+IntToString(app.HeadVariation));
-	
-	DestroyObject(oCreature, 1.0f);
-	return app;
-}
+*/
