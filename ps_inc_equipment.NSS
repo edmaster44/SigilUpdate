@@ -395,7 +395,8 @@ void BucklerFinesse(object oPC, object oLHAND){
 
 	
 	if (GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE) < 17) return;
-	if (GetBaseItemType(oLHAND) != BASE_ITEM_SMALLSHIELD) return;
+	int nItem = GetBaseItemType(oLHAND);
+	if (nItem != BASE_ITEM_SMALLSHIELD && nItem != 205) return;
 
 	if (GetLevelByClass(CLASS_TYPE_SWASHBUCKLER, oPC) < 7 && 
 		GetLevelByClass(CLASS_TYPE_ROGUE, oPC) < 7)
