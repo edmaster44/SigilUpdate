@@ -22,6 +22,11 @@ int StartingConditional(object oPC, int iCondition, int iInventorySlot, int iVis
 {
 	object oInventoryItem = GetItemInSlot(iInventorySlot, oPC);
 	
+	if (GetTag(oInventoryItem) == "creature_invis"){
+		SendMessageToPC(oPC, "This is a creature item with no visible model. It cannot be changed");
+		return FALSE;
+	}
+	
 	// For XP_CRAFT_CONDITION_HAS_ARMOR_PIECE, we run after the craft system has
 	// initialized for an item.  The 'inventory slot' argument is in this case
 	// actually the armor piece mask of the armor piece we want to check if is

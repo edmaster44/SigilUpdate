@@ -396,7 +396,7 @@ void BucklerFinesse(object oPC, object oLHAND){
 	
 	if (GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE) < 17) return;
 	int nItem = GetBaseItemType(oLHAND);
-	if (nItem != BASE_ITEM_SMALLSHIELD && nItem != 205) return;
+	if (nItem != BASE_ITEM_SMALLSHIELD) return;
 
 	if (GetLevelByClass(CLASS_TYPE_SWASHBUCKLER, oPC) < 7 && 
 		GetLevelByClass(CLASS_TYPE_ROGUE, oPC) < 7)
@@ -937,8 +937,8 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
     if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE) return FALSE;
 	// base item type of creature skin is 73
 	if (nITEM == 73) return FALSE;
-	// new "creature shields" are items 205, 206, and 207
-	if (nITEM == 205 || nITEM == 206 || nITEM == 207) return FALSE;
+	// new "creature shields" have tag "creature_invis"
+	if (GetTag(oITEM) == "creature_invis") return FALSE;
     
     switch (nITEM)
     {
@@ -988,21 +988,19 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM){
         case BASE_ITEM_RING:
             return FALSE;
     }
-    // new "creature shields" are items 205, 206, and 207
-	if (nITEM == 205 || nITEM == 206 || nITEM == 207) return FALSE;
-	
+   
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (GetLocalInt(oESSENCE, "TempChange") == 1){
-        if ((IPGetIsCreatureEquippedWeapon(oITEM) == TRUE || nITEM == 205 || nITEM == 206 || nITEM == 207) &&
+        if ((IPGetIsCreatureEquippedWeapon(oITEM) == TRUE || GetTag(oITEM) == "creature_invis") &&
 			!GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE)){
             SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form.");
             AssignCommand(oPC, ClearAllActions());
             AssignCommand(oPC, ActionUnequipItem(oITEM));
             return TRUE;
         }
-    } else if (IPGetIsCreatureEquippedWeapon(oITEM) == FALSE && nITEM != 205 && nITEM != 206 && nITEM != 207){
+    } else if (IPGetIsCreatureEquippedWeapon(oITEM) == FALSE && GetTag(oITEM) != "creature_invis"){
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
         AssignCommand(oPC, ActionUnequipItem(oITEM));
