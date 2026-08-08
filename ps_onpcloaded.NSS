@@ -184,7 +184,17 @@ void GiveStartingTraits(object oPC){
 	// calls the psywar progression function from ps_inc_functions with 
 	// an argument that tells it to grant the first feat only.
 	DoPsyProgression(oPC, TRUE);
+	// give fey traits 
+	if (GetRacialType(oPC) == 17){
+		if (!GetLocalInt(PS_GetEssence(oPC), "FEY_SET")){
+			AddScriptParameterString("START");
+			AddScriptParameterString("");
+			ExecuteScriptEnhanced("gui_extra_choices", oPC);
+			SetLocalInt(PS_GetEssence(oPC), "FEY_SET", TRUE);
+		}
+	}
 }
+
 void GiveStartingGold( object oPC, int nAmount )
 {
 	int nGold = GetGold(oPC);
@@ -546,9 +556,9 @@ void main()
 		
 		if (Template == 0) RemoveAllItems(oPC); //don't remove widgets on race templates
 		oItem = CreateItemOnObject("ps_essence", oPC);
-		GiveStartingTraits(oPC);
 		GiveStartingGold(oPC, 500);
 		SetStartingVariables(oPC, Legal);
+		GiveStartingTraits(oPC);
 		PS_GiveXPReward(oPC, 1);
 		
 		Booted = prepChar(oPC);

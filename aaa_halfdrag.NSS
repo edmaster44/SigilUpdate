@@ -23,13 +23,17 @@ void main()
 			PS_DraconicBloodline(oPC, nSpell);
 		break;
 ///////////////////////////////////////////////////////////////////////////////////
+	/* deprecated, we no longer use persistent feats just to launch a one time feat selection
 		case 1216 :		//Draconic Heritage
 			PS_HD_DraconicHeritage(oPC, nSpell, oItem);
 		break;
+		*/
 ///////////////////////////////////////////////////////////////////////////////////
+	/* deprecated, we no longer use persistent feats just to launch a one time alignment shift
 		case 1218 :		//In The Blood
 			PS_HD_InTheBlood(oPC, oItem);
 		break;
+	*/
 ///////////////////////////////////////////////////////////////////////////////////
 		case 1219 :		//Breath Weapon
 			PS_HD_BreathWeapon(oPC, oItem, nSpell, lTarget);

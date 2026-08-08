@@ -26,33 +26,26 @@
 
 
 void ff_update_feats(object oPC, int bOnLevelUp = FALSE);
-void fGrantSneakFeats(object oPC);
 void UpdateACFeats(object oPC);
 void fUpdateOtherFeats(object oPC);
 void GiveCreatureWeaponFinesse(object oPC);
-void AdjustAbilityScores(object oPC);
+void AdjustAbilityScoresHuHE(object oPC);
 
 
 
 
 //main logic of this script
 void ff_update_feats(object oPC, int bOnLevelUp = FALSE){
-
+	
+	if (bOnLevelUp) FF_AdjustClasses(oPC);
 	SendMessageToPC(oPC, "Re-calculating Sneak Dice");
-	
-	int nSneakDice = 0;
-	int nDeathDice = 0;
-	
 	fRemoveSneakFeats(oPC);
-
 	fGrantSneakFeats(oPC);
-
 	SendMessageToPC(oPC, "Finished Re-calculating Sneak Dice\nUpdating Other Feats");
-	
 	fUpdateOtherFeats(oPC);
-	
 	SendMessageToPC(oPC, "Finished Updating Other Feats");
-
+	
+	/* wererat no longer gets temp sneak dice, gets regular
 	string tempDiceWarning = "";
 	tempDiceWarning = fCheckForTempSneakDice(oPC);
 
@@ -60,10 +53,10 @@ void ff_update_feats(object oPC, int bOnLevelUp = FALSE){
 	{
 		SendMessageToPC(oPC, tempDiceWarning);
 	}
+	*/
 	
-	DelayCommand(3.0f, AdjustAbilityScores(oPC));
+	DelayCommand(3.0f, AdjustAbilityScoresHuHE(oPC));
 	
-	if (bOnLevelUp) ClassOneShotAdjustments(oPC);
 
 	if (bSaveAfterThisScript)
 	{
@@ -72,38 +65,6 @@ void ff_update_feats(object oPC, int bOnLevelUp = FALSE){
 }
 
 
-//Function to grant sneak dice, death dice, and ep if applicable
-void fGrantSneakFeats(object oPC){
-
-	int	nSneakDice = fCalcSneakDice(oPC);
-	int nDeathDice = fCalcDeathDice(oPC);
-	int i;
-	
-	//grant sneak attack
-	if (nSneakDice > 0){
-		for (i = 1; i <= nSneakDice; i++){
-			FeatAdd(oPC, fFindSneakFeat(i), FALSE);
-		}
-	}
-	// grant death attack
-	if (nDeathDice > 0){
-		for (i = 1; i <= nDeathDice; i++){
-			FeatAdd(oPC, fFindDeathFeat(i), FALSE);
-		}
-	}
-
-	// calculate additional qualifier dice for Epic Precision
-	int nBonusDice = fCalcOtherSneakFeats(oPC);
-
-	// Give swash EP at level 12 if the appropriate boolean in this script is set to TRUE
-	if (bGrantToSwash12 && GetLevelByClass(CLASS_TYPE_SWASHBUCKLER, oPC) >= 12)
-		nBonusDice += 5;
-	
-
-	// grant ep if sneak dice + death dice + other qualifier >= 5
-	if ((nSneakDice + nDeathDice + nBonusDice) >= 5)
-		FeatAdd(oPC, idFeatEpicPrecision, FALSE);
-}
 
 
 void fUpdateOtherFeats(object oPC){
@@ -124,9 +85,7 @@ void fUpdateOtherFeats(object oPC){
 	GiveCreatureWeaponFinesse(oPC);
 	
 	fFixAlertness(oPC);
-	
-	AdjustDragonPrC(oPC);
-	
+
 	//Since the racial feat skill affinity craft alchemy is useless
 	//replace it with skill affinity concentration -FlattedFifth, July 25, 2024
 	if (GetHasFeat(1754, oPC))
@@ -195,7 +154,7 @@ void GiveCreatureWeaponFinesse(object oPC){
 	}
 }
 
-void AdjustAbilityScores(object oPC){
+void AdjustAbilityScoresHuHE(object oPC){
 	int nRace = GetSubRace(oPC);
 	if (nRace != RACIAL_SUBTYPE_HUMAN && nRace != RACIAL_SUBTYPE_HALFELF && 
 		nRace != RACIAL_SUBTYPE_HALFDROW)

@@ -19,9 +19,11 @@ void main()
 	switch (nSpell)
 	{
 ///////////////////////////////////////////////////////////////////////////////////
+		/* deprecated, we do not need a whole persistent feat to launch a one time choice
 		case 1840 :		//Fey Trait
 			PS_Fey_FeyTrait(oPC);
 		break;
+		*/
 ///////////////////////////////////////////////////////////////////////////////////
 		case 1841 :		//Hypnotism
 			PS_Fey_FeyHypnotism(oPC);

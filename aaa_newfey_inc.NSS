@@ -20,6 +20,9 @@ const int SPRING1 = 69731328;
 const int SPRING2 = 1501898496;
 
 //Fey trait choice on login
+// deprecated, this is now handled in the GiveStartingTraits function in ps_onpcloaded
+// we do not need whole peristent feats to launch a one-time choice
+/*
 void PS_Fey_FeyTrait(object oPC) {
 
 	//SendMessageToPC(oPC, "choosing fey heritage:");
@@ -30,6 +33,7 @@ void PS_Fey_FeyTrait(object oPC) {
 	ExecuteScriptEnhanced("gui_extra_choices", oPC);
 	
 }
+*/
 
 //Fey Hypnotism
 void PS_Fey_FeyHypnotism(object oPC) {

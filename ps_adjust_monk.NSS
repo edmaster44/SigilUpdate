@@ -12,6 +12,11 @@ void PS_MonkLevels(object oPC)
 {
 	int iMonk = GetLevelByClass(CLASS_TYPE_MONK, oPC);
 	int iAustereOne = GetLevelByClass(CLASS_TYPE_AUSTERE_ONE, oPC);//Rakshasa
+	
+	if (GetHasFeat(3683, oPC)){ // monk path of dragon prc
+		int nDrag = GetLevelByClass(129, oPC) - 2;
+		if (nDrag > 0) iMonk += nDrag;
+	}
 
 	int iTotal = iMonk + iAustereOne;
 	if (iMonk < 1) return;

@@ -705,13 +705,14 @@ void PS_Feat_CE_DivineEndurance(object oPC, int nSpell)
 	
     ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eConst, oPC, fDur);
 }
-
+/* deprecated
 void PS_Feat_CE_ArchonicPath(object oPC)
 {
 	AddScriptParameterString("START");
 	AddScriptParameterString("");
 	ExecuteScriptEnhanced("gui_extra_choices", oPC);
 }
+*/
 
 void PS_Feat_GM_Gargoyle(object oPC, location lTarget, int nSpell)
 {

@@ -58,35 +58,7 @@ const int DRACONIC_MAGIC_MIRROR_IMAGE						= 2533;
 const int DRACONIC_MAGIC_SHIELD_GREATER						= 2534;
 const int FEAT_BACKGROUND_DRACONIC_BLOODLINE				= 2535;
 
-void PS_HD_SetAlignmentsByHeritage(object oPC)
-{
-	int nHeritage;
-
-	if (GetHasFeat(2496, oPC)) nHeritage = 2496;
-	else if (GetHasFeat(2497, oPC)) nHeritage = 2497;
-	else if (GetHasFeat(2498, oPC)) nHeritage = 2498;
-	else if (GetHasFeat(2499, oPC)) nHeritage = 2499; 
-	else if (GetHasFeat(2500, oPC)) nHeritage = 2500;
-	else if (GetHasFeat(2501, oPC)) nHeritage = 2501;
-	else if (GetHasFeat(2502, oPC)) nHeritage = 2502;
-	else if (GetHasFeat(2503, oPC)) nHeritage = 2503;
-	else if (GetHasFeat(2504, oPC)) nHeritage = 2504;
-	else if (GetHasFeat(2505, oPC)) nHeritage = 2505;
-	else if (GetHasFeat(2506, oPC)) nHeritage = 2506;
-	else if (GetHasFeat(2507, oPC)) nHeritage = 2507;
-	else if (GetHasFeat(2508, oPC)) nHeritage = 2508;
-	else if (GetHasFeat(2509, oPC)) nHeritage = 2509;
-	else if (GetHasFeat(2510, oPC)) nHeritage = 2510;
-	else if (GetHasFeat(2511, oPC)) nHeritage = 2511;
-	else if (GetHasFeat(2512, oPC)) nHeritage = 2512;
-	else return; //Just in case there's no heritage, we avoid setting the local variable on object.
-
-	object oItem = GetItemPossessedBy(oPC, "ps_essence");
-
-	SetLocalInt(oItem, "Draconic_Heritage", nHeritage);
-}
-
-
+/* deprecated
 void PS_HD_DraconicHeritage(object oPC, int nSpell, object oItem){
 
 	int iHeritage = GetLocalInt(oItem, "Draconic_Heritage");
@@ -94,7 +66,7 @@ void PS_HD_DraconicHeritage(object oPC, int nSpell, object oItem){
 	{	return;		}
 	else
 	{	// Clangeddin UI script.
-		AddScriptParameterString("START");
+		AddScriptParameterString("HALF_DRAGON_START");
 		AddScriptParameterString("");
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
 	
@@ -102,7 +74,8 @@ void PS_HD_DraconicHeritage(object oPC, int nSpell, object oItem){
 	PS_HD_SetAlignmentsByHeritage(oPC);
 	PS_TintFixer(oPC); //testing to see if this gives properly tinted wings!
 }
-
+*/
+/* combined with PS_HD_SetAlignmentsByHeritage and moved to ff_adjust_classes
 void PS_HD_InTheBlood(object oPC, object oItem)
 {
 	int nHeritage = GetLocalInt(oItem, "Draconic_Heritage");
@@ -171,7 +144,7 @@ void PS_HD_InTheBlood(object oPC, object oItem)
 		SetLocalString(oItem, "InBlood", "HD+1");	}
 		
 }
-
+*/
 void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 {
     int nHeritage;
@@ -353,75 +326,49 @@ void PS_HD_BreathWeapon(object oPC, object oItem, int nSpell, location lTarget)
 void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 {
 	
-    int nHeritage, nImmunity; 
+    int nHeritage = 0;
+	string sWarning = "";
+	int nImmunity; 
 	
-	if(GetIsObjectValid(oItem))
-	{	nHeritage = GetLocalInt(oItem, "Draconic_Heritage");	}
-	else
-	{	SendMessageToPC(oPC, "You appear to be missing your Essence. Unable to access Draconic Heritage. Contact a member of staff.");	}
-
-	if (nHeritage < 1)
-	{	SendMessageToPC(oPC, "Draconic heritage not found.");
-		return;	}
+	if(GetIsObjectValid(oItem)){
+		nHeritage = GetLocalInt(oItem, "Draconic_Heritage");
+	} else {
+		sWarning += "You appear to be missing your Essence. ";
+	}
+	if (nHeritage < 1){	
+		sWarning += "Draconic heritage not found. Contact staff on our Discord.";
+		SendMessageToPC(oPC, sWarning);
+		return;
+	}
 	
-	switch (nHeritage)
-	{	case 2496 : //DRACONIC_HERITAGE_WHITE
-	    {	nImmunity	= DAMAGE_TYPE_COLD;
-	        break;	}
-		case 2497 : //DRACONIC_HERITAGE_BLACK
-	    {	nImmunity	= DAMAGE_TYPE_ACID;
-	        break;	}
-		case 2498 : //DRACONIC_HERITAGE_GREEN
-	    {	nImmunity	= DAMAGE_TYPE_ACID;
-	        break;	}
-		case 2499 : //DRACONIC_HERITAGE_BLUE
-	    {	nImmunity	= DAMAGE_TYPE_ELECTRICAL;
-	        break;	}
-		case 2500 : //DRACONIC_HERITAGE_RED
-	    {	nImmunity	= DAMAGE_TYPE_FIRE;
-	        break;	}
-		case 2501 : //DRACONIC_HERITAGE_BRASS
-	    {	nImmunity	= DAMAGE_TYPE_FIRE;
-	        break;	}
-		case 2502 :	//DRACONIC_HERITAGE_COPPER
-	    {	nImmunity	= DAMAGE_TYPE_ACID;
-	        break;	}
-		case 2503 : //DRACONIC_HERITAGE_BRONZE
-	    {	nImmunity	= DAMAGE_TYPE_ELECTRICAL;
-	        break;	}
-		case 2504 :	//DRACONIC_HERITAGE_SILVER
-	    {	nImmunity	= DAMAGE_TYPE_COLD;
-	        break;	}
-		case 2505 : //DRACONIC_HERITAGE_GOLD
-	    {	nImmunity	= DAMAGE_TYPE_FIRE;
-	        break;	}
-		case 2506 : //DRACONIC_HERITAGE_AMETHYST
-	    {	break;	} //immune to poison
-		case 2507 : //DRACONIC_HERITAGE_CRYSTAL
-	    {	nImmunity	= DAMAGE_TYPE_POSITIVE;
-	    	break;	}
-		case 2508 : //DRACONIC_HERITAGE_EMERALD
-	    {	nImmunity	= DAMAGE_TYPE_SONIC;
-	        break;	}
-		case 2509 :	//DRACONIC_HERITAGE_SAPPHIRE
-	    {	nImmunity	= DAMAGE_TYPE_ELECTRICAL;
-	        break;	}
-		case 2510 : //DRACONIC_HERITAGE_TOPAZ
-	    {	nImmunity	= DAMAGE_TYPE_COLD;
-	        break;	}
-		case 2511 :	//DRACONIC_HERITAGE_SHADOW
-	    {	nImmunity	= DAMAGE_TYPE_NEGATIVE;
-			break;	}
-		case 2512 : //DRACONIC_HERITAGE_FANG
-	    {	break;	} //DR 2/ and 5/
+	switch (nHeritage){
+		case 2496: case 2504: case 2510:{ // white, silver, topaz
+	    	nImmunity = DAMAGE_TYPE_COLD; break;
+		}
+		case 2497: case 2498: case 2502:{ //black, green, copper
+	    	nImmunity = DAMAGE_TYPE_ACID; break;
+		}
+		case 2499: case 2503: case 2509:{//blue, bronze, sapphire
+			nImmunity = DAMAGE_TYPE_ELECTRICAL; break;	
+		}
+		case 2500: case 2501: case 2505:{//red, brass, gold
+	    	nImmunity = DAMAGE_TYPE_FIRE;
+	        break;
+		}
+		case 2506: break; //amethyst immune to poison
+		case 2507:{ //DRACONIC_HERITAGE_CRYSTAL
+	    	nImmunity = DAMAGE_TYPE_POSITIVE; break;
+		}
+		case 2508: {//DRACONIC_HERITAGE_EMERALD
+	    	nImmunity = DAMAGE_TYPE_SONIC; break;
+		}
+		case 2511:{	//DRACONIC_HERITAGE_SHADOW
+	    	nImmunity = DAMAGE_TYPE_NEGATIVE; break;	
+		}
+		case 2512: break; //DRACONIC_HERITAGE_FANG //DR 2/ and 5/
 	}
 	int nHalfdragon	= GetLevelByClass(CLASS_TYPE_HALFDRAGON_PRC, oPC);
-	int nImmune;
-	
-	if (nHalfdragon == 6)
-	{	nImmune = 100;	}
-	else
-	{	nImmune = 40;	}
+	int nImmune = (nHalfdragon == 6) ? 100 : 40;
 	
 	effect ePara		= EffectImmunity(IMMUNITY_TYPE_PARALYSIS);
 	effect eSleep		= EffectImmunity(IMMUNITY_TYPE_SLEEP);
@@ -432,41 +379,32 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 	effect eFang1		= EffectDamageReduction(2, DAMAGE_POWER_NORMAL, 0, DR_TYPE_NONE);
 	effect eFang2		= EffectDamageReduction(5, DAMAGE_POWER_NORMAL, 0, DR_TYPE_NONE);
 	effect eLink;
-	int nOrigin 		= GetRacialType(oPC);
-	int nOriSub 		= GetSubRace(oPC);
 
-	if (nHeritage == DRACONIC_HERITAGE_AMETHYST)
-	{	if (nHalfdragon == 6)
-		{	eLink = EffectLinkEffects(ePara, eSleep);
+	if (nHeritage == DRACONIC_HERITAGE_AMETHYST){
+		if (nHalfdragon == 6){
+			eLink = EffectLinkEffects(ePara, eSleep);
 			eLink = EffectLinkEffects(eLink, eAmethyst2);
-			eLink = SupernaturalEffect(eLink);	}
-		else
-		{	eLink = EffectLinkEffects(eSleep, eAmethyst1);
-			eLink = SupernaturalEffect(eLink);	}	}
-	else if (nHeritage == DRACONIC_HERITAGE_FANG)
-		{	if (nHalfdragon == 6)
-			{	eLink = EffectLinkEffects(ePara, eSleep);
-				eLink = EffectLinkEffects(eLink, eFang2);
-				eLink = SupernaturalEffect(eLink);	}
-			else
-			{	eLink = EffectLinkEffects(eSleep, eFang1);
-				eLink = SupernaturalEffect(eLink);	}	}
-		else
-		{
-			if (nHalfdragon == 6)
-			{
-				eLink = EffectLinkEffects(ePara, eSleep);
-				eLink = EffectLinkEffects(eLink, eImmune2);
-				eLink = SupernaturalEffect(eLink);
-			}
-			else
-			{
-				eLink = EffectLinkEffects(eSleep, eImmune);
-				eLink = SupernaturalEffect(eLink);
-			}
+		} else {
+			eLink = EffectLinkEffects(eSleep, eAmethyst1);	
+		}	
+	} else if (nHeritage == DRACONIC_HERITAGE_FANG){	
+		if (nHalfdragon == 6){	
+			eLink = EffectLinkEffects(ePara, eSleep);
+			eLink = EffectLinkEffects(eLink, eFang2);
+		} else {	
+			eLink = EffectLinkEffects(eSleep, eFang1);
+		}	
+	} else {
+		if (nHalfdragon == 6){
+			eLink = EffectLinkEffects(ePara, eSleep);
+			eLink = EffectLinkEffects(eLink, eImmune2);
+		} else {
+			eLink = EffectLinkEffects(eSleep, eImmune);
+			
 		}
-		
+	}
 	eLink = SetEffectSpellId(eLink, nSpell);
+	eLink = SupernaturalEffect(eLink);
 	RemoveEffectsFromSpell(oPC, nSpell);
 	
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
@@ -478,7 +416,7 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 	if (PS_GetAppWingType(oPC) != 0)
 	{	SetLocalInt(oPC, "OldWings", 1);	}
 	else
-	{	AddScriptParameterString("START");
+	{	AddScriptParameterString("HALF_DRAGON_WINGS_START");
 		AddScriptParameterString("");
 		ExecuteScriptEnhanced("gui_extra_choices", oPC);
 	}

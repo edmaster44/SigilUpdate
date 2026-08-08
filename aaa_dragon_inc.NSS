@@ -63,7 +63,7 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell){
 	}
 
 	effect eDR = EffectDamageReduction(nDR, nMat, 0, DR_TYPE_GMATERIAL);
-	
+	/*
 	if (!GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange")){
 		int iHD = GetTotalLevels(oPC, TRUE);
 		int iShield;
@@ -76,7 +76,7 @@ void PS_ShieldArmor_Dragon(object oPC, int nSpell){
 		effect eAC = EffectACIncrease(iShield, AC_SHIELD_ENCHANTMENT_BONUS);
 		eDR = EffectLinkEffects(eAC, eDR);
 	} else SendMessageToPC(oPC, "<c=red>Shield AC bonus for Dragons does not work in Humanoid Form.</c>");
-
+	*/
 	eDR = SupernaturalEffect(eDR);
 	eDR = SetEffectSpellId(eDR, nSpell);
 	PS_RemoveEffects(oPC, nSpell);

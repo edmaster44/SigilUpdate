@@ -53,7 +53,7 @@ void main()
 		case 1633 :	PS_Feat_CE_ArmorOfTheTome(oPC, nSpell);	break;
 		case 1634 :	PS_Feat_CE_SanctifiedSoul(oPC, nSpell); break;
 		case 1635 :	PS_Feat_CE_DivineEndurance(oPC, nSpell); break;
-		case 1636 :	PS_Feat_CE_ArchonicPath(oPC); break;
+		//case 1636 :	PS_Feat_CE_ArchonicPath(oPC); break; // deprecated, we no longer use a persistent feat to launch a 1 time operation
 		
 		//GOLEM MASTER
 		case 1638 :	PS_Feat_GM_Gargoyle(oPC, lTarget, nSpell); break;

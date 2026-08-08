@@ -1,5 +1,5 @@
 NDB V1.0
-0000078 0000020 0003704 0000531 0001461
+0000080 0000020 0003704 0000531 0001461
 n00 ginc_debug
 n01 ps_inc_advscript
 n02 ps_inc_functions
@@ -67,17 +67,19 @@ n63 ps_inc_equipmentprops
 n64 ff_feat_tactical_weapon_inc
 n65 ff_feat_tactical_weapon_feat
 n66 ff_track_classes
-n67 ff_update_feats_inc
-n68 nwnx_srvadmin
-n69 ps_inc_placeable_signs
-n70 ps_inc_faction
-n71 x2_inc_toollib
-n72 ps_inc_golem
-n73 ff_unarmored_ac
-n74 ps0_classes2015_inc
-n75 ps_inc_equipment
-n76 class_dervish_active
-N77 class_dervish_active_inc
+n67 ff_adjust_classes
+n68 ff_update_feats_sneak
+n69 ff_update_feats_inc
+n70 nwnx_srvadmin
+n71 ps_inc_placeable_signs
+n72 ps_inc_faction
+n73 x2_inc_toollib
+n74 ps_inc_golem
+n75 ff_unarmored_ac
+n76 ps0_classes2015_inc
+n77 ps_inc_equipment
+n78 class_dervish_active
+N79 class_dervish_active_inc
 s 03 vector
 sf f x
 sf f y
@@ -6535,9 +6537,36 @@ f ffffffff ffffffff 001 v StoreClasses
 fp o
 f ffffffff ffffffff 001 i GetLastClassLeveledUp
 fp o
+f ffffffff ffffffff 002 v LaunchGuiChoices
+fp o
+fp s
+f ffffffff ffffffff 002 v AdjustHalfUndead
+fp o
+fp i
+f ffffffff ffffffff 002 v AdjustVampMaleficus
+fp o
+fp i
+f ffffffff ffffffff 002 v AdjustHalfOutsider
+fp o
+fp i
+f ffffffff ffffffff 003 v AdjustAbilityScore
+fp o
+fp i
+fp i
+f ffffffff ffffffff 002 v AdjustDragonPrC
+fp o
+fp i
+f ffffffff ffffffff 002 v PS_HD_SetAlignmentsByHeritage
+fp o
+fp o
+f ffffffff ffffffff 001 v FF_AdjustClasses
+fp o
+f ffffffff ffffffff 003 v SetHoHeritage
+fp o
+fp o
+fp s
 f ffffffff ffffffff 000 i bGrantToSwash12
 f ffffffff ffffffff 000 i bCountBleedingWound
-f ffffffff ffffffff 000 i bCountWererat
 f ffffffff ffffffff 000 i bOnlyEvilBlackguardSneakAttacks
 f ffffffff ffffffff 000 i bIncludeLegacyBlackguard
 f ffffffff ffffffff 000 i bSaveAfterThisScript
@@ -6590,13 +6619,7 @@ f ffffffff ffffffff 000 i idFeatPathOfGuile
 f ffffffff ffffffff 000 i idFeatPsyWarLurk
 f ffffffff ffffffff 000 i idFeatWererat
 f ffffffff ffffffff 000 i idFeatBlackguardPath
-f ffffffff ffffffff 001 v ApplyGatecrasherAC
-fp o
-f ffffffff ffffffff 001 v ApplyTurnResist
-fp o
-f ffffffff ffffffff 001 v fFixAlertness
-fp o
-f ffffffff ffffffff 001 v AdjustDragonPrC
+f ffffffff ffffffff 001 v fGrantSneakFeats
 fp o
 f ffffffff ffffffff 001 i fFindSneakFeat
 fp i
@@ -6616,23 +6639,18 @@ f ffffffff ffffffff 001 i fCalcDeathDice
 fp o
 f ffffffff ffffffff 001 i fCalcOtherSneakFeats
 fp o
-f ffffffff ffffffff 001 s fCheckForTempSneakDice
+f ffffffff ffffffff 001 v ApplyGatecrasherAC
+fp o
+f ffffffff ffffffff 001 v ApplyTurnResist
+fp o
+f ffffffff ffffffff 001 v fFixAlertness
 fp o
 f ffffffff ffffffff 001 v SituationalAwareness
 fp o
 f ffffffff ffffffff 001 v ImprovedDefense
 fp o
-f ffffffff ffffffff 003 v AdjustAbilityScore
-fp o
-fp i
-fp i
 f ffffffff ffffffff 001 v PS_ManageImbueItem
 fp o
-f ffffffff ffffffff 001 v ClassOneShotAdjustments
-fp o
-f ffffffff ffffffff 002 v AdjustHalfOutsider
-fp o
-fp i
 f ffffffff ffffffff 001 v FF_WingFix
 fp o
 f ffffffff ffffffff 001 v ManageAppearance
@@ -6643,16 +6661,6 @@ f ffffffff ffffffff 001 v UpdateLycanWithoutRemake
 fp o
 f ffffffff ffffffff 001 v UpdateDominatingGaze
 fp o
-f ffffffff ffffffff 002 v AdjustHalfUndead
-fp o
-fp i
-f ffffffff ffffffff 003 v SetHoHeritage
-fp o
-fp o
-fp s
-f ffffffff ffffffff 002 v AdjustVampMaleficus
-fp o
-fp i
 f ffffffff ffffffff 001 v GiveCreatureWeaponProf
 fp o
 f ffffffff ffffffff 000 v ShutdownNwn2server
@@ -7078,8 +7086,6 @@ fp i
 f ffffffff ffffffff 002 v PS_Feat_CE_DivineEndurance
 fp o
 fp i
-f ffffffff ffffffff 001 v PS_Feat_CE_ArchonicPath
-fp o
 f ffffffff ffffffff 003 v PS_Feat_GM_Gargoyle
 fp o
 fp e2
@@ -7868,19 +7874,19 @@ l16 0000191 00000078 00000078
 l16 0000192 00000078 00000078
 l16 0000193 00000078 00000078
 l16 0000194 00000078 00000078
-l77 0000013 0000008a 00000094
-l77 0000014 000000a0 000000a6
-l77 0000015 000000a6 000000ab
-l77 0000016 000000ab 000000be
-l77 0000017 000000be 000000d3
-l77 0000019 000000ef 00000129
-l77 0000021 00000129 00000129
-l77 0000022 00000129 0000015c
-l77 0000023 0000015c 00000162
-l77 0000025 00000162 00000162
-l77 0000026 00000162 00000195
-l77 0000027 00000195 0000019b
-l77 0000036 000001a7 000001a9
+l79 0000013 0000008a 00000094
+l79 0000014 000000a0 000000a6
+l79 0000015 000000a6 000000ab
+l79 0000016 000000ab 000000be
+l79 0000017 000000be 000000d3
+l79 0000019 000000ef 00000129
+l79 0000021 00000129 00000129
+l79 0000022 00000129 0000015c
+l79 0000023 0000015c 00000162
+l79 0000025 00000162 00000162
+l79 0000026 00000162 00000195
+l79 0000027 00000195 0000019b
+l79 0000036 000001a7 000001a9
 l57 0000084 000001a9 000001af
 l57 0000085 000001af 000001b4
 l57 0000086 000001b4 000001c4
@@ -9115,51 +9121,51 @@ l34 0000888 0000acfa 0000ad0f
 l34 0000889 0000ad0f 0000ad2a
 l34 0000891 0000ad30 0000ad32
 l34 0000893 0000ad59 0000ad61
-l76 0000035 0000ad61 0000ad79
-l76 0000037 0000ad85 0000ad97
-l76 0000039 0000ad97 0000adaa
-l76 0000040 0000adaa 0000adc2
-l76 0000041 0000adc2 0000adcd
-l76 0000043 0000adcd 0000ade0
-l76 0000044 0000ade0 0000adf9
-l76 0000045 0000adf9 0000ae0e
-l76 0000046 0000ae0e 0000ae29
-l76 0000047 0000ae29 0000ae4a
-l76 0000049 0000ae4a 0000ae5d
-l76 0000051 0000ae5d 0000ae6d
-l76 0000053 0000ae73 0000ae7e
-l76 0000054 0000ae7e 0000ae89
-l76 0000055 0000ae89 0000aeb9
-l76 0000056 0000aeb9 0000aee9
-l76 0000058 0000aef5 0000aef7
-l76 0000060 0000af0d 0000af18
-l76 0000061 0000af18 0000af48
-l76 0000065 0000af4e 0000af8c
-l76 0000067 0000af8c 0000afc7
-l76 0000070 0000afcd 0000affa
-l76 0000072 0000b000 0000b008
-l75 0000605 0000b008 0000b020
-l75 0000606 0000b020 0000b050
-l75 0000607 0000b056 0000b0ad
-l75 0000608 0000b0ad 0000b0c7
-l75 0000612 0000b0c7 0000b0da
-l75 0000614 0000b0da 0000b0e9
-l75 0000616 0000b0ef 0000b13c
-l75 0000617 0000b13c 0000b156
-l75 0000620 0000b156 0000b190
-l75 0000623 0000b196 0000b1e6
-l75 0000624 0000b1e6 0000b200
-l75 0000627 0000b200 0000b213
-l75 0000628 0000b213 0000b220
-l75 0000631 0000b220 0000b22d
-l75 0000634 0000b233 0000b283
-l75 0000638 0000b289 0000b2d3
-l75 0000639 0000b2d3 0000b2ed
-l75 0000643 0000b2ed 0000b327
-l75 0000646 0000b32d 0000b376
-l75 0000647 0000b376 0000b390
-l75 0000652 0000b390 0000b3aa
-l75 0000653 0000b3b0 0000b3b8
+l78 0000035 0000ad61 0000ad79
+l78 0000037 0000ad85 0000ad97
+l78 0000039 0000ad97 0000adaa
+l78 0000040 0000adaa 0000adc2
+l78 0000041 0000adc2 0000adcd
+l78 0000043 0000adcd 0000ade0
+l78 0000044 0000ade0 0000adf9
+l78 0000045 0000adf9 0000ae0e
+l78 0000046 0000ae0e 0000ae29
+l78 0000047 0000ae29 0000ae4a
+l78 0000049 0000ae4a 0000ae5d
+l78 0000051 0000ae5d 0000ae6d
+l78 0000053 0000ae73 0000ae7e
+l78 0000054 0000ae7e 0000ae89
+l78 0000055 0000ae89 0000aeb9
+l78 0000056 0000aeb9 0000aee9
+l78 0000058 0000aef5 0000aef7
+l78 0000060 0000af0d 0000af18
+l78 0000061 0000af18 0000af48
+l78 0000065 0000af4e 0000af8c
+l78 0000067 0000af8c 0000afc7
+l78 0000070 0000afcd 0000affa
+l78 0000072 0000b000 0000b008
+l77 0000605 0000b008 0000b020
+l77 0000606 0000b020 0000b050
+l77 0000607 0000b056 0000b0ad
+l77 0000608 0000b0ad 0000b0c7
+l77 0000612 0000b0c7 0000b0da
+l77 0000614 0000b0da 0000b0e9
+l77 0000616 0000b0ef 0000b13c
+l77 0000617 0000b13c 0000b156
+l77 0000620 0000b156 0000b190
+l77 0000623 0000b196 0000b1e6
+l77 0000624 0000b1e6 0000b200
+l77 0000627 0000b200 0000b213
+l77 0000628 0000b213 0000b220
+l77 0000631 0000b220 0000b22d
+l77 0000634 0000b233 0000b283
+l77 0000638 0000b289 0000b2d3
+l77 0000639 0000b2d3 0000b2ed
+l77 0000643 0000b2ed 0000b327
+l77 0000646 0000b32d 0000b376
+l77 0000647 0000b376 0000b390
+l77 0000652 0000b390 0000b3aa
+l77 0000653 0000b3b0 0000b3b8
 l17 0001528 0000b3b8 0000b3c5
 l17 0001529 0000b3c5 0000b3d2
 l17 0001530 0000b3d2 0000b3d4
@@ -9199,23 +9205,23 @@ l17 0001601 0000b722 0000b73c
 l17 0001605 0000b73c 0000b757
 l17 0001608 0000b75d 0000b777
 l17 0001609 0000b77d 0000b785
-l76 0000015 0000b785 0000b798
-l76 0000016 0000b798 0000b7b8
-l76 0000017 0000b7b8 0000b7c8
-l76 0000019 0000b7e2 0000b7f5
-l76 0000020 0000b7f5 0000b825
-l76 0000022 0000b83f 0000b852
-l76 0000023 0000b852 0000b85d
-l76 0000025 0000b85d 0000b872
-l76 0000026 0000b872 0000b88d
-l76 0000027 0000b88d 0000b8ae
-l76 0000028 0000b8b4 0000b8bc
-l76 0000008 0000b8bc 0000b8c9
-l76 0000009 0000b8c9 0000b975
-l76 0000010 0000b97b 0000b983
-l76 0000078 0000b983 0000b99c
-l76 0000079 0000b99c 0000b9a2
-l76 0000080 0000b9a2 0000b9b2
-l76 0000081 0000b9cc 0000b9df
-l76 0000082 0000b9df 0000ba02
-l76 0000083 0000ba08 0000ba10
+l78 0000015 0000b785 0000b798
+l78 0000016 0000b798 0000b7b8
+l78 0000017 0000b7b8 0000b7c8
+l78 0000019 0000b7e2 0000b7f5
+l78 0000020 0000b7f5 0000b825
+l78 0000022 0000b83f 0000b852
+l78 0000023 0000b852 0000b85d
+l78 0000025 0000b85d 0000b872
+l78 0000026 0000b872 0000b88d
+l78 0000027 0000b88d 0000b8ae
+l78 0000028 0000b8b4 0000b8bc
+l78 0000008 0000b8bc 0000b8c9
+l78 0000009 0000b8c9 0000b975
+l78 0000010 0000b97b 0000b983
+l78 0000078 0000b983 0000b99c
+l78 0000079 0000b99c 0000b9a2
+l78 0000080 0000b9a2 0000b9b2
+l78 0000081 0000b9cc 0000b9df
+l78 0000082 0000b9df 0000ba02
+l78 0000083 0000ba08 0000ba10

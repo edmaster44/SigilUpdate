@@ -2,7 +2,13 @@
 
 //This is called on pc load for new characters (and for characters who have not had this done yet), 
 // and then at the end of ps_levelup and also in the mimic deleveling scripts. It stores the classes 
-// so that we can figure out which class was just leveled in the function below this
+// so that we can figure out which class was just leveled in the function below this. How this works:
+// At character creation and at end of every level up it stores 2 local integers on essence for each class.
+// one for the class and one for the level, by it's position. For example, if you create a cleric at character
+// creation then your position 1 class is cleric (classes.2da row 2) and you have one level in it. So this will
+// store on the essence the local integer "CLASS_1" with a value of 2 and the local integer "CLASS_1_LVL" with a 
+// value of 1. Then if at lvl 2 you add a lvl of barb then it will add "CLASS_2" with a value of 0 and "CLASS_2_LVL"
+// with a value of 1. Then at lvl 3 if you add another cleric lvl then "CLASS_1_LVL" value will change to 2.
 void StoreClasses(object oPC){
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
 	if (!GetIsObjectValid(oEss)){
@@ -26,7 +32,7 @@ void StoreClasses(object oPC){
 }
 
 //this is called on the level up event only in ff_update_feats before the above function is called.
-// this info will be used in the function ClassOneShotAdjustments() to determine if we need to launch
+// this info will be used in the function FF_AdjustClasses() in the file ff_adjust_classes to determine if we need to launch
 // gui_extra_choices and if so with which params. This way we can make 2 improvements:
 // 1: We can ditch the "persistent" flag on feats such as half outsider apotheosis that is 
 // unnecessarily running on heartbeat just to launch the gui one time

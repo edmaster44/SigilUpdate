@@ -21,8 +21,10 @@ int GetBarbarianLevels(object oPC){
 	
 	if(GetHasFeat(2610,oPC,TRUE)) // wereboar affliction
 		iBarb += GetLevelByClass(CLASS_TYPE_LYCAN_PRC,oPC);
-
-
+	if (GetHasFeat(3685, oPC, TRUE)){ // barb path of dragon PRC
+		int nDrag = GetLevelByClass(129, oPC) - 2;
+		if (nDrag > 0) iBarb += nDrag;
+	}
 	return iBarb;
 }
 
