@@ -72,14 +72,14 @@ void main(){
 		case TAC_SUITE_KD: DoLegSweep(oPC, oTarget, oRHAND, oLHAND, data); break;
 		case TAC_SUITE_PA: DoRoundhouse(oPC, oTarget, data); break;
 	}
-	ClearAllActions(TRUE);
+	AssignCommand(oPC, ClearAllActions());
 	DelayCommand(0.1f, ActionAttack(oTarget));
 }
 
 int PerformAttack(object oPC, object oTarget, int nPenalty, struct DamageStats data){
 	int nAB = GetBaseAttackBonus(oPC) + data.nPow + nPenalty + data.nHitMod;
 	int nAC = GetAC(oTarget);
-
+	int nResult;
 	int nRoll = d20(1);
 	if (nRoll + nAB > nAC){
 		if (nRoll >= 20 - data.nCritRange + 1 && !data.bCritImmune){
@@ -89,6 +89,13 @@ int PerformAttack(object oPC, object oTarget, int nPenalty, struct DamageStats d
 		return ATTACK_HIT;
 	}
 	return ATTACK_MISS;
+}
+
+void ApplyTacticalVFX(object oTarget){
+
+
+
+
 }
 
 /*
@@ -417,8 +424,11 @@ void DoDisablingStrike(object oPC, object oTarget, struct DamageStats data){
 }
 
 void ApplyManeuverEffect(object oTarget, effect eFX, float fDuration = 0.0f){
+
+	effect eVis = EffectVisualEffect(VFX_HIT_SPELL_AVASCULATE);
+	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 	if (fDuration == 0.0f){
-		ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTarget, fDuration);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eFX, oTarget);
     }else	{
 		eFX = SupernaturalEffect(eFX);
 		eFX = SetEffectSpellId(eFX, TAC_SPELL_ID);

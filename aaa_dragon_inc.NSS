@@ -34,17 +34,15 @@ void ApplyDraconicImmunities(object oPC, int nSpell, effect eFX){
 
 //-------------------------------------------------------------------------------------------------------------------
 // Applies Shield AC based on characterlevel and DR (new as per FlattedFifth, May 7, 2025)
+// Now applies DR only, FlattedFifth August 9, 2026
 //-------------------------------------------------------------------------------------------------------------------
 
-void PS_ShieldArmor_Dragon(object oPC, int nSpell){	
+void PS_Dragon_DR(object oPC, int nSpell){	
 	
 	int nDR = 5;
-	// if has melee path of new dragon prc, dr increases by 1 per lvl beyond first
-	// for a total of 10 at lvl 6.
-	if (GetHasFeat(3670, oPC, TRUE)){ // melee path of new dragon prc
-		int nDragonPrcDr = GetLevelByClass(129, oPC) - 1; // new dragon prc
-		if (nDragonPrcDr > 0) nDR += nDragonPrcDr;
-	}
+	int nDragonPrcDr = GetLevelByClass(129, oPC) + GetLevelByClass(130, oPC) - 1; // new dragon prc
+	if (nDragonPrcDr > 0) nDR += nDragonPrcDr;
+
 	
 	// chaotic species of dragons are Black, Copper, Red, Shadow, Topaz, and White.
 	// They and Amethyst (TN) will get DR / cold iron. The rest will get DR / silver.
@@ -502,9 +500,7 @@ void PS_Hardening_Scales(object oPC, int nSpell){
 				
 	} // END OLD PRC FX
 	else { //NEW PRC FX
-		if (iLevelNew >= 6 && GetHasFeat(3670, oPC))
-			iNatural = 10;
-		else iNatural = 2 + iLevelNew;
+		iNatural = 2 + iLevelNew;
 		eAC	= EffectACIncrease(iNatural, AC_NATURAL_BONUS);
 	}
 	eAC = SupernaturalEffect(eAC);
@@ -647,7 +643,7 @@ void PS_Dragon_Roar(object oPC, int nSpell){
 		case 6: sSound = "dragon_roar4"; break;	 	 
 	}
 	
-	ClearAllActions();
+	AssignCommand(oPC, ClearAllActions());
 	PlaySound(sSound, TRUE);
 	DelayCommand(0.2f, AssignCommand(oPC, ActionPlayAnimation(ANIMATION_FIREFORGET_TAUNT, 1.0, 3.0)));	
 

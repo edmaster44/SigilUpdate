@@ -495,9 +495,11 @@ void PS_Ability_MarqCambAlternateForm(object oPC, int nSpell){
 	}
 	ClearScriptParams();
 	*/
-	//reset dragon ac
+	//reset dragon ac 
+	/* no longer necessary, dragons no longer get free shield ac
 	if (GetRacialType(oPC) == RACIAL_TYPE_DRAGON)
-		DelayCommand(1.0f, PS_ShieldArmor_Dragon(oPC, 2623));
+		DelayCommand(1.0f, PS_Dragon_DR(oPC, 2623));
+	*/
 }
 
 void PS_Ability_MarqCambAlignedStrike(object oPC, int nSpell)

@@ -1,7 +1,7 @@
 //:://////////////////////////////////////////////
 //:: Sigil Equip system
 //:://////////////////////////////////////////////
-//:: Runs the Custom OnEquip and OnUnequip Scripts.
+//:: Runs the Custom OnEquip and OnUnEquip Scripts.
 //:://////////////////////////////////////////////
 //:: Created By: Clangeddin
 //:: Created On: December 29, 2017
@@ -23,22 +23,22 @@
 			DECLARATIONS
 -----------------------------------------------------------------------------------------*/
 void ApplyEquipmentEffect(object oPC, effect eFX, int nDUR = DURATION_TYPE_PERMANENT);
-void SigilEquipment(object oPC, object oITEM, int nEQUIP);
+void SigilEquipment(object oPC, object oItem, int nEquip);
 void EquipmentEffects(object oPC, object oChanged, int bOnEquip);
 void ConDrainProtection(object oItem, object oPC);
 int GetACProvidedByShield(object oShield);
-void DrunkMasterImprovised(object oPC, int nRIGHT);
+void DrunkMasterImprovised(object oPC, int nRight);
 void ShieldRangedConceal(object oPC, int nSHIELD);
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value");
 //void MonkDruidPenalty(object oPC);
-//void UnearthlyGrace(object oPC, object oCHEST);
+//void UnearthlyGrace(object oPC, object oChest);
 int GetArmorQualifiesForArmorOpt(object oARMOR);
 void ArmorOptimizations(object oPC, object oARMOR);
 void SilentMetal(object oPC, object oARMOR, object oSHIELD, int nSHIELD, string s2DA = "armorrulestats", string sCOLUMN = "ACCHECK");
-int CheckDragonForms(object oPC, object oITEM, int nITEM);
-int CheckManualDexterity(object oPC, object oITEM, int nITEM);
+int CheckDragonForms(object oPC, object oItem, int nItem);
+int CheckManualDexterity(object oPC, object oItem, int nItem);
 void CheckForTempProperties(object oItem, object oPC);
-int MonkeyGripAbuse(object oPC, object oITEM);
+int MonkeyGripAbuse(object oPC, object oItem);
 void FixARMOR(object oPC, object oARMOR);
 void FixSHIELD(object oPC, object oSHIELD, int nSHIELD);
 void RemoveElementalWeapon(object oPC,object oItem);
@@ -50,24 +50,24 @@ void ApplyMeditativeStrikes(object oPC,object oItem);
 int DervishCanUseDance(object oPC);
 int NoHeavyArmorOrShield(object oPC);
 int GetMonkWeapon(object oItem);
-void MurderousIntent(object oPC, object oRHAND);
-void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND);
-void BucklerFinesse(object oPC, object oLHAND);
-void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor);
-void FlorentineTWF(object oPC, object oRHAND, object oLHAND);
-void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND);
-void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip);
+void MurderousIntent(object oPC, object oRHand);
+void HandAndAHalfWeapon(object oPC, object oRHand, object oLHand);
+void BucklerFinesse(object oPC, object oLHand);
+void BojutsuKenjutsu(object oPC, object oRHand, object oLHand, object oArmor);
+void FlorentineTWF(object oPC, object oRHand, object oLHand);
+void TwoSwordsAsOne(object oPC, object oRHand, object oLHand);
+void IajaitsuMaster(object oPC, object oRHand, object oChanged, int bOnEquip);
 void FrightfulPresence(object oPC, int nCHA);
 void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0);
-void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip);
-void NaturalMultiattack(object oPC, object oRHAND, object oLHAND);
-
+void UpdateWeaponBenefits(object oPC, object oRHand, object oLHand, object oChest, object oChanged, int bOnEquip);
+void NaturalMultiattack(object oPC, object oRHand, object oLHand);
+void CheckCreatureShieldProficiency(object oPC, object oItem, int nItem);
 
 //int GetCreatureWeapons(object oItem);
 //int GetIsSpecialFinessable(int nTYPE);
 //int GetIsShields(object oItem)
-//void TatooedMonk(object oPC, int nRIGHT, int nLEFT);
-//void DrunkMasterImprovised(object oPC, int nRIGHT);
+//void TatooedMonk(object oPC, int nRight, int nLeft);
+//void DrunkMasterImprovised(object oPC, int nRight);
 
 
 /*----------------------------------------------------------------------------------------
@@ -76,57 +76,57 @@ void NaturalMultiattack(object oPC, object oRHAND, object oLHAND);
 
 
 //This starts all the various checks and effects to be applied based on equipment, as per Sigil's custom rules.
-//nEQUIP: TRUE when called from OnEquip and FALSE when called from OnUnequip.
+//nEquip: TRUE when called from OnEquip and FALSE when called from OnUnEquip.
 //Found in "ps_inc_equipment.nss".
-void SigilEquipment(object oPC, object oITEM, int nEQUIP){
+void SigilEquipment(object oPC, object oItem, int nEquip){
 
 	// we shouldn't have to do ANY processing for creature skin, so just skip all this if 
 	// that's what it is
-	int nITEM = GetBaseItemType(oITEM);
-	if (nITEM == BASE_ITEM_CREATUREITEM) return; // base item 73, creature skin
+	int nItem = GetBaseItemType(oItem);
+	if (nItem == BASE_ITEM_CREATUREITEM) return; // base item 73, creature skin
 	
     //RemoveEffectsFromSpell(oPC, EQUIP_FX);
 	PS_RemoveEffects(oPC, EQUIP_FX);
-    if (nEQUIP == TRUE)
+    if (nEquip == TRUE)
     {
-      CheckForTempProperties(oITEM, oPC);
+      CheckForTempProperties(oItem, oPC);
         
-      DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oITEM));
+      DelayCommand(0.1f,ApplyMeditativeStrikes(oPC,oItem));
 	  
-	  DelayCommand(0.1f,ApplyAustereStrikes(oPC,oITEM));
+	  DelayCommand(0.1f,ApplyAustereStrikes(oPC,oItem));
     
-      DelayCommand(0.1f,ApplyElementalWeapon(oPC,oITEM));
+      DelayCommand(0.1f,ApplyElementalWeapon(oPC,oItem));
         
-        /*	 if (GetIsFinessable(oITEM))
-			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
+        /*	 if (GetIsFinessable(oItem))
+			 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oItem));
 
-            if (!GetExistingFinesse(oITEM)&&  GetSubRace(oPC) == 243) 
-            DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM));
+            if (!GetExistingFinesse(oItem)&&  GetSubRace(oPC) == 243) 
+            DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oItem));
 				
-			if (GetDervishWeapon(oITEM) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
-				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oITEM)); */
+			if (GetDervishWeapon(oItem) && (GetLevelByClass(CLASS_DERVISH,oPC)>4))
+				 DelayCommand(0.05f,PS_ApplySpecialWeaponFinesse(oPC, oItem)); */
 
         
-        if (nITEM == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
+        if (nItem == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
         //{  // weird orphan brackets
-		if (MonkeyGripAbuse(oPC, oITEM) == TRUE) return;
-		if (CheckManualDexterity(oPC, oITEM, nITEM) == TRUE) return;
-		if (CheckDragonForms(oPC, oITEM, nITEM) == TRUE) return;
+		if (MonkeyGripAbuse(oPC, oItem) == TRUE) return;
+		if (CheckManualDexterity(oPC, oItem, nItem) == TRUE) return;
+		if (CheckDragonForms(oPC, oItem, nItem) == TRUE) return;
 
         //}
     }
     else
     {
-        ConDrainProtection(oITEM, oPC);
-        if (nITEM == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oITEM);
-            //PS_RemoveSpecialWeaponFinesse(oPC, oITEM);
-            RemoveElementalWeapon(oPC,oITEM);
-            RemoveMeditativeStrikes(oPC,oITEM);
-			RemoveAustereStrikes(oPC,oITEM);
+        ConDrainProtection(oItem, oPC);
+        if (nItem == BASE_ITEM_GLOVES) RemoveTempOnHitProperty(oItem);
+            //PS_RemoveSpecialWeaponFinesse(oPC, oItem);
+            RemoveElementalWeapon(oPC,oItem);
+            RemoveMeditativeStrikes(oPC,oItem);
+			RemoveAustereStrikes(oPC,oItem);
         
     }
-	
-    DelayCommand(0.5f, EquipmentEffects(oPC, oITEM, nEQUIP));
+	if (nEquip) CheckCreatureShieldProficiency(oPC, oItem, nItem);
+    DelayCommand(0.5f, EquipmentEffects(oPC, oItem, nEquip));
 	
 
 }
@@ -135,67 +135,78 @@ void SigilEquipment(object oPC, object oITEM, int nEQUIP){
 void EquipmentEffects(object oPC, object oChanged, int bOnEquip)
 {
 
-    object oCHEST = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
-	FixARMOR(oPC, oCHEST);
+    object oChest = GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
+	FixARMOR(oPC, oChest);
 	
 	//update gatecrasher ac to make sure it never stacks with duelist or
 	//invis blade
 	PS_Feat_GC_DODGE_AC(oPC, 1817);
 	
-    object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-	int nLEFT = GetBaseItemType(oLHAND);
-	FixSHIELD(oPC, oLHAND, nLEFT);
+    object oLHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	int nLeft = GetBaseItemType(oLHand);
+	FixSHIELD(oPC, oLHand, nLeft);
 	
-    object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-    int nRIGHT = GetBaseItemType(oRHAND);   
+    object oRHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+    int nRight = GetBaseItemType(oRHand);   
     SpellResistFix(oPC);
-    ShieldRangedConceal(oPC, nLEFT);
-    SilentMetal(oPC, oCHEST, oLHAND, nLEFT);
-    ArmorOptimizations(oPC, oCHEST);
-   // UnearthlyGrace(oPC, oCHEST);
+    ShieldRangedConceal(oPC, nLeft);
+    SilentMetal(oPC, oChest, oLHand, nLeft);
+    ArmorOptimizations(oPC, oChest);
+   // UnearthlyGrace(oPC, oChest);
 	//MonkDruidPenalty(oPC);
-	HandAndAHalfWeapon(oPC, oRHAND, oLHAND);
-	UpdateWeaponBenefits(oPC, oRHAND, oLHAND, oCHEST, oChanged, bOnEquip);
+	HandAndAHalfWeapon(oPC, oRHand, oLHand);
+	UpdateWeaponBenefits(oPC, oRHand, oLHand, oChest, oChanged, bOnEquip);
 
 	
-    //TatooedMonk(oPC, nRIGHT, nLEFT);
-    //DrunkMasterImprovised(oPC, nRIGHT, nLEFT);
+    //TatooedMonk(oPC, nRight, nLeft);
+    //DrunkMasterImprovised(oPC, nRight, nLeft);
 }
 
-void UpdateWeaponBenefits(object oPC, object oRHAND, object oLHAND, object oCHEST, object oChanged, int bOnEquip){
+// unequip a "creature shield" if the player does not have creature weapon proficiency
+void CheckCreatureShieldProficiency(object oPC, object oItem, int nItem){
+	if (GetTag(oItem) != "creature_invis") return;
+	if (GetHasFeat(289, oPC, TRUE)) return;
+	if (nItem != BASE_ITEM_TOWERSHIELD && nItem != BASE_ITEM_LARGESHIELD &&
+		nItem != BASE_ITEM_SMALLSHIELD)
+			return;
+	AssignCommand(oPC, ClearAllActions());
+    AssignCommand(oPC, ActionUnequipItem(oItem));	
+}
+
+void UpdateWeaponBenefits(object oPC, object oRHand, object oLHand, object oChest, object oChanged, int bOnEquip){
 
 	PS_RemoveEffects(oPC, FF_AC_FX);
-	BucklerFinesse(oPC, oLHAND);
-	BojutsuKenjutsu(oPC, oRHAND, oLHAND, oCHEST);
+	BucklerFinesse(oPC, oLHand);
+	BojutsuKenjutsu(oPC, oRHand, oLHand, oChest);
 	
 	// this only relates to weapons, but we want it called every time to correct
 	// legacy applications of multiattack feat 1784 instead of nat multi feat 4000
-	NaturalMultiattack(oPC, oRHAND, oLHAND);
+	NaturalMultiattack(oPC, oRHand, oLHand);
 
 	//the rest only relate to weapons
 	if (!IPGetIsWeapon(oChanged)) return;
 	
-	MurderousIntent(oPC, oRHAND);
-	FlorentineTWF(oPC, oRHAND, oLHAND);
-	TwoSwordsAsOne(oPC, oRHAND, oLHAND);
-	IajaitsuMaster(oPC, oRHAND, oChanged, bOnEquip);
+	MurderousIntent(oPC, oRHand);
+	FlorentineTWF(oPC, oRHand, oLHand);
+	TwoSwordsAsOne(oPC, oRHand, oLHand);
+	IajaitsuMaster(oPC, oRHand, oChanged, bOnEquip);
 	UpdateCombatMods(oPC, NULL);
 	object oSkin = PS_GetCreatureSkin(oPC);
 	CheckTacticalWeapons(oPC, oSkin);
 }
 
-void NaturalMultiattack(object oPC, object oRHAND, object oLHAND){
+void NaturalMultiattack(object oPC, object oRHand, object oLHand){
 	if (GetHasFeat(1784, oPC, TRUE)) FeatRemove(oPC, 1784);
 	
 	if (!GetHasFeat(4000, oPC, TRUE)) return;
 
-	if ((IPGetIsCreatureEquippedWeapon(oRHAND) || oRHAND == OBJECT_INVALID) && 
-		(IPGetIsCreatureEquippedWeapon(oLHAND) || oLHAND == OBJECT_INVALID))
+	if ((IPGetIsCreatureEquippedWeapon(oRHand) || oRHand == OBJECT_INVALID) && 
+		(IPGetIsCreatureEquippedWeapon(oLHand) || oLHand == OBJECT_INVALID))
 			FeatAdd(oPC, 1784, FALSE);
 }
 
 //Samurais get AB and damage bonus when they dual wield katana/longsword in main hand and shortsword or ninjato in off hand.
-void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
+void TwoSwordsAsOne(object oPC, object oRHand, object oLHand){
 
     int nSAMURAI = GetLevelByClass(65, oPC);
     if (nSAMURAI < 2) return;
@@ -204,11 +215,11 @@ void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
 	int bRightQualifies = FALSE;
 	int bLeftQualifies = FALSE;
 	
-	if (oRHAND == OBJECT_INVALID || oLHAND == OBJECT_INVALID)
+	if (oRHand == OBJECT_INVALID || oLHand == OBJECT_INVALID)
 		return;
 	
-	int nRIGHT = GetBaseItemType(oRHAND);
-	int nLEFT = GetBaseItemType(oLHAND);
+	int nRight = GetBaseItemType(oRHand);
+	int nLeft = GetBaseItemType(oLHand);
 	
 	// Whoever came up with the rules for TSAO didn't think about the fact that in nwn weapons do not
 	// change size to accomodate the character. So I fix that here.
@@ -216,21 +227,21 @@ void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
 	// large Samurai can use a falchion, greatsword, or odachi in the right hand
 	// and katana, longsword, ninjato, or shortsword in left
 	if (nPCsize > 3){
-		bRightQualifies = (nRIGHT == BASE_ITEM_FALCHION || nRIGHT == BASE_ITEM_GREATSWORD ||
-			nRIGHT == BASE_ITEM_ODACHI );
-		bLeftQualifies = (nLEFT == BASE_ITEM_KATANA || nLEFT == BASE_ITEM_LONGSWORD ||
-			nLEFT == BASE_ITEM_SHORTSWORD || nLEFT == BASE_ITEM_NINJATO);
+		bRightQualifies = (nRight == BASE_ITEM_FALCHION || nRight == BASE_ITEM_GREATSWORD ||
+			nRight == BASE_ITEM_ODACHI );
+		bLeftQualifies = (nLeft == BASE_ITEM_KATANA || nLeft == BASE_ITEM_LONGSWORD ||
+			nLeft == BASE_ITEM_SHORTSWORD || nLeft == BASE_ITEM_NINJATO);
 	// small samurai can use a ninjato, shortsword, katana, or longsword in the right hand 
 	// and dagger or kukri in the left otherwise they would have -2 penalties making 
 	// a small samurai unfairly penalized
 	} else if (nPCsize < 3){
-		bRightQualifies = (nRIGHT == BASE_ITEM_NINJATO || nRIGHT == BASE_ITEM_SHORTSWORD || 
-			nRIGHT == BASE_ITEM_KATANA || nRIGHT == BASE_ITEM_LONGSWORD);
-		bLeftQualifies = (nLEFT == BASE_ITEM_DAGGER || nLEFT == BASE_ITEM_KUKRI);
+		bRightQualifies = (nRight == BASE_ITEM_NINJATO || nRight == BASE_ITEM_SHORTSWORD || 
+			nRight == BASE_ITEM_KATANA || nRight == BASE_ITEM_LONGSWORD);
+		bLeftQualifies = (nLeft == BASE_ITEM_DAGGER || nLeft == BASE_ITEM_KUKRI);
 	} else { //medium characters
-		bRightQualifies = (nRIGHT == BASE_ITEM_KATANA || nRIGHT == BASE_ITEM_LONGSWORD);
-		bLeftQualifies = (nLEFT == BASE_ITEM_SHORTSWORD || nLEFT == BASE_ITEM_NINJATO || 
-		nLEFT == BASE_ITEM_DAGGER || nLEFT == BASE_ITEM_KUKRI);
+		bRightQualifies = (nRight == BASE_ITEM_KATANA || nRight == BASE_ITEM_LONGSWORD);
+		bLeftQualifies = (nLeft == BASE_ITEM_SHORTSWORD || nLeft == BASE_ITEM_NINJATO || 
+		nLeft == BASE_ITEM_DAGGER || nLeft == BASE_ITEM_KUKRI);
 	}
 	
 	if (!bRightQualifies || !bLeftQualifies) return;
@@ -253,13 +264,13 @@ void TwoSwordsAsOne(object oPC, object oRHAND, object oLHAND){
 // character won't get the bonus attack if using methodical defense or considered strike, which makes
 // sense, considering that those are supposed to grant their bonuses because the character is moving
 // cautiously
-void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
+void IajaitsuMaster(object oPC, object oRHand, object oChanged, int bOnEquip){
 
     if (GetLevelByClass(65, oPC) < 5) return;
 	if (!GetHasFeat(2414, oPC, TRUE)) return;
 
 	if (!bOnEquip) return;
-	if (oChanged != oRHAND) return;
+	if (oChanged != oRHand) return;
 	
 	// don't allow ppl to spam this ability by constantly swapping between two katanas
 	if (GetLocalInt(oPC, "Iajaitsu")) return;
@@ -269,13 +280,13 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 	
 	int bQualifies = FALSE;
 	int nPCsize = GetCreatureSize(oPC);
-	int nITEM = GetBaseItemType(oRHAND);
-    if ((nITEM == BASE_ITEM_KATANA) || (nITEM == BASE_ITEM_LONGSWORD) || 
-		(nITEM == BASE_ITEM_ODACHI) || nITEM == (BASE_ITEM_NINJATO))
+	int nItem = GetBaseItemType(oRHand);
+    if ((nItem == BASE_ITEM_KATANA) || (nItem == BASE_ITEM_LONGSWORD) || 
+		(nItem == BASE_ITEM_ODACHI) || nItem == (BASE_ITEM_NINJATO))
 			bQualifies = TRUE;
-	if (nPCsize > 3 && (nITEM == BASE_ITEM_FALCHION || nITEM == BASE_ITEM_GREATSWORD || 
-		nITEM == BASE_ITEM_ODACHI)) bQualifies == TRUE;
-	if (nPCsize < 3 && (nITEM == BASE_ITEM_SHORTSWORD)) bQualifies = TRUE;
+	if (nPCsize > 3 && (nItem == BASE_ITEM_FALCHION || nItem == BASE_ITEM_GREATSWORD || 
+		nItem == BASE_ITEM_ODACHI)) bQualifies == TRUE;
+	if (nPCsize < 3 && (nItem == BASE_ITEM_SHORTSWORD)) bQualifies = TRUE;
 	if (!bQualifies) return;
 	
     
@@ -283,7 +294,7 @@ void IajaitsuMaster(object oPC, object oRHAND, object oChanged, int bOnEquip){
 	float fDUR = RoundsToSeconds(1);
 	effect eFX_4 = EffectModifyAttacks(1);
 	if (nCHA > 0){
-		int nBonus = GetWeaponBonus(oRHAND) + nCHA;
+		int nBonus = GetWeaponBonus(oRHand) + nCHA;
 		eFX_4 = EffectLinkEffects(EffectAttackIncrease(nBonus, ATTACK_BONUS_ONHAND), eFX_4);
 	}
 	eFX_4 = SetEffectSpellId(eFX_4, 1839);
@@ -324,13 +335,13 @@ void FrightfulPresence(object oPC, int nCHA){
 
 void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
 	int nTac;
-	object oRHAND;
+	object oRHand;
 	// There appears to be a slight delay when adding or removing item properties
 	// so make sure this waits a bit if it's doing that in case of rapid calls,
 	// such as equipping 2 items at once from hotbar
     if (nCount >= 2000 || !GetLocalInt(oPC, "tacbusy")){
-		oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-		nTac = GetTacSuiteByWeaponCategory(oPC, oRHAND);
+		oRHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+		nTac = GetTacSuiteByWeaponCategory(oPC, oRHand);
 		// don't change tac weapons feat if the feat granted by the weapons doesn't change
 		if (GetLocalInt(oPC, "tacweapon") != nTac){
 			SetLocalInt(oPC, "tacbusy", TRUE);
@@ -340,7 +351,7 @@ void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
 				SetActionMode(oPC, ACTION_MODE_COMBAT_EXPERTISE, FALSE);
 			if (!GetHasFeat(FEAT_POWER_ATTACK, oPC, TRUE))
 				SetActionMode(oPC, ACTION_MODE_POWER_ATTACK, FALSE);
-			FF_TacticalWeapons(oPC, oRHAND, oSkin);
+			FF_TacticalWeapons(oPC, oRHand, oSkin);
 			DelayCommand(0.1, SetLocalInt(oPC, "tacbusy", FALSE));
 		}
         return;
@@ -353,22 +364,22 @@ void CheckTacticalWeapons(object oPC, object oSkin, int nCount = 0){
 // Gain defense improvements to twf if using the smallest possible off hand weapon
 // and a normal sized, or smaller, main hand and the character has twd feat. 
 // 10% - 25% concealment vs melee, depending on combo of weapons and feats. 
-void FlorentineTWF(object oPC, object oRHAND, object oLHAND){
+void FlorentineTWF(object oPC, object oRHand, object oLHand){
 
 	if (!GetHasFeat(FEAT_TWO_WEAPON_DEFENSE, oPC, TRUE)) return;
 	
-	if (!IPGetIsMeleeWeapon(oRHAND) || !IPGetIsMeleeWeapon(oLHAND)) return;
+	if (!IPGetIsMeleeWeapon(oRHand) || !IPGetIsMeleeWeapon(oLHand)) return;
 	
 	int nPCsize = GetCreatureSize(oPC);
-	if (IPGetWeaponSize(oRHAND) > nPCsize) return;
+	if (IPGetWeaponSize(oRHand) > nPCsize) return;
 	
 	int nSmallestWeap = nPCsize - 2;
 	if (nSmallestWeap < 1) nSmallestWeap = 1;
 	// bail if they're not using the smallest off-hand they can
-	if (IPGetWeaponSize(oLHAND) > nSmallestWeap) return;
+	if (IPGetWeaponSize(oLHand) > nSmallestWeap) return;
 	
 	int bIsMainGauche = FALSE;
-	int nLeftId = GetBaseItemType(oLHAND);
+	int nLeftId = GetBaseItemType(oLHand);
 	if (nPCsize > 3){
 		if (nLeftId == BASE_ITEM_SHORTSWORD || nLeftId == BASE_ITEM_LIGHTMACE ||
 			nLeftId ==  BASE_ITEM_CREATURECLAW_SML || nLeftId == BASE_ITEM_CREATURESLAM_SML) 
@@ -391,11 +402,11 @@ void FlorentineTWF(object oPC, object oRHAND, object oLHAND){
 // as effectively as a normal sized shield. Gain +1 ac. Had a problem with this
 // double-applying when equipped from hotbar, so I gave it its own spellid =
 // buckler prof feat * -1 
-void BucklerFinesse(object oPC, object oLHAND){
+void BucklerFinesse(object oPC, object oLHand){
 
 	
 	if (GetAbilityScore(oPC, ABILITY_DEXTERITY, TRUE) < 17) return;
-	int nItem = GetBaseItemType(oLHAND);
+	int nItem = GetBaseItemType(oLHand);
 	if (nItem != BASE_ITEM_SMALLSHIELD) return;
 
 	if (GetLevelByClass(CLASS_TYPE_SWASHBUCKLER, oPC) < 7 && 
@@ -409,18 +420,18 @@ void BucklerFinesse(object oPC, object oLHAND){
 }
 
 // had to give this its own spell id for ac for the same reason as buckler
-void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor){
+void BojutsuKenjutsu(object oPC, object oRHand, object oLHand, object oArmor){
 	int bQualifies = TRUE;
 
 	// must be two handed
-	if (!GetWeaponIsTwoHanded(oPC, oRHAND, oLHAND))
+	if (!GetWeaponIsTwoHanded(oPC, oRHand, oLHand))
 		bQualifies = FALSE;
 		
 	// no heavy armor
 	if (GetArmorRank(oArmor) == ARMOR_RANK_HEAVY) bQualifies = FALSE;
 	
 	// find out it's a qualifying sword or a qualifying staff
-	int nType = GetBaseItemType(oRHAND);
+	int nType = GetBaseItemType(oRHand);
 	int bKenjutsu = FALSE;
 	int bBojutsu = FALSE;
 	switch (nType){
@@ -429,14 +440,14 @@ void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor){
 		case BASE_ITEM_FALCHION: bKenjutsu = TRUE; break;
 		case BASE_ITEM_NINJATO: bKenjutsu = TRUE; break;
 	}
-	if (!bKenjutsu) bBojutsu = GetQualifiesForStaffFighting(oPC, oRHAND, oLHAND);
+	if (!bKenjutsu) bBojutsu = GetQualifiesForStaffFighting(oPC, oRHand, oLHand);
 	if (!bKenjutsu && !bBojutsu) bQualifies = FALSE;
 
 	int bGetsAC = FALSE;
 	int bMartialArtist = (GetLevelByClass(CLASS_TYPE_MONK, oPC) + 
 		GetLevelByClass(CLASS_SAMURAI, oPC) +
 			GetLevelByClass(CLASS_KENSAI, oPC) > 0);
-	int nSizeDifference = IPGetWeaponSize(oRHAND) - GetCreatureSize(oPC);
+	int nSizeDifference = IPGetWeaponSize(oRHand) - GetCreatureSize(oPC);
 	if (bKenjutsu){
 		if (nSizeDifference == 1 && !GetHasFeat(FEAT_MONKEY_GRIP, oPC, TRUE))
 			bQualifies = FALSE;
@@ -486,8 +497,8 @@ void BojutsuKenjutsu(object oPC, object oRHAND, object oLHAND, object oArmor){
 // character has sneak attack from race or class. "Murderous Intent" was what I renamed the feat
 // for NeverWinter 9 Agent sneak attack 1. Nw9 Agent is a class that was supposed to be a rogue-ish
 // alternative PrC for nwn9, but Bioware never finished it and it's not in the game. But the feat works. 
-void MurderousIntent(object oPC, object oRHAND){
-	int nType = GetBaseItemType(oRHAND);
+void MurderousIntent(object oPC, object oRHand){
+	int nType = GetBaseItemType(oRHand);
 	if (nType != BASE_ITEM_NINJATO && nType != BASE_ITEM_STILETTO){
 		if (GetHasFeat(FEAT_MURDEROUS_INTENT, oPC, TRUE))
 			FeatRemove(oPC, FEAT_MURDEROUS_INTENT);
@@ -506,13 +517,13 @@ void MurderousIntent(object oPC, object oRHAND){
 		FeatRemove(oPC, FEAT_MURDEROUS_INTENT);
 }
 
-void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND){
+void HandAndAHalfWeapon(object oPC, object oRHand, object oLHand){
 	// giants can one-hand these weapons with only martial feat.
 	int nPCsize = GetCreatureSize(oPC);
 	if (nPCsize > 3) return;
 	
-	int nRtype = GetBaseItemType(oRHAND);
-	int nLtype = GetBaseItemType(oLHAND);
+	int nRtype = GetBaseItemType(oRHand);
+	int nLtype = GetBaseItemType(oLHand);
 	
 	int bRightBastard = (nRtype == BASE_ITEM_BASTARDSWORD || nRtype == BASE_ITEM_MAUL ||
 		nRtype == BASE_ITEM_INFANTRYFLAIL || nRtype == BASE_ITEM_DWARVENWARAXE);
@@ -526,49 +537,49 @@ void HandAndAHalfWeapon(object oPC, object oRHAND, object oLHAND){
 	int bHasMonkey = GetHasFeat(FEAT_MONKEY_GRIP, oPC, TRUE);
 	
 	string sMessage = "This weapon is slightly larger than normal weapons of its type (though not as big as a large weapon)";
-	int bUnequipR = FALSE;
-	int bUnequipL = FALSE;
+	int bUnEquipR = FALSE;
+	int bUnEquipL = FALSE;
 	
 	// small characters need either exotic or monkey grip to use
 	// two handed, and both to use 1 handed.
 	if (nPCsize < 3){
 		// small character who has nothing in off hand and has either feat is golden. bail.
-		if ((bHasExotic || bHasMonkey) && oLHAND == OBJECT_INVALID) return;
+		if ((bHasExotic || bHasMonkey) && oLHand == OBJECT_INVALID) return;
 		if (bHasExotic && bHasMonkey) return; // small char with both feats also golden. bail.
-		if (oLHAND == OBJECT_INVALID){
+		if (oLHand == OBJECT_INVALID){
 			sMessage += " You need either exotic weapon proficiency or monkey grip to wield this weapon in two hands.";
 			sMessage += " (You will not suffer the large weapon -2 penalty for using this weapon two-handed if doing so via monkey grip.)";
-			bUnequipR = TRUE;	
+			bUnEquipR = TRUE;	
 		} else {
 			sMessage += " You need both monkey grip and exotic weapon proficiency to wield this weapon in one hand.";
-			if (bRightBastard) bUnequipR = TRUE;
-			if (bLeftBastard) bUnequipL = TRUE;
+			if (bRightBastard) bUnEquipR = TRUE;
+			if (bLeftBastard) bUnEquipL = TRUE;
 		}
 	} else { // medium chars only, we've already bailed for large and handled small
 		// if either hand is empty then this doesn't concern us, we only need to check
 		// medium characters for one-handing a bastard or dwarfaxe
-		if (oLHAND == OBJECT_INVALID) return;
+		if (oLHand == OBJECT_INVALID) return;
 	
 		// if a medium char has exotic or monkey, they're all set. bail.
 		if (bHasExotic || bHasMonkey) return;
 	
 		// dwarves have special rules due to being culturally accustomed to dwarfaxe
 		if (GetRacialType(oPC) == RACIAL_TYPE_DWARF){
-			if (bRightBastard && nRtype != BASE_ITEM_DWARVENWARAXE) bUnequipR = TRUE;
-			if (bLeftBastard && nLtype != BASE_ITEM_DWARVENWARAXE) bUnequipL = TRUE;
+			if (bRightBastard && nRtype != BASE_ITEM_DWARVENWARAXE) bUnEquipR = TRUE;
+			if (bLeftBastard && nLtype != BASE_ITEM_DWARVENWARAXE) bUnEquipL = TRUE;
 		} else {
-			if (bRightBastard) bUnequipR = TRUE;
-			if (bLeftBastard) bUnequipL = TRUE;
+			if (bRightBastard) bUnEquipR = TRUE;
+			if (bLeftBastard) bUnEquipL = TRUE;
 		} // end racial check
-		if (bUnequipR || bUnequipL){
+		if (bUnEquipR || bUnEquipL){
 			sMessage += " You need to have either monkey grip or exotic weapon proficiency to use this weapon in one hand.";
 			sMessage += " (You will not suffer the large weapon -2 penalty for using this weapon one-handed if doing so via monkey grip.)";
 		}
 	} // end of pc size conditional
 	
-	if (bUnequipR || bUnequipL){
-		if (bUnequipR) AssignCommand(oPC, ActionUnequipItem(oRHAND));
-		if (bUnequipL) AssignCommand(oPC, ActionUnequipItem(oLHAND));
+	if (bUnEquipR || bUnEquipL){
+		if (bUnEquipR) AssignCommand(oPC, ActionUnequipItem(oRHand));
+		if (bUnEquipL) AssignCommand(oPC, ActionUnequipItem(oLHand));
 		SendMessageToPC(oPC, sMessage);
 	}
 }
@@ -879,18 +890,18 @@ void FixARMOR(object oPC, object oARMOR)
 
 // Check for giant weapons and monkey grip abuse
 // returns FALSE if no abuse is taking place, true if there is
-int MonkeyGripAbuse(object oPC, object oITEM){
+int MonkeyGripAbuse(object oPC, object oItem){
 
 	// if the equipped item isn't in one of the hand slots, bail
-	object oLHAND = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-	if (GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC) != oITEM && oLHAND != oITEM)
+	object oLHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	if (GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC) != oItem && oLHand != oItem)
 			return FALSE;
 	
 	int bIsAbuse = FALSE;
-	int bEmptyOffHand = (oLHAND == OBJECT_INVALID);
+	int bEmptyOffHand = (oLHand == OBJECT_INVALID);
 	int bHasMonkey = GetHasFeat(FEAT_MONKEY_GRIP, oPC, TRUE);
 	int nPCsize = GetCreatureSize(oPC);
-	int nWeaponSize = IPGetWeaponSize(oITEM);
+	int nWeaponSize = IPGetWeaponSize(oItem);
 	
 	if (nWeaponSize >= nPCsize + 3) bIsAbuse = TRUE;
 	else if (nWeaponSize == nPCsize + 2){
@@ -909,7 +920,7 @@ int MonkeyGripAbuse(object oPC, object oITEM){
 			sMessage = "This weapon is so large you can only wield it 2-handed and only with Monkey Grip";
 		else sMessage = "You need Monkey Grip to wield this weapon in this way";
 		AssignCommand(oPC, ClearAllActions());
-		AssignCommand(oPC, ActionUnequipItem(oITEM));
+		AssignCommand(oPC, ActionUnequipItem(oItem));
 		SendMessageToPC(oPC, sMessage);
 	}
 	return bIsAbuse;
@@ -931,16 +942,16 @@ void CheckForTempProperties(object oItem, object oPC)
 }
 
 // Check No Manual Dexterity. With it you can only equip creature weapons.
-int CheckManualDexterity(object oPC, object oITEM, int nITEM)
+int CheckManualDexterity(object oPC, object oItem, int nItem)
 {
 
-    if (IPGetIsCreatureEquippedWeapon(oITEM) == TRUE) return FALSE;
+    if (IPGetIsCreatureEquippedWeapon(oItem) == TRUE) return FALSE;
 	// base item type of creature skin is 73
-	if (nITEM == 73) return FALSE;
+	if (nItem == 73) return FALSE;
 	// new "creature shields" have tag "creature_invis"
-	if (GetTag(oITEM) == "creature_invis") return FALSE;
+	if (GetTag(oItem) == "creature_invis") return FALSE;
     
-    switch (nITEM)
+    switch (nItem)
     {
         case BASE_ITEM_AMULET:
         case BASE_ITEM_ARROW:
@@ -960,19 +971,19 @@ int CheckManualDexterity(object oPC, object oITEM, int nITEM)
     if (GetHasFeat(2340, oPC, TRUE) == FALSE) return FALSE;
     
     AssignCommand(oPC, ClearAllActions());
-    AssignCommand(oPC, ActionUnequipItem(oITEM));
+    AssignCommand(oPC, ActionUnequipItem(oItem));
     SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons, shields, or any other object in their hands due to the No Manual Dexterity feat");
     return TRUE;    
 }
 
 // No Weapons and Shields for Dragons in Natural Form
 // Creature weapons are 160-180. Others are not allowed unless "in humanoid form (=1)".
-int CheckDragonForms(object oPC, object oITEM, int nITEM){	
+int CheckDragonForms(object oPC, object oItem, int nItem){	
 
 	if (GetRacialType(oPC) != RACIAL_TYPE_DRAGON)
 		return FALSE;
 		
-    switch (nITEM)
+    switch (nItem)
     {
         case BASE_ITEM_AMULET:
         case BASE_ITEM_ARROW:
@@ -993,17 +1004,17 @@ int CheckDragonForms(object oPC, object oITEM, int nITEM){
     
     object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
     if (GetLocalInt(oESSENCE, "TempChange") == 1){
-        if ((IPGetIsCreatureEquippedWeapon(oITEM) == TRUE || GetTag(oITEM) == "creature_invis") &&
+        if ((IPGetIsCreatureEquippedWeapon(oItem) == TRUE || GetTag(oItem) == "creature_invis") &&
 			!GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE)){
             SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form.");
             AssignCommand(oPC, ClearAllActions());
-            AssignCommand(oPC, ActionUnequipItem(oITEM));
+            AssignCommand(oPC, ActionUnequipItem(oItem));
             return TRUE;
         }
-    } else if (IPGetIsCreatureEquippedWeapon(oITEM) == FALSE && GetTag(oITEM) != "creature_invis"){
+    } else if (IPGetIsCreatureEquippedWeapon(oItem) == FALSE && GetTag(oItem) != "creature_invis"){
         SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
         AssignCommand(oPC, ClearAllActions());
-        AssignCommand(oPC, ActionUnequipItem(oITEM));
+        AssignCommand(oPC, ActionUnequipItem(oItem));
         return TRUE;
     }
     
@@ -1144,10 +1155,10 @@ void ArmorOptimizations(object oPC, object oARMOR){
 }
 /* race removed
 // Unearthly grace feat for Nymphs. CHA bonus to Saves and Dodge AC.
-void UnearthlyGrace(object oPC, object oCHEST)
+void UnearthlyGrace(object oPC, object oChest)
 {
     if (GetHasFeat(2367, oPC, TRUE) == FALSE) return;
-    if (GetArmorRank(oCHEST) > ARMOR_RANK_LIGHT) return;
+    if (GetArmorRank(oChest) > ARMOR_RANK_LIGHT) return;
     int nCHA = GetAbilityModifier(ABILITY_CHARISMA, oPC);
     if (nCHA < 1) return;
     effect eFX = EffectSavingThrowIncrease(SAVING_THROW_ALL, nCHA);
@@ -1172,20 +1183,20 @@ void MonkDruidPenalty(object oPC)
 //Fixes the Spell Resistance bug from items.
 void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "Value")
 {
-    object oITEM;
-    int nEQUIP;
+    object oItem;
+    int nEquip;
     int nSR;
     int nMAX;
     int nTYPE;
     int nTABLE;
     int nCACHE = GetNum2DARows(s2DA);
     itemproperty iPROP;
-    while (nEQUIP < 18)
+    while (nEquip < 18)
     {
-        oITEM = GetItemInSlot(nEQUIP, oPC);
-        if (GetItemHasItemProperty(oITEM, ITEM_PROPERTY_SPELL_RESISTANCE) == TRUE)
+        oItem = GetItemInSlot(nEquip, oPC);
+        if (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SPELL_RESISTANCE) == TRUE)
         {
-            iPROP = GetFirstItemProperty(oITEM);
+            iPROP = GetFirstItemProperty(oItem);
             while (GetIsItemPropertyValid(iPROP))
             {
                 nTYPE = GetItemPropertyType(iPROP);
@@ -1195,10 +1206,10 @@ void SpellResistFix(object oPC, string s2DA = "iprp_srcost", string sCOLUMN = "V
                     nSR = Get2DAInt(s2DA, sCOLUMN, nTABLE);
                     if (nSR > nMAX) nMAX = nSR;
                 }
-                iPROP = GetNextItemProperty(oITEM);
+                iPROP = GetNextItemProperty(oItem);
             }
         }
-        nEQUIP = nEQUIP + 1;
+        nEquip = nEquip + 1;
     }
     if (nMAX > 0)
 	{
@@ -1265,18 +1276,18 @@ Following 2 functions currently disabled, so no sense in compiling them.
 // Do bonus damage when unarmed or wielding a creature weapon (new creature weapons)
 // need to check on-equip script and cancel these effects if a weapon is equipped.
 // Not implemented yet (TatooedMonk)
-void TatooedMonk(object oPC, int nRIGHT, int nLEFT)
+void TatooedMonk(object oPC, int nRight, int nLeft)
 {
     if (GetLevelByClass(998, oPC) < 1) return;
     
 }
 //Drunk Masters get bonuses with improvised weapons.
 //Not implemented yet
-void DrunkMasterImprovised(object oPC, int nRIGHT)
+void DrunkMasterImprovised(object oPC, int nRight)
 {
     int nDRUNK = GetLevelByClass(999, oPC);
     if (nDRUNK < 1) return;
-    if (nRIGHT != BASE_ITEM_INVALID && nRIGHT != BASE_ITEM_CLUB && nRIGHT != 152) return;
+    if (nRight != BASE_ITEM_INVALID && nRight != BASE_ITEM_CLUB && nRight != 152) return;
     int nLEVEL = nDRUNK + GetLevelByClass(CLASS_TYPE_MONK, oPC);
     int nATTACKS = 2;
     if (nLEVEL < 11) nATTACKS = 1;

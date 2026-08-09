@@ -1,5 +1,5 @@
 //::///////////////////////////////////////////////
-//:: Expeditious retreat
+//:: Expeditious retreat and Longstrider
 //:: x0_s0_exretreat.nss
 //:: Copyright (c) 2002 Bioware Corp.
 //:://////////////////////////////////////////////
@@ -53,7 +53,7 @@ void main()
     }
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX
     effect eDur = EffectVisualEffect( VFX_DUR_SPELL_EXPEDITIOUS_RETREAT );	// NWN2 VFX
-    effect eFast = EffectMovementSpeedIncrease(150);
+    effect eFast = EffectMovementSpeedIncrease(50);
     effect eLink = EffectLinkEffects(eFast, eDur);
     
     //float fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));// default duration

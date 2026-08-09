@@ -11,7 +11,7 @@
 void main() {
 
     object oDoor = OBJECT_SELF;
-    ClearAllActions();
+    AssignCommand(oDoor, ClearAllActions());
 	effect eHeal = EffectHeal(GetMaxHitPoints()-GetCurrentHitPoints());
     ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oDoor);
     ActionWait(360.0);

@@ -15,6 +15,11 @@ void PS_HD_SetAlignmentsByHeritage(object oPC, object oEss);
 //levels of specific classes and then never repeated. We could make sure of non repetition by storing a bunch of local 
 //integers for each separate feature, but that woud entail dozens of local integers instead of 4. This is cleaner.
 void FF_AdjustClasses(object oPC){
+	//this will be removed once we transition to gui for mentalist power selection because this will
+	//be moved to 2da
+	if (GetLevelByClass(110, oPC) >= 1 && !GetHasFeat(21470, oPC) && !GetHasFeat(21471, oPC))
+		LaunchGuiChoices(oPC, "PSYWAR_START");
+
 	object oEss = PS_GetEssence(oPC);
 	int nLastClass = GetLastClassLeveledUp(oPC);
 	if (nLastClass == -1 || nLastClass == -2){
@@ -54,8 +59,6 @@ void FF_AdjustClasses(object oPC){
 		LaunchGuiChoices(oPC, "CELESTIAL_ENVOY_START");
 	} else if (nLastClass == 108 && nLastClassLevel == 6){ // gray sladd crafting
 		LaunchGuiChoices(oPC, "GRAY_SLAAD_START");
-	} else if (nLastClass == 110 && nLastClassLevel == 1){ // psywar path
-		LaunchGuiChoices(oPC, "PSYWAR_START"); 
 	}
 	ExportSingleCharacter(oPC);
 }
@@ -225,6 +228,7 @@ void AdjustDragonPrC(object oPC, int nLvl){
 	if (nLvl == 2){
 		int nAbility = -1;
 		if (GetHasFeat(3670, oPC)){ // melee path
+			FeatAdd(oPC, 28, FALSE); //power attack
 			nAbility = ABILITY_DEXTERITY;
 		} else if (GetHasFeat(3671, oPC)){ // rogue path	
 			FeatAdd(oPC, 1857, FALSE); // trapfinding
@@ -239,7 +243,7 @@ void AdjustDragonPrC(object oPC, int nLvl){
 			FeatAdd(oPC, 28, FALSE); //power attack
 			nAbility = ABILITY_CHARISMA;
 		} else if (GetHasFeat(3685, oPC)){ //barb path
-			FeatAdd(oPC, 28, FALSE); //power attack
+			FeatAdd(oPC, 1341, FALSE); //extra rage
 			nAbility = ABILITY_CONSTITUTION;
 		} else if (GetHasFeat(3686, oPC)){ //monk path
 			FeatAdd(oPC, 410, FALSE); // xtra stunning fist

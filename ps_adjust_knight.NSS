@@ -3,6 +3,7 @@
 void PS_KnightLevels(object oPC);
 int KnightLevels(object oPC, int bForSneakDice = FALSE);
 int LayOnHandsLevels(object oPC);
+void PS_KnightPathSelection(object oPC);
 
 void PS_KnightLevels(object oPC){
 
@@ -10,31 +11,9 @@ void PS_KnightLevels(object oPC){
 
 	if (iTotal < 1 ){
 		return;
-	} else if (iTotal >= 1){
-		if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL){
-			if(!GetHasFeat(FEAT_BLACKGUARD, oPC, TRUE))
-				FeatAdd(oPC,FEAT_BLACKGUARD,FALSE,FALSE,FALSE);
-			if (GetHasFeat(FEAT_PALADIN, oPC, TRUE))
-				FeatRemove(oPC, FEAT_PALADIN);
-			if (GetHasFeat(FEAT_KNIGHT, oPC, TRUE))
-				FeatRemove(oPC, FEAT_KNIGHT);
-		} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD){
-			if(!GetHasFeat(FEAT_PALADIN, oPC, TRUE))
-				FeatAdd(oPC,FEAT_PALADIN,FALSE,FALSE,FALSE);
-			if (GetHasFeat(FEAT_BLACKGUARD, oPC, TRUE))
-				FeatRemove(oPC, FEAT_BLACKGUARD);
-			if (GetHasFeat(FEAT_KNIGHT, oPC, TRUE))
-				FeatRemove(oPC, FEAT_KNIGHT);
-		} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL){
-			if(!GetHasFeat(FEAT_KNIGHT, oPC, TRUE))
-				FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);
-			if (GetHasFeat(FEAT_BLACKGUARD, oPC, TRUE))
-				FeatRemove(oPC, FEAT_BLACKGUARD);
-			if (GetHasFeat(FEAT_PALADIN, oPC, TRUE))
-				FeatRemove(oPC, FEAT_PALADIN);
-		}
+	} else {
+		PS_KnightPathSelection(oPC);
 	}
-	
 	// BLACKGUARD FEATS:
 	if (GetHasFeat(FEAT_BLACKGUARD,oPC, TRUE)){
 		if (iTotal >= 1){
@@ -171,4 +150,65 @@ int KnightLevels(object oPC, int bForSneakDice = FALSE){
 
 int LayOnHandsLevels(object oPC){
 	return KnightLevels(oPC);
+}
+
+void PS_KnightPathSelection(object oPC){
+	int bPathChanged = FALSE;
+	if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_EVIL){
+		if(!GetHasFeat(FEAT_BLACKGUARD, oPC, TRUE))
+			FeatAdd(oPC,FEAT_BLACKGUARD,FALSE,FALSE,FALSE);
+		if (GetHasFeat(FEAT_PALADIN, oPC, TRUE)){
+			bPathChanged = TRUE;
+			FeatRemove(oPC, FEAT_PALADIN);
+		}
+		if (GetHasFeat(FEAT_KNIGHT, oPC, TRUE)){
+			bPathChanged = TRUE;
+			FeatRemove(oPC, FEAT_KNIGHT);
+		}
+	} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_GOOD){
+		if(!GetHasFeat(FEAT_PALADIN, oPC, TRUE))
+			FeatAdd(oPC,FEAT_PALADIN,FALSE,FALSE,FALSE);
+		if (GetHasFeat(FEAT_BLACKGUARD, oPC, TRUE)){
+			bPathChanged = TRUE;
+			FeatRemove(oPC, FEAT_BLACKGUARD);
+		}
+		if (GetHasFeat(FEAT_KNIGHT, oPC, TRUE)){
+			bPathChanged = TRUE;
+			FeatRemove(oPC, FEAT_KNIGHT);
+		}
+	} else if (GetAlignmentGoodEvil(oPC) == ALIGNMENT_NEUTRAL){
+		if(!GetHasFeat(FEAT_KNIGHT, oPC, TRUE))
+			FeatAdd(oPC,FEAT_KNIGHT,FALSE,FALSE,FALSE);
+		if (GetHasFeat(FEAT_BLACKGUARD, oPC, TRUE)){
+			bPathChanged = TRUE;
+			FeatRemove(oPC, FEAT_BLACKGUARD);
+		}
+		if (GetHasFeat(FEAT_PALADIN, oPC, TRUE)){
+			bPathChanged = TRUE;
+			FeatRemove(oPC, FEAT_PALADIN);
+		}
+	}
+	if (!bPathChanged) return;
+	// remove path feats no longer qualified for, except non-class specific ones that could have been acquired normally
+	FeatRemove(oPC, FEAT_KNIGHTS_AURA);// Knight's Aura, Knight Path
+	FeatRemove(oPC, 1761);//Smite Infidel , Knight Path
+	FeatRemove(oPC, FEAT_DIVINE_RETRIBUTION);//Divine Retribution , Knight Path
+	FeatRemove(oPC, FEAT_USE_POISON);//Use Poison, BG Path
+	FeatRemove(oPC, FEAT_SMITE_GOOD);//Smite Good, BG Path
+	FeatRemove(oPC, FEAT_BULLS_STRENGTH);//Bull's Strength Feat
+	FeatRemove(oPC, FEAT_PRESTIGE_DARK_BLESSING);//Dark Blessing, BG Path
+	FeatRemove(oPC, 1832);//Aura of Despair, BG Path
+	FeatRemove(oPC, FEAT_TURN_UNDEAD);//Turn Undead, BG Path
+	FeatRemove(oPC, FEAT_INFLICT_LIGHT_WOUNDS);
+	FeatRemove(oPC, FEAT_CONTAGION);//Contagion, BG Path
+	FeatRemove(oPC, FEAT_INFLICT_CRITICAL_WOUNDS);//Inflict Critical Wounds, BG Path
+	FeatRemove(oPC, 475);//Summon Fiend , BG Path
+	FeatRemove(oPC, 2654);//Unsummon Fiend, BG Path
+	FeatRemove(oPC, FEAT_SMITE_EVIL);//Smite Evil , Paladin Path
+	FeatRemove(oPC, FEAT_LAY_ON_HANDS);//Lay on Hands, Paladin
+	FeatRemove(oPC, FEAT_DIVINE_GRACE);//Divine Grace, Paladin
+	FeatRemove(oPC, FEAT_DIVINE_HEALTH);//Divine Health , Paladin Path
+	FeatRemove(oPC, FEAT_AURA_OF_COURAGE);//Aura of Courage , Paladin Path
+	FeatRemove(oPC, FEAT_TURN_UNDEAD);// Turn Undead, Paladin Path
+	FeatRemove(oPC, FEAT_REMOVE_DISEASE);// Remove Disease, Paladin Path
 }

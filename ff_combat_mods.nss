@@ -176,7 +176,7 @@ void UpdateCombatMods(object oPC, int nAction = NULL){
 	DelayCommand(0.3f, ApplyCombatMods(oPC, nAPR, nAB));
 	
 	if (oTarget != OBJECT_INVALID){
-		ClearAllActions(TRUE);
+		AssignCommand(oPC, ClearAllActions());
 		DelayCommand(0.1f, ActionAttack(oTarget));
 	}
 }

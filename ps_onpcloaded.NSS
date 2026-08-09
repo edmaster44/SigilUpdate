@@ -187,7 +187,7 @@ void GiveStartingTraits(object oPC){
 	// give fey traits 
 	if (GetRacialType(oPC) == 17){
 		if (!GetLocalInt(PS_GetEssence(oPC), "FEY_SET")){
-			AddScriptParameterString("START");
+			AddScriptParameterString("FEY_START");
 			AddScriptParameterString("");
 			ExecuteScriptEnhanced("gui_extra_choices", oPC);
 			SetLocalInt(PS_GetEssence(oPC), "FEY_SET", TRUE);

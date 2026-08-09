@@ -5037,11 +5037,14 @@ void DoPsyPathFeatProgression(object oPC){
 
 	int iPsy = PsyWarLevels(oPC, TRUE);
 	if (iPsy < 1) return;
-	
+		/*
+		case 1: return 21470; // Lurk Path
+			case 2: return 21471; // Feral Path
+			*/
 	if (GetHasFeat(FEAT_PSYWAR_LURK,oPC)){
-		if (iPsy >= 1){
+		if (iPsy >= 2){
 			FeatAdd(oPC,21079,FALSE,FALSE,FALSE);//Chameleon
-			FeatAdd(oPC,21003,FALSE,FALSE,FALSE);//Coneal Thought
+			FeatAdd(oPC,21003,FALSE,FALSE,FALSE);//Conceal Thought
 			FeatAdd(oPC,21011,FALSE,FALSE,FALSE);//Dissipating Touch
 		}
 		if (iPsy >= 9){
@@ -5049,11 +5052,11 @@ void DoPsyPathFeatProgression(object oPC){
 		}
 	}
 	if (GetHasFeat(FEAT_PSYWAR_FERAL,oPC)){
-		if (iPsy >= 1) FeatAdd(oPC,21027,FALSE,FALSE,FALSE);//Vigor
-		if (iPsy >= 3){
+		if (iPsy >= 2){
+			FeatAdd(oPC,21027,FALSE,FALSE,FALSE);//Vigor
 			FeatAdd(oPC,289,FALSE,FALSE,FALSE);//Weapon Prof. Creature
-			FeatAdd(oPC,291,FALSE,FALSE,FALSE);//Weapon Focus. Creature
 		}
+		if (iPsy >= 3) FeatAdd(oPC,291,FALSE,FALSE,FALSE);//Weapon Focus. Creature
 		if (iPsy >= 5) FeatAdd(oPC,290,FALSE,FALSE,FALSE);//Weapon creature, Specialization
 		if (iPsy >= 7) FeatAdd(oPC,1157,FALSE,FALSE,FALSE);//Greater Weapon Focus, Creature
 		if (iPsy >= 14) FeatAdd(oPC,1383,FALSE,FALSE,FALSE);//Power Critical, Creature

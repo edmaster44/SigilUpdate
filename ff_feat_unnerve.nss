@@ -32,6 +32,7 @@ void UnnerveTarget(object oTarget, object oPC, int nRoll){
 	else if (nRoll > nTargetRoll) nPenalty = 2;
 	
 	if (nPenalty > 0){
+		effect eVis = EffectVisualEffect(VFX_HIT_SPELL_EVIL);
 		effect eAt = EffectAttackDecrease(nPenalty);
 		effect eDam = EffectDamageDecrease(nPenalty);
 		effect eAc = EffectACDecrease(nPenalty);
@@ -43,6 +44,7 @@ void UnnerveTarget(object oTarget, object oPC, int nRoll){
 		eAt = SetEffectSpellId(eAt, UNNERVE_SPELL_ID);
 		float fDur = IntToFloat(6 * nPenalty);
 		RemoveEffectsFromSpell(oPC, UNNERVE_SPELL_ID);
+		ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
 		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eAt, oTarget, fDur);
 	}
 }
