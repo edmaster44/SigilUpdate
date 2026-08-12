@@ -19,7 +19,11 @@ struct manifestation EvaluateManifestationNew(object oManifester, object oTarget
 	
     int nPowerLevel      = GetSpellLevel(spellID);
 	// elfsight is 1 pp for psywar
-	if (GetLevelByClass(110, oManifester) > 0 && spellID == 14419) nPowerLevel = 1;
+	if (GetLevelByClass(110, oManifester) > 0){
+		if (spellID == 14419) nPowerLevel = 1;
+		else if (spellID == 14494) nPowerLevel = 2;
+	}
+	
     int nManifesterPP    = GetLocalInt(oManifester, "PSI_PP");
 	if (GetLocalInt(oManifester, "PSI_SPAWN")){
 		nManifesterLevel = PS_GetLevel(oManifester);

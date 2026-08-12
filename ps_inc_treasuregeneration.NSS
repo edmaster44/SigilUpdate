@@ -129,7 +129,7 @@ int SpecialDrop(string sAREA, object oSPAWN, int bGetPercentage = FALSE){
 	
 	// low level areas
 	
-if (TestStringAgainstPattern("**graywaste**", sAREA)){
+	if (TestStringAgainstPattern("**graywaste**", sAREA)){
 		if (bGetPercentage) return 3;
 		else {
 			switch (Random(4)){
@@ -241,22 +241,20 @@ if (TestStringAgainstPattern("**graywaste**", sAREA)){
 				case 9: sSpecial = MISC_DRAG_SINEW; break; 
 			}
 		}
-	} else 	if (TestStringAgainstPattern("**maldomini**", sAREA) || 
+	} else if (TestStringAgainstPattern("**maldomini**", sAREA) || 
 		TestStringAgainstPattern("**minauros**", sAREA)){
 		if (bGetPercentage) return 4;
 		string sAltMat = INGOT_GOLD;
 		if (TestStringAgainstPattern("**minauros**", sAREA))
 			sAltMat = WOOD_TWELVETREES;
-		else {
-			switch (Random(7)){
-				case 0: sSpecial = WOOD_DEVIL_HORN; break; 
-				case 1: sSpecial = HIDE_DEVIL; break; 
-				case 2: sSpecial = INGOT_METEORIC_IRON; break;
-				case 3: sSpecial = MISC_FIENDIVORY; break;
-				case 4: sSpecial = INGOT_TANTULHOR; break; 
-				case 5: sSpecial = INGOT_MORGUTH_IRON; break; 
-				case 6: sSpecial = sAltMat; break;
-			}
+		switch (Random(7)){
+			case 0: sSpecial = WOOD_DEVIL_HORN; break; 
+			case 1: sSpecial = HIDE_DEVIL; break; 
+			case 2: sSpecial = INGOT_METEORIC_IRON; break;
+			case 3: sSpecial = MISC_FIENDIVORY; break;
+			case 4: sSpecial = INGOT_TANTULHOR; break; 
+			case 5: sSpecial = INGOT_MORGUTH_IRON; break; 
+			case 6: sSpecial = sAltMat; break;
 		}
 	} else 	if (TestStringAgainstPattern("**mercuria**", sAREA)){
 		if (bGetPercentage) return 4;
