@@ -588,6 +588,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			}
 			object oGolem = CreateObject(OBJECT_TYPE_CREATURE, sMessage, GetLocation(oSender));
 			AddHenchman(oSender, oGolem);
+			return TRUE;
 		}
 		else if (GetStringLeft(sInput, 11) == "#testvfxint"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 11);
