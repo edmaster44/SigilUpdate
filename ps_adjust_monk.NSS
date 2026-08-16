@@ -54,7 +54,9 @@ void PS_MonkLevels(object oPC)
 { 	FeatAdd(oPC,FEAT_DEFLECT_ARROWS,FALSE,FALSE,FALSE);		
 			}
 	 if (iTotal  >= 3)
-		{FeatAdd(oPC,FEAT_STILL_MIND,FALSE,FALSE,FALSE);
+		{
+			FeatAdd(oPC,FEAT_STILL_MIND,FALSE,FALSE,FALSE);
+			FeatAdd(oPC,21907,FALSE,FALSE,FALSE); // toggles speed on and off
 		}
 		 if(iTotal >= 4)
 		{FeatAdd(oPC,FEAT_KI_STRIKE,FALSE,FALSE,FALSE);

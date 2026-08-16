@@ -25,6 +25,19 @@ const int CLASS_TYPE_GOLEM_MASTER		= 77;
 const int CLASS_TYPE_CELESTIAL_ENVOY 	= 42;
 
 
+void  PS_ToggleMonkSpeed(object oPC){
+	string sMessage;
+	if (GetHasFeat(207, oPC)){
+		sMessage = "Removing";
+		FeatRemove(oPC, 207);
+	} else {
+		sMessage = "Applying";
+		FeatAdd(oPC, 207, FALSE);
+	}
+	SendMessageToPC(oPC, sMessage + " monk speed.");
+}
+
+
 void PS_Feat_SHD_ShadowDaze(object oPC, object oTarget, int nSpell){
 	/* is this bit necessary? Probably not, but if we notice any of these being affected
 		we can uncomment this bit

@@ -38,6 +38,7 @@ void main()
 		{	PS_Lycan_HybridForm(oPC, oItem, nSpell);			}
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
+	/*
 		case 335 :		//Bestial Power - Werewolf
 		{	PS_Lycan_BPWerewolf(oPC, oTarget, oItem, nSpell);			}
 		break;	
@@ -50,7 +51,7 @@ void main()
 		{	PS_Lycan_BPWeretiger(oPC, oTarget, oItem, nSpell);			}
 		break;	
 		case 339: PS_Lycan_Bite(oPC, oTarget, oItem, nSpell); break;  // lycan bite
-			
+		*/
 		
 		
 ////////////////////////////////////////////////////////////////////////////////////

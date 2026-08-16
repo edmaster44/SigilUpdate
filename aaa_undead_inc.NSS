@@ -759,7 +759,7 @@ void PS_VampAltForm_Bat(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_BAT);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_BAT, FALSE, TRUE);
 	effect eSpeed = EffectMovementSpeedIncrease(50);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = EffectLinkEffects(ePoly, eSpeed);
@@ -778,7 +778,7 @@ void PS_VampAltForm_Wolf(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_WOLF);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_WOLF, FALSE, TRUE);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_WOLF);
@@ -799,7 +799,7 @@ void PS_VampAltForm_Gas(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_GASEOUS);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_GASEOUS, FALSE, TRUE);
 	effect eDR = EffectDamageReduction(10, DAMAGE_POWER_PLUS_ONE, 0, DR_TYPE_MAGICBONUS);
 	effect eConceal = EffectConcealment(50);
 	effect eMiss = EffectAttackDecrease(5);
@@ -822,7 +822,7 @@ void PS_VampAltForm_DireWolf(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_DIREWOLF);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_DIREWOLF, FALSE, TRUE);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_DIREWOLF);
@@ -1016,7 +1016,7 @@ void PS_Vamp_AltForm_Wyvern(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_WYVERN);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_WYVERN, FALSE, TRUE);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_WYVERN);
@@ -1033,7 +1033,7 @@ void PS_Vamp_AltForm_TerrorWolf(object oPC, int nSpell)
     if (!X2PreSpellCastCode())
     {	return;		}
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
-    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_TWOLF);
+    effect ePoly = PS_EffectPolymorph(POLYMORPH_VAMPIRE_TWOLF, FALSE, TRUE);
 		ePoly = EffectLinkEffects(ePoly, eVis);
 		ePoly = SupernaturalEffect(ePoly);
 	string sVFX = Get2DAString("polymorph", "VFX", POLYMORPH_VAMPIRE_TWOLF);

@@ -5206,8 +5206,8 @@ int PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
 		} else eFX = GetNextEffect( oPC ); 
 	}
 	if (bRestoreApp){
-		PS_RestoreOriginalAppearance(oPC);
 		PS_TintFixer(oPC); //Fix the tint first!
+		PS_RestoreOriginalAppearance(oPC);
 		int nCustom = GetLocalInt(oEss, "Custom_Tail");
 		int nTail = (nCustom != 0) ? nCustom : GetLocalInt(oEss, "PC_Tail");
 		int nWing;
@@ -5222,7 +5222,10 @@ int PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
 		PS_SetCreatureCoreAppearance(oPC, app);
 		ServerExts_RefreshCreatureAppearance(oPC,oPC);
 		SetLocalInt(oEss, "FiendformSource", 0);
-		SetLocalInt(oEss, "Hybrid", FALSE);
+		if (GetLocalInt(oEss, "Hybrid")){
+			SetLocalInt(oEss, "Hybrid", FALSE);
+			FeatRemove(oPC, 4000); // remove multiattack when removing Hybrid
+		}
 		SetLocalInt(oEss, "TempChange", FALSE);
 	}
 	return TRUE;

@@ -6,7 +6,6 @@
 /*
  Increases movement rate to the max, allowing
  the spell-caster to flee.
- Also gives + 2 AC bonus
 */
 //:://////////////////////////////////////////////
 //:: Created By: Brent Knowles
@@ -51,20 +50,33 @@ void main()
     {
         return ; // does nothing if caster already has haste
     }
+	int nId = GetSpellId();
+	int nCL = PS_GetCasterLevel(OBJECT_SELF);
+	int nFast, nDur;
+	if (nId == 1959){ //Longstrider
+		nFast = 30; // speed +30 for Longstrider
+		nDur = nCL & 3600; // duration 1 hour per CL for Longstrider
+	} else {
+		nFast = 50; // speed + 50 for exp retreat
+		nDur = 30 + (nCL * 6); // duration 5 rounds + 1 round per level for exp retreat
+		if (nDur > 180) nDur = 180; // max 30 rounds
+	}
     //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);	// NWN1 VFX
-    effect eDur = EffectVisualEffect( VFX_DUR_SPELL_EXPEDITIOUS_RETREAT );	// NWN2 VFX
-    effect eFast = EffectMovementSpeedIncrease(50);
+    effect eDur = EffectVisualEffect(VFX_DUR_SPELL_EXPEDITIOUS_RETREAT);	// NWN2 VFX
+    effect eFast = EffectMovementSpeedIncrease(nFast);
     effect eLink = EffectLinkEffects(eFast, eDur);
+	eLink = SetEffectSpellId(eLink, nId); 
     
     //float fDuration = RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));// default duration
-	float fDuration = 30.0 + (6.0 * IntToFloat(PS_GetCasterLevel(OBJECT_SELF))); // FlattedFifth duration
-	if (fDuration > 180.0) fDuration = 180.0;
+	float fDuration = IntToFloat(nDur);
     fDuration = ApplyMetamagicDurationMods(fDuration);
     int nDurType = ApplyMetamagicDurationTypeMods(DURATION_TYPE_TEMPORARY);
 
     //Fire cast spell at event for the specified target
     SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, 455, FALSE));
-
+	//remove previous castings of Expeditious Retreat and Longstrider
+	PS_RemoveEffects(oTarget, 456);
+	PS_RemoveEffects(oTarget, 1959);
 	//Apply the VFX impact and effects
     ApplyEffectToObject(nDurType, eLink, oTarget, fDuration);
 }

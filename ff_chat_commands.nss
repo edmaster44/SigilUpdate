@@ -495,10 +495,6 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			oItem = CreateItemOnObject("ps_arrow_mundane", oSender, d10(2));
 			return TRUE;
 		}
-		else if (sInput == "#creatureshield"){
-			oItem = CreateItemOnObject("creatureshield", oSender); 
-			return TRUE;
-		}
 	}
 	//END DM OR TEST SERVER ONLY COMMANDS
 	
@@ -583,7 +579,17 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	// LOT of copy-paste bs here but I'm just going to remove these once we have 
 	// some good numbers. -FlattedFifth
 	if (GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE")){
-		if (GetStringLeft(sInput, 11) == "#testvfxint"){
+		if (GetStringLeft(sInput, 12) == "#summonhench"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 12);
+			if (GetHenchman(oSender) != OBJECT_INVALID){	
+				object oHENCH = GetHenchman(oSender);
+				RemoveHenchman(oSender, oHENCH);
+				DestroyObject(oHENCH, 0.5);
+			}
+			object oGolem = CreateObject(OBJECT_TYPE_CREATURE, sMessage, GetLocation(oSender));
+			AddHenchman(oSender, oGolem);
+		}
+		else if (GetStringLeft(sInput, 11) == "#testvfxint"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 11);
 			int nFX = StringToInt(sMessage);
 			effect eFX = EffectVisualEffect(nFX);

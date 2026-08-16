@@ -57,5 +57,8 @@ void main()
 		
 		//GOLEM MASTER
 		case 1638 :	PS_Feat_GM_Gargoyle(oPC, lTarget, nSpell); break;
+		
+		//monk
+		case 1818: PS_ToggleMonkSpeed(oPC); break;
 	}
 }

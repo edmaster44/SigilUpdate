@@ -33,6 +33,7 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 		ResetFeatUses(oPC, GetSpellFeatId(), TRUE, TRUE);
 		return;
 	}
+	
 	// do a finessable melee touch attack to see if the bite hits
 	int nStr = GetAbilityModifier(ABILITY_STRENGTH, oPC);
 	int nDex = GetAbilityModifier(ABILITY_DEXTERITY, oPC);
@@ -40,41 +41,39 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 	SignalEvent(oTarget, EventSpellCastAt(oPC, nSpell));
 	int nAttack = TouchAttackMelee(oTarget, FALSE, nBonus);
 	if (nAttack == TOUCH_ATTACK_RESULT_MISS){
-		SendMessageToPC(oPC, "<c=tomato>Bite attack: Miss!</c>");
+		FloatingTextStringOnCreature("<c=tomato>Bite attack: Miss!</c>", oPC, FALSE);
 		return;
 	}
-	int nLevel = PS_GetLevel(oPC);
-	int nPower = DAMAGE_POWER_PLUS_ONE;
-	int nDamage = d10();
-	 // werewolf and weretiger bite harder than werewolf and wereboar
-	if (GetHasFeat(2592, oPC) || GetHasFeat(2656)) nDamage = d6(2);
-	nDamage += nStr;
-	if (nLevel >= 20){
-		nPower = DAMAGE_POWER_PLUS_THREE;
-		nDamage += 3;
-	} else if (nLevel >= 10){
-		nPower = DAMAGE_POWER_PLUS_TWO;
-		nDamage += 3;
-	} else nDamage += 1;
+	int nBitePower = PS_GetLevel(oPC) / 6;
+	if (nBitePower > 5) nBitePower = 5;
+	else if (nBitePower < 1) nBitePower = 1;
+	// werewolf and weretiger bite harder than werewolf and wereboar
+	int nDamage;
+	if (GetHasFeat(2592, oPC) || GetHasFeat(2656, oPC)) nDamage = d6(2);
+	else nDamage = d10();
 
+	nDamage += nStr + nBitePower;
+	
+	string sMessage;
 	if (nAttack == TOUCH_ATTACK_RESULT_CRITICAL){
 		nDamage *= 2;
-		SendMessageToPC(oPC, "<c=orange>Bite attack critical hit!</c>");
-	} else SendMessageToPC(oPC, "Bite attack hit!");
+		sMessage = "Bite attack critical hit!";
+	} else sMessage = "Bite attack hit!";
 	
 	// now apply damage and see if it's all resisted or not
 	int nHP = GetCurrentHitPoints(oTarget);
-	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, nPower, FALSE);
+	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, nBitePower, FALSE);
 	ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
 	int nPostHP = GetCurrentHitPoints(oTarget);
-	// if the target's DR absorbed all damage, then no bleed DOT. Exit
+	// if the target's DR absorbed all damage, then no bleed DOT or stun. Exit
 	if (nPostHP >= nHP){
-		SendMessageToPC(oPC, "Your target resisted all damage from your bite!");
+		sMessage += "\nYour target resisted all damage from your bite!";
+		FloatingTextStringOnCreature(sMessage, oPC, FALSE);
 		return;
 	} else {
-		SendMessageToPC(oPC, "You've bitten your opponent for " + IntToString(nHP - nPostHP) + " damage!");
+		sMessage += "\nYou've bitten your opponent for " + IntToString(nHP - nPostHP) + " damage!";
 	}
-	
+	FloatingTextStringOnCreature(sMessage, oPC, FALSE);
 	// constructs, elementals, incorporeal, oozes, plants, and undead do not take bleed damage
 	int nRace = GetRacialType(oTarget);
 	int nSub = GetSubRace(oTarget);
@@ -83,141 +82,30 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 		nSub == RACIAL_SUBTYPE_ELEMENTAL || nSub == RACIAL_SUBTYPE_UNDEAD || nSub == RACIAL_SUBTYPE_INCORPOREAL || 
 		nSub ==  RACIAL_SUBTYPE_PLANT || nSub == RACIAL_SUBTYPE_OOZE || nRace == RACIAL_TYPE_PLANT)
 			return;
-	int nDot = d6();
+	int nDot = d3(2); // was d6 but this gives more consistent result
 	if (nAttack == TOUCH_ATTACK_RESULT_CRITICAL) nDot *= 2;		
 	effect eDot = EffectDamageOverTime(nDot, 6.0, DAMAGE_TYPE_MAGICAL, TRUE);
-	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDot, oTarget, 18.0);
-}
-
-	/* no longer using a persistent feat to launch lycan type choice ui
-void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)	
-{
-	int nAfflict = GetLocalInt(oItem, "Lycan_Affliction");
-	int nOldECL = PS_GetEssenceECL(oPC);
-	
-	if (nAfflict != 0)
-	{	return;		}
-	else
-	{	// Clangeddin UI script.
-		AddScriptParameterString("START");
-		AddScriptParameterString("");
-		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
-	
-	SetLocalString(oItem, "Template", "Lycan");
-	SetLocalInt(oItem, "Lycan_Affliction", 1);  
-}
-*/
-
-// Helper feat for granting wererat sneak attack bonus
-// wererat just gets full sneak dice prog for parity with wereboar barb feats and lupus vamp sneak dice
-/*
-void PS_Wererat_SneakAdd(object oPC)
-{
-	// adds 2 dice of blackguard sneak attack. Shouldn't conflict with anything since blackguard
-	// path gets normal sneak dice.
-	if (GetHasFeat(2593, oPC))
-	{	FeatAdd(oPC, 460, 0);
-		FeatAdd(oPC, 461, 0);
-		SendMessageToPC(oPC, "Wererat sneak attack feats granted while in hybrid form."); 	}
-}
-*/
-/* wererats no longer get bonus sneak dice in animal form
-void PS_Wererat_AnimalSneakApply(object oPC)
-{	
-	itemproperty ipSneak1 	= ItemPropertyBonusFeat(553);
-	itemproperty ipSneak2	= ItemPropertyBonusFeat(554);
-	object oSkin			= GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
-	if (GetHasFeat(2593, oPC))
-	{	IPSafeAddItemProperty(oSkin, ipSneak1, HoursToSeconds(24));
-		IPSafeAddItemProperty(oSkin, ipSneak2, HoursToSeconds(24));	}
-}
-*/
-
-/* lycans no longer get saddled with undroppable/untradeable unenchanted weapons
-void PS_Lycan_HybridWeaponAdd(object oPC, object oItem)
-{
-	string sWeapon1, sWeapon2, sWeapon3;
-	if (GetHasFeat(2592, oPC))
-	{	sWeapon1		= "s3_w_werewolfbite_01";
-		sWeapon2		= "s3_w_werewolfclaw_01";
-		sWeapon3		= "s3_w_werewolfclaw_01";	}
-	else if (GetHasFeat(2592, oPC))
-	{	sWeapon1		= "s3_w_wereratbite_01";
-		sWeapon2		= "s3_w_wereratclaw_01";
-		sWeapon3		= "s3_w_wereratclaw_01";		}
-	else if (GetHasFeat(2610, oPC))
-	{	sWeapon1		= "s3_w_wereboargore_01";
-		sWeapon2		= "s3_w_wereboargore_01";								}
-	else if (GetHasFeat(2656, oPC))
-	{	sWeapon1		= "s3_w_weretigerbite_01";
-		sWeapon2		= "s3_w_weretigerclaw_01";
-		sWeapon3		= "s3_w_weretigerclaw_01";	}
-	else
-	{	return;		}
-	
-	object oWeapon1		= CreateItemOnObject(sWeapon1, oPC);
-	object oWeapon2		= CreateItemOnObject(sWeapon2, oPC);
-	object oWeapon3		= CreateItemOnObject(sWeapon3, oPC);
-	SetLocalInt(oItem, "LycanWeapons", 1);
-	SendMessageToPC(oPC, "Equippable creature weapons added to inventory!");
-}
-*/
-
-void PS_Lycan_ScaledWeaponApply(object oWeapon, object oPC)
-{
-	itemproperty ipEnhance1 = ItemPropertyEnhancementBonus(1);
-	itemproperty ipEnhance3 = ItemPropertyEnhancementBonus(3);
-	itemproperty ipEnhance5 = ItemPropertyEnhancementBonus(5);
-	itemproperty ipDamage3	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, IP_CONST_DAMAGEBONUS_1d6);
-	itemproperty ipDamage5	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, IP_CONST_DAMAGEBONUS_2d6);
-	itemproperty ipKeen3	= ItemPropertyKeen();
-	itemproperty ipMassive5	= ItemPropertyMassiveCritical(IP_CONST_DAMAGEBONUS_2d8);
-	int nLevel				= PS_GetLevel(oPC);
-	
-	if (nLevel >= 21)
-	{	IPSafeAddItemProperty(oWeapon, ipEnhance5);
-		IPSafeAddItemProperty(oWeapon, ipDamage5);
-		IPSafeAddItemProperty(oWeapon, ipKeen3);
-		IPSafeAddItemProperty(oWeapon, ipMassive5);		}
-	else if (nLevel >= 11)
-	{	IPSafeAddItemProperty(oWeapon, ipEnhance3);
-		IPSafeAddItemProperty(oWeapon, ipDamage3);
-		IPSafeAddItemProperty(oWeapon, ipKeen3);		}
-	else
-	{	IPSafeAddItemProperty(oWeapon, ipEnhance1);		}
-}
-
-void PS_Lycan_ScaledWeapons(object oPC)
-{
-	object oWeaponR		= GetItemInSlot(INVENTORY_SLOT_CWEAPON_R, oPC);
-	object oWeaponL		= GetItemInSlot(INVENTORY_SLOT_CWEAPON_L, oPC);
-	object oWeaponB		= GetItemInSlot(INVENTORY_SLOT_CWEAPON_B, oPC);
-
-	itemproperty ipEnhance1 = ItemPropertyEnhancementBonus(1);
-	itemproperty ipEnhance3 = ItemPropertyEnhancementBonus(3);
-	itemproperty ipEnhance5 = ItemPropertyEnhancementBonus(5);
-	itemproperty ipDamage3	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, IP_CONST_DAMAGEBONUS_1d6);
-	itemproperty ipDamage5	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, IP_CONST_DAMAGEBONUS_2d6);
-	itemproperty ipKeen3	= ItemPropertyKeen();
-	itemproperty ipMassive5	= ItemPropertyMassiveCritical(IP_CONST_DAMAGEBONUS_2d8);
-	
-	if (oWeaponR != OBJECT_INVALID)
-	{	DelayCommand(1.0f, PS_Lycan_ScaledWeaponApply(oWeaponR, oPC));	}
-	if (oWeaponL != OBJECT_INVALID)
-	{	DelayCommand(1.0f, PS_Lycan_ScaledWeaponApply(oWeaponL, oPC));	}
-	if (oWeaponB != OBJECT_INVALID)
-	{	DelayCommand(1.0f, PS_Lycan_ScaledWeaponApply(oWeaponB, oPC));	}
+	if (GetHasFeat(2656, oPC)){ // weretiger stun
+		int nLycan = GetLevelByClass(CLASS_TYPE_LYCAN_PRC, oPC);
+		int nCL = (PS_GetLevel(oPC) - nLycan) / 2;
+		int nDC = 10 + nLycan + nCL;
+		nDC += GetAbilityModifier(ABILITY_STRENGTH, oPC) / 2;
+		if(!MySavingThrow(SAVING_THROW_FORT, oTarget, nDC, SAVING_THROW_TYPE_ALL)){
+			effect eStun = EffectStunned();
+			eDot = EffectLinkEffects(eStun, eDot);
+		}
+	}
+	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDot, oTarget, 19.0);
 }
 
 // Helper feat for adding and removing multiattack in animal/hybrid form
-void PS_Lycan_Multiattack(object oPC, int bHasMultiattack = FALSE){
-	/*
-	itemproperty ipMA	= ItemPropertyBonusFeat(1315);
-	object oSkin		= GetItemInSlot(INVENTORY_SLOT_CHEST, oPC);
+void PS_Lycan_Multiattack(object oPC, int bHasMultiattack = -1){
 	
-	IPSafeAddItemProperty(oSkin, ipMA, HoursToSeconds(24));
-	*/
-	if (bHasMultiattack) FeatAdd(oPC, 4000, FALSE);
+	if (bHasMultiattack == -1){
+		if (GetLocalInt(PS_GetEssence(oPC), "Hybrid"))
+			FeatAdd(oPC, 4000, FALSE);
+		else FeatRemove(oPC, 4000);
+	} else if (bHasMultiattack) FeatAdd(oPC, 4000, FALSE);
 	else FeatRemove(oPC, 4000);
 
 	object oRHAND = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
@@ -225,11 +113,9 @@ void PS_Lycan_Multiattack(object oPC, int bHasMultiattack = FALSE){
 	NaturalMultiattack(oPC, oRHAND, oLHAND);
 }
 
-
-
 void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 {
-	if (!X2PreSpellCastCode()) return;		
+	//if (!X2PreSpellCastCode()) return;		
 	
 	
     effect eVis = EffectVisualEffect(VFX_DUR_POLYMORPH);
@@ -251,8 +137,12 @@ void PS_Lycan_AnimalForm(object oPC, object oItem, int nSpell)
 	PS_RefreshAppearance(oPC);
 	ApplyEffectToObject(DURATION_TYPE_TEMPORARY, ePoly, oPC, HoursToSeconds(24));
 	//PS_Wererat_AnimalSneakApply(oPC);
-	PS_Lycan_Multiattack(oPC, TRUE);
-	PS_Lycan_ScaledWeapons(oPC);
+	// cannot cleanly and reliably remove multiattack on use of contextual "return to normal form"
+	// menu item, so not granting multiattack to animal form in order to prevent use with spell polymorph.
+	// For example, if we add multiattack to animal, a wiz lycan can shift to animal to gain it, unshift
+	// then cast the Shapeshift spell to use multiattack in iron golem shape.
+	PS_Lycan_Multiattack(oPC, FALSE);
+	//PS_Lycan_ScaledWeapons(oPC);
 	
 }
 
@@ -273,14 +163,17 @@ void PS_Lycan_DR(object oPC, int nSpell)
 		SendMessageToPC(oPC, "Damage Reduction of " + IntToString(nAmount) + "/silver applied.");
 		SetLocalInt(oPC, "lycanDR", nAmount);
 	}
+	PS_Lycan_Multiattack(oPC);
 }
 
 void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 {
 	int bIsAlreadyHybrid = GetLocalInt(oItem, "Hybrid");
 	int nWait = PS_RemoveAllShapeChange(oPC);
-	if (bIsAlreadyHybrid) return;
-	
+	if (bIsAlreadyHybrid){
+		PS_Lycan_Multiattack(oPC, FALSE);
+		return;
+	}
 	int nAfflict;
 	int nStr;
 	int nDex;
@@ -335,9 +228,11 @@ void PS_Lycan_HybridForm(object oPC, object oItem, int nSpell)
 	SignalEvent(oPC, EventSpellCastAt(OBJECT_SELF, nSpell, FALSE));
 	ApplyEffectToObject(DURATION_TYPE_PERMANENT, eLink, oPC);
 	SetLocalInt(oItem, "Hybrid", 1);
+	PS_Lycan_Multiattack(oPC, TRUE);
 	//PS_Wererat_SneakAdd(oPC);
 }
 
+/* deprecated
 void PS_Lycan_BPWerewolf(object oPC, object oTarget, object oItem, int nSpell)
 {
 	int nIsAnimal		= GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC);
@@ -613,3 +508,118 @@ void PS_Lycan_BPWeretiger(object oPC, object oTarget, object oItem, int nSpell)
 	else
 	{	SendMessageToPC(oPC, "This ability is only usable in Animal or Hybrid form.");	}
 }
+
+// lycans no longer get saddled with undroppable/untradeable unenchanted weapons
+void PS_Lycan_HybridWeaponAdd(object oPC, object oItem)
+{
+	string sWeapon1, sWeapon2, sWeapon3;
+	if (GetHasFeat(2592, oPC))
+	{	sWeapon1		= "s3_w_werewolfbite_01";
+		sWeapon2		= "s3_w_werewolfclaw_01";
+		sWeapon3		= "s3_w_werewolfclaw_01";	}
+	else if (GetHasFeat(2592, oPC))
+	{	sWeapon1		= "s3_w_wereratbite_01";
+		sWeapon2		= "s3_w_wereratclaw_01";
+		sWeapon3		= "s3_w_wereratclaw_01";		}
+	else if (GetHasFeat(2610, oPC))
+	{	sWeapon1		= "s3_w_wereboargore_01";
+		sWeapon2		= "s3_w_wereboargore_01";								}
+	else if (GetHasFeat(2656, oPC))
+	{	sWeapon1		= "s3_w_weretigerbite_01";
+		sWeapon2		= "s3_w_weretigerclaw_01";
+		sWeapon3		= "s3_w_weretigerclaw_01";	}
+	else
+	{	return;		}
+	
+	object oWeapon1		= CreateItemOnObject(sWeapon1, oPC);
+	object oWeapon2		= CreateItemOnObject(sWeapon2, oPC);
+	object oWeapon3		= CreateItemOnObject(sWeapon3, oPC);
+	SetLocalInt(oItem, "LycanWeapons", 1);
+	SendMessageToPC(oPC, "Equippable creature weapons added to inventory!");
+}
+
+void PS_Lycan_ScaledWeaponApply(object oWeapon, object oPC)
+{
+	itemproperty ipEnhance1 = ItemPropertyEnhancementBonus(1);
+	itemproperty ipEnhance3 = ItemPropertyEnhancementBonus(3);
+	itemproperty ipEnhance5 = ItemPropertyEnhancementBonus(5);
+	itemproperty ipDamage3	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, IP_CONST_DAMAGEBONUS_1d6);
+	itemproperty ipDamage5	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, IP_CONST_DAMAGEBONUS_2d6);
+	itemproperty ipKeen3	= ItemPropertyKeen();
+	itemproperty ipMassive5	= ItemPropertyMassiveCritical(IP_CONST_DAMAGEBONUS_2d8);
+	int nLevel				= PS_GetLevel(oPC);
+	
+	if (nLevel >= 21)
+	{	IPSafeAddItemProperty(oWeapon, ipEnhance5);
+		IPSafeAddItemProperty(oWeapon, ipDamage5);
+		IPSafeAddItemProperty(oWeapon, ipKeen3);
+		IPSafeAddItemProperty(oWeapon, ipMassive5);		}
+	else if (nLevel >= 11)
+	{	IPSafeAddItemProperty(oWeapon, ipEnhance3);
+		IPSafeAddItemProperty(oWeapon, ipDamage3);
+		IPSafeAddItemProperty(oWeapon, ipKeen3);		}
+	else
+	{	IPSafeAddItemProperty(oWeapon, ipEnhance1);		}
+}
+
+void PS_Lycan_ScaledWeapons(object oPC)
+{
+	object oWeaponR		= GetItemInSlot(INVENTORY_SLOT_CWEAPON_R, oPC);
+	object oWeaponL		= GetItemInSlot(INVENTORY_SLOT_CWEAPON_L, oPC);
+	object oWeaponB		= GetItemInSlot(INVENTORY_SLOT_CWEAPON_B, oPC);
+
+	itemproperty ipEnhance1 = ItemPropertyEnhancementBonus(1);
+	itemproperty ipEnhance3 = ItemPropertyEnhancementBonus(3);
+	itemproperty ipEnhance5 = ItemPropertyEnhancementBonus(5);
+	itemproperty ipDamage3	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, IP_CONST_DAMAGEBONUS_1d6);
+	itemproperty ipDamage5	= ItemPropertyDamageBonus(DAMAGE_TYPE_BLUDGEONING, IP_CONST_DAMAGEBONUS_2d6);
+	itemproperty ipKeen3	= ItemPropertyKeen();
+	itemproperty ipMassive5	= ItemPropertyMassiveCritical(IP_CONST_DAMAGEBONUS_2d8);
+	
+	if (oWeaponR != OBJECT_INVALID)
+	{	DelayCommand(1.0f, PS_Lycan_ScaledWeaponApply(oWeaponR, oPC));	}
+	if (oWeaponL != OBJECT_INVALID)
+	{	DelayCommand(1.0f, PS_Lycan_ScaledWeaponApply(oWeaponL, oPC));	}
+	if (oWeaponB != OBJECT_INVALID)
+	{	DelayCommand(1.0f, PS_Lycan_ScaledWeaponApply(oWeaponB, oPC));	}
+}
+
+
+ no longer using a persistent feat to launch lycan type choice ui
+void PS_Lycan_Affliction(object oPC, object oItem, int nSpell)	
+{
+	int nAfflict = GetLocalInt(oItem, "Lycan_Affliction");
+	int nOldECL = PS_GetEssenceECL(oPC);
+	
+	if (nAfflict != 0)
+	{	return;		}
+	else
+	{	// Clangeddin UI script.
+		AddScriptParameterString("START");
+		AddScriptParameterString("");
+		ExecuteScriptEnhanced("gui_extra_choices", oPC);	}
+	
+	SetLocalString(oItem, "Template", "Lycan");
+	SetLocalInt(oItem, "Lycan_Affliction", 1);  
+}
+
+void PS_Wererat_AnimalSneakApply(object oPC)
+{	
+	itemproperty ipSneak1 	= ItemPropertyBonusFeat(553);
+	itemproperty ipSneak2	= ItemPropertyBonusFeat(554);
+	object oSkin			= GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+	if (GetHasFeat(2593, oPC))
+	{	IPSafeAddItemProperty(oSkin, ipSneak1, HoursToSeconds(24));
+		IPSafeAddItemProperty(oSkin, ipSneak2, HoursToSeconds(24));	}
+}
+
+void PS_Wererat_SneakAdd(object oPC)
+{
+	// adds 2 dice of blackguard sneak attack. Shouldn't conflict with anything since blackguard
+	// path gets normal sneak dice.
+	if (GetHasFeat(2593, oPC))
+	{	FeatAdd(oPC, 460, 0);
+		FeatAdd(oPC, 461, 0);
+		SendMessageToPC(oPC, "Wererat sneak attack feats granted while in hybrid form."); 	}
+}
+*/

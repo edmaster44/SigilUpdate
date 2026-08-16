@@ -199,9 +199,15 @@ void NaturalMultiattack(object oPC, object oRHand, object oLHand){
 	if (GetHasFeat(1784, oPC, TRUE)) FeatRemove(oPC, 1784);
 	
 	if (!GetHasFeat(4000, oPC, TRUE)) return;
-
-	if ((IPGetIsCreatureEquippedWeapon(oRHand) || oRHand == OBJECT_INVALID) && 
-		(IPGetIsCreatureEquippedWeapon(oLHand) || oLHand == OBJECT_INVALID))
+	// "creature_invis" is the tag on the invisible "creature shield" items and cannot therefore
+	// possibly be on right hand items, however, this tag my in future be put to other uses so 
+	// including it here anyway. I do not want to add the tag check to IPGetIsCreatureEquippedWeapon()
+	// because that function looks for weapons specifically.
+	int bRHandCreature = IPGetIsCreatureEquippedWeapon(oRHand) || GetTag(oRHand) == "creature_invis";
+	int bLHandCreature = IPGetIsCreatureEquippedWeapon(oLHand) || GetTag(oLHand) == "creature_invis";
+	
+	if ((bRHandCreature || oRHand == OBJECT_INVALID) && 
+		(bLHandCreature || oLHand == OBJECT_INVALID))
 			FeatAdd(oPC, 1784, FALSE);
 }
 
