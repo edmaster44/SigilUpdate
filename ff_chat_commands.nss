@@ -1358,7 +1358,7 @@ void SetWingTail(object oSender, string sInput, int bIsTail){
 	}
 	string sLocal = (bIsTail) ? "Custom_Tail" : "Custom_Wing";
 	SetLocalInt(oEss, sLocal, nAppendage);
-	PS_RestoreOriginalAppearance(oTarget);
+	//PS_RestoreOriginalAppearance(oTarget);
 	PS_RefreshAppearance(oTarget);
 	FeatAdd(oTarget, 21905, FALSE);
 	string sType = (bIsTail) ? "tail" : "wings";
