@@ -615,7 +615,7 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			app.AppearanceType = StringToInt(sMessage);
 			PS_SetCreatureCoreAppearance(oSender, app);
 			ServerExts_RefreshCreatureAppearance(oSender, oSender);
-			SetLocalInt(PS_GetEssence(oSender), "TempChange", TRUE);
+			//SetLocalInt(PS_GetEssence(oSender), "TempChange", TRUE);
 			return TRUE;
 		}
 		else if (sInput == "#resetappearance"){
