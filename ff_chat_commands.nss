@@ -609,6 +609,15 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 			SendMessageToPC(oSender, sFeedback);
 			return TRUE;
 		}
+		else if (GetStringLeft(sInput, 8) == "#sethead"){
+			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 8);
+			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
+			app.HeadVariation = StringToInt(sMessage);
+			PS_SetCreatureCoreAppearance(oSender, app);
+			ServerExts_RefreshCreatureAppearance(oSender, oSender);
+			//SetLocalInt(PS_GetEssence(oSender), "TempChange", TRUE);
+			return TRUE;
+		}
 		else if (GetStringLeft(sInput, 14) == "#setappearance"){
 			sMessage = GetStringRight(sInput, GetStringLength(sInput) - 14);
 			struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oSender);
