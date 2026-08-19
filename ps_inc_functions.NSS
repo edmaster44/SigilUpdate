@@ -5179,6 +5179,27 @@ void PS_Wererat_SneakRemove(object oPC){
 }
 */
 
+//make sure that people are not equipping visually silly weapons for their type of word of changing
+int CheckWordOfChangeWeaps(object oPC){
+	
+	if (!GetHasSpellEffect(WORD_OF_CHANGE_ID, oPC)) return FALSE;
+	
+	object oEss = GetItemPossessedBy(oPC, "ps_essence");
+	if (GetLocalInt(oEss, "WOC_NO_WEAPS")){
+		object oRHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+		object oLHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+		if ((!IPGetIsCreatureEquippedWeapon(oRHand) && GetTag(oRHand) != "creature_invis") ||
+			(!IPGetIsCreatureEquippedWeapon(oLHand) && GetTag(oLHand) != "creature_invis")){
+			SendMessageToPC(oPC, "<c=red>Your character cannot use normal weapons in this form.");
+			AssignCommand(oPC, ClearAllActions());
+			AssignCommand(oPC, ActionUnequipItem(oRHand));
+			AssignCommand(oPC, ActionUnequipItem(oLHand));
+			return TRUE;
+		}
+	} else return FALSE;
+	return FALSE;
+}
+
 int PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
 	if (!GetIsPC(oPC)) return FALSE;
 	object oEss = PS_GetEssence(oPC);
@@ -5228,7 +5249,7 @@ int PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
 		}
 		SetLocalInt(oEss, "TempChange", FALSE);
 	}
-	DeleteLocalInt(oEss, "DRAGON_WOC_USES_WEAPS");
+	DeleteLocalInt(oEss, "WOC_NO_WEAPS");
 	return TRUE;
 }
 

@@ -178,6 +178,8 @@ void GiveStartingTraits(object oPC){
 		if (nTail != 0){
 			PS_SetTailNumber(oPC, nTail);
 			PS_ApplyPCTail(oPC);
+			if (!GetHasFeat(2120, oPC, FALSE))
+				FeatAdd(oPC, 2120, FALSE);
 		}
 	}
 	

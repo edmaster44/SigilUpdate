@@ -192,10 +192,15 @@ void PS_Dragon_Large_Biped(object oPC)
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.TailVariation = 42;
 		app.WingVariation = 112;
+		object oEssence = GetItemPossessedBy(oPC,"ps_essence");
+		SetLocalInt(oEssence, "PC_Tail", 42); 
+		SetLocalInt(oEssence, "PC_Wing", 112);
+		SetLocalInt(oEssence, "BIPEDAL_DRAGON", TRUE);
 		app.AppearanceType = nAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
-		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	
+		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	
+		
 		
 		//SetCreatureAppearanceType(oPC, nAppearance);	
 		//PS_RefreshAppearance(oPC);

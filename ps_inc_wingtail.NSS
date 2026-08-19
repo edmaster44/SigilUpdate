@@ -62,6 +62,8 @@ int PS_GetTailNumber(object oPC){
 
 int PS_GetRacialTailType(object oPC)
 {
+	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
+	if (GetLocalInt(oEssence, "BIPEDAL_DRAGON")) return 42;
 	int nSub = GetSubRace(oPC);
 	string sTail = Get2DAString("racialsubtypes", "TAIL", nSub);
 	return StringToInt(sTail);
@@ -73,6 +75,8 @@ int PS_GetRacialWingType(object oPC){
 	int nGender		= GetGender(oPC);
 	//int nSub		= GetSubRace(oPC);
 	int nSub = GetOriginalSubrace(oPC);
+	object oEssence = GetItemPossessedBy(oPC,"ps_essence");
+	if (GetLocalInt(oEssence, "BIPEDAL_DRAGON")) return 112;
 	string sMWing	= Get2DAString("racialsubtypes", "MWING", nSub);
 	int nMWing		= StringToInt(sMWing);
 	string sFWing	= Get2DAString("racialsubtypes", "FWING", nSub);

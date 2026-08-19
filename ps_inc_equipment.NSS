@@ -63,6 +63,7 @@ void UpdateWeaponBenefits(object oPC, object oRHand, object oLHand, object oChes
 void NaturalMultiattack(object oPC, object oRHand, object oLHand);
 void CheckCreatureShieldProficiency(object oPC, object oItem, int nItem);
 
+
 //int GetCreatureWeapons(object oItem);
 //int GetIsSpecialFinessable(int nTYPE);
 //int GetIsShields(object oItem)
@@ -110,6 +111,7 @@ void SigilEquipment(object oPC, object oItem, int nEquip){
         if (nItem == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
         //{  // weird orphan brackets
 		if (MonkeyGripAbuse(oPC, oItem) == TRUE) return;
+		if (CheckWordOfChangeWeaps(oPC) == TRUE) return; // this check must come before the following
 		if (CheckManualDexterity(oPC, oItem, nItem) == TRUE) return;
 		if (CheckDragonForms(oPC, oItem, nItem) == TRUE) return;
 
@@ -950,7 +952,8 @@ void CheckForTempProperties(object oItem, object oPC)
 // Check No Manual Dexterity. With it you can only equip creature weapons.
 int CheckManualDexterity(object oPC, object oItem, int nItem)
 {
-	
+	// we've already checked weapons for equipability in WoC
+	if (GetHasSpellEffect(WORD_OF_CHANGE_ID, oPC)) return FALSE;
     if (IPGetIsCreatureEquippedWeapon(oItem) == TRUE) return FALSE;
 	// base item type of creature skin is 73
 	if (nItem == 73) return FALSE;
@@ -983,12 +986,12 @@ int CheckManualDexterity(object oPC, object oItem, int nItem)
 }
 
 // No Weapons and Shields for Dragons in Natural Form
-// Creature weapons are 160-180. Others are not allowed unless "in humanoid form (=1)".
 int CheckDragonForms(object oPC, object oItem, int nItem){	
-
-	if (GetRacialType(oPC) != RACIAL_TYPE_DRAGON)
+	
+	if (GetOriginalRace(oPC) != RACIAL_TYPE_DRAGON)
 		return FALSE;
-		
+	// we've already checked weapons for equipability in WoC
+	if (GetHasSpellEffect(WORD_OF_CHANGE_ID, oPC)) return FALSE;
     switch (nItem)
     {
         case BASE_ITEM_AMULET:
@@ -1006,24 +1009,8 @@ int CheckDragonForms(object oPC, object oItem, int nItem){
             return FALSE;
     }
 	
-	object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
-	// because one Word of Change form is a wraith that should not have manual dex and the Others
-	// should have manual dex, determine whether norm weapons can be equipped or not by type of woc
-	if (GetHasSpellEffect(WORD_OF_CHANGE_ID, oPC)){
-		if (!GetLocalInt(oESSENCE, "DRAGON_WOC_USES_WEAPS")){ // if in vfx or eldritch form
-			if (!IPGetIsCreatureEquippedWeapon(oItem) && GetTag(oItem) != "creature_invis"){
-				SendMessageToPC(oPC, "<c=red>Your character cannot use normal weapons in this form.");
-				AssignCommand(oPC, ClearAllActions());
-				AssignCommand(oPC, ActionUnequipItem(oItem));
-				return TRUE;
-			}
-		} else return FALSE; // allow both creature and normal weapons in demond, devil, and fey forms
-	}
-   
-    if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
-    
-    
-	
+   // if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE; 
+    object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
 	if (GetLocalInt(oESSENCE, "TempChange")){
 		if ((IPGetIsCreatureEquippedWeapon(oItem) == TRUE || GetTag(oItem) == "creature_invis") &&
 			!GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE)){

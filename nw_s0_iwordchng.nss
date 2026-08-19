@@ -44,24 +44,20 @@ void main() {
 	struct CreatureCoreAppearance Appearance;
 	string sEyes = "";
 	int bVFXonly = FALSE;
-	int bDragCanUseWeaps = TRUE;
+	int bWOC_NO_WEAPS = FALSE;
    
 	int nGender = GetGender(oPC);
 	if (nSpell == 1721) { //Demon
 		sEyes = "fx_f_beetle_eyes";
-		if (GetLocalInt(PS_GetEssence(oPC), "VFX_FIENDFORM")){
-			bVFXonly = TRUE;
-			bDragCanUseWeaps = FALSE; 
-		} else {	
-			Appearance = GetPolymorphAppearance("ps_polymorph_warlockdemon", oPC);
-			Appearance.Gender = nGender;
-			if (nGender == GENDER_FEMALE){
-				Appearance.HairVariation = 100; //Different hair
-				Appearance.HeadVariation = 11;
-				Appearance.WingVariation = 42; //bat wings!
-				Appearance.TailVariation = 9; //Tail switch
-			}
+		Appearance = GetPolymorphAppearance("ps_polymorph_warlockdemon", oPC);
+		Appearance.Gender = nGender;
+		if (nGender == GENDER_FEMALE){
+			Appearance.HairVariation = 100; //Different hair
+			Appearance.HeadVariation = 11;
+			Appearance.WingVariation = 42; //bat wings!
+			Appearance.TailVariation = 9; //Tail switch
 		}
+		
 	} else if (nSpell == 1722) { //Devil
 		sEyes = "fx_f_beetle_eyes";
 		Appearance = GetPolymorphAppearance("ps_polymorph_warlockdevil", oPC);
@@ -72,8 +68,15 @@ void main() {
 			Appearance.WingVariation = 66; //raven wings!
 		}
 	}  else if (nSpell == 1723) { //Abomination
-		bDragCanUseWeaps = FALSE;
-		Appearance = GetPolymorphAppearance("ps_polymorph_warlockeldritch", oPC);
+		if (GetLocalInt(oEss, "VFX_FIENDFORM") || !GetHasFeat(289, oPC)){
+			bVFXonly = TRUE;
+			//dragons and anyone with the no manual dex feat cannot use weaps in vfx form
+			if (GetOriginalRace(oPC) == RACIAL_TYPE_DRAGON || GetHasFeat(2340, oPC))
+				bWOC_NO_WEAPS = TRUE;
+		} else {
+			bWOC_NO_WEAPS = TRUE;
+			Appearance = GetPolymorphAppearance("ps_polymorph_warlockeldritch", oPC);
+		}
 	}  else if (nSpell == 1724) { //Fey
 		sEyes = "fx_green_eyes";
 		Appearance = GetPolymorphAppearance("ps_polymorph_warlockfey", oPC);
@@ -97,8 +100,9 @@ void main() {
 	}
 	AddPolymorphBoni(oPC, sEyes, bVFXonly);
 	SetLocalInt(oEss, "FiendformSource", WORD_OF_CHANGE_ID);
-	SetLocalInt(oEss, "DRAGON_WOC_USES_WEAPS", bDragCanUseWeaps);
+	SetLocalInt(oEss, "WOC_NO_WEAPS", bWOC_NO_WEAPS);
 	SetLocalInt(oEss, "TempChange", TRUE);
+	CheckWordOfChangeWeaps(oPC);
 }
 
 void AddPolymorphBoni(object oCaster, string sVFX = "", int bVFXonly = FALSE){

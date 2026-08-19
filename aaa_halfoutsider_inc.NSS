@@ -1,6 +1,5 @@
 #include "x2_inc_spellhook"
 #include "X0_I0_SPELLS"
-#include "ps_inc_functions"
 #include "ps_inc_advscript"
 #include "aaa_constants"
 #include "nw_i0_spells"
