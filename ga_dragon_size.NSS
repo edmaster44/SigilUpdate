@@ -35,5 +35,9 @@ void main(int iParam)
 			DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
 		break;	
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */	
+		case 3:
+			PS_Dragon_Large_Biped(oPC);
+			SendMessageToPC(oPC, "You have chosen to be large with a NWN1 model.");
+			DelayCommand(1.0f, AssignCommand(oPC, ActionRest()));
 	}
 }		

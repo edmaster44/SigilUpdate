@@ -950,13 +950,13 @@ void CheckForTempProperties(object oItem, object oPC)
 // Check No Manual Dexterity. With it you can only equip creature weapons.
 int CheckManualDexterity(object oPC, object oItem, int nItem)
 {
-
+	
     if (IPGetIsCreatureEquippedWeapon(oItem) == TRUE) return FALSE;
 	// base item type of creature skin is 73
 	if (nItem == 73) return FALSE;
 	// new "creature shields" have tag "creature_invis"
 	if (GetTag(oItem) == "creature_invis") return FALSE;
-    
+  
     switch (nItem)
     {
         case BASE_ITEM_AMULET:
@@ -1005,24 +1005,40 @@ int CheckDragonForms(object oPC, object oItem, int nItem){
         case BASE_ITEM_RING:
             return FALSE;
     }
+	
+	object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
+	// because one Word of Change form is a wraith that should not have manual dex and the Others
+	// should have manual dex, determine whether norm weapons can be equipped or not by type of woc
+	if (GetHasSpellEffect(WORD_OF_CHANGE_ID, oPC)){
+		if (!GetLocalInt(oESSENCE, "DRAGON_WOC_USES_WEAPS")){ // if in vfx or eldritch form
+			if (!IPGetIsCreatureEquippedWeapon(oItem) && GetTag(oItem) != "creature_invis"){
+				SendMessageToPC(oPC, "<c=red>Your character cannot use normal weapons in this form.");
+				AssignCommand(oPC, ClearAllActions());
+				AssignCommand(oPC, ActionUnequipItem(oItem));
+				return TRUE;
+			}
+		} else return FALSE; // allow both creature and normal weapons in demond, devil, and fey forms
+	}
    
     if (GetHasFeat(3623, oPC, TRUE) == FALSE) return FALSE;
     
-    object oESSENCE = GetItemPossessedBy(oPC, "ps_essence");
-    if (GetLocalInt(oESSENCE, "TempChange") == 1){
-        if ((IPGetIsCreatureEquippedWeapon(oItem) == TRUE || GetTag(oItem) == "creature_invis") &&
+    
+	
+	if (GetLocalInt(oESSENCE, "TempChange")){
+		if ((IPGetIsCreatureEquippedWeapon(oItem) == TRUE || GetTag(oItem) == "creature_invis") &&
 			!GetHasFeat(FEAT_PSYWAR_FERAL, oPC, TRUE)){
-            SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form.");
-            AssignCommand(oPC, ClearAllActions());
-            AssignCommand(oPC, ActionUnequipItem(oItem));
-            return TRUE;
-        }
-    } else if (IPGetIsCreatureEquippedWeapon(oItem) == FALSE && GetTag(oItem) != "creature_invis"){
-        SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
-        AssignCommand(oPC, ClearAllActions());
-        AssignCommand(oPC, ActionUnequipItem(oItem));
-        return TRUE;
-    }
+			SendMessageToPC(oPC, "<c=red>Your character does not have claws or a bite in humanoid form.");
+			AssignCommand(oPC, ClearAllActions());
+			AssignCommand(oPC, ActionUnequipItem(oItem));
+			return TRUE;
+		}
+	} else if (!IPGetIsCreatureEquippedWeapon(oItem) && GetTag(oItem) != "creature_invis"){
+		SendMessageToPC(oPC, "<c=red>Your character cannot wield weapons or shields in natural form.");
+		AssignCommand(oPC, ClearAllActions());
+		AssignCommand(oPC, ActionUnequipItem(oItem));
+		return TRUE;
+	}
+	
     
     return FALSE;
 }

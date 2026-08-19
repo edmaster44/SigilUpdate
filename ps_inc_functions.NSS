@@ -5228,6 +5228,7 @@ int PS_RemoveAllShapeChange(object oPC, int bRestoreApp = TRUE){
 		}
 		SetLocalInt(oEss, "TempChange", FALSE);
 	}
+	DeleteLocalInt(oEss, "DRAGON_WOC_USES_WEAPS");
 	return TRUE;
 }
 

@@ -64,14 +64,13 @@ void PS_Dragon_Medium(object oPC)
 			nAppearance = 3137;
 		break;						 
 		}		
-/*		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
-		app.AppearanceType = nAppVar;
+		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+		app.AppearanceType = nAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
-		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	*/
+		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	
 		
-		SetCreatureAppearanceType(oPC, nAppearance);	
-		PS_RefreshAppearance(oPC);
+		//PS_RefreshAppearance(oPC);
 	}
 }
 
@@ -133,20 +132,81 @@ void PS_Dragon_Large(object oPC)
 			nAppearance = 3138;
 		break;			 
 		}
-/*		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
-		app.AppearanceType = nAppVar;
+		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+		app.AppearanceType = nAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		PS_RefreshAppearance(oPC);
-		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	*/
+		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	
 		
-		SetCreatureAppearanceType(oPC, nAppearance);	
-		PS_RefreshAppearance(oPC);
+		//SetCreatureAppearanceType(oPC, nAppearance);	
+		//PS_RefreshAppearance(oPC);
 	}
 }
+
+
+// Large Bipedal
+
+void PS_Dragon_Large_Biped(object oPC)
+{
+	SetLocalInt(PS_GetEssence(oPC), "NWN1_DRAGON", TRUE);
+	if(GetRacialType(oPC) == 11)  // Should only work for dragons ;)
+	{	
+		//SendMessageToPC(oPC, "You are a dragon.");
+		effect eDragon 	= EffectNWN2SpecialEffectFile("fx_ritual_purification", oPC);
+		ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eDragon, oPC, 6.0f);
+
+		int nSubRace = GetSubRace(oPC);
+		int nAppearance;
+
+		switch (nSubRace)
+		{
+		case 0: //Debug
+			SendMessageToPC(oPC, "Something is wrong.");
+			nAppearance = 1;
+		break;
+		case 222: //Bronze
+			nAppearance = 2122; break;
+		case 223: //Red
+			nAppearance = 2127; break; 
+		case 224: //Blue
+			nAppearance = 2121; break;
+		case 225: //Shadow
+			nAppearance = 2128; break;
+		case 226: //Black
+			nAppearance = 2120; break;
+		case 227: //Copper
+			nAppearance = 2123; break;
+		case 228: //Iron
+			nAppearance = 2125; break;
+		case 237: //Amethyst
+			nAppearance = 2119; break;
+		case 238: //Emerald
+			nAppearance = 2124; break;
+		case 239: //Topaz
+			nAppearance = 2129; break;
+		case 240: //White
+			nAppearance = 2130; break;
+		case 244: //Radiant
+			nAppearance = 2126; break;			 
+		}
+		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
+		app.TailVariation = 42;
+		app.WingVariation = 112;
+		app.AppearanceType = nAppearance;
+		PS_SetCreatureCoreAppearance(oPC, app);
+		PS_RefreshAppearance(oPC);
+		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	
+		
+		//SetCreatureAppearanceType(oPC, nAppearance);	
+		//PS_RefreshAppearance(oPC);
+	}
+}
+
 
 //---------------------------------------------------------------------------------------------------------------------------
 // Huge
 //---------------------------------------------------------------------------------------------------------------------------
+
 
 void PS_Dragon_Huge(object oPC)
 {
