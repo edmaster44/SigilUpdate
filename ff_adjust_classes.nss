@@ -49,10 +49,21 @@ void FF_AdjustClasses(object oPC){
 		SetLocalInt(oEss, "Lycan_Affliction", 1); 
 	} else if (nLastClass == 49){ // half dragon
 		if (nLastClassLevel == 1){
-			PS_HD_SetAlignmentsByHeritage(oPC, oEss);
 			SetLocalString(oEss, "Template", "HalfDragon");
+			if (GetOriginalSubrace(oPC) == 67) // kobolds get +2 str from this class
+				AdjustAbilityScore(oPC, ABILITY_STRENGTH, 2);
+			LaunchGuiChoices(oPC, "HALF_DRAGON_BLOOD_START");
+		} else if (nLastClassLevel == 2){
+			PS_HD_SetAlignmentsByHeritage(oPC, oEss);
 		} else if (nLastClassLevel == 6){
-			LaunchGuiChoices(oPC, "HALF_DRAGON_START");
+			if (GetHasFeat(3688, oPC)) // grant +2 str if they did not choose spell prog
+				AdjustAbilityScore(oPC, ABILITY_STRENGTH, 2);
+			// grant breath weapon, either a line or a cone depending on heritage
+			if (GetHasFeat(2497, oPC) || GetHasFeat(2498, oPC) || GetHasFeat(2502, oPC) || 
+				GetHasFeat(2499, oPC) || GetHasFeat(2503, oPC) || GetHasFeat(2506, oPC))
+					FeatAdd(oPC, 3639, FALSE); // line breath weapon
+			else FeatAdd(oPC, 3638, FALSE); // cone breath weapon
+			LaunchGuiChoices(oPC, "HALF_DRAGON_WING_START");
 			PS_TintFixer(oPC); 
 		}
 	} else if (nLastClass == 42 && nLastClassLevel == 1){ //celestial envoy

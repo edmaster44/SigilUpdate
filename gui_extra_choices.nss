@@ -88,7 +88,8 @@ int GetRelevantClass(object oPC, string sCOMMAND){
 	else if (sCOMMAND == "VAMP_MAL_START") return 106;
 	else if (sCOMMAND == "HALF_UNDEAD_START") return 114;
 	else if (sCOMMAND == "LYCAN_START") return 104;
-	else if (sCOMMAND == "HALF_DRAGON_START") return 49;//Half-Dragon Wings
+	else if (sCOMMAND == "HALF_DRAGON_BLOOD_START") return 49;//Half-Dragon bloodline
+	else if (sCOMMAND == "HALF_DRAGON_WING_START") return 499;//Half-Dragon Wings
 	else if (sCOMMAND == "CELESTIAL_ENVOY_START") return 42;//Celestial Envoy
 	else if (sCOMMAND == "GRAY_SLAAD_START") return 108;
 	else if (sCOMMAND == "FEY_START" && !GetLocalInt(PS_GetEssence(oPC), "FEY_SET"))
@@ -123,9 +124,24 @@ int GetEpithet(int nCLASS, int nCOUNT){
 			case 3: return 2631;
 			case 4: return 2632;
 		}	break;
-		case 49: switch(nCOUNT){ //Half-Dragon Wings
-			case 1: return 288; //Wings
-			case 2: return 220; //Wingless
+		case 49: switch(nCOUNT){ //Draconic Heritage
+			case 1: return 2496; //White
+			case 2: return 2497; //Black
+			case 3: return 2498; //Green
+			case 4: return 2499; //Blue
+			case 5: return 2500; //Red
+			case 6:	return 2501; //Brass
+			case 7: return 2502; //Copper
+			case 8: return 2503; //Bronze
+			case 9: return 2504; //Silver
+			case 10: return 2505; //Gold
+			case 11: return 2506; //Amethyst
+			case 12: return 2507; //Crystal
+			case 13: return 2508; //Emerald
+			case 14: return 2509; //Sapphire
+			case 15: return 2510; //Topaz
+			case 16: return 2511; //Shadow
+			case 17: return 2512; //Fang
 		}	break;
 		case 62: switch(nCOUNT){ //Half-Fiend Wings/Eyes
 			case 1: return 2781; //Dark Flight
@@ -185,6 +201,10 @@ int GetEpithet(int nCLASS, int nCOUNT){
 			case 3: return FEAT_GHUL;
 			case 4:	return FEAT_GHAEDEN;
 		} break;
+		case 499: switch(nCOUNT){ //Half-Dragon Wings
+			case 1: return 288; //Wings
+			case 2: return 220; //Wingless
+		}	break;
 		case 621: switch(nCOUNT){ //Half-Celestial Wings/Eyes
 			case 1: return 2179; //Bright Flight
 			case 2: return 2556; //Supernatural Sight
@@ -313,8 +333,8 @@ void PopulateList(object oPC, int nCLASS, int nPAGE, string sSCREEN){
 
 string GetClassSubtitle(int nCLASS){
 	switch(nCLASS){
-		case CLASS_TYPE_FEY: return "You must select which fey trait you want. Keep in mind - Fey Trait: Hypnotism will add butterfly wings, and the Scent feat will add a tail.";
-		case 42: return "You must select which member of the Hebdomad to serve. This selection determines the bonus feats gained at levels 2, 3 and 5. "; //Celestial Envoy
+		case CLASS_TYPE_FEY: return "You must select a fey trait. Hypnotism adds butterfly wings and Scent adds a tail.";
+		case 42: return "Select which member of the Hebdomad to serve."; //Celestial Envoy
 		case 49: return "You must select your draconic heritage. This selection determines your breath weapon, immunities, and draconic magic."; //Draconic Heritage
 		case 62: return "You must select either fiendish wings or supernatural sight."; //Half-Fiend
 		case 104: return "You must select your lycanthropic affliction."; //Lycanthrope

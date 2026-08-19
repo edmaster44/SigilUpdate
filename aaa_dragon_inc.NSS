@@ -762,8 +762,28 @@ void DoBreathWeapon(object oPC, int nSpell){
 	object oPC 	= OBJECT_SELF;
 	// Breath Weapon does not work when in humanoid form (Temp = 1)	
 	if (GetLocalInt(GetItemPossessedBy(oPC, "ps_essence"), "TempChange")){
-		SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while in humanoid form.");
+		SendMessageToPC(oPC, "<c=red>You cannot use your breath weapon while not in natural form.");
 		return;
+	}
+	// at level 6 half dragons now get the same breath weapon as full dragons,  set the spell id to 
+	// match the weapon to heritage
+	if (nSpell == 2621 || nSpell == 2622){
+		if (GetHasFeat(2497, oPC)) nSpell =  2631; //Black, line acid
+		else if (GetHasFeat(2498, oPC)) nSpell =  2631; //Green, line acid
+		else if (GetHasFeat(2502, oPC)) nSpell =  2651; //Copper, line acid
+		else if (GetHasFeat(2499, oPC)) nSpell =  2625; //Blue. line lightning
+		else if (GetHasFeat(2503, oPC)) nSpell =  2625;	//Bronze, line lightning
+		else if (GetHasFeat(2506, oPC)) nSpell =  2660; //Amethyst, line force
+		else if (GetHasFeat(2500, oPC)) nSpell =  2632; //Red, cone fire
+		else if (GetHasFeat(2501, oPC)) nSpell =  2632; //Brass, cone fire
+		else if (GetHasFeat(2512, oPC)) nSpell =  2665; //Fang, cone sparks
+		else if (GetHasFeat(2510, oPC)) nSpell =  2664; //Topaz, cone cold
+		else if (GetHasFeat(2504, oPC)) nSpell =  2664; //Silver, cone cold
+		else if (GetHasFeat(2505, oPC)) nSpell =  2667; //Gold, cone light
+		else if (GetHasFeat(2507, oPC)) nSpell =  2667; //Crystal, cone light
+		else if (GetHasFeat(2508, oPC)) nSpell =  2661; //Emerald, cone sonic
+		else if (GetHasFeat(2509, oPC)) nSpell =  2661; //Sapphire, cone sonic
+		else if (GetHasFeat(2511, oPC)) nSpell =  2633; //Shadow, cone negative
 	}
 	
 	int nDice = GetTotalLevels(oPC, TRUE);

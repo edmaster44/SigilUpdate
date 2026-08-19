@@ -26,6 +26,11 @@ void main()
 			PS_Immunity_Electricity(oPC, nSpell);						
 		break;	
 ////////////////////////////////////////////////////////////////////////////////////
+		case 2621: case 2622:		//Dragon Breath, Half-Dragon
+			DoBreathWeapon(oPC, nSpell);
+			//PS_Dragon_Breath_Bronze(oPC, nSpell);						
+		break;
+////////////////////////////////////////////////////////////////////////////////////
 		case 2625 :		//Dragon Breath, Line, Electricity
 			DoBreathWeapon(oPC, nSpell);
 			//PS_Dragon_Breath_Bronze(oPC, nSpell);						
@@ -175,7 +180,7 @@ void main()
 		case 2656 :		//Dragon Breath, Cone, Sleep (Iron)
 			DoBreathWeapon(oPC, nSpell);
 			//PS_Dragon_Breath_Iron_Gas(oPC, nSpell);
-		break;										
+		break;	
 ////////////////////////////////////////////////////////////////////////////////////
 //																				  //
 //																		   	 	  //
