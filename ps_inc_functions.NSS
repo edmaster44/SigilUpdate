@@ -5179,24 +5179,42 @@ void PS_Wererat_SneakRemove(object oPC){
 }
 */
 
+int GetIsCreatureWeaponOrShield(object oItem){
+	if (IPGetIsCreatureEquippedWeapon(oItem) || GetTag(oItem) == "creature_invis")
+		return TRUE;
+	return FALSE;
+}
+
 //make sure that people are not equipping visually silly weapons for their type of word of changing
-int CheckWordOfChangeWeaps(object oPC){
+int CheckWordOfChangeWeaps(object oPC, object oItem = OBJECT_INVALID){
 	
 	if (!GetHasSpellEffect(WORD_OF_CHANGE_ID, oPC)) return FALSE;
-	
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	if (GetLocalInt(oEss, "WOC_NO_WEAPS")){
-		object oRHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
-		object oLHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
-		if ((!IPGetIsCreatureEquippedWeapon(oRHand) && GetTag(oRHand) != "creature_invis") ||
-			(!IPGetIsCreatureEquippedWeapon(oLHand) && GetTag(oLHand) != "creature_invis")){
-			SendMessageToPC(oPC, "<c=red>Your character cannot use normal weapons in this form.");
-			AssignCommand(oPC, ClearAllActions());
+	if (!GetLocalInt(oEss, "WOC_NO_WEAPS")) return FALSE;
+	
+	int bUnequip = FALSE;
+	object oRHand = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oPC);
+	object oLHand = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oPC);
+	
+	if (oItem == OBJECT_INVALID){
+		if (oRHand != OBJECT_INVALID && !GetIsCreatureWeaponOrShield(oRHand))
+			bUnequip = TRUE;
+		if (oLHand != OBJECT_INVALID && !GetIsCreatureWeaponOrShield(oLHand))
+			bUnequip = TRUE;	
+	} else if (!GetIsCreatureWeaponOrShield(oItem))
+		bUnequip = TRUE;
+		
+	if (bUnequip){
+		SendMessageToPC(oPC, "<c=red>Your character cannot use normal weapons in this form.");
+		AssignCommand(oPC, ClearAllActions());
+		if (oRHand != OBJECT_INVALID)
 			AssignCommand(oPC, ActionUnequipItem(oRHand));
+		if (oLHand != OBJECT_INVALID)
 			AssignCommand(oPC, ActionUnequipItem(oLHand));
-			return TRUE;
-		}
-	} else return FALSE;
+		if (oItem != OBJECT_INVALID)
+			AssignCommand(oPC, ActionUnequipItem(oItem));
+		return TRUE;
+	}
 	return FALSE;
 }
 

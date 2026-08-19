@@ -207,7 +207,8 @@ void PS_Dragon_Large_Biped(object oPC)
 		DelayCommand(0.5f, PS_SaveOriginalAppearance(oPC));	
 		
 		
-		SetCreatureAppearanceType(oPC, nAppearance);	
+		SetCreatureAppearanceType(oPC, nAppearance);
+		SendMessageToPC(oPC, "Please log out and log back in now");
 		//PS_RefreshAppearance(oPC);
 	}
 }

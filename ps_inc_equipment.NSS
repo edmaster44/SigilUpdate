@@ -111,7 +111,7 @@ void SigilEquipment(object oPC, object oItem, int nEquip){
         if (nItem == BASE_ITEM_GLOVES) SetGlovesOnHitProperty(oPC);
         //{  // weird orphan brackets
 		if (MonkeyGripAbuse(oPC, oItem) == TRUE) return;
-		if (CheckWordOfChangeWeaps(oPC) == TRUE) return; // this check must come before the following
+		if (CheckWordOfChangeWeaps(oPC, oItem) == TRUE) return; // this check must come before the following
 		if (CheckManualDexterity(oPC, oItem, nItem) == TRUE) return;
 		if (CheckDragonForms(oPC, oItem, nItem) == TRUE) return;
 
