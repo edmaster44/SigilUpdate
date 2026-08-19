@@ -1362,7 +1362,7 @@ void SetWingTail(object oSender, string sInput, int bIsTail){
 	
 	if (GetLocalInt(oEss, "Hybrid") || GetLocalInt(oEss, "TempChange") ||
 		GetHasEffect(EFFECT_TYPE_POLYMORPH, oTarget)){
-			SendMessageToPC(oSender, "YOu can only alter the wings and tail of characters in their true forms");
+			SendMessageToPC(oSender, "You can only alter the wings and tail of characters in their true forms");
 			return;
 	}
 	string sLocal = (bIsTail) ? "Custom_Tail" : "Custom_Wing";

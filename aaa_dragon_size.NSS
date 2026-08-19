@@ -12,6 +12,9 @@
 	
 void PS_Dragon_Medium(object oPC)
 {
+	return;
+	// dragons are medium by default, shouldnt require doing anything
+	/*
 	if(GetRacialType(oPC) == 11)  // Should only work for dragons ;)
 	{	
 		//SendMessageToPC(oPC, "You are a dragon.");
@@ -71,7 +74,7 @@ void PS_Dragon_Medium(object oPC)
 		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	
 		
 		//PS_RefreshAppearance(oPC);
-	}
+	}*/
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -135,6 +138,7 @@ void PS_Dragon_Large(object oPC)
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.AppearanceType = nAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
+		SetCreatureAppearanceType(oPC, nAppearance);
 		PS_RefreshAppearance(oPC);
 		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	
 		
@@ -198,11 +202,12 @@ void PS_Dragon_Large_Biped(object oPC)
 		SetLocalInt(oEssence, "BIPEDAL_DRAGON", TRUE);
 		app.AppearanceType = nAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
+		SetCreatureAppearanceType(oPC, nAppearance);
 		PS_RefreshAppearance(oPC);
-		DelayCommand(0.2f, PS_SaveOriginalAppearance(oPC));	
+		DelayCommand(0.5f, PS_SaveOriginalAppearance(oPC));	
 		
 		
-		//SetCreatureAppearanceType(oPC, nAppearance);	
+		SetCreatureAppearanceType(oPC, nAppearance);	
 		//PS_RefreshAppearance(oPC);
 	}
 }
