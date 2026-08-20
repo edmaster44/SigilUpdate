@@ -801,7 +801,8 @@ void DoBreathWeapon(object oPC, int nSpell){
 	int nDamageType = NULL; // default value of NULL because some breath attacks do only secondary fx, not dmg
 	int nDamageType2 = NULL;
 	effect eVis = EffectVisualEffect(VFX_IMP_FLAME_M);
-	effect eBreath = EffectNWN2SpecialEffectFile("fx_red_dragon_breath.sef");
+	//effect eBreath = EffectNWN2SpecialEffectFile("fx_red_dragon_breath.sef");
+	effect eBreath = EffectNWN2SpecialEffectFile("fx_red_dragon_breath");
 	int nShape = SHAPE_SPELLCONE;
 	float fShapeSize = RADIUS_SIZE_TREMENDOUS;
 	int nDieType = 10;
@@ -810,12 +811,15 @@ void DoBreathWeapon(object oPC, int nSpell){
 	int nSaveType = SAVING_THROW_TYPE_FIRE;
 	// End breath weapon variables
 	
+	// get whether dragon is nwn1 style
+	int bIsNWN1 = GetLocalInt(GetItemPossessedBy(oPC,"ps_essence"), "BIPEDAL_DRAGON");
 	// Set variables according to breath weapon
 	switch (nSpell){
 		case 2625: case 2634:{	//bronze and blue lightning
 			nDamageType = DAMAGE_TYPE_ELECTRICAL;
 			eVis = EffectVisualEffect(VFX_HIT_SPELL_LIGHTNING);
 			eBreath = EffectNWN2SpecialEffectFile("fx_lightningdragonbreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_lightning_breath");
 			nShape = SHAPE_SPELLCYLINDER;
 			fShapeSize = 16.0f;
 			nDieType = 8;
@@ -827,6 +831,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 			nDamageType2 = DAMAGE_TYPE_BLUDGEONING;
 			eVis = EffectVisualEffect(VFX_HIT_SPELL_MAGIC);
 			eBreath = EffectNWN2SpecialEffectFile("fx_amethystdragonbreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_fear_breath");
 			nShape = SHAPE_SPELLCYLINDER;
 			fShapeSize = 16.0f;
 			nDieType = 4;
@@ -837,7 +842,9 @@ void DoBreathWeapon(object oPC, int nSpell){
 		case 2661:{ // emerald sonic
 			nDamageType = DAMAGE_TYPE_SONIC;
 			eVis = EffectVisualEffect(VFX_HIT_SPELL_SONIC);
-			eBreath = EffectNWN2SpecialEffectFile("fx_emeralddragonbreath.sef");
+			//eBreath = EffectNWN2SpecialEffectFile("fx_emeralddragonbreath.sef");
+			eBreath = EffectNWN2SpecialEffectFile("fx_emeralddragonbreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_fear_breath");
 			nDieType = 6;
 			eSecondary = EffectDeaf();
 			eDur = EffectVisualEffect(VFX_DUR_BLIND);
@@ -849,7 +856,9 @@ void DoBreathWeapon(object oPC, int nSpell){
 		case 2662: case 2664:{	//topaz and white dehydrating cold
 			nDamageType = DAMAGE_TYPE_COLD;
 			eVis = EffectVisualEffect(VFX_HIT_SPELL_ICE);
-			eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
+			//eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath.sef");
+			eBreath = EffectNWN2SpecialEffectFile("fx_dragonicebreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_cold_breath");
 			eSecondary = EffectAbilityDecrease(ABILITY_CONSTITUTION, 1); // drain amount randomized in loop
 			bSecondaryIsDrain = TRUE;
 			fDur = HoursToSeconds(d6(1) + 5);
@@ -861,6 +870,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 		case 2626:{ // bronze gas
 			eVis = EffectVisualEffect(VFX_IMP_DAZED_S);
 			eBreath = EffectNWN2SpecialEffectFile("fx_dragonrepulsebreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_gas_breath");
 			eSecondary = EffectDazed();
 			effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_DAZE);
 			eDur = EffectLinkEffects(eDur2, eDur);
@@ -872,7 +882,8 @@ void DoBreathWeapon(object oPC, int nSpell){
 		case 2667:{	//radiant light
 			nDamageType = DAMAGE_TYPE_DIVINE;
 			eVis = EffectVisualEffect(VFX_IMP_DIVINE_STRIKE_HOLY);
-			eBreath = EffectNWN2SpecialEffectFile("fx_radiantdragonbreath");	
+			eBreath = EffectNWN2SpecialEffectFile("fx_radiantdragonbreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_paralysis_breath");			
 			eSecondary = EffectNewBlindness();
 			eDur = EffectVisualEffect(VFX_DUR_BLIND);
 			eSecondary = EffectLinkEffects(eDur, eSecondary);
@@ -901,6 +912,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 			nDamageType = DAMAGE_TYPE_NEGATIVE;
 			eVis = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
 			EffectNWN2SpecialEffectFile("fx_shadowdragonbreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_neg_breath");
 			eSecondary = EffectAbilityDecrease(ABILITY_CONSTITUTION, 1); // drain amount randomized in loop
 			bSecondaryIsDrain = TRUE;
 			fDur = HoursToSeconds(d6(1) + 5);
@@ -912,6 +924,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 		case 2652:{	//copper slow
 			eVis = EffectVisualEffect(VFX_IMP_SLOW);
 			eBreath = EffectNWN2SpecialEffectFile("fx_dragonslowbreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_gas_breath");
 			eSecondary = EffectSlow();
 			effect eDur2 = EffectVisualEffect(VFX_DUR_SPELL_SLOW);
 			eSecondary = EffectLinkEffects(eDur, eSecondary);
@@ -933,6 +946,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 		case 2656:{	//iron gas
 			eVis = EffectVisualEffect(VFX_IMP_SLEEP);
 			eBreath = EffectNWN2SpecialEffectFile("fx_dragonslowbreath");
+			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_gas_breath");
 			eSecondary = EffectSleep();
 			effect eDur2 = EffectVisualEffect(VFX_DUR_SLEEP);
 			eSecondary = EffectLinkEffects(eDur, eSecondary);
