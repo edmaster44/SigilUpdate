@@ -889,9 +889,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 			eSecondary = EffectLinkEffects(eDur, eSecondary);
 			fDur = RoundsToSeconds(d4(1) + 5);
 			nSave = SAVING_THROW_FORT;
-			nSaveType = SAVING_THROW_TYPE_DIVINE;
-			//RACIAL_TYPE_UNDEAD=24. This will signal loop to do 1d6 dmg to non undead and 1d6/lvl to undead
-			nDieType = RACIAL_TYPE_UNDEAD; 
+			nSaveType = SAVING_THROW_TYPE_DIVINE; 
 			break;
 		}	
 		case 2631: case 2651:{	//black and copper acid
@@ -911,7 +909,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 		case 2633:{	//shadow dragon 
 			nDamageType = DAMAGE_TYPE_NEGATIVE;
 			eVis = EffectVisualEffect(VFX_IMP_NEGATIVE_ENERGY);
-			EffectNWN2SpecialEffectFile("fx_shadowdragonbreath");
+			eBreath = EffectNWN2SpecialEffectFile("fx_shadowdragonbreath");
 			if (bIsNWN1) eBreath = EffectNWN2SpecialEffectFile("fx_neg_breath");
 			eSecondary = EffectAbilityDecrease(ABILITY_CONSTITUTION, 1); // drain amount randomized in loop
 			bSecondaryIsDrain = TRUE;
@@ -990,7 +988,7 @@ void DoBreathWeapon(object oPC, int nSpell){
 			
 			// Apply damage, if any
 			if (nDamageType != NULL){
-				if (nDieType == RACIAL_TYPE_UNDEAD){
+				if (nSpell == 2667){
 					if (nRace == RACIAL_TYPE_UNDEAD) nDieType = 6;
 					else nDieType = 1;
 				}
@@ -1019,17 +1017,17 @@ void DoBreathWeapon(object oPC, int nSpell){
 						else if (nDieType2 == 6) nDamage = d6(nDice);
 						else if (nDieType2 == 1) nDamage = d6(1);
 						else nDamage = d4(nDice);
-					}
-					nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC);
-					// convert neg damage to 1/2 magic so we don't heal undead with it
-					if (nRace == RACIAL_TYPE_UNDEAD && nDamageType2 == DAMAGE_TYPE_NEGATIVE){
-						nAdjustedDmgType = DAMAGE_TYPE_MAGICAL;
-						nDamage = nDamage / 2;
-						if (nDamage < 1) nDamage = 1;
-					} else nAdjustedDmgType = nDamageType2;
-					eDamage2 = EffectDamage(nDamage, nAdjustedDmgType);
 					
-					DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
+						nDamage = GetReflexAdjustedDamage(nDamage, oTarget, nDC);
+						// convert neg damage to 1/2 magic so we don't heal undead with it
+						if (nRace == RACIAL_TYPE_UNDEAD && nDamageType2 == DAMAGE_TYPE_NEGATIVE){
+							nAdjustedDmgType = DAMAGE_TYPE_MAGICAL;
+							nDamage = nDamage / 2;
+							if (nDamage < 1) nDamage = 1;
+						} else nAdjustedDmgType = nDamageType2;
+						eDamage2 = EffectDamage(nDamage, nAdjustedDmgType);
+						DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDamage2, oTarget));
+					}	
 				}
 			}
 			
