@@ -14,7 +14,7 @@
 
 int GetHasAllAccess(object oPC);
 int GetIsTester(object oPC);
-void SetWingTail(object oSender, string sInput, int bIsTail);
+int SetWingTail(object oSender, string sInput);
 
 
 // a function that sends a tick message to the player every 6 seconds
@@ -98,13 +98,8 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
-	else if (GetStringLeft(sInput, 8) == "#settail" && GetHasAllAccess(oSender)){
-		SetWingTail(oSender, sInput, TRUE);
-		return TRUE;
-	}
-	else if (GetStringLeft(sInput, 9) == "#setwings" && GetHasAllAccess(oSender)){
-		SetWingTail(oSender, sInput, FALSE);
-		return TRUE;
+	else if (GetStringLeft(sInput, 8) == "#settail" || GetStringLeft(sInput, 9) == "#setwings"){
+		return SetWingTail(oSender, sInput);
 	}
 	// #shout command to send a message to everyone in case server needs to come down and you're not logged
 	// in as dm. Only myself and admin staff, as only ppl who have the ability to update server need this.
@@ -1348,22 +1343,32 @@ int GetIsTester(object oPC){
 	return bIsTester;
 }
 
+// set an "override" wing or tail that will show on character with higher priority than racial or class
+// wing or tail. Does not destroy local int for default racial or class wing or tail
+int SetWingTail(object oSender, string sInput){
+	// testers can use this on test server. Myself, DMs, and Admin can use on either server.
+	int bIsAuthorized = FALSE;
+	if ((GetIsTester(oSender) && GetLocalInt(GetModule(), "SIGIL_DEV_MODE")) ||
+		GetHasAllAccess(oSender)){
+			bIsAuthorized = TRUE;
+	}
+	if (!bIsAuthorized) return FALSE;
 
-void SetWingTail(object oSender, string sInput, int bIsTail){
+	int bIsTail = (GetStringLeft(sInput, 8) == "#settail");
 	int nLength = (bIsTail) ? 8 : 9;
 	string sArg = GetStringRight(sInput, GetStringLength(sInput) - nLength);
 	int nAppendage = StringToInt(sArg);
 	object oTarget = GetPlayerCurrentTarget(oSender);
 	if (!GetIsPC(oTarget) && oTarget != oSender){ //couldnt remember if GetIsPC also includes dms
 		SendMessageToPC(oSender, "Must target a player");
-		return;
+		return TRUE;
 	}
 	object oEss = GetItemPossessedBy(oTarget, "ps_essence");
 	
 	if (GetLocalInt(oEss, "Hybrid") || GetLocalInt(oEss, "TempChange") ||
 		GetHasEffect(EFFECT_TYPE_POLYMORPH, oTarget)){
 			SendMessageToPC(oSender, "You can only alter the wings and tail of characters in their true forms");
-			return;
+			return TRUE;
 	}
 	string sLocal = (bIsTail) ? "Custom_Tail" : "Custom_Wing";
 	SetLocalInt(oEss, sLocal, nAppendage);
@@ -1375,4 +1380,5 @@ void SetWingTail(object oSender, string sInput, int bIsTail){
 	if (nAppendage == 0) sFeedback = "Custom " + sType + " disabled";
 	else sFeedback = "Custom " + sType + " set to number " + IntToString(nAppendage);
 	SendMessageToPC(oSender, sFeedback);
+	return TRUE;
 }

@@ -56,7 +56,7 @@ void FF_AdjustClasses(object oPC){
 		} else if (nLastClassLevel == 2){
 			PS_HD_SetAlignmentsByHeritage(oPC, oEss);
 		} else if (nLastClassLevel == 6){
-			if (GetHasFeat(3688, oPC)) // grant +2 str if they did not choose spell prog
+			if (GetHasFeat(3689, oPC)) // grant +2 str if they did not choose spell prog
 				AdjustAbilityScore(oPC, ABILITY_STRENGTH, 2);
 			// grant breath weapon, either a line or a cone depending on heritage
 			if (GetHasFeat(2497, oPC) || GetHasFeat(2498, oPC) || GetHasFeat(2502, oPC) || 

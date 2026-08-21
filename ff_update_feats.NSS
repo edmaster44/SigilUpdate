@@ -85,6 +85,10 @@ void fUpdateOtherFeats(object oPC){
 	GiveCreatureWeaponFinesse(oPC);
 	
 	fFixAlertness(oPC);
+	
+	// add the feat to toggle monk speed on and off to monks of lvl 3 or more
+	if (GetLevelByClass(CLASS_TYPE_MONK, oPC) >= 3 && !GetHasFeat(21907, oPC))
+		FeatAdd(oPC, 21907, FALSE);
 
 	//Since the racial feat skill affinity craft alchemy is useless
 	//replace it with skill affinity concentration -FlattedFifth, July 25, 2024
@@ -159,17 +163,11 @@ void AdjustAbilityScoresHuHE(object oPC){
 	if (nRace != RACIAL_SUBTYPE_HUMAN && nRace != RACIAL_SUBTYPE_HALFELF && 
 		nRace != RACIAL_SUBTYPE_HALFDROW)
 			return;
-			
+	int nPoints = (nRace == RACIAL_SUBTYPE_HUMAN) ? 2 : 1;		
 	object oEss = GetItemPossessedBy(oPC, "ps_essence");
-	if (GetLocalInt(oEss, "startability"))
+	if (GetLocalInt(oEss, "startability") >= nPoints)
 		return;
-	
-	SendMessageToPC(oPC, "Checking for Racial Ability Score Adjustment Choices");
-	if (GetHasFeat(FEAT_HUMAN_ABILITY_BONUS, oPC, TRUE)){
-		AssignCommand(oPC, ClearAllActions(TRUE));
-		AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
-	} else if (GetHasFeat(FEAT_HALF_ELF_ABILITY_BONUS, oPC, TRUE)){
-		AssignCommand(oPC, ClearAllActions(TRUE));
-		AssignCommand(oPC, ActionStartConversation(oPC, "conv_HE_Abil_start", TRUE, FALSE, TRUE, TRUE));
-	}
+		
+	AssignCommand(oPC, ClearAllActions(TRUE));
+	AssignCommand(oPC, ActionStartConversation(oPC, "conv_Human_Abil_start", TRUE, FALSE, TRUE, TRUE));
 }
