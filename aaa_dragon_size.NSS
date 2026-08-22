@@ -142,6 +142,8 @@ void PS_Dragon_Large(object oPC)
 		PS_RefreshAppearance(oPC);
 		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	
 		
+		FloatingTextStringOnCreature("PLEASE RELOG NOW FOR ALL CHANGES TO REGISTER", oPC);
+		
 		//SetCreatureAppearanceType(oPC, nAppearance);	
 		//PS_RefreshAppearance(oPC);
 	}
@@ -207,8 +209,8 @@ void PS_Dragon_Large_Biped(object oPC)
 		DelayCommand(0.5f, PS_SaveOriginalAppearance(oPC));	
 		
 		
-		SetCreatureAppearanceType(oPC, nAppearance);
-		SendMessageToPC(oPC, "Please log out and log back in now");
+		//SetCreatureAppearanceType(oPC, nAppearance);
+		FloatingTextStringOnCreature("PLEASE RELOG NOW FOR ALL CHANGES TO REGISTER", oPC);
 		//PS_RefreshAppearance(oPC);
 	}
 }
