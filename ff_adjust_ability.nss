@@ -6,7 +6,7 @@ Used to raise one ability of humans and half elves by 1 after char creation, cho
 */
 
 void main(int nAbility){
- 	int nCurrent = GetAbilityScore(OBJECT_SELF, nAbility);
+ 	int nCurrent = GetAbilityScore(OBJECT_SELF, nAbility, TRUE);
     SetBaseAbilityScore(OBJECT_SELF, nAbility, nCurrent + 1);
 	
 	object oEss = GetItemPossessedBy(OBJECT_SELF, "ps_essence");
