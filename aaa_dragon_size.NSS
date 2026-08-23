@@ -139,6 +139,7 @@ void PS_Dragon_Large(object oPC)
 		app.AppearanceType = nAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		SetCreatureAppearanceType(oPC, nAppearance);
+		PS_TintFixer(oPC);
 		PS_RefreshAppearance(oPC);
 		DelayCommand(0.1f, PS_SaveOriginalAppearance(oPC));	
 		
@@ -205,6 +206,7 @@ void PS_Dragon_Large_Biped(object oPC)
 		app.AppearanceType = nAppearance;
 		PS_SetCreatureCoreAppearance(oPC, app);
 		SetCreatureAppearanceType(oPC, nAppearance);
+		PS_TintFixer(oPC);
 		PS_RefreshAppearance(oPC);
 		DelayCommand(0.5f, PS_SaveOriginalAppearance(oPC));	
 		
