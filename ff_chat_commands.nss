@@ -101,6 +101,20 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 	else if (GetStringLeft(sInput, 8) == "#settail" || GetStringLeft(sInput, 9) == "#setwings"){
 		return SetWingTail(oSender, sInput);
 	}
+	else if (GetStringLeft(sInput, 8) == "#featadd" && GetHasAllAccess(oSender)){
+		sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - 8);
+		sMessage = TrimLeadingSpaces(sMessage);
+		int nFeat = StringToInt(sMessage);
+		oItem = GetPlayerCurrentTarget(oSender);
+		FeatAdd(oItem, nFeat, FALSE);
+	}
+	else if (GetStringLeft(sInput, 11) == "#featremove" && GetHasAllAccess(oSender)){
+		sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - 11);
+		sMessage = TrimLeadingSpaces(sMessage);
+		int nFeat = StringToInt(sMessage);
+		oItem = GetPlayerCurrentTarget(oSender);
+		FeatRemove(oItem, nFeat);
+	}
 	// #shout command to send a message to everyone in case server needs to come down and you're not logged
 	// in as dm. Only myself and admin staff, as only ppl who have the ability to update server need this.
 	// Did not enable shout channel directly for these users because if I did then I'm sure I would shout

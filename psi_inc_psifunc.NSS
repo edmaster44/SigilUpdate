@@ -23,7 +23,7 @@ const int CRAFTED_STAFF_BONUS_PP = 10;
 
 #include "psi_power_const"
 #include "psi_inc_fillin"
-#include "psi_feat_const"
+//#include "psi_feat_const"
 #include "x2_inc_itemprop"
 #include "aaa_constants"
 #include "X0_I0_SPELLS"   
@@ -403,20 +403,25 @@ void DoPsiMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAG
 int GetTargetSpecificChangesToDamage(object oTarget, object oManifester, int nDamage,
 	int bIsHitPointDamage = TRUE, int bIsEnergyDamage = FALSE){
     // Greater Power Specialization - +2 damage on all HP-damaging powers when target is within 30ft
+	// this feat no longer exists
+	/*
     if(bIsHitPointDamage                                                &&
        GetHasFeat(FEAT_GREATER_POWER_SPECIALIZATION, oManifester)       &&
        GetDistanceBetween(oTarget, oManifester) <= FeetToMeters(30.0f)
        )
             nDamage += 2;
+	*/
     // Intellect Fortress - Halve damage dealt by powers that allow PR. Goes before DR (-like) reductions
     if(GetLocalInt(oTarget, "PRC_Power_IntellectFortress_Active")    &&
        Get2DAString("spells", "ItemImmunity", GetSpellId()) == "1"
        )
         nDamage /= 2;
     // Mental Resistance - 3 damage less for all non-energy damage and ability damage
+		// this feat no longer exists
+	/*
     if(GetHasFeat(FEAT_MENTAL_RESISTANCE, oTarget) && !bIsEnergyDamage)
         nDamage -= 3;
-
+	*/
     // Reasonable return values only
     if(nDamage < 0) nDamage = 0;
 

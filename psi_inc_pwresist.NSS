@@ -36,6 +36,8 @@ PRCGetPowerResistance(object oTarget, object oCaster)
 
     //racial pack SR
     int iRacialPowerRes = 0;
+	// none of these feats still exist
+	/*
     if(GetHasFeat(FEAT_SPELL27, oTarget))
         iRacialPowerRes += 27+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL25, oTarget))
@@ -54,6 +56,7 @@ PRCGetPowerResistance(object oTarget, object oCaster)
         iRacialPowerRes += 10+PS_GetLevel(oTarget);
     else if(GetHasFeat(FEAT_SPELL5, oTarget))
         iRacialPowerRes += 5+PS_GetLevel(oTarget);
+	*/
     if(iRacialPowerRes > iPowerRes)
         iPowerRes = iRacialPowerRes;
 

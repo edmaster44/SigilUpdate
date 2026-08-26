@@ -253,7 +253,7 @@ void AdjustDragonPrC(object oPC, int nLvl){
 		} else if (GetHasFeat(3676, oPC)){ // knight path
 			FeatAdd(oPC, 28, FALSE); //power attack
 			nAbility = ABILITY_CHARISMA;
-		} else if (GetHasFeat(3685, oPC)){ //barb path
+		} else if (GetHasFeat(3684, oPC)){ //barb path
 			FeatAdd(oPC, 1341, FALSE); //extra rage
 			nAbility = ABILITY_CONSTITUTION;
 		} else if (GetHasFeat(3686, oPC)){ //monk path
