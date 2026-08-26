@@ -73,6 +73,26 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		SendMessageToPC(oSender, sFeedback);
 		return TRUE;
 	}
+	else if (GetStringLeft(sInput, 17) == "#removebackground"){
+		sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - 17);
+		sMessage = TrimLeadingSpaces(sMessage);
+		int nBack = StringToInt(sMessage);
+		if (nBack == 0 || nBack >= 39) sFeedback = "Invalid Selection";
+		else {
+			int nFeat = StringToInt(Get2DAString("backgrounds", "FeatGained", nBack));
+			if (nFeat == 0) sFeedback = "Invalid Selection";
+			else {
+				int nRef = StringToInt(Get2DAString("feat", "FEAT", nFeat));
+				if (nRef == 0) sFeedback = "Invalid Selection";
+				else {
+					sFeedback = "Removing feat " + GetStringByStrRef(nRef);
+					FeatRemove(oSender, nFeat);
+				}
+			}	
+		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
+	}
 	// manually set Half Outsider path, ONLY works for characters who have BOTH
 	// backgrounds AND have not yet gained any levels of Half Outsider
 	else if (GetStringLeft(sInput, 10) == "#sethopath"){
