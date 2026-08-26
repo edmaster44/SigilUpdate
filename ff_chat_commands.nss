@@ -106,14 +106,30 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		sMessage = TrimLeadingSpaces(sMessage);
 		int nFeat = StringToInt(sMessage);
 		oItem = GetPlayerCurrentTarget(oSender);
-		FeatAdd(oItem, nFeat, FALSE);
+		string sRef = Get2DAString("feat", "FEAT", nFeat);
+		if (sRef == "" || sRef == "****"){
+			sFeedback = "Invalid Feat";
+		} else {
+			sFeedback = "Adding feat " + GetStringByStrRef(StringToInt(sRef));
+			FeatAdd(oItem, nFeat, FALSE);
+		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
 	}
 	else if (GetStringLeft(sInput, 11) == "#featremove" && GetHasAllAccess(oSender)){
 		sMessage = GetStringRight(sMessage, GetStringLength(sMessage) - 11);
 		sMessage = TrimLeadingSpaces(sMessage);
 		int nFeat = StringToInt(sMessage);
 		oItem = GetPlayerCurrentTarget(oSender);
-		FeatRemove(oItem, nFeat);
+		string sRef = Get2DAString("feat", "FEAT", nFeat);
+		if (sRef == "" || sRef == "****"){
+			sFeedback = "Invalid Feat";
+		} else {
+			sFeedback = "Removing feat " + GetStringByStrRef(StringToInt(sRef));
+			FeatRemove(oItem, nFeat);
+		}
+		SendMessageToPC(oSender, sFeedback);
+		return TRUE;
 	}
 	// #shout command to send a message to everyone in case server needs to come down and you're not logged
 	// in as dm. Only myself and admin staff, as only ppl who have the ability to update server need this.

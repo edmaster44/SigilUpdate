@@ -437,7 +437,7 @@ void PS_HD_DraconicApotheosis(object oPC, object oItem, int nSpell)
 void PS_HD_DraconicMagic(object oPC, object oItem)
 {
     int nHeritage, nFeat;
-	
+	nHeritage = 0;
 	if(GetIsObjectValid(oItem))
 	{	nHeritage = GetLocalInt(oItem, "Draconic_Heritage");	}
 	else
