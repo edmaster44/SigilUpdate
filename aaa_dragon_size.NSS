@@ -184,17 +184,17 @@ void PS_Dragon_Large_Biped(object oPC)
 		case 227: //Copper
 			nAppearance = 2123; break;
 		case 228: //Iron
-			nAppearance = 2125; break;
+			nAppearance = 2134; break; // was 2125
 		case 237: //Amethyst
 			nAppearance = 2119; break;
 		case 238: //Emerald
-			nAppearance = 2124; break;
+			nAppearance = 2136; break; // was 2124
 		case 239: //Topaz
-			nAppearance = 2129; break;
+			nAppearance = 2133; break; // was 2129
 		case 240: //White
 			nAppearance = 2130; break;
 		case 244: //Radiant
-			nAppearance = 2126; break;			 
+			nAppearance = 2135; break; //was 2126 	 
 		}
 		struct CreatureCoreAppearance app = PS_GetCreatureCoreAppearance(oPC);
 		app.TailVariation = 42;
