@@ -15,7 +15,7 @@ struct PartyData{
 int nMax;
 float fAvg;
 int nNum;
-float fXPmod; // testers can cause there to be a dm xp bonus to kills if they have 3 or more in party
+float fXPmod; // testers can cause there to be a dm xp bonus to kills if they have 2 or more in party
 };
 
 
@@ -226,7 +226,7 @@ struct PartyData GetPartyData(object oPC){
 		}
         oMember = GetNextFactionMember(oPC, TRUE);     
 	}
-	if (data.nNum >= 3) data.fXPmod = fXPmod;
+	if (data.nNum >= 2) data.fXPmod = fXPmod;
 	else fXPmod = 0.0;
 	data.fAvg = IntToFloat(nTotal) / IntToFloat(data.nNum);
 	return data;

@@ -965,7 +965,9 @@ void PS_Spell_ScintillatingPattern(object oPC, location lTarget, int nSpell)
 	effect ePattern		= EffectAreaOfEffect(AOE_MOB_SCINTILLATING_PATTERN);
 	effect eVFX			= EffectNWN2SpecialEffectFile("sp_scintillating_pattern"); 
 	float fDuration		= RoundsToSeconds(PS_GetCasterLevel(OBJECT_SELF));
-
+	if (GetMetaMagicFeat() == METAMAGIC_EXTEND)
+		fDuration *= 2.0;
+	
 	ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, eVFX, lTarget, fDuration);
     ApplyEffectAtLocation(DURATION_TYPE_TEMPORARY, ePattern, lTarget, fDuration);
 }

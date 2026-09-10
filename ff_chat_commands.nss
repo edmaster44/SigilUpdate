@@ -15,6 +15,7 @@
 int GetHasAllAccess(object oPC);
 int GetIsTester(object oPC);
 int SetWingTail(object oSender, string sInput);
+int GetIsEM(object oPC);
 
 
 // a function that sends a tick message to the player every 6 seconds
@@ -171,11 +172,11 @@ int GetIsFFcommand(object oSender, int nChannel, string sMessage){
 		return TRUE;
 	}
 	else if (GetStringLeft(sInput, 4) == "#xp%"){
-		if (GetIsDM(oSender) || GetIsTester(oSender)){
+		if (GetIsDM(oSender) || GetIsTester(oSender) || GetIsEM(oSender)){
 			int bHasDMpower = (GetIsDM(oSender) || GetLocalInt(GetModule(), "SIGIL_DEV_MODE"));
 			string sRight = GetStringRight(sInput, GetStringLength(sInput) - 4);
 			object oCarrier = (bHasDMpower) ? GetModule() : oSender;
-			int nMaxBonus = (bHasDMpower) ? 500 : 300;
+			int nMaxBonus = 300;
 			int nPercent = StringToInt(sRight);
 			if (sRight == "off" || nPercent == 100){
 				DeleteLocalFloat(oCarrier, "DM_XP_MOD");
@@ -1431,4 +1432,14 @@ int SetWingTail(object oSender, string sInput){
 	else sFeedback = "Custom " + sType + " set to number " + IntToString(nAppendage);
 	SendMessageToPC(oSender, sFeedback);
 	return TRUE;
+}
+
+int GetIsEM(object oPC){
+	int bIsEM = FALSE;
+	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
+	if (sName == "kharneth" || sName == "slanesh")
+			bIsEM = TRUE;
+	if (GetIsTester(oPC)) bIsEM = TRUE;
+	
+	return bIsEM;
 }

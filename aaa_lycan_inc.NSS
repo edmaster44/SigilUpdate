@@ -45,8 +45,7 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 		return;
 	}
 	int nBitePower = PS_GetLevel(oPC) / 6;
-	if (nBitePower > 5) nBitePower = 5;
-	else if (nBitePower < 1) nBitePower = 1;
+	if (nBitePower < 1) nBitePower = 1;
 	// werewolf and weretiger bite harder than werewolf and wereboar
 	int nDamage;
 	if (GetHasFeat(2592, oPC) || GetHasFeat(2656, oPC)) nDamage = d6(2);
@@ -59,7 +58,7 @@ void PS_Lycan_Bite(object oPC, object oTarget, object oItem, int nSpell){
 		nDamage *= 2;
 		sMessage = "Bite attack critical hit!";
 	} else sMessage = "Bite attack hit!";
-	
+	FloatingTextStringOnCreature(sMessage, oPC, FALSE);
 	// now apply damage and see if it's all resisted or not
 	int nHP = GetCurrentHitPoints(oTarget);
 	effect eDam = EffectDamage(nDamage, DAMAGE_TYPE_PIERCING, nBitePower, FALSE);

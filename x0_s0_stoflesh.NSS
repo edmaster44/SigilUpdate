@@ -68,6 +68,8 @@ void main()
 			// spellsIsImmuneToPetrification() in x0_i0_spells read that as blanket
 			// petrification immunity.
 			int nDuration = PS_GetCasterLevel(OBJECT_SELF) * 180; // 3 mins per level
+			if (GetMetaMagicFeat() == METAMAGIC_EXTEND)
+				nDuration *= 2;
 			effect eImmune =   EffectSpellImmunity(496);
 			ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eImmune, oTarget, IntToFloat(nDuration));
 		
