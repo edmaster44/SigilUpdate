@@ -1437,7 +1437,7 @@ int SetWingTail(object oSender, string sInput){
 int GetIsEM(object oPC){
 	int bIsEM = FALSE;
 	string sName = GetStringLowerCase(GetPCPlayerName(oPC));
-	if (sName == "kharneth" || sName == "slanesh")
+	if (sName == "kharneth" || sName == "slaanesh")
 			bIsEM = TRUE;
 	if (GetIsTester(oPC)) bIsEM = TRUE;
 	
